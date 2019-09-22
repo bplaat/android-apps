@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="news_button">Laatste</string>
+    <string name="sports_button">Sport</string>
+    <string name="settings_button">Instellingen</string>
+</resources>

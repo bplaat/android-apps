@@ -1,8 +1,6 @@
 package nl.nos.android;
 
-import java.io.Serializable;
-
-public class Article implements Serializable {
+public class Article {
     private String title;
     private String imageUrl;
     private String date;

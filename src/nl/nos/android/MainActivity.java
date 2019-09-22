@@ -23,15 +23,16 @@ public class MainActivity extends Activity {
     private static final String SPORTS_RSS_FEED = "http://feeds.nos.nl/nossportalgemeen";
     private static final String API_KEY = "s3khkckng9or74lykjvhufbetd8jgtxcf265ltrh";
 
+    private LinearLayout mainPage;
+    private LinearLayout articlePage;
+
+    private int activeTab = 0;
+    private boolean articlePageOpen = false;
+
     private FetchDataTask fetchNewsDataTask;
     private FetchDataTask fetchSportsDataTask;
     private ArticlesAdapter newsArticlesAdapter;
     private ArticlesAdapter sportsArticlesAdapter;
-
-    private LinearLayout mainPage;
-    private LinearLayout articlePage;
-
-    private boolean articlePageOpen = false;
 
     private void openArticle(Article article) {
         articlePageOpen = true;
@@ -57,7 +58,7 @@ public class MainActivity extends Activity {
                     textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
                     textView.setTextSize(18);
                 } else {
-                    textView.setLineSpacing(0, 1.3f);
+                    textView.setLineSpacing(0, 1.2f);
                 }
                 if (child.nextElementSibling() != null) {
                     LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
@@ -76,14 +77,6 @@ public class MainActivity extends Activity {
                 articlePage.setVisibility(View.GONE);
             }
         });
-    }
-
-    public void onBackPressed() {
-        if (articlePageOpen) {
-            hideArticle();
-        } else {
-            super.onBackPressed();
-        }
     }
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,14 +145,18 @@ public class MainActivity extends Activity {
                 sportsTab.setVisibility(View.GONE);
                 settingsTab.setVisibility(View.GONE);
 
-                newsArticlesList.setAlpha(0f);
-                newsArticlesList.setScaleX(0.98f);
-                newsArticlesList.setScaleY(0.98f);
-                newsArticlesList.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
+                if (activeTab != 0) {
+                    newsArticlesList.setAlpha(0f);
+                    newsArticlesList.setScaleX(0.98f);
+                    newsArticlesList.setScaleY(0.98f);
+                    newsArticlesList.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
+                }
 
                 newsButton.animate().alpha(1f).setDuration(150);
                 sportsButton.animate().alpha(0.5f).setDuration(150);
                 settingsButton.animate().alpha(0.5f).setDuration(150);
+
+                activeTab = 0;
             }
         });
 
@@ -169,14 +166,18 @@ public class MainActivity extends Activity {
                 sportsTab.setVisibility(View.VISIBLE);
                 settingsTab.setVisibility(View.GONE);
 
-                sportsArticlesList.setAlpha(0f);
-                sportsArticlesList.setScaleX(0.98f);
-                sportsArticlesList.setScaleY(0.98f);
-                sportsArticlesList.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
+                if (activeTab != 1) {
+                    sportsArticlesList.setAlpha(0f);
+                    sportsArticlesList.setScaleX(0.98f);
+                    sportsArticlesList.setScaleY(0.98f);
+                    sportsArticlesList.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
+                }
 
                 newsButton.animate().alpha(0.5f).setDuration(150);
                 sportsButton.animate().alpha(1f).setDuration(150);
                 settingsButton.animate().alpha(0.5f).setDuration(150);
+
+                activeTab = 1;
             }
         });
 
@@ -186,14 +187,18 @@ public class MainActivity extends Activity {
                 sportsTab.setVisibility(View.GONE);
                 settingsTab.setVisibility(View.VISIBLE);
 
-                settingsTab.setAlpha(0f);
-                settingsTab.setScaleX(0.98f);
-                settingsTab.setScaleY(0.98f);
-                settingsTab.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
+                if (activeTab != 2) {
+                    settingsTab.setAlpha(0f);
+                    settingsTab.setScaleX(0.98f);
+                    settingsTab.setScaleY(0.98f);
+                    settingsTab.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
+                }
 
                 newsButton.animate().alpha(0.5f).setDuration(150);
                 sportsButton.animate().alpha(0.5f).setDuration(150);
                 settingsButton.animate().alpha(1f).setDuration(150);
+
+                activeTab = 2;
             }
         });
 
@@ -222,6 +227,14 @@ public class MainActivity extends Activity {
             });
             fetchNewsDataTask.execute();
         } catch (Exception e) {}
+    }
+
+    public void onBackPressed() {
+        if (articlePageOpen) {
+            hideArticle();
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void fetchSportsData (boolean loadFromCache) {
