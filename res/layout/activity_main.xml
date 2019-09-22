@@ -1,37 +1,224 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/primary_color">
+    <!-- Main page -->
+    <LinearLayout android:id="@+id/main_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <TextView android:text="@string/app_name"
-            android:layout_width="0dp"
+        <FrameLayout android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+            <!-- News page -->
+            <LinearLayout android:id="@+id/news_tab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/primary_color">
+
+                    <TextView android:text="@string/app_name"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp" />
+
+                    <ImageView android:id="@+id/news_refresh_button"
+                        android:src="@drawable/ic_refresh"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:scaleType="center" />
+                </LinearLayout>
+
+                <ListView android:id="@+id/news_articles_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:divider="@null"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:clipToPadding="false"
+                    android:scrollbarStyle="outsideOverlay" />
+            </LinearLayout>
+
+            <!-- Sports page -->
+            <LinearLayout android:id="@+id/sports_tab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@color/primary_color">
+
+                    <TextView android:text="@string/app_name"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:textStyle="bold"
+                        android:textSize="20sp"
+                        android:paddingLeft="16dp"
+                        android:paddingRight="16dp" />
+
+                    <ImageView android:id="@+id/sports_refresh_button"
+                        android:src="@drawable/ic_refresh"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
+                        android:scaleType="center" />
+                </LinearLayout>
+
+                <ListView android:id="@+id/sports_articles_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:divider="@null"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:clipToPadding="false"
+                    android:scrollbarStyle="outsideOverlay" />
+            </LinearLayout>
+
+            <!-- Settings page -->
+            <LinearLayout android:id="@+id/settings_tab"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                android:gravity="center">
+
+                <TextView android:text="Settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </FrameLayout>
+
+        <!-- Bottom Bar -->
+        <LinearLayout android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_weight="1"
-            android:gravity="center_vertical"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp" />
+            android:background="@color/primary_color">
 
-        <ImageView android:id="@+id/list_refresh_button"
-            android:src="@drawable/ic_refresh"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:scaleType="center" />
+            <LinearLayout android:id="@+id/news_button"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView android:src="@drawable/ic_clock_outline"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <TextView android:text="Laatse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/sports_button"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:alpha="0.5">
+
+                <ImageView android:src="@drawable/ic_basketball"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <TextView android:text="Sport"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+
+            <LinearLayout android:id="@+id/settings_button"
+                android:layout_width="0dp"
+                android:layout_height="56dp"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:alpha="0.5">
+
+                <ImageView android:src="@drawable/ic_settings"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp" />
+
+                <TextView android:text="Settings"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
     </LinearLayout>
 
-    <ListView android:id="@+id/list_items_list"
+    <!-- Article page -->
+    <LinearLayout android:id="@+id/article_page"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:divider="@null"
-        android:dividerHeight="0dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="8dp"
-        android:scrollbarStyle="outsideOverlay" />
-</LinearLayout>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/background_color"
+        android:visibility="gone">
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@color/primary_color">
+
+            <ImageView android:id="@+id/article_back_button"
+                android:src="@drawable/ic_arrow_back"
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:scaleType="center" />
+        </LinearLayout>
+
+        <ScrollView android:id="@+id/article_scroll"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <ImageView android:id="@+id/article_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop" />
+
+                <LinearLayout android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="vertical">
+
+                    <TextView android:id="@+id/article_title_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:textStyle="bold"
+                        android:textSize="20sp" />
+
+                    <TextView android:id="@+id/article_date_label"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:textStyle="italic"
+                        android:textColor="@color/secondary_text_color" />
+
+                    <LinearLayout android:id="@+id/article_content"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>
