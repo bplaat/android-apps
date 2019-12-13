@@ -1,3 +1,4 @@
+#!/bin/bash
 # keytool -genkey -validity 10000 -keystore key.keystore -keyalg RSA -keysize 2048 -storepass nos-android -keypass nos-android
 PATH=$PATH:../android-sdk/build-tools/29.0.2:../android-sdk/platform-tools
 PLATFORM=../android-sdk/platforms/android-29/android.jar

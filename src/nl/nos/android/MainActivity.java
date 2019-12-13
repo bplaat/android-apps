@@ -2,6 +2,7 @@ package nl.nos.android;
 
 import android.app.Activity;
 import android.graphics.Typeface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.View;
@@ -19,38 +20,23 @@ import org.jsoup.nodes.Element;
 import org.jsoup.Jsoup;
 
 public class MainActivity extends Activity {
-    private static final String NEWS_RSS_FEED = "http://feeds.nos.nl/nosnieuwsalgemeen";
-    private static final String SPORTS_RSS_FEED = "http://feeds.nos.nl/nossportalgemeen";
     private static final String API_KEY = "s3khkckng9or74lykjvhufbetd8jgtxcf265ltrh";
+    private static final String LATEST_RSS_URL = "http://feeds.nos.nl/nosnieuwsalgemeen";
+    private static final String SPORTS_RSS_URL = "http://feeds.nos.nl/nossportalgemeen";
+    private static final String TECH_RSS_URL = "http://feeds.nos.nl/nosnieuwstech";
 
     private LinearLayout mainPage;
     private LinearLayout articlePage;
 
-    private int activeTab = 0;
-    private boolean articlePageOpen = false;
-
-    private FetchDataTask fetchNewsDataTask;
-    private FetchDataTask fetchSportsDataTask;
-    private ArticlesAdapter newsArticlesAdapter;
-    private ArticlesAdapter sportsArticlesAdapter;
-
-    private void openArticle(Article article) {
-        articlePageOpen = true;
-        articlePage.setVisibility(View.VISIBLE);
-        articlePage.setAlpha(0f);
-        articlePage.setTranslationY(64);
-        articlePage.animate().alpha(1).translationY(0).setDuration(150);
-
-        ((ScrollView)findViewById(R.id.article_scroll)).scrollTo(0, 0);
-
+    private void openArticlePage(Article article) {
         FetchImageTask.fetchImage(this, (ImageView)findViewById(R.id.article_image), article.getImageUrl());
         ((TextView)findViewById(R.id.article_title_label)).setText(article.getTitle());
         ((TextView)findViewById(R.id.article_date_label)).setText(article.getDate());
 
         LinearLayout articleContent = (LinearLayout)findViewById(R.id.article_content);
         articleContent.removeAllViews();
-        Document doc = Jsoup.parse(article.getContent());
-        for (Element child : doc.body().children()) {
+        Document document = Jsoup.parse(article.getContent());
+        for (Element child : document.body().children()) {
             if (child.nodeName() == "h2" || child.nodeName() == "p") {
                 TextView textView = new TextView(this);
                 textView.setText(child.text());
@@ -68,10 +54,16 @@ public class MainActivity extends Activity {
                 articleContent.addView(textView);
             }
         }
+
+        ((ScrollView)findViewById(R.id.article_scroll)).scrollTo(0, 0);
+
+        articlePage.setVisibility(View.VISIBLE);
+        articlePage.setAlpha(0f);
+        articlePage.setTranslationY(64);
+        articlePage.animate().alpha(1).translationY(0).setDuration(150);
     }
 
-    public void hideArticle() {
-        articlePageOpen = false;
+    public void hideArticlePage() {
         articlePage.animate().alpha(0).translationY(64).setDuration(150).withEndAction(new Runnable() {
             public void run() {
                 articlePage.setVisibility(View.GONE);
@@ -89,164 +81,137 @@ public class MainActivity extends Activity {
 
         // Main Page
 
-        // News tab
-        ListView newsArticlesList = (ListView)findViewById(R.id.news_articles_list);
-        newsArticlesList.setAdapter(newsArticlesAdapter = new ArticlesAdapter(this));
-        newsArticlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        // Latest tab
+        ListView latestArticlesList = (ListView)findViewById(R.id.latest_articles_list);
+        ArticlesAdapter latestArticlesAdapter = new ArticlesAdapter(this);
+        latestArticlesList.setAdapter(latestArticlesAdapter);
+        latestArticlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openArticle(newsArticlesAdapter.getItem(position));
+                openArticlePage(latestArticlesAdapter.getItem(position));
             }
         });
-
-        ((ImageView)findViewById(R.id.news_refresh_button)).setOnClickListener(new View.OnClickListener() {
+        FetchDataTask latestFetchDataTask = null;
+        ((ImageView)findViewById(R.id.latest_refresh_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                fetchNewsDataTask.cancel(false);
-                newsArticlesAdapter.clear();
-                fetchNewsData(false);
+                if (latestFetchDataTask != null && latestFetchDataTask.getStatus() == AsyncTask.Status.RUNNING) {
+                    latestFetchDataTask.cancel(false);
+                }
+                latestArticlesAdapter.clear();
+                fetchData(latestFetchDataTask, latestArticlesAdapter, LATEST_RSS_URL, false);
             }
         });
+        fetchData(latestFetchDataTask, latestArticlesAdapter, LATEST_RSS_URL, true);
 
         // Sports tab
         ListView sportsArticlesList = (ListView)findViewById(R.id.sports_articles_list);
-        sportsArticlesList.setAdapter(sportsArticlesAdapter = new ArticlesAdapter(this));
+        ArticlesAdapter sportsArticlesAdapter = new ArticlesAdapter(this);
+        sportsArticlesList.setAdapter(sportsArticlesAdapter);
         sportsArticlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openArticle(sportsArticlesAdapter.getItem(position));
+                openArticlePage(sportsArticlesAdapter.getItem(position));
             }
         });
-
+        FetchDataTask sportsFetchDataTask = null;
         ((ImageView)findViewById(R.id.sports_refresh_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                fetchSportsDataTask.cancel(false);
+                if (sportsFetchDataTask != null && sportsFetchDataTask.getStatus() == AsyncTask.Status.RUNNING) {
+                    sportsFetchDataTask.cancel(false);
+                }
                 sportsArticlesAdapter.clear();
-                fetchSportsData(false);
+                fetchData(sportsFetchDataTask, sportsArticlesAdapter, SPORTS_RSS_URL, false);
             }
         });
+        fetchData(sportsFetchDataTask, sportsArticlesAdapter, SPORTS_RSS_URL, true);
+
+        // Tech tab
+        ListView techArticlesList = (ListView)findViewById(R.id.tech_articles_list);
+        ArticlesAdapter techArticlesAdapter = new ArticlesAdapter(this);
+        techArticlesList.setAdapter(techArticlesAdapter);
+        techArticlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                openArticlePage(techArticlesAdapter.getItem(position));
+            }
+        });
+        FetchDataTask techFetchDataTask = null;
+        ((ImageView)findViewById(R.id.tech_refresh_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (techFetchDataTask != null && techFetchDataTask.getStatus() == AsyncTask.Status.RUNNING) {
+                    techFetchDataTask.cancel(false);
+                }
+                techArticlesAdapter.clear();
+                fetchData(techFetchDataTask, techArticlesAdapter, TECH_RSS_URL, false);
+            }
+        });
+        fetchData(techFetchDataTask, techArticlesAdapter, TECH_RSS_URL, true);
 
         // Article page
         ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                hideArticle();
+                hideArticlePage();
             }
         });
 
         // Bottom bar
-        LinearLayout newsTab = (LinearLayout)findViewById(R.id.news_tab);
-        LinearLayout sportsTab = (LinearLayout)findViewById(R.id.sports_tab);
-        LinearLayout settingsTab = (LinearLayout)findViewById(R.id.settings_tab);
+        LinearLayout tabs[] = {
+            (LinearLayout)findViewById(R.id.latest_tab),
+            (LinearLayout)findViewById(R.id.sports_tab),
+            (LinearLayout)findViewById(R.id.tech_tab),
+            (LinearLayout)findViewById(R.id.settings_tab)
+        };
 
-        LinearLayout newsButton = (LinearLayout)findViewById(R.id.news_button);
-        LinearLayout sportsButton = (LinearLayout)findViewById(R.id.sports_button);
-        LinearLayout settingsButton = (LinearLayout)findViewById(R.id.settings_button);
+        LinearLayout buttons[] = {
+            (LinearLayout)findViewById(R.id.latest_button),
+            (LinearLayout)findViewById(R.id.sports_button),
+            (LinearLayout)findViewById(R.id.tech_button),
+            (LinearLayout)findViewById(R.id.settings_button)
+        };
 
-        newsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                newsTab.setVisibility(View.VISIBLE);
-                sportsTab.setVisibility(View.GONE);
-                settingsTab.setVisibility(View.GONE);
+        for (int i = 0; i < buttons.length; i++) {
+            buttons[i].setTag(i);
+            buttons[i].setOnClickListener(new View.OnClickListener() {
+                public void onClick(View view) {
+                    int index = (int)view.getTag();
 
-                if (activeTab != 0) {
-                    newsArticlesList.setAlpha(0f);
-                    newsArticlesList.setScaleX(0.98f);
-                    newsArticlesList.setScaleY(0.98f);
-                    newsArticlesList.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
-                }
+                    if (tabs[index].getVisibility() != View.VISIBLE) {
+                        View tabContent = tabs[index].getChildAt(1);
+                        tabContent.setAlpha(0f);
+                        tabContent.setScaleX(0.98f);
+                        tabContent.setScaleY(0.98f);
+                        tabContent.animate().alpha(1).scaleX(1).scaleY(1).setDuration(150);
+                    }
 
-                newsButton.animate().alpha(1f).setDuration(150);
-                sportsButton.animate().alpha(0.5f).setDuration(150);
-                settingsButton.animate().alpha(0.5f).setDuration(150);
+                    for (LinearLayout tab : tabs) {
+                        tab.setVisibility(View.GONE);
+                    }
+                    tabs[index].setVisibility(View.VISIBLE);
 
-                activeTab = 0;
-            }
-        });
-
-        sportsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                newsTab.setVisibility(View.GONE);
-                sportsTab.setVisibility(View.VISIBLE);
-                settingsTab.setVisibility(View.GONE);
-
-                if (activeTab != 1) {
-                    sportsArticlesList.setAlpha(0f);
-                    sportsArticlesList.setScaleX(0.98f);
-                    sportsArticlesList.setScaleY(0.98f);
-                    sportsArticlesList.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
-                }
-
-                newsButton.animate().alpha(0.5f).setDuration(150);
-                sportsButton.animate().alpha(1f).setDuration(150);
-                settingsButton.animate().alpha(0.5f).setDuration(150);
-
-                activeTab = 1;
-            }
-        });
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                newsTab.setVisibility(View.GONE);
-                sportsTab.setVisibility(View.GONE);
-                settingsTab.setVisibility(View.VISIBLE);
-
-                if (activeTab != 2) {
-                    settingsTab.setAlpha(0f);
-                    settingsTab.setScaleX(0.98f);
-                    settingsTab.setScaleY(0.98f);
-                    settingsTab.animate().alpha(1).scaleX(1).scaleY(1).setDuration(200);
-                }
-
-                newsButton.animate().alpha(0.5f).setDuration(150);
-                sportsButton.animate().alpha(0.5f).setDuration(150);
-                settingsButton.animate().alpha(1f).setDuration(150);
-
-                activeTab = 2;
-            }
-        });
-
-        fetchNewsData(true);
-        fetchSportsData(true);
-    }
-
-    private void fetchNewsData (boolean loadFromCache) {
-        try {
-            fetchNewsDataTask = new FetchDataTask(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(NEWS_RSS_FEED, "UTF-8") + "&api_key=" + API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
-                public void onLoad(String data) {
-                    try {
-                        JSONObject feed = new JSONObject(data);
-                        JSONArray articles = feed.getJSONArray("items");
-                        for (int i = 0; i < articles.length(); i++) {
-                            JSONObject article = articles.getJSONObject(i);
-                            newsArticlesAdapter.add(new Article(
-                                article.getString("title"),
-                                article.getJSONObject("enclosure").getString("link"),
-                                article.getString("pubDate"),
-                                article.getString("content")
-                            ));
-                        }
-                    } catch (Exception e) {}
+                    for (LinearLayout button : buttons) {
+                        button.animate().alpha(0.5f).setDuration(150);
+                    }
+                    view.animate().alpha(1f).setDuration(150);
                 }
             });
-            fetchNewsDataTask.execute();
-        } catch (Exception e) {}
+        }
     }
 
     public void onBackPressed() {
-        if (articlePageOpen) {
-            hideArticle();
+        if (articlePage.getVisibility() == View.VISIBLE) {
+            hideArticlePage();
         } else {
             super.onBackPressed();
         }
     }
 
-    private void fetchSportsData (boolean loadFromCache) {
+    private void fetchData (FetchDataTask fetchDataTask, ArticlesAdapter articlesAdapter, String rssUrl, boolean loadFromCache) {
         try {
-            fetchSportsDataTask = new FetchDataTask(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(SPORTS_RSS_FEED, "UTF-8") + "&api_key=" + API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
+            fetchDataTask = new FetchDataTask(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8") + "&api_key=" + API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
                 public void onLoad(String data) {
                     try {
                         JSONObject feed = new JSONObject(data);
                         JSONArray articles = feed.getJSONArray("items");
                         for (int i = 0; i < articles.length(); i++) {
                             JSONObject article = articles.getJSONObject(i);
-                            sportsArticlesAdapter.add(new Article(
+                            articlesAdapter.add(new Article(
                                 article.getString("title"),
                                 article.getJSONObject("enclosure").getString("link"),
                                 article.getString("pubDate"),
@@ -256,7 +221,7 @@ public class MainActivity extends Activity {
                     } catch (Exception e) {}
                 }
             });
-            fetchSportsDataTask.execute();
+            fetchDataTask.execute();
         } catch (Exception e) {}
     }
 }

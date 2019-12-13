@@ -13,9 +13,9 @@ import java.net.URL;
 import java.util.Base64;
 
 public class FetchImageTask extends AsyncTask<Void, Void, Bitmap> {
-    private Context context;
-    private ImageView imageView;
-    private String url;
+    private final Context context;
+    private final ImageView imageView;
+    private final String url;
 
     private FetchImageTask(Context context, ImageView imageView, String url) {
         this.context = context;
@@ -48,9 +48,9 @@ public class FetchImageTask extends AsyncTask<Void, Void, Bitmap> {
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 byte[] buffer = new byte[1024];
-                int nRead = 0;
-                while ((nRead = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
-                    byteArrayOutputStream.write(buffer, 0, nRead);
+                int number_read = 0;
+                while ((number_read = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, number_read);
                 }
                 byteArrayOutputStream.close();
                 bufferedInputStream.close();

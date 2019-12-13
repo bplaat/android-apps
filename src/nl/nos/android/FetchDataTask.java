@@ -15,11 +15,11 @@ public class FetchDataTask extends AsyncTask<Void, Void, String> {
         public abstract void onLoad(String data);
     }
 
-    private Context context;
-    private String url;
-    private boolean loadFomCache;
-    private boolean saveToCache;
-    private OnLoadListener onLoadListener;
+    private final Context context;
+    private final String url;
+    private final boolean loadFomCache;
+    private final boolean saveToCache;
+    private final OnLoadListener onLoadListener;
 
     public FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
         this.context = context;

@@ -1,10 +1,10 @@
 package nl.nos.android;
 
 public class Article {
-    private String title;
-    private String imageUrl;
-    private String date;
-    private String content;
+    private final String title;
+    private final String imageUrl;
+    private final String date;
+    private final String content;
 
     public Article(String title, String imageUrl, String date, String content) {
         this.title = title;

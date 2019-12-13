@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">NOS</string>
-    <string name="news_button">Latest</string>
+    <string name="latest_title">Latest news</string>
+    <string name="latest_button">Latest</string>
+    <string name="sports_title">Sports news</string>
     <string name="sports_button">Sports</string>
+    <string name="tech_title">Tech news</string>
+    <string name="tech_button">Tech</string>
     <string name="settings_button">Settings</string>
 </resources>
