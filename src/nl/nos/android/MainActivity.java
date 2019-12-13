@@ -23,6 +23,7 @@ public class MainActivity extends Activity {
     private static final String API_KEY = "s3khkckng9or74lykjvhufbetd8jgtxcf265ltrh";
     private static final String LATEST_RSS_URL = "http://feeds.nos.nl/nosnieuwsalgemeen";
     private static final String SPORTS_RSS_URL = "http://feeds.nos.nl/nossportalgemeen";
+    private static final String ECONOMY_RSS_URL = "http://feeds.nos.nl/nosnieuwseconomie";
     private static final String TECH_RSS_URL = "http://feeds.nos.nl/nosnieuwstech";
 
     private LinearLayout mainPage;
@@ -80,69 +81,10 @@ public class MainActivity extends Activity {
         articlePage = (LinearLayout)findViewById(R.id.article_page);
 
         // Main Page
-
-        // Latest tab
-        ListView latestArticlesList = (ListView)findViewById(R.id.latest_articles_list);
-        ArticlesAdapter latestArticlesAdapter = new ArticlesAdapter(this);
-        latestArticlesList.setAdapter(latestArticlesAdapter);
-        latestArticlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openArticlePage(latestArticlesAdapter.getItem(position));
-            }
-        });
-        FetchDataTask latestFetchDataTask = null;
-        ((ImageView)findViewById(R.id.latest_refresh_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (latestFetchDataTask != null && latestFetchDataTask.getStatus() == AsyncTask.Status.RUNNING) {
-                    latestFetchDataTask.cancel(false);
-                }
-                latestArticlesAdapter.clear();
-                fetchData(latestFetchDataTask, latestArticlesAdapter, LATEST_RSS_URL, false);
-            }
-        });
-        fetchData(latestFetchDataTask, latestArticlesAdapter, LATEST_RSS_URL, true);
-
-        // Sports tab
-        ListView sportsArticlesList = (ListView)findViewById(R.id.sports_articles_list);
-        ArticlesAdapter sportsArticlesAdapter = new ArticlesAdapter(this);
-        sportsArticlesList.setAdapter(sportsArticlesAdapter);
-        sportsArticlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openArticlePage(sportsArticlesAdapter.getItem(position));
-            }
-        });
-        FetchDataTask sportsFetchDataTask = null;
-        ((ImageView)findViewById(R.id.sports_refresh_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (sportsFetchDataTask != null && sportsFetchDataTask.getStatus() == AsyncTask.Status.RUNNING) {
-                    sportsFetchDataTask.cancel(false);
-                }
-                sportsArticlesAdapter.clear();
-                fetchData(sportsFetchDataTask, sportsArticlesAdapter, SPORTS_RSS_URL, false);
-            }
-        });
-        fetchData(sportsFetchDataTask, sportsArticlesAdapter, SPORTS_RSS_URL, true);
-
-        // Tech tab
-        ListView techArticlesList = (ListView)findViewById(R.id.tech_articles_list);
-        ArticlesAdapter techArticlesAdapter = new ArticlesAdapter(this);
-        techArticlesList.setAdapter(techArticlesAdapter);
-        techArticlesList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                openArticlePage(techArticlesAdapter.getItem(position));
-            }
-        });
-        FetchDataTask techFetchDataTask = null;
-        ((ImageView)findViewById(R.id.tech_refresh_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (techFetchDataTask != null && techFetchDataTask.getStatus() == AsyncTask.Status.RUNNING) {
-                    techFetchDataTask.cancel(false);
-                }
-                techArticlesAdapter.clear();
-                fetchData(techFetchDataTask, techArticlesAdapter, TECH_RSS_URL, false);
-            }
-        });
-        fetchData(techFetchDataTask, techArticlesAdapter, TECH_RSS_URL, true);
+        initNewsTab((ListView)findViewById(R.id.latest_articles_list), LATEST_RSS_URL, (ImageView)findViewById(R.id.latest_refresh_button));
+        initNewsTab((ListView)findViewById(R.id.sports_articles_list), SPORTS_RSS_URL, (ImageView)findViewById(R.id.sports_refresh_button));
+        initNewsTab((ListView)findViewById(R.id.economy_articles_list), ECONOMY_RSS_URL, (ImageView)findViewById(R.id.economy_refresh_button));
+        initNewsTab((ListView)findViewById(R.id.tech_articles_list), TECH_RSS_URL, (ImageView)findViewById(R.id.tech_refresh_button));
 
         // Article page
         ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener(new View.OnClickListener() {
@@ -152,16 +94,18 @@ public class MainActivity extends Activity {
         });
 
         // Bottom bar
-        LinearLayout tabs[] = {
+        LinearLayout[] tabs = {
             (LinearLayout)findViewById(R.id.latest_tab),
             (LinearLayout)findViewById(R.id.sports_tab),
+            (LinearLayout)findViewById(R.id.economy_tab),
             (LinearLayout)findViewById(R.id.tech_tab),
             (LinearLayout)findViewById(R.id.settings_tab)
         };
 
-        LinearLayout buttons[] = {
+        LinearLayout[] buttons = {
             (LinearLayout)findViewById(R.id.latest_button),
             (LinearLayout)findViewById(R.id.sports_button),
+            (LinearLayout)findViewById(R.id.economy_button),
             (LinearLayout)findViewById(R.id.tech_button),
             (LinearLayout)findViewById(R.id.settings_button)
         };
@@ -202,7 +146,30 @@ public class MainActivity extends Activity {
         }
     }
 
-    private void fetchData (FetchDataTask fetchDataTask, ArticlesAdapter articlesAdapter, String rssUrl, boolean loadFromCache) {
+    private void initNewsTab(ListView listView, String rssUrl, ImageView refreshButton) {
+        ArticlesAdapter articlesAdapter = new ArticlesAdapter(this);
+        listView.setAdapter(articlesAdapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                openArticlePage(articlesAdapter.getItem(position));
+            }
+        });
+
+        FetchDataTask fetchDataTask = null;
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                if (fetchDataTask != null && fetchDataTask.getStatus() == AsyncTask.Status.RUNNING) {
+                    fetchDataTask.cancel(false);
+                }
+                articlesAdapter.clear();
+                fetchNewsData(fetchDataTask, articlesAdapter, rssUrl, false);
+            }
+        });
+
+        fetchNewsData(fetchDataTask, articlesAdapter, rssUrl, true);
+    }
+
+    private void fetchNewsData(FetchDataTask fetchDataTask, ArticlesAdapter articlesAdapter, String rssUrl, boolean loadFromCache) {
         try {
             fetchDataTask = new FetchDataTask(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8") + "&api_key=" + API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
                 public void onLoad(String data) {

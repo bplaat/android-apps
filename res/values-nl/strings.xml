@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="latest_title">Laatste nieuws</string>
+    <string name="economy_button">Economie</string>
+    <string name="economy_title">Economie nieuws</string>
     <string name="latest_button">Laatste</string>
-    <string name="sports_title">Sport nieuws</string>
-    <string name="sports_button">Sport</string>
-    <string name="tech_title">Tech nieuws</string>
-    <string name="tech_button">Tech</string>
+    <string name="latest_title">Laatste nieuws</string>
     <string name="settings_button">Instellingen</string>
+    <string name="sports_button">Sport</string>
+    <string name="sports_title">Sport nieuws</string>
+    <string name="tech_button">Tech</string>
+    <string name="tech_title">Tech nieuws</string>
 </resources>

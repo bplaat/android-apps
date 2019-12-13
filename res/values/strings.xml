@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">NOS</string>
-    <string name="latest_title">Latest news</string>
+    <string name="economy_button">Economy</string>
+    <string name="economy_title">Economy news</string>
     <string name="latest_button">Latest</string>
-    <string name="sports_title">Sports news</string>
-    <string name="sports_button">Sports</string>
-    <string name="tech_title">Tech news</string>
-    <string name="tech_button">Tech</string>
+    <string name="latest_title">Latest news</string>
     <string name="settings_button">Settings</string>
+    <string name="sports_button">Sports</string>
+    <string name="sports_title">Sports news</string>
+    <string name="tech_button">Tech</string>
+    <string name="tech_title">Tech news</string>
 </resources>
