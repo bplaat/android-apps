@@ -1,16 +1,21 @@
 package nl.nos.android;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ScrollView;
+import android.widget.Switch;
 import android.widget.TextView;
 import java.net.URLEncoder;
 import org.json.JSONObject;
@@ -74,6 +79,10 @@ public class MainActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        if (preferences.getBoolean("dark-theme", false)) {
+            setTheme(R.style.AppThemeDark);
+        }
         setContentView(R.layout.activity_main);
 
         // Pages
@@ -81,10 +90,28 @@ public class MainActivity extends Activity {
         articlePage = (LinearLayout)findViewById(R.id.article_page);
 
         // Main Page
+
+        // News tabs
         initNewsTab((ListView)findViewById(R.id.latest_articles_list), LATEST_RSS_URL, (ImageView)findViewById(R.id.latest_refresh_button));
         initNewsTab((ListView)findViewById(R.id.sports_articles_list), SPORTS_RSS_URL, (ImageView)findViewById(R.id.sports_refresh_button));
         initNewsTab((ListView)findViewById(R.id.economy_articles_list), ECONOMY_RSS_URL, (ImageView)findViewById(R.id.economy_refresh_button));
         initNewsTab((ListView)findViewById(R.id.tech_articles_list), TECH_RSS_URL, (ImageView)findViewById(R.id.tech_refresh_button));
+
+        // Settings tab
+        Switch darkThemeSwitch = (Switch)findViewById(R.id.dark_theme_switch);
+        darkThemeSwitch.setChecked(preferences.getBoolean("dark-theme", false));
+
+        ((Button)findViewById(R.id.settings_save_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("dark-theme", darkThemeSwitch.isChecked());
+                editor.apply();
+
+                Intent intent = getIntent();
+                finish();
+                startActivity(intent);
+            }
+        });
 
         // Article page
         ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener(new View.OnClickListener() {

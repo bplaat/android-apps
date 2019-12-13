@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colors -->
+    <attr name="primary_color" format="reference|color" />
+    <attr name="secondary_text_color" format="reference|color" />
+    <attr name="loading_background_color" format="reference|color" />
+    <attr name="background_color" format="reference|color" />
+
+    <!-- Drawables -->
+    <attr name="ic_arrow_left" format="reference" />
+    <attr name="ic_basketball" format="reference" />
+    <attr name="ic_chip" format="reference" />
+    <attr name="ic_clock_outline" format="reference" />
+    <attr name="ic_coin_outline" format="reference" />
+    <attr name="ic_refresh" format="reference" />
+    <attr name="ic_settings" format="reference" />
+</resources>

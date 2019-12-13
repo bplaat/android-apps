@@ -1,7 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="AppTheme" parent="@android:style/Theme.Holo.NoActionBar">
-        <item name="android:textColor">@color/primary_text_color</item>
-        <item name="android:windowBackground">@color/background_color</item>
+    <!-- Holo Light Theme -->
+    <style name="AppThemeLight" parent="@android:style/Theme.Holo.Light.NoActionBar">
+        <item name="android:textColor">@color/light_primary_text_color</item>
+        <item name="android:windowBackground">@color/light_background_color</item>
+
+        <item name="primary_color">@color/light_primary_color</item>
+        <item name="secondary_text_color">@color/light_secondary_text_color</item>
+        <item name="loading_background_color">@color/light_loading_background_color</item>
+        <item name="background_color">@color/light_background_color</item>
+
+        <item name="ic_arrow_left">@drawable/ic_arrow_left_light</item>
+        <item name="ic_basketball">@drawable/ic_basketball_light</item>
+        <item name="ic_chip">@drawable/ic_chip_light</item>
+        <item name="ic_clock_outline">@drawable/ic_clock_outline_light</item>
+        <item name="ic_coin_outline">@drawable/ic_coin_outline_light</item>
+        <item name="ic_refresh">@drawable/ic_refresh_light</item>
+        <item name="ic_settings">@drawable/ic_settings_light</item>
+    </style>
+
+    <!-- Holo Dark Theme -->
+    <style name="AppThemeDark" parent="@android:style/Theme.Holo.NoActionBar">
+        <item name="android:textColor">@color/dark_primary_text_color</item>
+        <item name="android:windowBackground">@color/dark_background_color</item>
+
+        <item name="primary_color">@color/dark_primary_color</item>
+        <item name="secondary_text_color">@color/dark_secondary_text_color</item>
+        <item name="loading_background_color">@color/dark_loading_background_color</item>
+        <item name="background_color">@color/dark_background_color</item>
+
+        <item name="ic_arrow_left">@drawable/ic_arrow_left_dark</item>
+        <item name="ic_basketball">@drawable/ic_basketball_dark</item>
+        <item name="ic_chip">@drawable/ic_chip_dark</item>
+        <item name="ic_clock_outline">@drawable/ic_clock_outline_dark</item>
+        <item name="ic_coin_outline">@drawable/ic_coin_outline_dark</item>
+        <item name="ic_refresh">@drawable/ic_refresh_dark</item>
+        <item name="ic_settings">@drawable/ic_settings_dark</item>
     </style>
 </resources>

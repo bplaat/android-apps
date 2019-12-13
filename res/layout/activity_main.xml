@@ -21,7 +21,7 @@
 
                 <LinearLayout android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@color/primary_color">
+                    android:background="?primary_color">
 
                     <TextView android:text="@string/latest_title"
                         android:layout_width="0dp"
@@ -34,7 +34,7 @@
                         android:paddingRight="16dp" />
 
                     <ImageView android:id="@+id/latest_refresh_button"
-                        android:src="@drawable/ic_refresh"
+                        android:src="?ic_refresh"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:scaleType="center" />
@@ -60,7 +60,7 @@
 
                 <LinearLayout android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@color/primary_color">
+                    android:background="?primary_color">
 
                     <TextView android:text="@string/sports_title"
                         android:layout_width="0dp"
@@ -73,7 +73,7 @@
                         android:paddingRight="16dp" />
 
                     <ImageView android:id="@+id/sports_refresh_button"
-                        android:src="@drawable/ic_refresh"
+                        android:src="?ic_refresh"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:scaleType="center" />
@@ -99,7 +99,7 @@
 
                 <LinearLayout android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@color/primary_color">
+                    android:background="?primary_color">
 
                     <TextView android:text="@string/economy_title"
                         android:layout_width="0dp"
@@ -112,7 +112,7 @@
                         android:paddingRight="16dp" />
 
                     <ImageView android:id="@+id/economy_refresh_button"
-                        android:src="@drawable/ic_refresh"
+                        android:src="?ic_refresh"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:scaleType="center" />
@@ -138,7 +138,7 @@
 
                 <LinearLayout android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@color/primary_color">
+                    android:background="?primary_color">
 
                     <TextView android:text="@string/tech_title"
                         android:layout_width="0dp"
@@ -151,7 +151,7 @@
                         android:paddingRight="16dp" />
 
                     <ImageView android:id="@+id/tech_refresh_button"
-                        android:src="@drawable/ic_refresh"
+                        android:src="?ic_refresh"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
                         android:scaleType="center" />
@@ -177,7 +177,7 @@
 
                 <LinearLayout android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:background="@color/primary_color">
+                    android:background="?primary_color">
 
                     <TextView android:text="@string/settings_button"
                         android:layout_width="0dp"
@@ -190,18 +190,53 @@
                         android:paddingRight="16dp" />
                 </LinearLayout>
 
-                <TextView android:text="@string/settings_button"
-                    android:layout_width="match_parent"
+                <ScrollView android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="center" />
+                    android:layout_weight="1">
+
+                    <LinearLayout android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <LinearLayout android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="16dp">
+
+                            <TextView android:text="@string/dark_theme_label"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:padding="4dp"
+                                android:textColor="?secondary_text_color" />
+
+                            <Switch android:id="@+id/dark_theme_switch"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+                        </LinearLayout>
+
+                        <Button android:id="@+id/settings_save_button"
+                            android:text="@string/save_button"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp" />
+
+                        <TextView android:text="@string/about"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="4dp"
+                            android:gravity="center"
+                            android:lineSpacingMultiplier="1.2"
+                            android:textColor="?secondary_text_color" />
+                    </LinearLayout>
+                </ScrollView>
             </LinearLayout>
         </FrameLayout>
 
         <!-- Bottom Bar -->
         <LinearLayout android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@color/primary_color">
+            android:background="?primary_color">
 
             <LinearLayout android:id="@+id/latest_button"
                 android:layout_width="0dp"
@@ -210,7 +245,7 @@
                 android:orientation="vertical"
                 android:gravity="center">
 
-                <ImageView android:src="@drawable/ic_clock_outline"
+                <ImageView android:src="?ic_clock_outline"
                     android:layout_width="24dp"
                     android:layout_height="24dp" />
 
@@ -227,7 +262,7 @@
                 android:gravity="center"
                 android:alpha="0.5">
 
-                <ImageView android:src="@drawable/ic_basketball"
+                <ImageView android:src="?ic_basketball"
                     android:layout_width="24dp"
                     android:layout_height="24dp" />
 
@@ -244,7 +279,7 @@
                 android:gravity="center"
                 android:alpha="0.5">
 
-                <ImageView android:src="@drawable/ic_coin_outline"
+                <ImageView android:src="?ic_coin_outline"
                     android:layout_width="24dp"
                     android:layout_height="24dp" />
 
@@ -261,7 +296,7 @@
                 android:gravity="center"
                 android:alpha="0.5">
 
-                <ImageView android:src="@drawable/ic_chip"
+                <ImageView android:src="?ic_chip"
                     android:layout_width="24dp"
                     android:layout_height="24dp" />
 
@@ -278,7 +313,7 @@
                 android:gravity="center"
                 android:alpha="0.5">
 
-                <ImageView android:src="@drawable/ic_settings"
+                <ImageView android:src="?ic_settings"
                     android:layout_width="24dp"
                     android:layout_height="24dp" />
 
@@ -294,15 +329,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:background="@color/background_color"
+        android:background="?background_color"
         android:visibility="gone">
 
         <LinearLayout android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:background="@color/primary_color">
+            android:background="?primary_color">
 
             <ImageView android:id="@+id/article_back_button"
-                android:src="@drawable/ic_arrow_back"
+                android:src="?ic_arrow_left"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
                 android:scaleType="center" />
@@ -340,7 +375,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:textStyle="italic"
-                        android:textColor="@color/secondary_text_color" />
+                        android:textColor="?secondary_text_color" />
 
                     <LinearLayout android:id="@+id/article_content"
                         android:layout_width="match_parent"

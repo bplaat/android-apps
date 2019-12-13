@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">NOS</string>
+    <string name="about">This application is made by Bastiaan van der Plaat but all the news data is from the NOS site</string>
+    <string name="dark_theme_label">Dark theme</string>
     <string name="economy_button">Economy</string>
     <string name="economy_title">Economy news</string>
     <string name="latest_button">Latest</string>
     <string name="latest_title">Latest news</string>
     <string name="settings_button">Settings</string>
+    <string name="save_button">Save</string>
     <string name="sports_button">Sports</string>
     <string name="sports_title">Sports news</string>
     <string name="tech_button">Tech</string>

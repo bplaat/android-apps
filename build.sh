@@ -3,7 +3,7 @@
 PATH=$PATH:../android-sdk/build-tools/29.0.2:../android-sdk/platform-tools
 PLATFORM=../android-sdk/platforms/android-29/android.jar
 if aapt package -m -J src -M AndroidManifest.xml -S res -I $PLATFORM; then
-    if javac -cp "$PLATFORM:classes" -d classes $(find -name *.java); then
+    if javac -Xlint -cp "$PLATFORM:classes" -d classes $(find -name *.java); then
         dx --dex --output=classes.dex classes
         aapt package -F nos-unaligned.apk -M AndroidManifest.xml -S res -I $PLATFORM
         aapt add nos-unaligned.apk classes.dex
