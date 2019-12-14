@@ -1,12 +1,12 @@
 package nl.nos.android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,10 +26,6 @@ import org.jsoup.Jsoup;
 
 public class MainActivity extends Activity {
     private static final String API_KEY = "s3khkckng9or74lykjvhufbetd8jgtxcf265ltrh";
-    private static final String LATEST_RSS_URL = "http://feeds.nos.nl/nosnieuwsalgemeen";
-    private static final String SPORTS_RSS_URL = "http://feeds.nos.nl/nossportalgemeen";
-    private static final String ECONOMY_RSS_URL = "http://feeds.nos.nl/nosnieuwseconomie";
-    private static final String TECH_RSS_URL = "http://feeds.nos.nl/nosnieuwstech";
 
     private LinearLayout mainPage;
     private LinearLayout articlePage;
@@ -69,7 +65,7 @@ public class MainActivity extends Activity {
         articlePage.animate().alpha(1).translationY(0).setDuration(150);
     }
 
-    public void hideArticlePage() {
+    private void hideArticlePage() {
         articlePage.animate().alpha(0).translationY(64).setDuration(150).withEndAction(new Runnable() {
             public void run() {
                 articlePage.setVisibility(View.GONE);
@@ -79,7 +75,7 @@ public class MainActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences preferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
         if (preferences.getBoolean("dark-theme", false)) {
             setTheme(R.style.AppThemeDark);
         }
@@ -92,10 +88,10 @@ public class MainActivity extends Activity {
         // Main Page
 
         // News tabs
-        initNewsTab((ListView)findViewById(R.id.latest_articles_list), LATEST_RSS_URL, (ImageView)findViewById(R.id.latest_refresh_button));
-        initNewsTab((ListView)findViewById(R.id.sports_articles_list), SPORTS_RSS_URL, (ImageView)findViewById(R.id.sports_refresh_button));
-        initNewsTab((ListView)findViewById(R.id.economy_articles_list), ECONOMY_RSS_URL, (ImageView)findViewById(R.id.economy_refresh_button));
-        initNewsTab((ListView)findViewById(R.id.tech_articles_list), TECH_RSS_URL, (ImageView)findViewById(R.id.tech_refresh_button));
+        initNewsTab((ListView)findViewById(R.id.latest_articles_list), "http://feeds.nos.nl/nosnieuwsalgemeen", (ImageView)findViewById(R.id.latest_refresh_button));
+        initNewsTab((ListView)findViewById(R.id.sports_articles_list), "http://feeds.nos.nl/nossportalgemeen", (ImageView)findViewById(R.id.sports_refresh_button));
+        initNewsTab((ListView)findViewById(R.id.economy_articles_list), "http://feeds.nos.nl/nosnieuwseconomie", (ImageView)findViewById(R.id.economy_refresh_button));
+        initNewsTab((ListView)findViewById(R.id.tech_articles_list), "http://feeds.nos.nl/nosnieuwstech", (ImageView)findViewById(R.id.tech_refresh_button));
 
         // Settings tab
         Switch darkThemeSwitch = (Switch)findViewById(R.id.dark_theme_switch);
