@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Material Light Theme -->
-    <style name="AppThemeLight" parent="@android:style/Theme.Material.Light.NoActionBar">
+    <style name="light_app_theme" parent="@android:style/Theme.Material.Light.NoActionBar">
         <item name="android:textColor">@color/light_primary_text_color</item>
         <item name="android:windowBackground">@color/light_background_color</item>
         <item name="android:colorPrimary">@color/light_primary_color</item>
@@ -23,7 +23,7 @@
     </style>
 
     <!-- Material Dark Theme -->
-    <style name="AppThemeDark" parent="@android:style/Theme.Material.NoActionBar">
+    <style name="dark_app_theme" parent="@android:style/Theme.Material.NoActionBar">
         <item name="android:textColor">@color/dark_primary_text_color</item>
         <item name="android:windowBackground">@color/dark_background_color</item>
         <item name="android:colorPrimary">@color/dark_primary_color</item>

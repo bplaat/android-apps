@@ -77,7 +77,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         SharedPreferences preferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
         if (preferences.getBoolean("dark-theme", false)) {
-            setTheme(R.style.AppThemeDark);
+            setTheme(R.style.dark_app_theme);
         }
         setContentView(R.layout.activity_main);
 

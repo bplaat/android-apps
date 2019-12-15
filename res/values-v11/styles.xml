@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Holo Light Theme -->
-    <style name="AppThemeLight" parent="@android:style/Theme.Holo.Light.NoActionBar">
+    <style name="light_app_theme" parent="@android:style/Theme.Holo.Light.NoActionBar">
         <item name="android:textColor">@color/light_primary_text_color</item>
         <item name="android:windowBackground">@color/light_background_color</item>
 
@@ -20,7 +20,7 @@
     </style>
 
     <!-- Holo Dark Theme -->
-    <style name="AppThemeDark" parent="@android:style/Theme.Holo.NoActionBar">
+    <style name="dark_app_theme" parent="@android:style/Theme.Holo.NoActionBar">
         <item name="android:textColor">@color/dark_primary_text_color</item>
         <item name="android:windowBackground">@color/dark_background_color</item>
 
