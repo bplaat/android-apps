@@ -2,7 +2,7 @@
 <resources>
     <!-- Light theme colors -->
     <color name="light_primary_color">#eee</color>
-    <color name="light_primary_dark_color">#ccc</color>
+    <color name="light_primary_dark_color">#ddd</color>
     <color name="light_accent_color">#e11</color>
     <color name="light_background_color">#fff</color>
     <color name="light_secondary_text_color">#666</color>
