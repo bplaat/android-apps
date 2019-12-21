@@ -29,6 +29,8 @@ public class MainActivity extends Activity {
 
     private LinearLayout mainPage;
     private LinearLayout articlePage;
+    private LinearLayout[] tabs;
+    private LinearLayout[] buttons;
 
     private void openArticlePage(Article article) {
         FetchImageTask.fetchImage(this, (ImageView)findViewById(R.id.article_image), article.getImageUrl());
@@ -117,45 +119,27 @@ public class MainActivity extends Activity {
         });
 
         // Bottom bar
-        LinearLayout[] tabs = {
-            (LinearLayout)findViewById(R.id.latest_tab),
-            (LinearLayout)findViewById(R.id.sports_tab),
-            (LinearLayout)findViewById(R.id.economy_tab),
-            (LinearLayout)findViewById(R.id.tech_tab),
-            (LinearLayout)findViewById(R.id.settings_tab)
-        };
+        tabs = new LinearLayout[5];
+        tabs[0] = (LinearLayout)findViewById(R.id.latest_tab);
+        tabs[1] = (LinearLayout)findViewById(R.id.sports_tab);
+        tabs[2] = (LinearLayout)findViewById(R.id.economy_tab);
+        tabs[3] = (LinearLayout)findViewById(R.id.tech_tab);
+        tabs[4] = (LinearLayout)findViewById(R.id.settings_tab);
+        for (int i = 0; i < tabs.length; i++) {
+            tabs[i].setTag(i);
+        }
 
-        LinearLayout[] buttons = {
-            (LinearLayout)findViewById(R.id.latest_button),
-            (LinearLayout)findViewById(R.id.sports_button),
-            (LinearLayout)findViewById(R.id.economy_button),
-            (LinearLayout)findViewById(R.id.tech_button),
-            (LinearLayout)findViewById(R.id.settings_button)
-        };
-
+        buttons = new LinearLayout[5];
+        buttons[0] = (LinearLayout)findViewById(R.id.latest_button);
+        buttons[1] = (LinearLayout)findViewById(R.id.sports_button);
+        buttons[2] = (LinearLayout)findViewById(R.id.economy_button);
+        buttons[3] = (LinearLayout)findViewById(R.id.tech_button);
+        buttons[4] = (LinearLayout)findViewById(R.id.settings_button);
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setTag(i);
             buttons[i].setOnClickListener(new View.OnClickListener() {
                 public void onClick(View view) {
-                    int index = (int)view.getTag();
-
-                    if (tabs[index].getVisibility() != View.VISIBLE) {
-                        View tabContent = tabs[index].getChildAt(1);
-                        tabContent.setAlpha(0f);
-                        tabContent.setScaleX(0.98f);
-                        tabContent.setScaleY(0.98f);
-                        tabContent.animate().alpha(1).scaleX(1).scaleY(1).setDuration(150);
-                    }
-
-                    for (LinearLayout tab : tabs) {
-                        tab.setVisibility(View.GONE);
-                    }
-                    tabs[index].setVisibility(View.VISIBLE);
-
-                    for (LinearLayout button : buttons) {
-                        button.animate().alpha(0.5f).setDuration(150);
-                    }
-                    view.animate().alpha(1f).setDuration(150);
+                    openTab((int)view.getTag());
                 }
             });
         }
@@ -164,8 +148,38 @@ public class MainActivity extends Activity {
     public void onBackPressed() {
         if (articlePage.getVisibility() == View.VISIBLE) {
             hideArticlePage();
-        } else {
-            super.onBackPressed();
+        }
+        else if (tabs[0].getVisibility() != View.VISIBLE) {
+            openTab(0);
+        }
+        else {
+            moveTaskToBack(false);
+        }
+    }
+
+    private void openTab(int index) {
+        for (LinearLayout tab : tabs) {
+            if ((int)tab.getTag() == index) {
+                if (tab.getVisibility() != View.VISIBLE) {
+                    tab.setVisibility(View.VISIBLE);
+
+                    View tabContent = tab.getChildAt(1);
+                    tabContent.setAlpha(0f);
+                    tabContent.setScaleX(0.98f);
+                    tabContent.setScaleY(0.98f);
+                    tabContent.animate().alpha(1).scaleX(1).scaleY(1).setDuration(150);
+                }
+            } else {
+                tab.setVisibility(View.GONE);
+            }
+        }
+
+        for (LinearLayout button : buttons) {
+            if ((int)button.getTag() == index) {
+                button.animate().alpha(1f).setDuration(150);
+            } else {
+                button.animate().alpha(0.5f).setDuration(150);
+            }
         }
     }
 
