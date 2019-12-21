@@ -260,7 +260,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:alpha="0.5">
+                android:alpha="?bottom_bar_button_alpha">
 
                 <ImageView android:src="?ic_basketball"
                     android:layout_width="24dp"
@@ -277,7 +277,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:alpha="0.5">
+                android:alpha="?bottom_bar_button_alpha">
 
                 <ImageView android:src="?ic_coin_outline"
                     android:layout_width="24dp"
@@ -294,7 +294,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:alpha="0.5">
+                android:alpha="?bottom_bar_button_alpha">
 
                 <ImageView android:src="?ic_chip"
                     android:layout_width="24dp"
@@ -311,7 +311,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:alpha="0.5">
+                android:alpha="?bottom_bar_button_alpha">
 
                 <ImageView android:src="?ic_settings"
                     android:layout_width="24dp"

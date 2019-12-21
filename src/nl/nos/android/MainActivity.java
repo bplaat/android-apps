@@ -31,6 +31,7 @@ public class MainActivity extends Activity {
     private LinearLayout articlePage;
     private LinearLayout[] tabs;
     private LinearLayout[] buttons;
+    private float normalButtonAlpha;
 
     private void openArticlePage(Article article) {
         FetchImageTask.fetchImage(this, (ImageView)findViewById(R.id.article_image), article.getImageUrl());
@@ -135,6 +136,7 @@ public class MainActivity extends Activity {
         buttons[2] = (LinearLayout)findViewById(R.id.economy_button);
         buttons[3] = (LinearLayout)findViewById(R.id.tech_button);
         buttons[4] = (LinearLayout)findViewById(R.id.settings_button);
+        normalButtonAlpha = buttons[1].getAlpha();
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setTag(i);
             buttons[i].setOnClickListener(new View.OnClickListener() {
@@ -178,7 +180,7 @@ public class MainActivity extends Activity {
             if ((int)button.getTag() == index) {
                 button.animate().alpha(1f).setDuration(150);
             } else {
-                button.animate().alpha(0.5f).setDuration(150);
+                button.animate().alpha(normalButtonAlpha).setDuration(150);
             }
         }
     }

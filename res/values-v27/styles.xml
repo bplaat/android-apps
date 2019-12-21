@@ -8,6 +8,8 @@
         <item name="android:colorAccent">@color/light_accent_color</item>
         <item name="android:colorPrimaryDark">@color/light_primary_color</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@color/light_primary_color</item>
+        <item name="android:windowLightNavigationBar">true</item>
 
         <item name="bottom_bar_button_alpha">0.6</item>
 
@@ -34,6 +36,7 @@
         <item name="android:colorPrimaryDark">@color/dark_primary_color</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:navigationBarColor">@color/dark_primary_color</item>
+        <item name="android:windowLightNavigationBar">false</item>
 
         <item name="bottom_bar_button_alpha">0.5</item>
 
