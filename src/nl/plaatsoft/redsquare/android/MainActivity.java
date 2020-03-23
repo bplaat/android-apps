@@ -37,8 +37,4 @@ public class MainActivity extends Activity {
         gameView.pause();
         super.onPause();
     }
-
-    public void onBackPressed() {
-        moveTaskToBack(false);
-    }
 }

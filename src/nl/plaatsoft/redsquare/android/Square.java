@@ -46,7 +46,7 @@ public class Square {
     }
 
     public boolean collision (Square otherSquare) {
-        return otherSquare.getX() < getX() + getWidth() && otherSquare.getX() + otherSquare.getWidth() > getX() &&
-            otherSquare.getY() < getY() + getHeight() && otherSquare.getY() + otherSquare.getHeight() > getY();
+        return otherSquare.getX() < x + width && otherSquare.getX() + otherSquare.getWidth() > x &&
+            otherSquare.getY() < y + height && otherSquare.getY() + otherSquare.getHeight() > y;
     }
 }
