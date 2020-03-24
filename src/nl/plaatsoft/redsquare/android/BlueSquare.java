@@ -6,10 +6,10 @@ import android.graphics.Paint;
 public class BlueSquare extends Square {
     private int vx;
     private int vy;
-    private int speed;
+    private float speed;
     private Paint paint;
 
-    public BlueSquare(int x, int y, int width, int height, int vx, int vy, int speed) {
+    public BlueSquare(float x, float y, float width, float height, int vx, int vy, float speed) {
         super(x, y, width, height);
         this.vx = vx;
         this.vy = vy;
@@ -20,19 +20,31 @@ public class BlueSquare extends Square {
         paint.setColor(0xaa0000ff);
     }
 
-    public int getSpeed() {
+    public float getSpeed() {
         return speed;
     }
 
-    public void setSpeed(int speed) {
+    public void setSpeed(float speed) {
         this.speed = speed;
     }
 
     public void update(Canvas canvas) {
         x += vx * speed;
         y += vy * speed;
-        if (x < 0 || x + width > canvas.getWidth()) vx = -vx;
-        if (y < 0 || y + height > canvas.getHeight()) vy = -vy;
+
+        if (x < 1 || x + width >= canvas.getWidth() - 1) {
+            vx = -vx;
+            if (Utils.rand(1, 3) == 1) {
+                vy = -vy;
+            }
+        }
+
+        if (y < 1 || y + height >= canvas.getHeight() - 1) {
+            vy = -vy;
+            if (Utils.rand(1, 3) == 1) {
+                vx = -vx;
+            }
+        }
     }
 
     public void draw(Canvas canvas) {

@@ -6,7 +6,7 @@ import android.graphics.Paint;
 public class RedSquare extends Square {
     private Paint paint;
 
-    public RedSquare(int x, int y, int width, int height) {
+    public RedSquare(float x, float y, float width, float height) {
         super(x, y, width, height);
 
         paint = new Paint();

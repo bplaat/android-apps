@@ -1,47 +1,47 @@
 package nl.plaatsoft.redsquare.android;
 
-public class Square {
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
+abstract public class Square {
+    protected float x;
+    protected float y;
+    protected float width;
+    protected float height;
 
-    public Square(int x, int y, int width, int height) {
+    public Square(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
     }
 
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
-    public int getWidth() {
+    public float getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
+    public void setWidth(float width) {
         this.width = width;
     }
 
-    public int getHeight() {
+    public float getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(float height) {
         this.height = height;
     }
 

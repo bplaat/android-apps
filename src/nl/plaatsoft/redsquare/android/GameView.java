@@ -42,18 +42,25 @@ public class GameView extends View {
 
         score = 0;
         startTime = System.currentTimeMillis();
-        levelTime = System.currentTimeMillis();
+        levelTime = startTime;
         level = 1;
-        borderWidth = 20;
+        borderWidth = 0;
+
+        Utils.seed = startTime;
 
         int redsquareSize = 60;
-        redsquare = new RedSquare((int)(((width - redsquareSize) / 2) * scale), (int)(((height - redsquareSize) / 2) * scale), (int)(redsquareSize * scale), (int)(redsquareSize * scale));
+        redsquare = new RedSquare(((width - redsquareSize) / 2) * scale, ((height - redsquareSize) / 2) * scale, redsquareSize * scale, redsquareSize * scale);
 
         blueSquares = new BlueSquare[4];
-        blueSquares[0] = new BlueSquare((int)(0 * scale), (int)(0 * scale), (int)(75 * scale), (int)(100 * scale), 1, 1, (int)(1 * scale));
-        blueSquares[1] = new BlueSquare((int)((width - 150) * scale), (int)(0 * scale), (int)(150 * scale), (int)(75 * scale), -1, 1, (int)(1 * scale));
-        blueSquares[2] = new BlueSquare((int)(0 * scale), (int)((height - 125) * scale), (int)(75 * scale), (int)(125 * scale), 1, -1, (int)(1 * scale));
-        blueSquares[3] = new BlueSquare((int)((width - 100) * scale), (int)((height - 150) * scale), (int)(100 * scale), (int)(150 * scale), -1, -1, (int)(1 * scale));
+        blueSquares[0] = new BlueSquare(0, 0, Utils.rand(50, 100) * scale, Utils.rand(75, 125) * scale, 1, 1, 0.5f * scale);
+        int _width = Utils.rand(125, 150);
+        blueSquares[1] = new BlueSquare((width - _width) * scale, 0, _width * scale, Utils.rand(50, 100) * scale, -1, 1, 0.5f * scale);
+        int _height = Utils.rand(75, 125);
+        blueSquares[2] = new BlueSquare(0, (height - _height) * scale, Utils.rand(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
+
+        _width = Utils.rand(75, 125);
+        _height = Utils.rand(125, 150);
+        blueSquares[3] = new BlueSquare((width - _width) * scale, (height - _height) * scale, _width * scale, _height * scale, -1, -1, 0.5f * scale);
 
         invalidate();
     }
@@ -64,38 +71,39 @@ public class GameView extends View {
 
     protected void onDraw(Canvas canvas) {
         if (running) {
-            if (System.currentTimeMillis() - levelTime > 10000) {
-                borderWidth += level;
+            if (System.currentTimeMillis() - levelTime > 5000 + level * Utils.rand(2500, 10000)) {
                 level++;
+                borderWidth += Utils.rand(4, 12);
                 levelTime = System.currentTimeMillis();
 
                 for (BlueSquare blueSquare : blueSquares) {
-                    blueSquare.setSpeed((int)(level * scale));
+                    blueSquare.setSpeed((0.25f + level * 0.25f) * scale);
                 }
             }
 
             for (BlueSquare blueSquare : blueSquares) {
                 blueSquare.update(canvas);
+
                 if (blueSquare.collision(redsquare)) {
                     pause();
                 }
             }
 
             if (
-                redsquare.getX() < (int)(borderWidth * scale) ||
-                redsquare.getY() < (int)(borderWidth * scale) ||
-                redsquare.getX() + redsquare.getWidth() > (int)((width - borderWidth) * scale) ||
-                redsquare.getY() + redsquare.getHeight() > (int)((height - borderWidth) * scale)
+                redsquare.getX() < borderWidth * scale ||
+                redsquare.getY() < borderWidth * scale ||
+                redsquare.getX() + redsquare.getWidth() > (width - borderWidth) * scale ||
+                redsquare.getY() + redsquare.getHeight() > (height - borderWidth) * scale
             ) {
                 pause();
             }
         }
 
-        canvas.drawRGB((score * 2) % 256, (score / 2) % 256, (score << 2) % 256);
+        canvas.drawColor(0xffD62753);
 
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0x44ffffff);
+        paint.setColor(0x33ffffff);
         canvas.drawRect(borderWidth * scale, borderWidth * scale, (width - borderWidth) * scale, (height - borderWidth) * scale, paint);
 
         for (int i = 0; i < blueSquares.length; i++) {
@@ -108,14 +116,14 @@ public class GameView extends View {
         paint.setColor(0xffffffff);
         paint.setTextSize(16 * scale);
         paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("Score: " + score, borderWidth * scale, 32 * scale, paint);
+        canvas.drawText("Score: " + score, 16 * scale, (16 + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
         int seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
-        canvas.drawText(String.format("Time: %d:%02d", seconds / 60, seconds % 60), (width / 2) * scale, 32 * scale, paint);
+        canvas.drawText(String.format("Time: %d:%02d", seconds / 60, seconds % 60), (width / 2) * scale, (16 + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Level: " + level, (width - borderWidth) * scale, 32 * scale, paint);
+        canvas.drawText("Level: " + level, (width - 16) * scale, (16 + 8) * scale, paint);
 
         if (running) {
             invalidate();
@@ -134,7 +142,8 @@ public class GameView extends View {
 
             else {
                 if (
-                    touchX >= redsquare.getX() && touchY >= redsquare.getY() &&
+                    touchX >= redsquare.getX() &&
+                    touchY >= redsquare.getY() &&
                     touchX < redsquare.getX() + redsquare.getWidth() &&
                     touchY < redsquare.getY() + redsquare.getHeight()
                 ) {
@@ -147,8 +156,8 @@ public class GameView extends View {
 
         else if (event.getAction() == MotionEvent.ACTION_MOVE) {
             if (dragging) {
-                redsquare.setX((int)(touchX - redsquare.getWidth() / 2));
-                redsquare.setY((int)(touchY - redsquare.getHeight() / 2));
+                redsquare.setX(touchX - redsquare.getWidth() / 2);
+                redsquare.setY(touchY - redsquare.getHeight() / 2);
             }
 
             return true;
