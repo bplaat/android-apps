@@ -17,7 +17,7 @@ public class BlueSquare extends Square {
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0xaa0000ff);
+        paint.setColor(0xcc1155ff);
     }
 
     public float getSpeed() {

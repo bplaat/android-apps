@@ -11,7 +11,7 @@ public class RedSquare extends Square {
 
         paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0xaaff0000);
+        paint.setColor(0xccee3322);
     }
 
     public void draw(Canvas canvas) {

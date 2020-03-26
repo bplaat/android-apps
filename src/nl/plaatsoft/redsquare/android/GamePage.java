@@ -2,6 +2,7 @@ package nl.plaatsoft.redsquare.android;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
@@ -126,11 +127,11 @@ public class GamePage extends View {
             }
         }
 
-        canvas.drawColor(0x00000000);
+        canvas.drawColor(Color.TRANSPARENT);
 
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0x33ffffff);
+        paint.setColor(0x22ffffff);
         canvas.drawRect(borderWidth * scale, borderWidth * scale, (width - borderWidth) * scale, (height - borderWidth) * scale, paint);
 
         for (int i = 0; i < blueSquares.length; i++) {
@@ -140,7 +141,7 @@ public class GamePage extends View {
         redsquare.draw(canvas);
 
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(0xffffffff);
+        paint.setColor(Color.WHITE);
         paint.setTextSize(16 * scale);
         paint.setTextAlign(Paint.Align.LEFT);
 
