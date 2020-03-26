@@ -2,7 +2,9 @@
 <resources>
     <string name="app_name" translatable="false">RedSquare</string>
     <string name="play_button">Play</string>
+    <string name="highscore_button">High Score</string>
     <string name="help_button">Help</string>
+    <string name="settings_button">Settings</string>
     <string name="exit_button">Exit</string>
     <string name="footer_label">Made by Bastiaan van der Plaat</string>
 
@@ -12,6 +14,19 @@
     <string name="level_label" formatted="false">Level: %d</string>
     <string name="back_button">Back</string>
 
+    <string name="highscore_title">High Score</string>
+
     <string name="help_title">Help</string>
-    <string name="help_text_label">RedSquare is an classic 2D action game.\nClick and hold the red square.\nNow move so that you neither touch the wall\nnor get hit by any of the blue squares.\nIf you make it to 40 seconds, you are\ndoing brilliantly!</string>
+    <string name="help_text_label">
+        RedSquare is an classic 2D action game.\n
+        Click and hold the red square.\n
+        Now move so that you neither touch the wall\n
+        nor get hit by any of the blue squares.\n
+        If you make it to 40 seconds, you are\n
+        doing brilliantly!
+    </string>
+
+    <string name="settings_title">Settings</string>
+    <string name="name_input_label">Your name:</string>
+    <string name="settings_back_button">Save &amp; Back</string>
 </resources>

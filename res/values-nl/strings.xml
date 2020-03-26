@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="play_button">Spelen</string>
+    <string name="highscore_button">Hoogste Scores</string>
     <string name="help_button">Help</string>
+    <string name="settings_button">Instellingen</string>
     <string name="exit_button">Sluiten</string>
     <string name="footer_label">Gemaakt door Bastiaan van der Plaat</string>
 
@@ -10,4 +12,20 @@
     <string name="time_label" formatted="false">Tijd: %d:%02d</string>
     <string name="level_label" formatted="false">Level: %d</string>
     <string name="back_button">Terug</string>
+
+    <string name="highscore_title">Hoogste Scores</string>
+
+    <string name="help_title">Help</string>
+    <string name="help_text_label">
+        RedSquare is een klassiek 2D-actiespel.\n
+        Klik en houd het rode vierkant vast.\n
+        Verplaats nu zodat je de muur niet aanraakt\n
+        of je wordt niet geraakt door een van\n
+        de blauwe vierkanten. Als je de 40 seconden\n
+        haalt, doe je het briljant!
+    </string>
+
+    <string name="settings_title">Instellingen</string>
+    <string name="name_input_label">Je naam:</string>
+    <string name="settings_back_button">Opslaan &amp; Terug</string>
 </resources>

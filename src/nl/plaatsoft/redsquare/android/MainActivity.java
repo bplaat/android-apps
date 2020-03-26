@@ -1,10 +1,13 @@
 package nl.plaatsoft.redsquare.android;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,10 +19,14 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SharedPreferences preferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
+
         RelativeLayout menuPage = (RelativeLayout)findViewById(R.id.menu_page);
         gamePage = (GamePage)findViewById(R.id.game_page);
         LinearLayout gameoverPage = (LinearLayout)findViewById(R.id.gameover_page);
+        LinearLayout highscorePage = (LinearLayout)findViewById(R.id.highscore_page);
         LinearLayout helpPage = (LinearLayout)findViewById(R.id.help_page);
+        LinearLayout settingsPage = (LinearLayout)findViewById(R.id.settings_page);
 
         // Menu page
         try {
@@ -27,6 +34,14 @@ public class MainActivity extends Activity {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+
+        ((Button)findViewById(R.id.menu_exit_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                finish();
+            }
+        });
+
+        // Game page
         ((Button)findViewById(R.id.menu_play_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 menuPage.setVisibility(View.GONE);
@@ -35,25 +50,15 @@ public class MainActivity extends Activity {
                 gamePage.start();
             }
         });
-        ((Button)findViewById(R.id.menu_help_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                menuPage.setVisibility(View.GONE);
-                helpPage.setVisibility(View.VISIBLE);
-            }
-        });
-        ((Button)findViewById(R.id.menu_exit_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
-        // Game page & game over page
+        // Game Over page
         TextView gameoverScoreLabel = (TextView)findViewById(R.id.gameover_score_label);
         String scoreLabelString = getResources().getString(R.string.score_label);
         TextView gameoverTimeLabel = (TextView)findViewById(R.id.gameover_time_label);
         String timeLabelString = getResources().getString(R.string.time_label);
         TextView gameoverLevelLabel = (TextView)findViewById(R.id.gameover_level_label);
         String levelLabelString = getResources().getString(R.string.level_label);
+
         gamePage.setOnEventListener(new GamePage.OnEventListener() {
             public void onGameover(int score, int seconds, int level) {
                 gameoverScoreLabel.setText(String.format(scoreLabelString, score));
@@ -65,6 +70,7 @@ public class MainActivity extends Activity {
                 gameoverPage.setVisibility(View.VISIBLE);
             }
         });
+
         ((Button)findViewById(R.id.gameover_back_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 gamePage.setVisibility(View.GONE);
@@ -73,10 +79,56 @@ public class MainActivity extends Activity {
             }
         });
 
+        // High Score page
+        ((Button)findViewById(R.id.menu_highscore_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                menuPage.setVisibility(View.GONE);
+                highscorePage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        ((Button)findViewById(R.id.highscore_back_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                highscorePage.setVisibility(View.GONE);
+                menuPage.setVisibility(View.VISIBLE);
+            }
+        });
+
         // Help page
+        ((Button)findViewById(R.id.menu_help_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                menuPage.setVisibility(View.GONE);
+                helpPage.setVisibility(View.VISIBLE);
+            }
+        });
+
         ((Button)findViewById(R.id.help_back_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 helpPage.setVisibility(View.GONE);
+                menuPage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Settings page
+        EditText settingsNameInput = (EditText)findViewById(R.id.settings_name_input);
+
+        ((Button)findViewById(R.id.menu_settings_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                settingsNameInput.setText(preferences.getString("name", "Anonymous"));
+                settingsNameInput.setSelection(settingsNameInput.getText().length());
+
+                menuPage.setVisibility(View.GONE);
+                settingsPage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        ((Button)findViewById(R.id.settings_back_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("name", settingsNameInput.getText().toString());
+                editor.apply();
+
+                settingsPage.setVisibility(View.GONE);
                 menuPage.setVisibility(View.VISIBLE);
             }
         });
