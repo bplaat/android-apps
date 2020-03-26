@@ -111,7 +111,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="#bb000000"
+        android:background="#cc000000"
         android:visibility="gone">
 
         <TextView android:text="@string/gameover_title"

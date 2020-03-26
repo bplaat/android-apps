@@ -74,15 +74,15 @@ public class GamePage extends View {
         redsquare = new RedSquare(((width - redsquareSize) / 2) * scale, ((height - redsquareSize) / 2) * scale, redsquareSize * scale, redsquareSize * scale);
 
         blueSquares = new BlueSquare[4];
-        blueSquares[0] = new BlueSquare(0, 0, Utils.rand(50, 100) * scale, Utils.rand(75, 125) * scale, 1, 1, 0.5f * scale);
+        blueSquares[0] = new BlueSquare(scale, scale, Utils.rand(50, 100) * scale, Utils.rand(75, 125) * scale, 1, 1, 0.5f * scale);
         int _width = Utils.rand(125, 150);
-        blueSquares[1] = new BlueSquare((width - _width) * scale, 0, _width * scale, Utils.rand(50, 100) * scale, -1, 1, 0.5f * scale);
+        blueSquares[1] = new BlueSquare((width - _width - 1) * scale, scale, _width * scale, Utils.rand(50, 100) * scale, -1, 1, 0.5f * scale);
         int _height = Utils.rand(75, 125);
-        blueSquares[2] = new BlueSquare(0, (height - _height) * scale, Utils.rand(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
+        blueSquares[2] = new BlueSquare(2 * scale, (height - _height - 1) * scale, Utils.rand(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
 
         _width = Utils.rand(75, 125);
         _height = Utils.rand(125, 150);
-        blueSquares[3] = new BlueSquare((width - _width) * scale, (height - _height) * scale, _width * scale, _height * scale, -1, -1, 0.5f * scale);
+        blueSquares[3] = new BlueSquare((width - _width - 1) * scale, (height - _height - 1) * scale, _width * scale, _height * scale, -1, -1, 0.5f * scale);
 
         invalidate();
     }
