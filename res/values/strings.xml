@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name" translatable="false">RedSquare</string>
     <string name="play_button">Play</string>
+    <string name="help_button">Help</string>
     <string name="exit_button">Exit</string>
     <string name="footer_label">Made by Bastiaan van der Plaat</string>
 
@@ -10,4 +11,7 @@
     <string name="time_label" formatted="false">Time: %d:%02d</string>
     <string name="level_label" formatted="false">Level: %d</string>
     <string name="back_button">Back</string>
+
+    <string name="help_title">Help</string>
+    <string name="help_text_label">RedSquare is an classic 2D action game.\nClick and hold the red square.\nNow move so that you neither touch the wall\nnor get hit by any of the blue squares.\nIf you make it to 40 seconds, you are\ndoing brilliantly!</string>
 </resources>

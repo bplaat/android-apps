@@ -19,6 +19,7 @@ public class MainActivity extends Activity {
         RelativeLayout menuPage = (RelativeLayout)findViewById(R.id.menu_page);
         gamePage = (GamePage)findViewById(R.id.game_page);
         LinearLayout gameoverPage = (LinearLayout)findViewById(R.id.gameover_page);
+        LinearLayout helpPage = (LinearLayout)findViewById(R.id.help_page);
 
         // Menu page
         try {
@@ -26,7 +27,6 @@ public class MainActivity extends Activity {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-
         ((Button)findViewById(R.id.menu_play_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 menuPage.setVisibility(View.GONE);
@@ -35,13 +35,19 @@ public class MainActivity extends Activity {
                 gamePage.start();
             }
         });
+        ((Button)findViewById(R.id.menu_help_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                menuPage.setVisibility(View.GONE);
+                helpPage.setVisibility(View.VISIBLE);
+            }
+        });
         ((Button)findViewById(R.id.menu_exit_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 finish();
             }
         });
 
-        // Game page
+        // Game page & game over page
         TextView gameoverScoreLabel = (TextView)findViewById(R.id.gameover_score_label);
         String scoreLabelString = getResources().getString(R.string.score_label);
         TextView gameoverTimeLabel = (TextView)findViewById(R.id.gameover_time_label);
@@ -59,12 +65,18 @@ public class MainActivity extends Activity {
                 gameoverPage.setVisibility(View.VISIBLE);
             }
         });
-
-        // Game over page
         ((Button)findViewById(R.id.gameover_back_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 gamePage.setVisibility(View.GONE);
                 gameoverPage.setVisibility(View.GONE);
+                menuPage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Help page
+        ((Button)findViewById(R.id.help_back_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                helpPage.setVisibility(View.GONE);
                 menuPage.setVisibility(View.VISIBLE);
             }
         });

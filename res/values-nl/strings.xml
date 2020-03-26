@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="play_button">Spelen</string>
+    <string name="help_button">Help</string>
     <string name="exit_button">Sluiten</string>
     <string name="footer_label">Gemaakt door Bastiaan van der Plaat</string>
 
