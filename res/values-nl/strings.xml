@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="play_button">Spelen</string>
+    <string name="exit_button">Sluiten</string>
+    <string name="footer_label">Gemaakt door Bastiaan van der Plaat</string>
+
+    <string name="gameover_title">Spel Over</string>
+    <string name="score_label" formatted="false">Score: %d</string>
+    <string name="time_label" formatted="false">Tijd: %d:%02d</string>
+    <string name="level_label" formatted="false">Level: %d</string>
+    <string name="back_button">Terug</string>
+</resources>

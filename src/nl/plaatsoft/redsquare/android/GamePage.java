@@ -9,7 +9,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 
-public class GameView extends View {
+public class GamePage extends View {
+    public static abstract class OnEventListener {
+        public abstract void onGameover(int score, int seconds, int level);
+    }
+
     private boolean running = false;
     private boolean dragging = false;
     private int score;
@@ -23,8 +27,13 @@ public class GameView extends View {
     private RedSquare redsquare;
     private BlueSquare[] blueSquares;
     private Paint paint;
+    private OnEventListener onEventListener;
 
-    public GameView(Context context, AttributeSet attrs) {
+    private String scoreLabelString;
+    private String timeLabelString;
+    private String levelLabelString;
+
+    public GamePage(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         DisplayMetrics metrics = new DisplayMetrics();
@@ -35,6 +44,18 @@ public class GameView extends View {
         height = (int)(metrics.heightPixels / scale);
 
         paint = new Paint();
+
+        scoreLabelString = getResources().getString(R.string.score_label);
+        timeLabelString = getResources().getString(R.string.time_label);
+        levelLabelString = getResources().getString(R.string.level_label);
+    }
+
+    public boolean isRunning() {
+        return running;
+    }
+
+    public void setOnEventListener(OnEventListener onEventListener) {
+        this.onEventListener = onEventListener;
     }
 
     public void start() {
@@ -65,13 +86,19 @@ public class GameView extends View {
         invalidate();
     }
 
-    public void pause() {
+    public void stop() {
         running = false;
+    }
+
+    private void gameover() {
+        stop();
+        int seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
+        onEventListener.onGameover(score, seconds, level);
     }
 
     protected void onDraw(Canvas canvas) {
         if (running) {
-            if (System.currentTimeMillis() - levelTime > 5000 + level * Utils.rand(2500, 10000)) {
+            if (System.currentTimeMillis() - levelTime > 10000) {
                 level++;
                 borderWidth += Utils.rand(4, 12);
                 levelTime = System.currentTimeMillis();
@@ -85,7 +112,7 @@ public class GameView extends View {
                 blueSquare.update(canvas);
 
                 if (blueSquare.collision(redsquare)) {
-                    pause();
+                    gameover();
                 }
             }
 
@@ -95,11 +122,11 @@ public class GameView extends View {
                 redsquare.getX() + redsquare.getWidth() > (width - borderWidth) * scale ||
                 redsquare.getY() + redsquare.getHeight() > (height - borderWidth) * scale
             ) {
-                pause();
+                gameover();
             }
         }
 
-        canvas.drawColor(0xffD62753);
+        canvas.drawColor(0x00000000);
 
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
@@ -116,14 +143,15 @@ public class GameView extends View {
         paint.setColor(0xffffffff);
         paint.setTextSize(16 * scale);
         paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText("Score: " + score, 16 * scale, (16 + 8) * scale, paint);
+
+        canvas.drawText(String.format(scoreLabelString, score), 16 * scale, (16 + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
         int seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
-        canvas.drawText(String.format("Time: %d:%02d", seconds / 60, seconds % 60), (width / 2) * scale, (16 + 8) * scale, paint);
+        canvas.drawText(String.format(timeLabelString, seconds / 60, seconds % 60), (width / 2) * scale, (16 + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText("Level: " + level, (width - 16) * scale, (16 + 8) * scale, paint);
+        canvas.drawText(String.format(levelLabelString, level), (width - 16) * scale, (16 + 8) * scale, paint);
 
         if (running) {
             invalidate();
@@ -136,19 +164,13 @@ public class GameView extends View {
         float touchY = event.getY();
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (!running) {
-                start();
-            }
-
-            else {
-                if (
-                    touchX >= redsquare.getX() &&
-                    touchY >= redsquare.getY() &&
-                    touchX < redsquare.getX() + redsquare.getWidth() &&
-                    touchY < redsquare.getY() + redsquare.getHeight()
-                ) {
-                    dragging = true;
-                }
+            if (
+                touchX >= redsquare.getX() &&
+                touchY >= redsquare.getY() &&
+                touchX < redsquare.getX() + redsquare.getWidth() &&
+                touchY < redsquare.getY() + redsquare.getHeight()
+            ) {
+                dragging = true;
             }
 
             return true;
