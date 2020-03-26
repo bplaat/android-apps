@@ -156,23 +156,26 @@
         android:gravity="center"
         android:visibility="gone">
 
-        <TextView android:text="@string/highscore_title"
+        <TextView android:text="@string/local_highscore_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:fontFamily="sans-serif-medium"
-            android:textSize="48sp" />
+            android:textSize="32sp" />
 
-        <TextView android:text="Comming soon..."
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ListView android:id="@+id/local_scores_list"
+            android:layout_width="300dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:layout_marginBottom="16dp"
-            android:textSize="22sp" />
+            android:divider="@null" />
 
         <Button android:id="@+id/highscore_back_button"
             android:text="@string/back_button"
             android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
             android:paddingTop="12dp"
             android:paddingBottom="12dp"
             android:textSize="20sp" />
@@ -233,9 +236,11 @@
         <EditText android:id="@+id/settings_name_input"
             android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:inputType="text"
             android:layout_marginBottom="16dp"
-            android:textSize="22sp" />
+            android:textSize="22sp"
+            android:imeOptions="actionDone"
+            android:inputType="text"
+            android:maxLength="32" />
 
         <Button android:id="@+id/settings_back_button"
             android:text="@string/settings_back_button"

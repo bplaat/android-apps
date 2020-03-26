@@ -13,7 +13,7 @@
     <string name="level_label" formatted="false">Level: %d</string>
     <string name="back_button">Terug</string>
 
-    <string name="highscore_title">Hoogste Scores</string>
+    <string name="local_highscore_title">Lokale Hoogste Scores</string>
 
     <string name="help_title">Help</string>
     <string name="help_text_label">

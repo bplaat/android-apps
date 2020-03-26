@@ -14,7 +14,7 @@
     <string name="level_label" formatted="false">Level: %d</string>
     <string name="back_button">Back</string>
 
-    <string name="highscore_title">High Score</string>
+    <string name="local_highscore_title">Local High Score</string>
 
     <string name="help_title">Help</string>
     <string name="help_text_label">
