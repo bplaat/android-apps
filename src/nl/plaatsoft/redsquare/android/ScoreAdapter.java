@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 public class ScoreAdapter extends ArrayAdapter<Score> {
-    private static class ViewHolder {
+    private class ViewHolder {
         public TextView scoreName;
         public TextView scoreScore;
     }

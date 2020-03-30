@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">RedSquare</string>
+
     <string name="play_button">Play</string>
-    <string name="highscore_button">High Score</string>
+    <string name="local_highscore_button">Local High Score</string>
+    <string name="global_highscore_button">Global High Score</string>
     <string name="help_button">Help</string>
     <string name="settings_button">Settings</string>
-    <string name="exit_button">Exit</string>
     <string name="footer_label">Made by Bastiaan van der Plaat</string>
 
     <string name="gameover_title">Game Over</string>
@@ -15,6 +16,10 @@
     <string name="back_button">Back</string>
 
     <string name="local_highscore_title">Local High Score</string>
+
+    <string name="global_highscore_title">Global High Score</string>
+    <string name="global_highscore_loading">Loading global high scores...</string>
+    <string name="global_highscore_error">Can\'t load the global high scores</string>
 
     <string name="help_title">Help</string>
     <string name="help_text_label">

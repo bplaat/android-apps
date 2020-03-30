@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import java.net.URLEncoder;
 import java.util.Comparator;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -30,7 +31,8 @@ public class MainActivity extends Activity {
         RelativeLayout menuPage = (RelativeLayout)findViewById(R.id.menu_page);
         gamePage = (GamePage)findViewById(R.id.game_page);
         LinearLayout gameoverPage = (LinearLayout)findViewById(R.id.gameover_page);
-        LinearLayout highscorePage = (LinearLayout)findViewById(R.id.highscore_page);
+        LinearLayout localHighscorePage = (LinearLayout)findViewById(R.id.local_highscore_page);
+        LinearLayout globalHighscorePage = (LinearLayout)findViewById(R.id.global_highscore_page);
         LinearLayout helpPage = (LinearLayout)findViewById(R.id.help_page);
         LinearLayout settingsPage = (LinearLayout)findViewById(R.id.settings_page);
 
@@ -40,12 +42,6 @@ public class MainActivity extends Activity {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
-
-        ((Button)findViewById(R.id.menu_exit_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                finish();
-            }
-        });
 
         // Game page
         ((Button)findViewById(R.id.menu_play_button)).setOnClickListener(new View.OnClickListener() {
@@ -68,6 +64,8 @@ public class MainActivity extends Activity {
         gamePage.setOnEventListener(new GamePage.OnEventListener() {
             public void onGameover(int score, int seconds, int level) {
                 try {
+                    new FetchDataTask(Config.API_URL + "?key=" + Config.API_KEY + "&name=" + URLEncoder.encode(preferences.getString("name", "Anonymous"), "UTF-8") + "&score=" + score, null).execute();
+
                     JSONArray scoresJSON = new JSONArray(preferences.getString("scores", "[]"));
 
                     JSONObject newScoreJSON = new JSONObject();
@@ -78,6 +76,7 @@ public class MainActivity extends Activity {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("scores", scoresJSON.toString());
                     editor.apply();
+
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -100,42 +99,96 @@ public class MainActivity extends Activity {
             }
         });
 
-        // High Score page
-        ScoreAdapter scoresAdapter = new ScoreAdapter(this);
-        ListView localScoresList = (ListView)findViewById(R.id.local_scores_list);
-        localScoresList.setAdapter(scoresAdapter);
+        // Local High Score page
+        ScoreAdapter localHighscoreAdapter = new ScoreAdapter(this);
+        ListView localHighscoreList = (ListView)findViewById(R.id.local_highscore_list);
+        localHighscoreList.setAdapter(localHighscoreAdapter);
 
-        ((Button)findViewById(R.id.menu_highscore_button)).setOnClickListener(new View.OnClickListener() {
+        ((Button)findViewById(R.id.menu_local_highscore_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 try {
-                    scoresAdapter.clear();
+                    localHighscoreAdapter.clear();
                     JSONArray scoresJSON = new JSONArray(preferences.getString("scores", "[]"));
                     for (int i = 0; i < scoresJSON.length(); i++) {
                         JSONObject scoreJSON = scoresJSON.getJSONObject(i);
-                        scoresAdapter.add(new Score(
+                        localHighscoreAdapter.add(new Score(
                             scoreJSON.getString("name"),
                             scoreJSON.getInt("score")
                         ));
                     }
 
-                    scoresAdapter.sort(new Comparator<Score>() {
+                    localHighscoreAdapter.sort(new Comparator<Score>() {
                         public int compare(Score a, Score b) {
                             return b.getScore() - a.getScore();
                         }
                     });
-                    scoresAdapter.notifyDataSetChanged();
+                    localHighscoreAdapter.notifyDataSetChanged();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
 
                 menuPage.setVisibility(View.GONE);
-                highscorePage.setVisibility(View.VISIBLE);
+                localHighscorePage.setVisibility(View.VISIBLE);
             }
         });
 
-        ((Button)findViewById(R.id.highscore_back_button)).setOnClickListener(new View.OnClickListener() {
+        ((Button)findViewById(R.id.local_highscore_back_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                highscorePage.setVisibility(View.GONE);
+                localHighscorePage.setVisibility(View.GONE);
+                menuPage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        // Global High Score page
+        ScoreAdapter globalHighscoreAdapter = new ScoreAdapter(this);
+        ListView globalHighscoreList = (ListView)findViewById(R.id.global_highscore_list);
+        globalHighscoreList.setAdapter(globalHighscoreAdapter);
+        TextView globalHighscoreListLoading = (TextView)findViewById(R.id.global_highscore_list_loading);
+        TextView globalHighscoreListError = (TextView)findViewById(R.id.global_highscore_list_error);
+
+        ((Button)findViewById(R.id.menu_global_highscore_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                globalHighscoreAdapter.clear();
+                globalHighscoreList.setVisibility(View.GONE);
+                globalHighscoreListLoading.setVisibility(View.VISIBLE);
+                globalHighscoreListError.setVisibility(View.GONE);
+
+                new FetchDataTask(Config.API_URL + "?key=" + Config.API_KEY + "&page=1&limit=50", new FetchDataTask.OnLoadListener() {
+                    public void onLoad(String data) {
+                        if (data != null) {
+                            try {
+                                JSONObject dataJSON = new JSONObject(data);
+                                JSONArray scoresJSON = dataJSON.getJSONArray("scores");
+                                for (int i = 0; i < scoresJSON.length(); i++) {
+                                    JSONObject scoreJSON = scoresJSON.getJSONObject(i);
+                                    globalHighscoreAdapter.add(new Score(
+                                        scoreJSON.getString("name"),
+                                        scoreJSON.getInt("score")
+                                    ));
+                                }
+
+                                globalHighscoreList.setVisibility(View.VISIBLE);
+                                globalHighscoreListLoading.setVisibility(View.GONE);
+                                globalHighscoreListError.setVisibility(View.GONE);
+                            } catch (Exception exception) {
+                                exception.printStackTrace();
+                            }
+                        } else {
+                            globalHighscoreList.setVisibility(View.GONE);
+                            globalHighscoreListLoading.setVisibility(View.GONE);
+                            globalHighscoreListError.setVisibility(View.VISIBLE);
+                        }
+                    }
+                }).execute();
+
+                menuPage.setVisibility(View.GONE);
+                globalHighscorePage.setVisibility(View.VISIBLE);
+            }
+        });
+
+        ((Button)findViewById(R.id.global_highscore_back_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                globalHighscorePage.setVisibility(View.GONE);
                 menuPage.setVisibility(View.VISIBLE);
             }
         });
@@ -218,5 +271,9 @@ public class MainActivity extends Activity {
             gamePage.stop();
         }
         super.onPause();
+    }
+
+    public void onBackPressed() {
+        moveTaskToBack(false);
     }
 }

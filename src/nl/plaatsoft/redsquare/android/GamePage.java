@@ -11,8 +11,8 @@ import android.view.View;
 import android.view.WindowManager;
 
 public class GamePage extends View {
-    public static abstract class OnEventListener {
-        public abstract void onGameover(int score, int seconds, int level);
+    public interface OnEventListener {
+        public void onGameover(int score, int seconds, int level);
     }
 
     private boolean running = false;

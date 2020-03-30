@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="play_button">Spelen</string>
-    <string name="highscore_button">Hoogste Scores</string>
+    <string name="local_highscore_button">Lokale Hoogste Scores</string>
+    <string name="global_highscore_button">Globale Hoogste Scores</string>
     <string name="help_button">Help</string>
     <string name="settings_button">Instellingen</string>
-    <string name="exit_button">Sluiten</string>
     <string name="footer_label">Gemaakt door Bastiaan van der Plaat</string>
 
     <string name="gameover_title">Spel Over</string>
@@ -14,6 +14,10 @@
     <string name="back_button">Terug</string>
 
     <string name="local_highscore_title">Lokale Hoogste Scores</string>
+
+    <string name="global_highscore_title">Globale Hoogste Scores</string>
+    <string name="global_highscore_loading">Globale Hoogste Scores laden...</string>
+    <string name="global_highscore_error">We kunen de Globale Hoogste Scores niet laden</string>
 
     <string name="help_title">Help</string>
     <string name="help_text_label">
