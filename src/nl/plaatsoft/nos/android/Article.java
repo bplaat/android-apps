@@ -1,4 +1,4 @@
-package nl.nos.android;
+package nl.plaatsoft.nos.android;
 
 public class Article {
     private final String title;

@@ -1,4 +1,4 @@
-package nl.nos.android;
+package nl.plaatsoft.nos.android;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,14 +25,14 @@ public class FetchImageTask extends AsyncTask<Void, Void, Bitmap> {
         imageView.setImageBitmap(null);
     }
 
-    public static void fetchImage(Context context, ImageView imageView, String url) {
-        Bitmap bitmap = ImageMemoryCache.getInstance().get(url);
-        if (bitmap != null) {
-            imageView.setTag(url);
-            imageView.setImageBitmap(bitmap);
-        } else {
-            new FetchImageTask(context, imageView, url).execute();
+    public static FetchImageTask fetchImage(Context context, ImageView imageView, String url) {
+        String imageTagUrl = imageView.getTag() != null ? (String)imageView.getTag() : "";
+        if (!imageTagUrl.equals(url)) {
+            FetchImageTask fetchImageTask = new FetchImageTask(context, imageView, url);
+            fetchImageTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            return fetchImageTask;
         }
+        return null;
     }
 
     public Bitmap doInBackground(Void... voids) {
@@ -41,9 +41,7 @@ public class FetchImageTask extends AsyncTask<Void, Void, Bitmap> {
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.RGB_565;
             if (file.exists()) {
-                Bitmap bitmap = BitmapFactory.decodeFile(file.getPath(), options);
-                ImageMemoryCache.getInstance().put(url, bitmap);
-                return bitmap;
+                return BitmapFactory.decodeFile(file.getPath(), options);
             } else {
                 BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -60,17 +58,16 @@ public class FetchImageTask extends AsyncTask<Void, Void, Bitmap> {
                 fileOutputStream.write(image);
                 fileOutputStream.close();
 
-                Bitmap bitmap = BitmapFactory.decodeByteArray(image, 0, image.length, options);
-                ImageMemoryCache.getInstance().put(url, bitmap);
-                return bitmap;
+                return BitmapFactory.decodeByteArray(image, 0, image.length, options);
             }
-        } catch (Exception e) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }
 
     public void onPostExecute(Bitmap image) {
-        if (!isCancelled() && (String)imageView.getTag() == url) {
+        if (!isCancelled() && ((String)imageView.getTag()).equals(url)) {
             imageView.setImageBitmap(image);
         }
     }

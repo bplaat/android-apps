@@ -1,4 +1,4 @@
-package nl.nos.android;
+package nl.plaatsoft.nos.android;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -29,6 +29,7 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
         } else {
             viewHolder = (ViewHolder)convertView.getTag();
         }
+
         Article article = getItem(position);
         FetchImageTask.fetchImage(getContext(), viewHolder.articleItemImage, article.getImageUrl());
         viewHolder.articleItemTitleLabel.setText(article.getTitle());

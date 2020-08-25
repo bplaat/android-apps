@@ -1,0 +1,7 @@
+package nl.plaatsoft.nos.android;
+
+public class Config {
+    private Config() {}
+
+    public static final String API_KEY = "";
+}

@@ -1,4 +1,4 @@
-package nl.nos.android;
+package nl.plaatsoft.nos.android;
 
 import android.app.Activity;
 import android.content.Context;
@@ -25,8 +25,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.Jsoup;
 
 public class MainActivity extends Activity {
-    private static final String API_KEY = "s3khkckng9or74lykjvhufbetd8jgtxcf265ltrh";
-
     private LinearLayout mainPage;
     private LinearLayout articlePage;
     private LinearLayout[] tabs;
@@ -155,7 +153,7 @@ public class MainActivity extends Activity {
             openTab(0);
         }
         else {
-            moveTaskToBack(false);
+            super.onBackPressed();
         }
     }
 
@@ -210,7 +208,7 @@ public class MainActivity extends Activity {
 
     private void fetchNewsData(FetchDataTask fetchDataTask, ArticlesAdapter articlesAdapter, String rssUrl, boolean loadFromCache) {
         try {
-            fetchDataTask = new FetchDataTask(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8") + "&api_key=" + API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
+            fetchDataTask = FetchDataTask.fetchData(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8") + "&api_key=" + Config.API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
                 public void onLoad(String data) {
                     try {
                         JSONObject feed = new JSONObject(data);
@@ -227,7 +225,6 @@ public class MainActivity extends Activity {
                     } catch (Exception e) {}
                 }
             });
-            fetchDataTask.execute();
         } catch (Exception e) {}
     }
 }

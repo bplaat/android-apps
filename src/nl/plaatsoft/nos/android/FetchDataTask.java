@@ -1,4 +1,4 @@
-package nl.nos.android;
+package nl.plaatsoft.nos.android;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -11,7 +11,7 @@ import java.net.URL;
 import java.util.Base64;
 
 public class FetchDataTask extends AsyncTask<Void, Void, String> {
-    public interface OnLoadListener {
+    public static interface OnLoadListener {
         public abstract void onLoad(String data);
     }
 
@@ -21,12 +21,18 @@ public class FetchDataTask extends AsyncTask<Void, Void, String> {
     private final boolean saveToCache;
     private final OnLoadListener onLoadListener;
 
-    public FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
+    private FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
         this.context = context;
         this.url = url;
         this.loadFomCache = loadFomCache;
         this.saveToCache = saveToCache;
         this.onLoadListener = onLoadListener;
+    }
+
+    public static FetchDataTask fetchData(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
+        FetchDataTask fetchDataTask = new FetchDataTask(context, url, loadFomCache, saveToCache, onLoadListener);
+        fetchDataTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        return fetchDataTask;
     }
 
     public String doInBackground(Void... voids) {
@@ -59,7 +65,8 @@ public class FetchDataTask extends AsyncTask<Void, Void, String> {
                 }
                 return data;
             }
-        } catch (Exception e) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }
