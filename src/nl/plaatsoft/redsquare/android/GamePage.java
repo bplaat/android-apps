@@ -8,7 +8,6 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 
 public class GamePage extends View {
     public interface OnEventListener {
@@ -37,9 +36,7 @@ public class GamePage extends View {
     public GamePage(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        DisplayMetrics metrics = new DisplayMetrics();
-        ((WindowManager)context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getRealMetrics(metrics);
-
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
         scale = metrics.density;
         width = (int)(metrics.widthPixels / scale);
         height = (int)(metrics.heightPixels / scale);
