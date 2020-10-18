@@ -1,6 +1,6 @@
 # keytool -genkey -validity 10000 -keystore key.keystore -keyalg RSA -keysize 2048 -storepass nos-android -keypass nos-android
-PATH=$PATH:../android-sdk/build-tools/29.0.3:../android-sdk/platform-tools
-PLATFORM=../android-sdk/platforms/android-29/android.jar
+PATH=$PATH:~/android-sdk/build-tools/30.0.2:~/android-sdk/platform-tools
+PLATFORM=C:\\Users\\bplaat\\android-sdk\\platforms\\android-30\\android.jar
 if aapt package -m -J src -M AndroidManifest.xml -S res -I $PLATFORM; then
     if javac -Xlint -cp "$PLATFORM;classes" -d classes $(find -name *.java); then
         dx.bat --dex --output=classes.dex classes
