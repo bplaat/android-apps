@@ -1,6 +1,8 @@
 package nl.plaatsoft.nos.android;
 
-public class Article {
+import java.io.Serializable;
+
+public class Article implements Serializable {
     private final String title;
     private final String imageUrl;
     private final String date;
