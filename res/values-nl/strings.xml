@@ -7,7 +7,7 @@
     <string name="settings_language">Taal</string>
     <string name="settings_theme">Thema</string>
     <string name="settings_cancel">Annuleren</string>
-    <string name="settings_footer">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+    <string name="settings_about">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
 
     <string-array name="languages">
         <item>English</item>

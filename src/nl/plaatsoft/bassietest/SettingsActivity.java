@@ -4,7 +4,9 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -70,6 +72,12 @@ public class SettingsActivity extends BaseActivity {
                     })
                     .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
                     .show();
+            }
+        });
+
+        ((TextView)findViewById(R.id.settings_about_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bastiaan.ml/")));
             }
         });
     }

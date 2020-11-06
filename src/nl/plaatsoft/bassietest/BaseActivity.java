@@ -36,9 +36,8 @@ public abstract class BaseActivity extends Activity {
                 configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
             }
 
-            if (theme == 2 && Build.VERSION.SDK_INT < 29) {
-                PowerManager powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
-                if (powerManager.isPowerSaveMode()) {
+            if (theme == 2 && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                if (((PowerManager)context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode()) {
                     configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
                     configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
                 } else {

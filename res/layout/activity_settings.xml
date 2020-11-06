@@ -33,7 +33,8 @@
         <LinearLayout android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp">
 
             <LinearLayout android:id="@+id/settings_language_button"
                 android:layout_width="match_parent"
@@ -69,9 +70,11 @@
                     android:textColor="@color/secondary_text_color" />
             </LinearLayout>
 
-            <TextView android:text="@string/settings_footer"
+            <TextView android:id="@+id/settings_about_button"
+                android:text="@string/settings_about"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="16dp"
                 android:gravity="center_horizontal"
                 android:textColor="@color/secondary_text_color" />
         </LinearLayout>
