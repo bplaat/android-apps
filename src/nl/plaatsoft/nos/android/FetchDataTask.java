@@ -1,16 +1,21 @@
 package nl.plaatsoft.nos.android;
 
 import android.content.Context;
-import android.os.AsyncTask;
+import android.os.Looper;
+import android.os.Handler;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.net.URL;
-import java.util.Base64;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 
-public class FetchDataTask extends AsyncTask<Void, Void, String> {
+public class FetchDataTask {
+    private static final Executor executor = Executors.newFixedThreadPool(4);
+    private static final Handler handler = new Handler(Looper.getMainLooper());
+
     public static interface OnLoadListener {
         public abstract void onLoad(String data);
     }
@@ -20,24 +25,48 @@ public class FetchDataTask extends AsyncTask<Void, Void, String> {
     private final boolean loadFomCache;
     private final boolean saveToCache;
     private final OnLoadListener onLoadListener;
+    private boolean finished;
+    private boolean canceled;
 
-    private FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
+    public FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
         this.context = context;
         this.url = url;
         this.loadFomCache = loadFomCache;
         this.saveToCache = saveToCache;
         this.onLoadListener = onLoadListener;
+        finished = false;
+        canceled = false;
+
+        executor.execute(new Runnable() {
+            public void run() {
+                String data = fetchData();
+                if (!canceled) {
+                    handler.post(new Runnable() {
+                        public void run() {
+                            finished = true;
+                            onLoadListener.onLoad(data);
+                        }
+                    });
+                }
+            }
+        });
     }
 
-    public static FetchDataTask fetchData(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
-        FetchDataTask fetchDataTask = new FetchDataTask(context, url, loadFomCache, saveToCache, onLoadListener);
-        fetchDataTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        return fetchDataTask;
+    public boolean isFinished() {
+        return finished;
     }
 
-    public String doInBackground(Void... voids) {
+    public boolean isCanceled() {
+        return canceled;
+    }
+
+    public void cancel() {
+        canceled = true;
+    }
+
+    private String fetchData() {
         try {
-            File file = new File(context.getCacheDir(), new String(Base64.getUrlEncoder().encode(url.getBytes())));
+            File file = new File(context.getCacheDir(), Utils.md5(url));
             if (loadFomCache && file.exists()) {
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
                 StringBuilder stringBuilder = new StringBuilder();
@@ -48,32 +77,28 @@ public class FetchDataTask extends AsyncTask<Void, Void, String> {
                 }
                 bufferedReader.close();
                 return stringBuilder.toString();
-            } else {
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line);
-                    stringBuilder.append(System.lineSeparator());
-                }
-                bufferedReader.close();
-                String data = stringBuilder.toString();
-                if (saveToCache) {
-                    FileWriter fileWriter = new FileWriter(file);
-                    fileWriter.write(data);
-                    fileWriter.close();
-                }
-                return data;
             }
-        } catch (Exception exception) {
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
+            StringBuilder stringBuilder = new StringBuilder();
+            String line;
+            while ((line = bufferedReader.readLine()) != null) {
+                stringBuilder.append(line);
+                stringBuilder.append(System.lineSeparator());
+            }
+            bufferedReader.close();
+
+            String data = stringBuilder.toString();
+            if (saveToCache) {
+                FileWriter fileWriter = new FileWriter(file);
+                fileWriter.write(data);
+                fileWriter.close();
+            }
+            return data;
+        }
+        catch (Exception exception) {
             exception.printStackTrace();
             return null;
-        }
-    }
-
-    public void onPostExecute(String data) {
-        if (!isCancelled()) {
-            onLoadListener.onLoad(data);
         }
     }
 }

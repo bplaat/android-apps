@@ -24,7 +24,7 @@ public class ArticleActivity extends BaseActivity {
             }
         });
 
-        FetchImageTask.fetchImage(this, (ImageView)findViewById(R.id.article_image), article.getImageUrl());
+        new FetchImageTask(this, (ImageView)findViewById(R.id.article_image), article.getImageUrl(), true, true);
         ((TextView)findViewById(R.id.article_title_label)).setText(article.getTitle());
         ((TextView)findViewById(R.id.article_date_label)).setText(article.getDate());
 

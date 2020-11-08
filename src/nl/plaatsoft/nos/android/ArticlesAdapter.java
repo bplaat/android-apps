@@ -31,7 +31,7 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
         }
 
         Article article = getItem(position);
-        FetchImageTask.fetchImage(getContext(), viewHolder.articleItemImage, article.getImageUrl());
+        new FetchImageTask(getContext(), viewHolder.articleItemImage, article.getImageUrl(), true, true);
         viewHolder.articleItemTitleLabel.setText(article.getTitle());
         return convertView;
     }

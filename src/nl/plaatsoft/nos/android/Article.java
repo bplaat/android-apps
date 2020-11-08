@@ -3,6 +3,8 @@ package nl.plaatsoft.nos.android;
 import java.io.Serializable;
 
 public class Article implements Serializable {
+    private static final long serialVersionUID = 1;
+
     private final String title;
     private final String imageUrl;
     private final String date;

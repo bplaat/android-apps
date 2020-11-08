@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.net.Uri;
@@ -30,8 +29,6 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        SharedPreferences settings = getSharedPreferences("settings", Context.MODE_PRIVATE);
 
         // News tabs
         initNewsTab((ListView)findViewById(R.id.latest_articles_list), "http://feeds.nos.nl/nosnieuwsalgemeen", (ImageView)findViewById(R.id.latest_refresh_button));
@@ -190,8 +187,8 @@ public class MainActivity extends BaseActivity {
         FetchDataTask fetchDataTask = null;
         refreshButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                if (fetchDataTask != null && fetchDataTask.getStatus() == AsyncTask.Status.RUNNING) {
-                    fetchDataTask.cancel(false);
+                if (fetchDataTask != null && !fetchDataTask.isFinished()) {
+                    fetchDataTask.cancel();
                 }
                 articlesAdapter.clear();
                 fetchNewsData(fetchDataTask, articlesAdapter, rssUrl, false);
@@ -203,7 +200,7 @@ public class MainActivity extends BaseActivity {
 
     private void fetchNewsData(FetchDataTask fetchDataTask, ArticlesAdapter articlesAdapter, String rssUrl, boolean loadFromCache) {
         try {
-            fetchDataTask = FetchDataTask.fetchData(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8") + "&api_key=" + Config.API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
+            fetchDataTask = new FetchDataTask(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8") + "&api_key=" + Config.API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
                 public void onLoad(String data) {
                     try {
                         JSONObject feed = new JSONObject(data);
