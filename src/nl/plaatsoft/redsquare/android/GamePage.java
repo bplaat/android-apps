@@ -43,9 +43,9 @@ public class GamePage extends View {
 
         paint = new Paint();
 
-        scoreLabelString = getResources().getString(R.string.score_label);
-        timeLabelString = getResources().getString(R.string.time_label);
-        levelLabelString = getResources().getString(R.string.level_label);
+        scoreLabelString = getResources().getString(R.string.game_score_label);
+        timeLabelString = getResources().getString(R.string.game_time_label);
+        levelLabelString = getResources().getString(R.string.game_level_label);
     }
 
     public boolean isRunning() {
@@ -138,7 +138,8 @@ public class GamePage extends View {
         redsquare.draw(canvas);
 
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.WHITE);
+
+        paint.setColor(getContext().getResources().getColor(R.color.primary_text_color));
         paint.setTextSize(16 * scale);
         paint.setTextAlign(Paint.Align.LEFT);
 

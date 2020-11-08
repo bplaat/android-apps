@@ -2,24 +2,30 @@
 <resources>
     <string name="app_name" translatable="false">RedSquare</string>
 
-    <string name="play_button">Play</string>
-    <string name="local_highscore_button">Local High Score</string>
-    <string name="global_highscore_button">Global High Score</string>
-    <string name="help_button">Help</string>
-    <string name="settings_button">Settings</string>
-    <string name="footer_label">Made by Bastiaan van der Plaat</string>
+    <string name="menu_play_button">Play</string>
+    <string name="menu_local_highscore_button">Local High Score</string>
+    <string name="menu_global_highscore_button">Global High Score</string>
+    <string name="menu_help_button">Help</string>
+    <string name="menu_settings_button">Settings</string>
+    <string name="menu_about_label">Made by Bastiaan van der Plaat</string>
+
+    <string name="game_score_label" formatted="false">Score: %d</string>
+    <string name="game_time_label" formatted="false">Time: %d:%02d</string>
+    <string name="game_level_label" formatted="false">Level: %d</string>
 
     <string name="gameover_title">Game Over</string>
-    <string name="score_label" formatted="false">Score: %d</string>
-    <string name="time_label" formatted="false">Time: %d:%02d</string>
-    <string name="level_label" formatted="false">Level: %d</string>
-    <string name="back_button">Back</string>
+    <string name="gameover_score_label" formatted="false">Score: %d</string>
+    <string name="gameover_time_label" formatted="false">Time: %d:%02d</string>
+    <string name="gameover_level_label" formatted="false">Level: %d</string>
+    <string name="gameover_back_button">Back</string>
 
     <string name="local_highscore_title">Local High Score</string>
+    <string name="local_highscore_back_button">Back</string>
 
     <string name="global_highscore_title">Global High Score</string>
     <string name="global_highscore_loading">Loading global high scores...</string>
     <string name="global_highscore_error">Can\'t load the global high scores</string>
+    <string name="global_highscore_back_button">Back</string>
 
     <string name="help_title">Help</string>
     <string name="help_text_label">
@@ -30,8 +36,24 @@
         If you make it to 60 seconds, you are\n
         doing brilliantly!
     </string>
+    <string name="help_back_button">Back</string>
 
     <string name="settings_title">Settings</string>
-    <string name="name_input_label">Your name:</string>
-    <string name="settings_back_button">Save &amp; Back</string>
+    <string name="settings_name">Player name</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_cancel">Cancel</string>
+    <string name="settings_back_button">Back</string>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Nederlands</item>
+        <item>Use system default</item>
+    </string-array>
+
+    <string-array name="themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Set by Battery Saver</item>
+    </string-array>
 </resources>

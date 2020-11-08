@@ -1,8 +1,11 @@
 package nl.plaatsoft.redsquare.android;
 
-import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.inputmethod.EditorInfo;
@@ -19,22 +22,29 @@ import java.util.Comparator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
+    public static final String SCORE_DEFAULT = "[]";
+    public static final String NAME_DEFAULT = "Anonymous";
+    public static final int LANGUAGE_DEFAULT = 2;
+    public static final int THEME_DEFAULT = 2;
+
     private GamePage gamePage;
+    private RelativeLayout menuPage;
+    private LinearLayout settingsPage;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SharedPreferences preferences = getSharedPreferences("settings", Context.MODE_PRIVATE);
+        SharedPreferences settings = getSharedPreferences("settings", Context.MODE_PRIVATE);
 
-        RelativeLayout menuPage = (RelativeLayout)findViewById(R.id.menu_page);
+        menuPage = (RelativeLayout)findViewById(R.id.menu_page);
         gamePage = (GamePage)findViewById(R.id.game_page);
         LinearLayout gameoverPage = (LinearLayout)findViewById(R.id.gameover_page);
         LinearLayout localHighscorePage = (LinearLayout)findViewById(R.id.local_highscore_page);
         LinearLayout globalHighscorePage = (LinearLayout)findViewById(R.id.global_highscore_page);
         LinearLayout helpPage = (LinearLayout)findViewById(R.id.help_page);
-        LinearLayout settingsPage = (LinearLayout)findViewById(R.id.settings_page);
+        settingsPage = (LinearLayout)findViewById(R.id.settings_page);
 
         // Menu page
         try {
@@ -42,6 +52,12 @@ public class MainActivity extends Activity {
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+
+        ((TextView)findViewById(R.id.menu_about_label)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bastiaan.ml/")));
+            }
+        });
 
         // Game page
         ((Button)findViewById(R.id.menu_play_button)).setOnClickListener(new View.OnClickListener() {
@@ -55,28 +71,27 @@ public class MainActivity extends Activity {
 
         // Game Over page
         TextView gameoverScoreLabel = (TextView)findViewById(R.id.gameover_score_label);
-        String scoreLabelString = getResources().getString(R.string.score_label);
+        String scoreLabelString = getResources().getString(R.string.gameover_score_label);
         TextView gameoverTimeLabel = (TextView)findViewById(R.id.gameover_time_label);
-        String timeLabelString = getResources().getString(R.string.time_label);
+        String timeLabelString = getResources().getString(R.string.gameover_time_label);
         TextView gameoverLevelLabel = (TextView)findViewById(R.id.gameover_level_label);
-        String levelLabelString = getResources().getString(R.string.level_label);
+        String levelLabelString = getResources().getString(R.string.gameover_level_label);
 
         gamePage.setOnEventListener(new GamePage.OnEventListener() {
             public void onGameover(int score, int seconds, int level) {
                 try {
-                    new FetchDataTask(Config.API_URL + "?key=" + Config.API_KEY + "&name=" + URLEncoder.encode(preferences.getString("name", "Anonymous"), "UTF-8") + "&score=" + score, null).execute();
+                    new FetchDataTask(Config.API_URL + "?key=" + Config.API_KEY + "&name=" + URLEncoder.encode(settings.getString("name", MainActivity.NAME_DEFAULT), "UTF-8") + "&score=" + score, null).execute();
 
-                    JSONArray scoresJSON = new JSONArray(preferences.getString("scores", "[]"));
+                    JSONArray scoresJSON = new JSONArray(settings.getString("scores", MainActivity.SCORE_DEFAULT));
 
                     JSONObject newScoreJSON = new JSONObject();
-                    newScoreJSON.put("name", preferences.getString("name", "Anonymous"));
+                    newScoreJSON.put("name", settings.getString("name", MainActivity.NAME_DEFAULT));
                     newScoreJSON.put("score", score);
                     scoresJSON.put(newScoreJSON);
 
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("scores", scoresJSON.toString());
-                    editor.apply();
-
+                    SharedPreferences.Editor settingsEditor = settings.edit();
+                    settingsEditor.putString("scores", scoresJSON.toString());
+                    settingsEditor.apply();
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
@@ -108,7 +123,7 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 try {
                     localHighscoreAdapter.clear();
-                    JSONArray scoresJSON = new JSONArray(preferences.getString("scores", "[]"));
+                    JSONArray scoresJSON = new JSONArray(settings.getString("scores", MainActivity.SCORE_DEFAULT));
                     for (int i = 0; i < scoresJSON.length(); i++) {
                         JSONObject scoreJSON = scoresJSON.getJSONObject(i);
                         localHighscoreAdapter.add(new Score(
@@ -210,9 +225,16 @@ public class MainActivity extends Activity {
 
         // Settings page
         EditText settingsNameInput = (EditText)findViewById(R.id.settings_name_input);
+        settingsNameInput.setText(settings.getString("name", MainActivity.NAME_DEFAULT));
+        settingsNameInput.setSelection(settingsNameInput.getText().length());
+
         settingsNameInput.setOnEditorActionListener(new EditText.OnEditorActionListener() {
             public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    SharedPreferences.Editor settingsEditor = settings.edit();
+                    settingsEditor.putString("name", settingsNameInput.getText().toString());
+                    settingsEditor.apply();
+
                     hideSystemUI();
                 }
                 return false;
@@ -221,7 +243,7 @@ public class MainActivity extends Activity {
 
         ((Button)findViewById(R.id.menu_settings_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                settingsNameInput.setText(preferences.getString("name", "Anonymous"));
+                settingsNameInput.setText(settings.getString("name", MainActivity.NAME_DEFAULT));
                 settingsNameInput.setSelection(settingsNameInput.getText().length());
 
                 menuPage.setVisibility(View.GONE);
@@ -229,16 +251,73 @@ public class MainActivity extends Activity {
             }
         });
 
+        String[] languages = getResources().getStringArray(R.array.languages);
+        int language = settings.getInt("language", MainActivity.LANGUAGE_DEFAULT);
+        ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
+
+        ((LinearLayout)findViewById(R.id.settings_language_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                    .setTitle(getResources().getString(R.string.settings_language))
+                    .setSingleChoiceItems(languages, language, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor settingsEditor = settings.edit();
+                            settingsEditor.putInt("language", which);
+                            settingsEditor.apply();
+
+                            dialog.dismiss();
+                            recreate();
+                        }
+                    })
+                    .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
+                    .show();
+            }
+        });
+
+        String[] themes = getResources().getStringArray(R.array.themes);
+        int theme = settings.getInt("theme", MainActivity.THEME_DEFAULT);
+        ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
+
+        ((LinearLayout)findViewById(R.id.settings_theme_button)).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View view) {
+                new AlertDialog.Builder(MainActivity.this)
+                    .setTitle(getResources().getString(R.string.settings_theme))
+                    .setSingleChoiceItems(themes, theme, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            SharedPreferences.Editor settingsEditor = settings.edit();
+                            settingsEditor.putInt("theme", which);
+                            settingsEditor.apply();
+
+                            dialog.dismiss();
+                            recreate();
+                        }
+                    })
+                    .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
+                    .show();
+            }
+        });
+
         ((Button)findViewById(R.id.settings_back_button)).setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("name", settingsNameInput.getText().toString());
-                editor.apply();
-
                 settingsPage.setVisibility(View.GONE);
                 menuPage.setVisibility(View.VISIBLE);
             }
         });
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState.getBoolean("settingsPageOpen", false)) {
+            menuPage.setVisibility(View.GONE);
+            settingsPage.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+
+        savedInstanceState.putBoolean("settingsPageOpen", settingsPage.getVisibility() == View.VISIBLE);
     }
 
     public void onWindowFocusChanged(boolean hasFocus) {
@@ -271,9 +350,5 @@ public class MainActivity extends Activity {
             gamePage.stop();
         }
         super.onPause();
-    }
-
-    public void onBackPressed() {
-        moveTaskToBack(false);
     }
 }

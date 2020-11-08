@@ -28,6 +28,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         } else {
             viewHolder = (ViewHolder)convertView.getTag();
         }
+
         Score score = getItem(position);
         viewHolder.scoreName.setText(score.getName());
         viewHolder.scoreScore.setText(String.valueOf(score.getScore()));
