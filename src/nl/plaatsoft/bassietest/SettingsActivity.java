@@ -26,8 +26,6 @@ public class SettingsActivity extends BaseActivity {
             }
         });
 
-        SharedPreferences settings = getSharedPreferences("settings", Context.MODE_PRIVATE);
-
         String[] languages = getResources().getStringArray(R.array.languages);
         int language = settings.getInt("language", SettingsActivity.LANGUAGE_DEFAULT);
         ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);

@@ -48,7 +48,19 @@
             <TextView android:text="@string/main_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp"
                 android:textColor="@color/secondary_text_color" />
+
+            <ImageView android:id="@+id/main_random_image"
+                android:layout_width="320dp"
+                android:layout_height="240dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="centerCrop"
+                android:background="@color/loading_background_color" />
+
+            <TextView android:id="@+id/main_location_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
