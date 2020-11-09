@@ -37,17 +37,15 @@ public class FetchDataTask {
         finished = false;
         canceled = false;
 
-        executor.execute(new Runnable() {
-            public void run() {
-                String data = fetchData();
-                if (!canceled) {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            finished = true;
-                            onLoadListener.onLoad(data);
-                        }
-                    });
-                }
+        executor.execute(() -> {
+            String data = fetchData();
+            if (!canceled) {
+                handler.post(() -> {
+                    finished = true;
+                    if (onLoadListener != null) {
+                        onLoadListener.onLoad(data);
+                    }
+                });
             }
         });
     }

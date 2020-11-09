@@ -1,7 +1,6 @@
 package nl.plaatsoft.nos.android;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,52 +40,42 @@ public class MainActivity extends BaseActivity {
         int language = settings.getInt("language", MainActivity.LANGUAGE_DEFAULT);
         ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
 
-        ((LinearLayout)findViewById(R.id.settings_language_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                new AlertDialog.Builder(MainActivity.this)
-                    .setTitle(getResources().getString(R.string.settings_language))
-                    .setSingleChoiceItems(languages, language, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            SharedPreferences.Editor settingsEditor = settings.edit();
-                            settingsEditor.putInt("language", which);
-                            settingsEditor.apply();
+        ((LinearLayout)findViewById(R.id.settings_language_button)).setOnClickListener((View view) -> {
+            new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.settings_language))
+                .setSingleChoiceItems(languages, language, (DialogInterface dialog, int which) -> {
+                    SharedPreferences.Editor settingsEditor = settings.edit();
+                    settingsEditor.putInt("language", which);
+                    settingsEditor.apply();
 
-                            dialog.dismiss();
-                            recreate();
-                        }
-                    })
-                    .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
-                    .show();
-            }
+                    dialog.dismiss();
+                    recreate();
+                })
+                .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
+                .show();
         });
 
         String[] themes = getResources().getStringArray(R.array.themes);
         int theme = settings.getInt("theme", MainActivity.THEME_DEFAULT);
         ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
 
-        ((LinearLayout)findViewById(R.id.settings_theme_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                new AlertDialog.Builder(MainActivity.this)
-                    .setTitle(getResources().getString(R.string.settings_theme))
-                    .setSingleChoiceItems(themes, theme, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int which) {
-                            SharedPreferences.Editor settingsEditor = settings.edit();
-                            settingsEditor.putInt("theme", which);
-                            settingsEditor.apply();
+        ((LinearLayout)findViewById(R.id.settings_theme_button)).setOnClickListener((View view) -> {
+            new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.settings_theme))
+                .setSingleChoiceItems(themes, theme, (DialogInterface dialog, int which) -> {
+                    SharedPreferences.Editor settingsEditor = settings.edit();
+                    settingsEditor.putInt("theme", which);
+                    settingsEditor.apply();
 
-                            dialog.dismiss();
-                            recreate();
-                        }
-                    })
-                    .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
-                    .show();
-            }
+                    dialog.dismiss();
+                    recreate();
+                })
+                .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
+                .show();
         });
 
-        ((TextView)findViewById(R.id.settings_about_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bastiaan.ml/")));
-            }
+        ((TextView)findViewById(R.id.settings_about_button)).setOnClickListener((View view) -> {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bastiaan.ml/")));
         });
 
         // Bottom bar
@@ -110,10 +99,8 @@ public class MainActivity extends BaseActivity {
 
         for (int i = 0; i < buttons.length; i++) {
             buttons[i].setTag(i);
-            buttons[i].setOnClickListener(new View.OnClickListener() {
-                public void onClick(View view) {
-                    openTab((int)view.getTag(), true);
-                }
+            buttons[i].setOnClickListener((View view) -> {
+                openTab((int)view.getTag(), true);
             });
         }
     }
@@ -176,23 +163,19 @@ public class MainActivity extends BaseActivity {
     private void initNewsTab(ListView listView, String rssUrl, ImageView refreshButton) {
         ArticlesAdapter articlesAdapter = new ArticlesAdapter(this);
         listView.setAdapter(articlesAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, ArticleActivity.class);
-                intent.putExtra("article", articlesAdapter.getItem(position));
-                startActivity(intent);
-            }
+        listView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+            Intent intent = new Intent(this, ArticleActivity.class);
+            intent.putExtra("article", articlesAdapter.getItem(position));
+            startActivity(intent);
         });
 
         FetchDataTask fetchDataTask = null;
-        refreshButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                if (fetchDataTask != null && !fetchDataTask.isFinished()) {
-                    fetchDataTask.cancel();
-                }
-                articlesAdapter.clear();
-                fetchNewsData(fetchDataTask, articlesAdapter, rssUrl, false);
+        refreshButton.setOnClickListener((View view) -> {
+            if (fetchDataTask != null && !fetchDataTask.isFinished()) {
+                fetchDataTask.cancel();
             }
+            articlesAdapter.clear();
+            fetchNewsData(fetchDataTask, articlesAdapter, rssUrl, false);
         });
 
         fetchNewsData(fetchDataTask, articlesAdapter, rssUrl, true);
@@ -200,23 +183,21 @@ public class MainActivity extends BaseActivity {
 
     private void fetchNewsData(FetchDataTask fetchDataTask, ArticlesAdapter articlesAdapter, String rssUrl, boolean loadFromCache) {
         try {
-            fetchDataTask = new FetchDataTask(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8") + "&api_key=" + Config.API_KEY + "&count=20", loadFromCache, true, new FetchDataTask.OnLoadListener() {
-                public void onLoad(String data) {
-                    try {
-                        JSONObject feed = new JSONObject(data);
-                        JSONArray articles = feed.getJSONArray("items");
-                        for (int i = 0; i < articles.length(); i++) {
-                            JSONObject article = articles.getJSONObject(i);
-                            articlesAdapter.add(new Article(
-                                article.getString("title"),
-                                article.getJSONObject("enclosure").getString("link"),
-                                article.getString("pubDate"),
-                                article.getString("content")
-                            ));
-                        }
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
+            fetchDataTask = new FetchDataTask(this, "https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8") + "&api_key=" + Config.API_KEY + "&count=20", loadFromCache, true, (String data) -> {
+                try {
+                    JSONObject feed = new JSONObject(data);
+                    JSONArray articles = feed.getJSONArray("items");
+                    for (int i = 0; i < articles.length(); i++) {
+                        JSONObject article = articles.getJSONObject(i);
+                        articlesAdapter.add(new Article(
+                            article.getString("title"),
+                            article.getJSONObject("enclosure").getString("link"),
+                            article.getString("pubDate"),
+                            article.getString("content")
+                        ));
                     }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             });
         } catch (Exception exception) {

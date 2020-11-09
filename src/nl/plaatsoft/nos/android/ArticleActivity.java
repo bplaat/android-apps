@@ -18,10 +18,8 @@ public class ArticleActivity extends BaseActivity {
 
         Article article = (Article)getIntent().getSerializableExtra("article");
 
-        ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener(new View.OnClickListener() {
-            public void onClick(View view) {
-                finish();
-            }
+        ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener((View view) -> {
+            finish();
         });
 
         new FetchImageTask(this, (ImageView)findViewById(R.id.article_image), article.getImageUrl(), true, true);

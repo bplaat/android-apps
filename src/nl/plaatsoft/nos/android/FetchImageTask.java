@@ -39,19 +39,15 @@ public class FetchImageTask {
             imageView.setTag(url);
             imageView.setImageBitmap(null);
 
-            executor.execute(new Runnable() {
-                public void run() {
-                    Bitmap image = fetchImage();
-                    if (!canceled) {
-                        handler.post(new Runnable() {
-                            public void run() {
-                                finished = true;
-                                if ((imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
-                                    imageView.setImageBitmap(image);
-                                }
-                            }
-                        });
-                    }
+            executor.execute(() -> {
+                Bitmap image = fetchImage();
+                if (!canceled) {
+                    handler.post(() -> {
+                        finished = true;
+                        if ((imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
+                            imageView.setImageBitmap(image);
+                        }
+                    });
                 }
             });
         } else {
