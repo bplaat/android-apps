@@ -65,20 +65,20 @@ public class GamePage extends View {
         level = 1;
         borderWidth = 0;
 
-        Utils.seed = startTime;
+        Random.seed = startTime;
 
         int redsquareSize = 60;
         redsquare = new RedSquare(((width - redsquareSize) / 2) * scale, ((height - redsquareSize) / 2) * scale, redsquareSize * scale, redsquareSize * scale);
 
         blueSquares = new BlueSquare[4];
-        blueSquares[0] = new BlueSquare(scale, scale, Utils.rand(50, 100) * scale, Utils.rand(75, 125) * scale, 1, 1, 0.5f * scale);
-        int _width = Utils.rand(125, 150);
-        blueSquares[1] = new BlueSquare((width - _width - 1) * scale, scale, _width * scale, Utils.rand(50, 100) * scale, -1, 1, 0.5f * scale);
-        int _height = Utils.rand(75, 125);
-        blueSquares[2] = new BlueSquare(2 * scale, (height - _height - 1) * scale, Utils.rand(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
+        blueSquares[0] = new BlueSquare(scale, scale, Random.rand(50, 100) * scale, Random.rand(75, 125) * scale, 1, 1, 0.5f * scale);
+        int _width = Random.rand(125, 150);
+        blueSquares[1] = new BlueSquare((width - _width - 1) * scale, scale, _width * scale, Random.rand(50, 100) * scale, -1, 1, 0.5f * scale);
+        int _height = Random.rand(75, 125);
+        blueSquares[2] = new BlueSquare(2 * scale, (height - _height - 1) * scale, Random.rand(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
 
-        _width = Utils.rand(75, 125);
-        _height = Utils.rand(125, 150);
+        _width = Random.rand(75, 125);
+        _height = Random.rand(125, 150);
         blueSquares[3] = new BlueSquare((width - _width - 1) * scale, (height - _height - 1) * scale, _width * scale, _height * scale, -1, -1, 0.5f * scale);
 
         invalidate();
@@ -98,7 +98,7 @@ public class GamePage extends View {
         if (running) {
             if (System.currentTimeMillis() - levelTime > 10000) {
                 level++;
-                borderWidth += Utils.rand(4, 12);
+                borderWidth += Random.rand(4, 12);
                 levelTime = System.currentTimeMillis();
 
                 for (BlueSquare blueSquare : blueSquares) {
@@ -138,8 +138,7 @@ public class GamePage extends View {
         redsquare.draw(canvas);
 
         paint.setStyle(Paint.Style.FILL);
-
-        paint.setColor(getContext().getResources().getColor(R.color.primary_text_color));
+        paint.setColor(Utils.getColor(getContext(), R.color.primary_text_color));
         paint.setTextSize(16 * scale);
         paint.setTextAlign(Paint.Align.LEFT);
 

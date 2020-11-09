@@ -34,14 +34,14 @@ public class BlueSquare extends Square {
 
         if (x < 1 || x + width >= canvas.getWidth() - 1) {
             vx = -vx;
-            if (Utils.rand(1, 3) == 1) {
+            if (Random.rand(1, 3) == 1) {
                 vy = -vy;
             }
         }
 
         if (y < 1 || y + height >= canvas.getHeight() - 1) {
             vy = -vy;
-            if (Utils.rand(1, 3) == 1) {
+            if (Random.rand(1, 3) == 1) {
                 vx = -vx;
             }
         }
