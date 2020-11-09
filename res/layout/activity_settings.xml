@@ -49,7 +49,6 @@
 
             <LinearLayout style="@style/ListHighlightedGroup">
                 <LinearLayout android:id="@+id/settings_version_button"
-                    android:clickable="true"
                     style="@style/ListItemButton">
 
                     <ImageView android:src="@drawable/ic_information"

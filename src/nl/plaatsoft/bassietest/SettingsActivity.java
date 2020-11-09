@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SettingsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
@@ -70,12 +71,22 @@ public class SettingsActivity extends BaseActivity {
                 .show();
         });
 
-        // Init version button
+        // Init version button easter egg
         try {
             ((TextView)findViewById(R.id.settings_version_label)).setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (Exception exception) {
             exception.printStackTrace();
         }
+
+        int versionButtonClickCounterHolder[] = { 0 };
+        ((LinearLayout)findViewById(R.id.settings_version_button)).setOnClickListener((View view) -> {
+            versionButtonClickCounterHolder[0]++;
+            if (versionButtonClickCounterHolder[0] == 8) {
+                versionButtonClickCounterHolder[0] = 0;
+                Toast.makeText(this, R.string.settings_version_message_label, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bit.ly/3irDSvx")));
+            }
+        });
 
         // Init rate button
         ((LinearLayout)findViewById(R.id.settings_rate_button)).setOnClickListener((View view) -> {

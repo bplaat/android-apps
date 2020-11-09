@@ -12,6 +12,7 @@
 
     <string name="settings_information_label">Informatie</string>
     <string name="settings_version_button">App versie</string>
+    <string name="settings_version_message_label">Who, jij bent een geweldige hacker!</string>
     <string name="settings_rate_button">Beoordeel deze app</string>
     <string name="settings_share_button">Deel deze app</string>
     <string name="settings_share_message">Bekijk deze coole app:</string>
