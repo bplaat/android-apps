@@ -5,6 +5,7 @@ import java.security.MessageDigest;
 public class Utils {
     private Utils() {}
 
+    // Function that hashes its input data to a md5 hash
     public static String md5(String data) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");

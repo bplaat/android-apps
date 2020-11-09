@@ -30,6 +30,6 @@ else
             rm -r resources bassietest-unaligned.apk src/nl/plaatsoft/bassietest/R.java classes
         fi
     else
-        rm -r resources bassietest-unaligned.apk
+        rm -f -r resources bassietest-unaligned.apk
     fi
 fi

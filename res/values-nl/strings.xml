@@ -1,23 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_title">Binnenkort beschikbaar...</string>
-    <string name="main_description">We werken hard aan deze app</string>
+    <string name="main_title_label">Binnenkort beschikbaar...</string>
+    <string name="main_description_label">We werken hard aan deze app</string>
 
-    <string name="settings_title">Instellingen</string>
-    <string name="settings_language">Taal</string>
-    <string name="settings_theme">Thema</string>
-    <string name="settings_cancel">Annuleren</string>
-    <string name="settings_about">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+    <string name="settings_title_label">Instellingen</string>
 
-    <string-array name="languages">
+    <string name="settings_display_label">Weergave</string>
+    <string name="settings_language_button">Taal</string>
+    <string name="settings_theme_button">Thema</string>
+    <string name="settings_cancel_button">Annuleren</string>
+
+    <string name="settings_information_label">Informatie</string>
+    <string name="settings_version_button">App versie</string>
+    <string name="settings_rate_button">Beoordeel deze app</string>
+    <string name="settings_share_button">Deel deze app</string>
+    <string name="settings_share_message">Bekijk deze coole app:</string>
+    <string name="settings_about_button">Over deze app</string>
+    <string name="settings_about_message_label">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+    <string name="settings_about_website_button">Website</string>
+    <string name="settings_about_ok_button">OK</string>
+
+    <string-array name="settings_languages">
         <item>English</item>
         <item>Nederlands</item>
         <item>Gebruik systeemstandaard</item>
     </string-array>
 
-    <string-array name="themes">
+    <string-array name="settings_themes">
         <item>Licht</item>
         <item>Donker</item>
         <item>Ingesteld door batterijbesparing</item>
     </string-array>
+
+    <string name="rating_alert_title_label">Beoordeel BassieTest?</string>
+    <string name="rating_alert_message_label">Als je de BassieTest-app leuk vindt, neem dan even de tijd om deze te beoordelen. Bedankt voor je steun!</string>
+    <string name="rating_alert_rating_button">Beoordeel</string>
+    <string name="rating_alert_later_button">Later</string>
+    <string name="rating_alert_never_button">Nooit</string>
 </resources>

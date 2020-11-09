@@ -1,55 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    style="@style/Root">
 
-    <RelativeLayout android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/primary_color"
-        android:elevation="4dp">
-
+    <LinearLayout style="@style/ActionBar">
         <TextView android:text="@string/app_name"
-            android:layout_width="wrap_content"
-            android:layout_height="56dp"
-            android:gravity="center_vertical"
-            android:layout_centerHorizontal="true"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
-            android:fontFamily="sans-serif-medium"
-            android:textSize="20sp" />
+            style="@style/ActionBarTitle" />
 
-        <ImageView android:id="@+id/main_settings_button"
+        <ImageButton android:id="@+id/main_settings_button"
             android:src="@drawable/ic_settings"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:layout_alignParentRight="true"
-            android:scaleType="center" />
-    </RelativeLayout>
+            style="@style/ActionBarIconButton" />
+    </LinearLayout>
 
-    <ScrollView android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:fillViewport="true">
+    <ScrollView style="@style/Scroll">
+        <LinearLayout style="@style/Hero">
+            <ImageView android:src="@drawable/ic_clock"
+                style="@style/HeroIcon" />
 
-        <LinearLayout android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:padding="16dp">
+            <TextView android:text="@string/main_title_label"
+                style="@style/HeroTitle" />
 
-            <TextView android:text="@string/main_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:fontFamily="sans-serif-medium"
-                android:textSize="24sp" />
-
-            <TextView android:text="@string/main_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
-                android:textColor="@color/secondary_text_color" />
+            <TextView android:text="@string/main_description_label"
+                android:layout_marginBottom="32dp"
+                style="@style/HeroDescription" />
 
             <ImageView android:id="@+id/main_random_image"
                 android:layout_width="320dp"
@@ -59,8 +31,7 @@
                 android:background="@color/loading_background_color" />
 
             <TextView android:id="@+id/main_location_label"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                style="@style/HeroDescription" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
