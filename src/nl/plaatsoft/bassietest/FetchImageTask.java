@@ -15,7 +15,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class FetchImageTask {
-    private static final Executor executor = Executors.newFixedThreadPool(4);
+    private static final Executor executor = Executors.newFixedThreadPool(8);
     private static final Handler handler = new Handler(Looper.getMainLooper());
 
     private final Context context;
@@ -23,6 +23,7 @@ public class FetchImageTask {
     private final String url;
     private final boolean loadFomCache;
     private final boolean saveToCache;
+    private boolean finished;
     private boolean canceled;
 
     public FetchImageTask(Context context, ImageView imageView, String url, boolean loadFomCache, boolean saveToCache) {
@@ -31,27 +32,35 @@ public class FetchImageTask {
         this.url = url;
         this.loadFomCache = loadFomCache;
         this.saveToCache = saveToCache;
+        finished = false;
         canceled = false;
 
         if (!(imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
             imageView.setTag(url);
             imageView.setImageBitmap(null);
 
-            executor.execute(new Runnable() {
-                public void run() {
-                    Bitmap image = fetchImage();
-                    if (!canceled) {
-                        handler.post(new Runnable() {
-                            public void run() {
-                                if ((imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
-                                    imageView.setImageBitmap(image);
-                                }
-                            }
-                        });
-                    }
+            executor.execute(() -> {
+                Bitmap image = fetchImage();
+                if (!canceled) {
+                    handler.post(() -> {
+                        finished = true;
+                        if ((imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
+                            imageView.setImageBitmap(image);
+                        }
+                    });
                 }
             });
+        } else {
+            finished = true;
         }
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public boolean isCanceled() {
+        return canceled;
     }
 
     public void cancel() {

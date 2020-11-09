@@ -13,7 +13,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class FetchDataTask {
-    private static final Executor executor = Executors.newFixedThreadPool(4);
+    private static final Executor executor = Executors.newFixedThreadPool(8);
     private static final Handler handler = new Handler(Looper.getMainLooper());
 
     public static interface OnLoadListener {
@@ -25,6 +25,7 @@ public class FetchDataTask {
     private final boolean loadFomCache;
     private final boolean saveToCache;
     private final OnLoadListener onLoadListener;
+    private boolean finished;
     private boolean canceled;
 
     public FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
@@ -33,20 +34,28 @@ public class FetchDataTask {
         this.loadFomCache = loadFomCache;
         this.saveToCache = saveToCache;
         this.onLoadListener = onLoadListener;
+        finished = false;
         canceled = false;
 
-        executor.execute(new Runnable() {
-            public void run() {
-                String data = fetchData();
-                if (!canceled) {
-                    handler.post(new Runnable() {
-                        public void run() {
-                            onLoadListener.onLoad(data);
-                        }
-                    });
-                }
+        executor.execute(() -> {
+            String data = fetchData();
+            if (!canceled) {
+                handler.post(() -> {
+                    finished = true;
+                    if (onLoadListener != null) {
+                        onLoadListener.onLoad(data);
+                    }
+                });
             }
         });
+    }
+
+    public boolean isFinished() {
+        return finished;
+    }
+
+    public boolean isCanceled() {
+        return canceled;
     }
 
     public void cancel() {
