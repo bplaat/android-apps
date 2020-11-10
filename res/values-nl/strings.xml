@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Main activity -->
     <string name="main_title_label">Binnenkort beschikbaar...</string>
     <string name="main_description_label">We werken hard aan deze app</string>
 
+    <!-- Settings activity -->
     <string name="settings_title_label">Instellingen</string>
 
     <string name="settings_display_label">Weergave</string>
@@ -33,6 +35,7 @@
         <item>Ingesteld door batterijbesparing</item>
     </string-array>
 
+    <!-- Rating alert -->
     <string name="rating_alert_title_label">Beoordeel BassieTest?</string>
     <string name="rating_alert_message_label">Als je de BassieTest-app leuk vindt, neem dan even de tijd om deze te beoordelen. Bedankt voor je steun!</string>
     <string name="rating_alert_rating_button">Beoordeel</string>

@@ -39,8 +39,11 @@ public class FetchImageTask {
             imageView.setTag(url);
             imageView.setImageBitmap(null);
 
+            // Fetch the image an another thread
             executor.execute(() -> {
                 Bitmap image = fetchImage();
+
+                // Set the image on the UI thread when not canceled
                 if (!canceled) {
                     handler.post(() -> {
                         finished = true;
@@ -69,13 +72,16 @@ public class FetchImageTask {
 
     private Bitmap fetchImage() {
         try {
+            // Check if the file exists in the cache
             File file = new File(context.getCacheDir(), Utils.md5(url));
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.RGB_565;
             if (loadFomCache && file.exists()) {
+                // The read it
                 return BitmapFactory.decodeFile(file.getPath(), options);
             }
 
+            // Or fetch the image from the internet in to a byte array buffer
             BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
             ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
@@ -88,6 +94,7 @@ public class FetchImageTask {
 
             byte[] image = byteArrayOutputStream.toByteArray();
 
+            // When needed save the image to a cache file
             if (saveToCache) {
                 FileOutputStream fileOutputStream = new FileOutputStream(file);
                 fileOutputStream.write(image);

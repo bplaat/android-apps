@@ -84,19 +84,13 @@ public class SettingsActivity extends BaseActivity {
             if (versionButtonClickCounterHolder[0] == 8) {
                 versionButtonClickCounterHolder[0] = 0;
                 Toast.makeText(this, R.string.settings_version_message_label, Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bit.ly/3irDSvx")));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/dQw4w9WgXcQ?t=43")));
             }
         });
 
         // Init rate button
         ((LinearLayout)findViewById(R.id.settings_rate_button)).setOnClickListener((View view) -> {
-            // Open the store page for the user to add a rating
-            String appPackageName = getPackageName();
-            try {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
-            } catch (Exception exception) {
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
-            }
+            Utils.openStorePage(this);
         });
 
         // Init share button

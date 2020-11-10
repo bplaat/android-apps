@@ -45,7 +45,7 @@ public class MainActivity extends BaseActivity {
     // Everytime the main activity opens update / show rate alert
     public void onResume() {
         super.onResume();
-        RatingAlert.show(this);
+        RatingAlert.updateAndShow(this);
     }
 
     // When come back of the settings activity check for restart

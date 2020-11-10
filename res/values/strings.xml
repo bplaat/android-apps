@@ -2,9 +2,11 @@
 <resources>
     <string name="app_name" translatable="false">BassieTest</string>
 
+    <!-- Main activity -->
     <string name="main_title_label">Coming soon...</string>
     <string name="main_description_label">We are working hard on this app</string>
 
+    <!-- Settings activity -->
     <string name="settings_title_label">Settings</string>
 
     <string name="settings_display_label">Display</string>
@@ -35,6 +37,7 @@
         <item>Set by Battery Saver</item>
     </string-array>
 
+    <!-- Rating alert -->
     <string name="rating_alert_title_label">Rate BassieTest?</string>
     <string name="rating_alert_message_label">If you like the BassieTest app, please take a moment to rate it. Thanks for your support!</string>
     <string name="rating_alert_rating_button">Rate</string>

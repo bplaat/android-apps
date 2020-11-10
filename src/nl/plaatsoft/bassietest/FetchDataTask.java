@@ -37,8 +37,11 @@ public class FetchDataTask {
         finished = false;
         canceled = false;
 
+        // Fetch the data in another thread
         executor.execute(() -> {
             String data = fetchData();
+
+            // Run the onLoad event on the UI thread when not canceled
             if (!canceled) {
                 handler.post(() -> {
                     finished = true;
@@ -64,8 +67,10 @@ public class FetchDataTask {
 
     private String fetchData() {
         try {
+            // Check if the url is already cached
             File file = new File(context.getCacheDir(), Utils.md5(url));
             if (loadFomCache && file.exists()) {
+                // Then read the cached file
                 BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
                 StringBuilder stringBuilder = new StringBuilder();
                 String line;
@@ -77,6 +82,7 @@ public class FetchDataTask {
                 return stringBuilder.toString();
             }
 
+            // Or fetch the data from the internet
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
             StringBuilder stringBuilder = new StringBuilder();
             String line;
@@ -86,6 +92,7 @@ public class FetchDataTask {
             }
             bufferedReader.close();
 
+            // And write to a cache file when needed
             String data = stringBuilder.toString();
             if (saveToCache) {
                 FileWriter fileWriter = new FileWriter(file);

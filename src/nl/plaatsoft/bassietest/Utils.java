@@ -1,5 +1,8 @@
 package nl.plaatsoft.bassietest;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import java.security.MessageDigest;
 
 public class Utils {
@@ -20,6 +23,20 @@ public class Utils {
         catch (Exception exception) {
             exception.printStackTrace();
             return null;
+        }
+    }
+
+    // Function that opens the right store page for this app
+    public static void openStorePage(Context context) {
+        if (Config.SETTINGS_OVERRIDE_STORE_PAGE != null) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_OVERRIDE_STORE_PAGE)));
+        } else {
+            String appPackageName = context.getPackageName();
+            try {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+            } catch (Exception exception) {
+                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+            }
         }
     }
 }
