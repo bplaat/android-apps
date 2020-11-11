@@ -11,12 +11,12 @@
             style="@style/ActionBarTitle" />
     </LinearLayout>
 
-    <ScrollView style="@style/Scroll">
+    <ScrollView style="@style/ScrollContainer">
         <LinearLayout style="@style/List">
             <TextView android:text="@string/settings_display_label"
                 style="@style/ListItemSubtitle"/>
 
-            <LinearLayout style="@style/ListHighlightedGroup">
+            <LinearLayout style="@style/ListGroup">
                 <LinearLayout android:id="@+id/settings_language_button"
                     style="@style/ListItemButton">
 
@@ -47,7 +47,7 @@
             <TextView android:text="@string/settings_information_label"
                 style="@style/ListItemSubtitle" />
 
-            <LinearLayout style="@style/ListHighlightedGroup">
+            <LinearLayout style="@style/ListGroup">
                 <LinearLayout android:id="@+id/settings_version_button"
                     style="@style/ListItemButton">
 
@@ -64,7 +64,7 @@
                 <LinearLayout android:id="@+id/settings_rate_button"
                     style="@style/ListItemButton">
 
-                    <ImageView android:src="@drawable/ic_star"
+                    <ImageView android:src="@drawable/ic_grade"
                         style="@style/ListItemButtonIcon" />
 
                     <TextView android:text="@string/settings_rate_button"

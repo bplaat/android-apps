@@ -21,6 +21,7 @@ else
     mkdir res-compiled
     if aapt2 compile --dir res -o res-compiled; then
         if aapt2 link res-compiled/*.flat --manifest AndroidManifest.xml --java src -I $PLATFORM -o $name-unaligned.apk; then
+
             mkdir src-compiled
             find src -name *.java > sources.txt
             if javac -Xlint -cp $PLATFORM -d src-compiled @sources.txt; then

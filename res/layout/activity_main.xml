@@ -11,27 +11,46 @@
             style="@style/ActionBarIconButton" />
     </LinearLayout>
 
-    <ScrollView style="@style/Scroll">
-        <LinearLayout style="@style/Hero">
-            <ImageView android:src="@drawable/ic_clock"
-                style="@style/HeroIcon" />
+    <FrameLayout style="@style/Container">
+        <!-- Landing page -->
+        <ScrollView android:id="@+id/main_landing_page"
+            style="@style/Scroll">
 
-            <TextView android:text="@string/main_title_label"
-                style="@style/HeroTitle" />
+            <LinearLayout style="@style/Hero">
+                <ImageView android:src="@drawable/ic_clock"
+                    style="@style/HeroIcon" />
 
-            <TextView android:text="@string/main_description_label"
-                android:layout_marginBottom="32dp"
-                style="@style/HeroDescription" />
+                <TextView android:text="@string/main_landing_title_label"
+                    style="@style/HeroTitle" />
 
-            <ImageView android:id="@+id/main_random_image"
-                android:layout_width="320dp"
-                android:layout_height="240dp"
-                android:layout_marginBottom="16dp"
-                android:scaleType="centerCrop"
-                android:background="@color/loading_background_color" />
+                <TextView android:text="@string/main_landing_description_label"
+                    style="@style/HeroDescription" />
 
-            <TextView android:id="@+id/main_location_label"
-                style="@style/HeroDescription" />
-        </LinearLayout>
-    </ScrollView>
+                <Button android:id="@+id/main_landing_action_button"
+                    android:text="@string/main_landing_action_button"
+                    style="@style/HeroButton" />
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Data page -->
+        <ScrollView android:id="@+id/main_data_page"
+            android:visibility="gone"
+            style="@style/Scroll">
+
+            <LinearLayout style="@style/Hero">
+                <ImageView android:id="@+id/main_data_random_image"
+                    android:layout_width="320dp"
+                    android:layout_height="240dp"
+                    android:layout_marginBottom="16dp"
+                    android:scaleType="centerCrop"
+                    android:background="@color/loading_background_color" />
+
+                <TextView android:id="@+id/main_data_location_label"
+                    android:layout_width="320dp"
+                    android:gravity="center_horizontal"
+                    android:background="@color/loading_background_color"
+                    style="@style/HeroDescription" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 </LinearLayout>

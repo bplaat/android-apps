@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ScrollView;
 import org.json.JSONObject;
 
 public class MainActivity extends BaseActivity {
@@ -27,18 +29,36 @@ public class MainActivity extends BaseActivity {
             startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
         });
 
-        // Fetch random Unsplash image
-        new FetchImageTask(this, (ImageView)findViewById(R.id.main_random_image), "https://source.unsplash.com/random", false, false);
+        ScrollView landingPage = (ScrollView)findViewById(R.id.main_landing_page);
+        ScrollView dataPage = (ScrollView)findViewById(R.id.main_data_page);
 
-        // Fetch IP information
-        new FetchDataTask(this, "https://ipinfo.io/json", false, false, (String data) -> {
-            try {
-                JSONObject jsondata = new JSONObject(data);
+        // Init landing action button
+        ((Button)findViewById(R.id.main_landing_action_button)).setOnClickListener((View view) -> {
+            View landingPageContent = landingPage.getChildAt(0);
+            landingPageContent.animate().alpha(0).setDuration(150).withEndAction(() -> {
+                landingPage.setVisibility(View.GONE);
+            });
 
-                ((TextView)findViewById(R.id.main_location_label)).setText(jsondata.getString("city") + ", " + jsondata.getString("region"));
-            } catch (Exception exception) {
-                exception.printStackTrace();
-            }
+            dataPage.setVisibility(View.VISIBLE);
+            View dataPageContent = dataPage.getChildAt(0);
+            dataPageContent.setAlpha(0);
+            dataPageContent.animate().alpha(1).setDuration(150);
+
+            // Fetch random Unsplash image
+            new FetchImageTask(this, (ImageView)findViewById(R.id.main_data_random_image), "https://source.unsplash.com/random", false, false);
+
+            // Fetch IP information
+            new FetchDataTask(this, "https://ipinfo.io/json", false, false, (String data) -> {
+                try {
+                    JSONObject jsondata = new JSONObject(data);
+
+                    TextView localtionLabel = (TextView)findViewById(R.id.main_data_location_label);
+                    localtionLabel.setBackground(null);
+                    localtionLabel.setText(jsondata.getString("city") + ", " + jsondata.getString("region"));
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            });
         });
     }
 
