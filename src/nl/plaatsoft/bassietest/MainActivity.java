@@ -1,9 +1,7 @@
 package nl.plaatsoft.bassietest;
 
-import android.animation.ArgbEvaluator;
-import android.animation.ValueAnimator;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -20,6 +18,8 @@ public class MainActivity extends BaseActivity {
 
     private ScrollView landingPage;
     private ScrollView dataPage;
+    private boolean imageLoaded = false;
+    private boolean infoLoaded = false;
     private int oldLanguage = -1;
     private int oldTheme = -1;
 
@@ -42,28 +42,28 @@ public class MainActivity extends BaseActivity {
             Utils.fadeInOut(landingPage, dataPage);
 
             // Fetch random Unsplash image
-            ImageView imageView = (ImageView)findViewById(R.id.main_data_random_image);
-            new FetchImageTask(this, imageView, "https://source.unsplash.com/random", true, false, false);
+            if (!imageLoaded ) {
+                new FetchImageTask(this, (ImageView)findViewById(R.id.main_data_random_image), "https://source.unsplash.com/random", true, false, false, (Bitmap image) -> {
+                    imageLoaded = true;
+                });
+            }
 
             // Fetch IP information
-            new FetchDataTask(this, "https://ipinfo.io/json", (String data) -> {
-                try {
-                    JSONObject jsondata = new JSONObject(data);
+            if (!infoLoaded) {
+                new FetchDataTask(this, "https://ipinfo.io/json", (String data) -> {
+                    try {
+                        JSONObject jsondata = new JSONObject(data);
 
-                    TextView locationLabel = (TextView)findViewById(R.id.main_data_location_label);
+                        TextView locationLabel = (TextView)findViewById(R.id.main_data_location_label);
+                        Utils.fadeInTextView(this, locationLabel);
+                        locationLabel.setText(jsondata.getString("city") + ", " + jsondata.getString("region"));
 
-                    ValueAnimator animation = ValueAnimator.ofObject(new ArgbEvaluator(), ((ColorDrawable)locationLabel.getBackground()).getColor(), getColor(android.R.color.transparent));
-                    animation.addUpdateListener((ValueAnimator animator) -> {
-                        locationLabel.setBackgroundColor((int)animator.getAnimatedValue());
-                    });
-                    animation.setDuration(Config.ANIMATION_FADE_IN_DURATION);
-                    animation.start();
-
-                    locationLabel.setText(jsondata.getString("city") + ", " + jsondata.getString("region"));
-                } catch (Exception exception) {
-                    exception.printStackTrace();
-                }
-            });
+                        infoLoaded = true;
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+                });
+            }
         });
     }
 

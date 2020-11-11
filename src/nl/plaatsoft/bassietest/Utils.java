@@ -1,9 +1,13 @@
 package nl.plaatsoft.bassietest;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.view.View;
+import android.widget.TextView;
 import java.security.MessageDigest;
 
 public class Utils {
@@ -27,7 +31,7 @@ public class Utils {
         }
     }
 
-    // A function thate fades a view out and a view in
+    // A function that fades a view out and a view in
     public static void fadeInOut(View fadeOutView, View fadeInView) {
         fadeOutView.animate()
             .alpha(0)
@@ -41,6 +45,23 @@ public class Utils {
         fadeInView.animate()
             .alpha(1)
             .setDuration(Config.ANIMATION_FADE_IN_DURATION);
+    }
+
+    // A function that fades in a textview
+    public static void fadeInTextView(Context context, TextView textView) {
+        ValueAnimator backgroundColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), ((ColorDrawable)textView.getBackground()).getColor(), context.getColor(android.R.color.transparent));
+        backgroundColorAnimation.addUpdateListener((ValueAnimator animator) -> {
+            textView.setBackgroundColor((int)animator.getAnimatedValue());
+        });
+        backgroundColorAnimation.setDuration(Config.ANIMATION_FADE_IN_DURATION);
+        backgroundColorAnimation.start();
+
+        ValueAnimator textColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), context.getColor(android.R.color.transparent), textView.getCurrentTextColor());
+        textColorAnimation.addUpdateListener((ValueAnimator animator) -> {
+            textView.setTextColor((int)animator.getAnimatedValue());
+        });
+        textColorAnimation.setDuration(Config.ANIMATION_FADE_IN_DURATION);
+        textColorAnimation.start();
     }
 
     // Function that opens the right store page for this app
