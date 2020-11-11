@@ -3,6 +3,7 @@ package nl.plaatsoft.bassietest;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.view.View;
 import java.security.MessageDigest;
 
 public class Utils {
@@ -24,6 +25,22 @@ public class Utils {
             exception.printStackTrace();
             return null;
         }
+    }
+
+    // A function thate fades a view out and a view in
+    public static void fadeInOut(View fadeOutView, View fadeInView) {
+        fadeOutView.animate()
+            .alpha(0)
+            .setDuration(Config.ANIMATION_FADE_IN_DURATION)
+            .withEndAction(() -> {
+                fadeOutView.setVisibility(View.GONE);
+            });
+
+        fadeInView.setVisibility(View.VISIBLE);
+        fadeInView.setAlpha(0);
+        fadeInView.animate()
+            .alpha(1)
+            .setDuration(Config.ANIMATION_FADE_IN_DURATION);
     }
 
     // Function that opens the right store page for this app

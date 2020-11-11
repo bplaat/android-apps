@@ -42,8 +42,8 @@
                     android:layout_width="320dp"
                     android:layout_height="240dp"
                     android:layout_marginBottom="16dp"
-                    android:scaleType="centerCrop"
-                    android:background="@color/loading_background_color" />
+                    android:background="@color/loading_background_color"
+                    android:scaleType="centerCrop" />
 
                 <TextView android:id="@+id/main_data_location_label"
                     android:layout_width="320dp"

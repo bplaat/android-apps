@@ -3,6 +3,8 @@ package nl.plaatsoft.bassietest;
 public class Config {
     private Config() {}
 
+    public static final int ANIMATION_FADE_IN_DURATION = 150;
+
     public static final int SETTINGS_LANGUAGE_ENGLISH = 0;
     public static final int SETTINGS_LANGUAGE_DUTCH = 1;
     public static final int SETTINGS_LANGUAGE_SYSTEM = 2;

@@ -1,5 +1,7 @@
 package nl.plaatsoft.bassietest;
 
+import android.animation.IntEvaluator;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,44 +20,54 @@ public class FetchImageTask {
     private static final Executor executor = Executors.newFixedThreadPool(8);
     private static final Handler handler = new Handler(Looper.getMainLooper());
 
+    public static interface OnLoadListener {
+        public abstract void onLoad(Bitmap image);
+    }
+
     private final Context context;
     private final ImageView imageView;
     private final String url;
-    private final boolean loadFomCache;
-    private final boolean saveToCache;
-    private boolean finished;
-    private boolean canceled;
+    private boolean fadeIn = true;
+    private boolean loadFomCache = true;
+    private boolean saveToCache = true;
+    private OnLoadListener onLoadListener = null;
+    private boolean finished = false;
+    private boolean canceled = false;
 
-    public FetchImageTask(Context context, ImageView imageView, String url, boolean loadFomCache, boolean saveToCache) {
+    public FetchImageTask(Context context, ImageView imageView, String url) {
         this.context = context;
         this.imageView = imageView;
         this.url = url;
+        execute();
+    }
+
+    public FetchImageTask(Context context, ImageView imageView, String url, boolean fadeIn, boolean loadFomCache, boolean saveToCache) {
+        this.context = context;
+        this.imageView = imageView;
+        this.url = url;
+        this.fadeIn = fadeIn;
         this.loadFomCache = loadFomCache;
         this.saveToCache = saveToCache;
-        finished = false;
-        canceled = false;
+        execute();
+    }
 
-        if (!(imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
-            imageView.setTag(url);
-            imageView.setImageBitmap(null);
+    public FetchImageTask(Context context, ImageView imageView, String url, OnLoadListener onLoadListener) {
+        this.context = context;
+        this.imageView = imageView;
+        this.url = url;
+        this.onLoadListener = onLoadListener;
+        execute();
+    }
 
-            // Fetch the image an another thread
-            executor.execute(() -> {
-                Bitmap image = fetchImage();
-
-                // Set the image on the UI thread when not canceled
-                if (!canceled) {
-                    handler.post(() -> {
-                        finished = true;
-                        if ((imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
-                            imageView.setImageBitmap(image);
-                        }
-                    });
-                }
-            });
-        } else {
-            finished = true;
-        }
+    public FetchImageTask(Context context, ImageView imageView, String url, boolean fadeIn, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
+        this.context = context;
+        this.imageView = imageView;
+        this.url = url;
+        this.fadeIn = fadeIn;
+        this.loadFomCache = loadFomCache;
+        this.saveToCache = saveToCache;
+        this.onLoadListener = onLoadListener;
+        execute();
     }
 
     public boolean isFinished() {
@@ -68,6 +80,50 @@ public class FetchImageTask {
 
     public void cancel() {
         canceled = true;
+    }
+
+    private void execute() {
+        if (!(imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
+            imageView.setTag(url);
+            imageView.setImageBitmap(null);
+
+            // Fetch the image an another thread
+            executor.execute(() -> {
+                Bitmap image = fetchImage();
+
+                // Set the image on the UI thread when not canceled and run send onLoad event
+                if (!canceled) {
+                    handler.post(() -> {
+                        finished = true;
+
+                        if ((imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
+                            // When fading in set image alpha to zero
+                            if (fadeIn) {
+                                imageView.setImageAlpha(0);
+                            }
+
+                            imageView.setImageBitmap(image);
+
+                            // And animate the property to full opaque
+                            if (fadeIn) {
+                                ValueAnimator animation = ValueAnimator.ofObject(new IntEvaluator(), 0, 255);
+                                animation.addUpdateListener((ValueAnimator animator) -> {
+                                    imageView.setImageAlpha((int)animator.getAnimatedValue());
+                                });
+                                animation.setDuration(Config.ANIMATION_FADE_IN_DURATION);
+                                animation.start();
+                            }
+                        }
+
+                        if (onLoadListener != null) {
+                            onLoadListener.onLoad(image);
+                        }
+                    });
+                }
+            });
+        } else {
+            finished = true;
+        }
     }
 
     private Bitmap fetchImage() {

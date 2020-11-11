@@ -22,11 +22,32 @@ public class FetchDataTask {
 
     private final Context context;
     private final String url;
-    private final boolean loadFomCache;
-    private final boolean saveToCache;
-    private final OnLoadListener onLoadListener;
-    private boolean finished;
-    private boolean canceled;
+    private boolean loadFomCache = false;
+    private boolean saveToCache = false;
+    private OnLoadListener onLoadListener = null;
+    private boolean finished = false;
+    private boolean canceled = false;
+
+    public FetchDataTask(Context context, String url) {
+        this.context = context;
+        this.url = url;
+        execute();
+    }
+
+    public FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache) {
+        this.context = context;
+        this.url = url;
+        this.loadFomCache = loadFomCache;
+        this.saveToCache = saveToCache;
+        execute();
+    }
+
+    public FetchDataTask(Context context, String url, OnLoadListener onLoadListener) {
+        this.context = context;
+        this.url = url;
+        this.onLoadListener = onLoadListener;
+        execute();
+    }
 
     public FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
         this.context = context;
@@ -34,23 +55,7 @@ public class FetchDataTask {
         this.loadFomCache = loadFomCache;
         this.saveToCache = saveToCache;
         this.onLoadListener = onLoadListener;
-        finished = false;
-        canceled = false;
-
-        // Fetch the data in another thread
-        executor.execute(() -> {
-            String data = fetchData();
-
-            // Run the onLoad event on the UI thread when not canceled
-            if (!canceled) {
-                handler.post(() -> {
-                    finished = true;
-                    if (onLoadListener != null) {
-                        onLoadListener.onLoad(data);
-                    }
-                });
-            }
-        });
+        execute();
     }
 
     public boolean isFinished() {
@@ -63,6 +68,23 @@ public class FetchDataTask {
 
     public void cancel() {
         canceled = true;
+    }
+
+    private void execute() {
+        // Fetch the data in another thread
+        executor.execute(() -> {
+            String data = fetchData();
+
+            // Send the onLoad event on the UI thread when not canceled
+            if (!canceled) {
+                handler.post(() -> {
+                    finished = true;
+                    if (onLoadListener != null) {
+                        onLoadListener.onLoad(data);
+                    }
+                });
+            }
+        });
     }
 
     private String fetchData() {
