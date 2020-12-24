@@ -13,11 +13,10 @@ import java.util.HashMap;
 
 public class CustomWebViewClient extends WebViewClient {
     private Context context;
-    private Map<String, Boolean> urlAdCache;
+    private Map<String, Boolean> urlAdCache = new HashMap<String, Boolean>();
 
     CustomWebViewClient(Context context) {
         this.context = context;
-        urlAdCache = new HashMap<String, Boolean>();
     }
 
     @SuppressWarnings("deprecation")
