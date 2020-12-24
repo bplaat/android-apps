@@ -59,7 +59,8 @@ public class CustomWebViewClient extends WebViewClient {
     }
 
     public void onPageFinished(WebView view, String url) {
-        super.onPageFinished(view, url);
         CookieManager.getInstance().flush();
+
+        super.onPageFinished(view, url);
     }
 }

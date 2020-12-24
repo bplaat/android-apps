@@ -2,6 +2,7 @@ package net.tweakers.android;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.webkit.WebView;
@@ -14,6 +15,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         webview = new WebView(this);
+        webview.setBackgroundColor(Color.TRANSPARENT);
         setContentView(webview);
 
         WebSettings webSettings = webview.getSettings();
