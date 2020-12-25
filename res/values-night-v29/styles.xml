@@ -5,7 +5,7 @@
         <item name="android:statusBarColor">@color/primary_color</item>
         <item name="android:navigationBarColor">@color/primary_color</item>
 
-        <!-- Disable force dark mode -->
+        <!-- Enable force dark mode -->
         <item name="android:forceDarkAllowed">true</item>
     </style>
 </resources>
