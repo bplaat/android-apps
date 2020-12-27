@@ -1,12 +1,12 @@
 package nl.plaatsoft.bassietest;
 
-import android.animation.IntEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Looper;
 import android.os.Handler;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -106,11 +106,12 @@ public class FetchImageTask {
 
                             // And animate the property to full opaque
                             if (fadeIn) {
-                                ValueAnimator animation = ValueAnimator.ofObject(new IntEvaluator(), 0, 255);
+                                ValueAnimator animation = ValueAnimator.ofInt(0, 255);
+                                animation.setDuration(Config.APP_ANIMATION_DURATION);
+                                animation.setInterpolator(new AccelerateDecelerateInterpolator());
                                 animation.addUpdateListener((ValueAnimator animator) -> {
                                     imageView.setImageAlpha((int)animator.getAnimatedValue());
                                 });
-                                animation.setDuration(Config.ANIMATION_FADE_IN_DURATION);
                                 animation.start();
                             }
                         }

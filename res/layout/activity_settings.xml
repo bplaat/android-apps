@@ -17,6 +17,7 @@
                 style="@style/ListItemSubtitle"/>
 
             <LinearLayout style="@style/ListGroup">
+                <!-- Language button -->
                 <LinearLayout android:id="@+id/settings_language_button"
                     style="@style/ListItemButton">
 
@@ -30,6 +31,7 @@
                         style="@style/ListItemButtonMeta" />
                 </LinearLayout>
 
+                <!-- Theme button -->
                 <LinearLayout android:id="@+id/settings_theme_button"
                     style="@style/ListItemButton">
 
@@ -48,6 +50,7 @@
                 style="@style/ListItemSubtitle" />
 
             <LinearLayout style="@style/ListGroup">
+                <!-- Version button -->
                 <LinearLayout android:id="@+id/settings_version_button"
                     style="@style/ListItemButton">
 
@@ -61,6 +64,7 @@
                         style="@style/ListItemButtonMeta" />
                 </LinearLayout>
 
+                <!-- Rate button -->
                 <LinearLayout android:id="@+id/settings_rate_button"
                     style="@style/ListItemButton">
 
@@ -71,6 +75,7 @@
                         style="@style/ListItemButtonLabel" />
                 </LinearLayout>
 
+                <!-- Share button -->
                 <LinearLayout android:id="@+id/settings_share_button"
                     style="@style/ListItemButton">
 
@@ -81,6 +86,7 @@
                         style="@style/ListItemButtonLabel" />
                 </LinearLayout>
 
+                <!-- About button -->
                 <LinearLayout android:id="@+id/settings_about_button"
                     style="@style/ListItemButton">
 
@@ -92,7 +98,8 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <TextView android:text="@string/settings_about_message_label"
+            <TextView android:id="@+id/settings_about_message_label"
+                android:text="@string/settings_about_message_label"
                 style="@style/ListItemFooter" />
         </LinearLayout>
     </ScrollView>

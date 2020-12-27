@@ -1,11 +1,11 @@
 package nl.plaatsoft.bassietest;
 
-import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.View;
 import android.widget.TextView;
 import java.security.MessageDigest;
@@ -35,7 +35,8 @@ public class Utils {
     public static void fadeInOut(View fadeOutView, View fadeInView) {
         fadeOutView.animate()
             .alpha(0)
-            .setDuration(Config.ANIMATION_FADE_IN_DURATION)
+            .setDuration(Config.APP_ANIMATION_DURATION)
+            .setInterpolator(new AccelerateDecelerateInterpolator())
             .withEndAction(() -> {
                 fadeOutView.setVisibility(View.GONE);
             });
@@ -44,30 +45,42 @@ public class Utils {
         fadeInView.setAlpha(0);
         fadeInView.animate()
             .alpha(1)
-            .setDuration(Config.ANIMATION_FADE_IN_DURATION);
+            .setDuration(Config.APP_ANIMATION_DURATION)
+            .setInterpolator(new AccelerateDecelerateInterpolator());
     }
 
     // A function that fades in a textview
     public static void fadeInTextView(Context context, TextView textView) {
-        ValueAnimator backgroundColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), ((ColorDrawable)textView.getBackground()).getColor(), context.getColor(android.R.color.transparent));
+        ValueAnimator backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)textView.getBackground()).getColor(), context.getColor(android.R.color.transparent));
+        backgroundColorAnimation.setDuration(Config.APP_ANIMATION_DURATION);
+        backgroundColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
         backgroundColorAnimation.addUpdateListener((ValueAnimator animator) -> {
             textView.setBackgroundColor((int)animator.getAnimatedValue());
         });
-        backgroundColorAnimation.setDuration(Config.ANIMATION_FADE_IN_DURATION);
         backgroundColorAnimation.start();
 
-        ValueAnimator textColorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), context.getColor(android.R.color.transparent), textView.getCurrentTextColor());
+        ValueAnimator textColorAnimation = ValueAnimator.ofArgb(context.getColor(android.R.color.transparent), textView.getCurrentTextColor());
+        textColorAnimation.setDuration(Config.APP_ANIMATION_DURATION);
+        textColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
         textColorAnimation.addUpdateListener((ValueAnimator animator) -> {
             textView.setTextColor((int)animator.getAnimatedValue());
         });
-        textColorAnimation.setDuration(Config.ANIMATION_FADE_IN_DURATION);
         textColorAnimation.start();
+    }
+
+    // Function that resturns the url of the right store page
+    public static String getStorePageUrl(Context context) {
+        if (Config.APP_OVERRIDE_STORE_PAGE_URL != null) {
+            return Config.APP_OVERRIDE_STORE_PAGE_URL;
+        } else {
+            return "https://play.google.com/store/apps/details?id=" + context.getPackageName();
+        }
     }
 
     // Function that opens the right store page for this app
     public static void openStorePage(Context context) {
-        if (Config.SETTINGS_OVERRIDE_STORE_PAGE != null) {
-            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_OVERRIDE_STORE_PAGE)));
+        if (Config.APP_OVERRIDE_STORE_PAGE_URL != null) {
+            context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.APP_OVERRIDE_STORE_PAGE_URL)));
         } else {
             String appPackageName = context.getPackageName();
             try {

@@ -35,8 +35,6 @@ public class SettingsActivity extends BaseActivity {
                 .setTitle(R.string.settings_language_button)
                 .setSingleChoiceItems(languages, language, (DialogInterface dialog, int which) -> {
                     dialog.dismiss();
-
-                    // When different language is selected save and recreate activity
                     if (language != which) {
                         SharedPreferences.Editor settingsEditor = settings.edit();
                         settingsEditor.putInt("language", which);
@@ -58,8 +56,6 @@ public class SettingsActivity extends BaseActivity {
                 .setTitle(R.string.settings_theme_button)
                 .setSingleChoiceItems(themes, theme, (DialogInterface dialog, int which) ->  {
                     dialog.dismiss();
-
-                    // When different theme is selected save and recreate activity
                     if (theme != which) {
                         SharedPreferences.Editor settingsEditor = settings.edit();
                         settingsEditor.putInt("theme", which);
@@ -98,7 +94,7 @@ public class SettingsActivity extends BaseActivity {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.settings_share_message) + " https://play.google.com/store/apps/details?id=" + getPackageName());
+            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.settings_share_message) + " " + Utils.getStorePageUrl(this));
             startActivity(Intent.createChooser(intent, null));
         });
 
@@ -108,10 +104,15 @@ public class SettingsActivity extends BaseActivity {
                 .setTitle(R.string.settings_about_button)
                 .setMessage(R.string.settings_about_message_label)
                 .setNegativeButton(R.string.settings_about_website_button, (DialogInterface dialog, int which) ->  {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bastiaan.ml/")));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
                 })
                 .setPositiveButton(R.string.settings_about_ok_button, null)
                 .show();
+        });
+
+        // Init about label
+        ((TextView)findViewById(R.id.settings_about_message_label)).setOnClickListener((View view) -> {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
         });
     }
 }

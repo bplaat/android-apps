@@ -15,11 +15,30 @@
         <item name="android:colorAccent">@color/accent_color</item>
     </style>
 
-    <!-- Root -->
+    <!-- Containers -->
     <style name="Root">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="Container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+
+    <style name="Scroll">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:fillViewport">true</item>
+    </style>
+
+    <style name="ScrollContainer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:fillViewport">true</item>
     </style>
 
     <!-- Action bar -->
@@ -42,29 +61,10 @@
     </style>
 
     <style name="ActionBarIconButton">
-        <!-- <item name="android:layout_width">56dp</item>
-        <item name="android:layout_height">56dp</item> -->
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
         <item name="android:layout_margin">12dp</item>
         <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
-    </style>
-
-    <!-- Containers -->
-    <style name="Container">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">1</item>
-    </style>
-
-    <style name="Scroll">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:fillViewport">true</item>
-    </style>
-
-    <style name="ScrollContainer" parent="Container">
-        <item name="android:fillViewport">true</item>
     </style>
 
     <!-- Hero -->
@@ -160,5 +160,6 @@
     <style name="ListItemFooter" parent="ListItem">
         <item name="android:gravity">center_horizontal</item>
         <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 </resources>

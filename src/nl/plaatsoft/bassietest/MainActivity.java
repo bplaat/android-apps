@@ -38,7 +38,7 @@ public class MainActivity extends BaseActivity {
         dataPage = (ScrollView)findViewById(R.id.main_data_page);
 
         // Init landing action button
-        ((Button)findViewById(R.id.main_landing_action_button)).setOnClickListener((View view) -> {
+        ((Button)findViewById(R.id.main_landing_hero_button)).setOnClickListener((View view) -> {
             Utils.fadeInOut(landingPage, dataPage);
 
             // Fetch random Unsplash image

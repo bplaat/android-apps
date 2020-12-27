@@ -26,8 +26,8 @@
                 <TextView android:text="@string/main_landing_description_label"
                     style="@style/HeroDescription" />
 
-                <Button android:id="@+id/main_landing_action_button"
-                    android:text="@string/main_landing_action_button"
+                <Button android:id="@+id/main_landing_hero_button"
+                    android:text="@string/main_landing_hero_button"
                     style="@style/HeroButton" />
             </LinearLayout>
         </ScrollView>

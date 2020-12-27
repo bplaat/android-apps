@@ -3,7 +3,7 @@
     <!-- Main activity -->
     <string name="main_landing_title_label">Binnenkort beschikbaar...</string>
     <string name="main_landing_description_label">We werken hard aan deze app</string>
-    <string name="main_landing_action_button">Laad informatie</string>
+    <string name="main_landing_hero_button">Laad informatie</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Instellingen</string>
