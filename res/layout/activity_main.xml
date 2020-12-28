@@ -20,7 +20,9 @@
                 style="@style/ActionBarIconButton" />
         </LinearLayout>
 
-        <ScrollView style="@style/Scroll">
+        <ScrollView android:id="@+id/main_disconnected_scroll"
+            style="@style/Scroll">
+
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_wifi_off"
                     style="@style/HeroIcon" />
