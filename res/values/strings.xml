@@ -11,20 +11,28 @@
     <string name="settings_title_label">Settings</string>
 
     <string name="settings_display_label">Display</string>
+
     <string name="settings_language_button">Language</string>
+    <string name="settings_language_alert_title_label">Language</string>
+    <string name="settings_language_alert_cancel_button">Cancel</string>
+
     <string name="settings_theme_button">Theme</string>
-    <string name="settings_cancel_button">Cancel</string>
+    <string name="settings_theme_alert_title_label">Theme</string>
+    <string name="settings_theme_alert_cancel_button">Cancel</string>
 
     <string name="settings_information_label">Information</string>
     <string name="settings_version_button">App version</string>
-    <string name="settings_version_message_label">Who, you are an amazing hacker!</string>
+    <string name="settings_version_message">Who, you are an amazing hacker!</string>
     <string name="settings_rate_button">Rate this app</string>
     <string name="settings_share_button">Share this app</string>
     <string name="settings_share_message">Check out this cool app:</string>
     <string name="settings_about_button">About this app</string>
-    <string name="settings_about_message_button">This application is made by Bastiaan van der Plaat</string>
-    <string name="settings_about_website_button">Website</string>
-    <string name="settings_about_ok_button">OK</string>
+    <string name="settings_footer_button">This application is made by Bastiaan van der Plaat</string>
+
+    <string name="settings_about_alert_title_label">About this app</string>
+    <string name="settings_about_alert_message_label">This application is made by Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
 
     <string-array name="settings_languages">
         <item>English</item>
