@@ -35,7 +35,7 @@ public class Utils {
     public static void fadeInOut(View fadeOutView, View fadeInView) {
         fadeOutView.animate()
             .alpha(0)
-            .setDuration(Config.APP_ANIMATION_DURATION)
+            .setDuration(Config.ANIMATION_DURATION)
             .setInterpolator(new AccelerateDecelerateInterpolator())
             .withEndAction(() -> {
                 fadeOutView.setVisibility(View.GONE);
@@ -45,14 +45,14 @@ public class Utils {
         fadeInView.setAlpha(0);
         fadeInView.animate()
             .alpha(1)
-            .setDuration(Config.APP_ANIMATION_DURATION)
+            .setDuration(Config.ANIMATION_DURATION)
             .setInterpolator(new AccelerateDecelerateInterpolator());
     }
 
     // A function that fades in a textview
     public static void fadeInTextView(Context context, TextView textView) {
         ValueAnimator backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)textView.getBackground()).getColor(), 0);
-        backgroundColorAnimation.setDuration(Config.APP_ANIMATION_DURATION);
+        backgroundColorAnimation.setDuration(Config.ANIMATION_DURATION);
         backgroundColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
         backgroundColorAnimation.addUpdateListener(animator -> {
             textView.setBackgroundColor((int)animator.getAnimatedValue());
@@ -60,7 +60,7 @@ public class Utils {
         backgroundColorAnimation.start();
 
         ValueAnimator textColorAnimation = ValueAnimator.ofArgb(0, textView.getCurrentTextColor());
-        textColorAnimation.setDuration(Config.APP_ANIMATION_DURATION);
+        textColorAnimation.setDuration(Config.ANIMATION_DURATION);
         textColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
         textColorAnimation.addUpdateListener(animator -> {
             textView.setTextColor((int)animator.getAnimatedValue());

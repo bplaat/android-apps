@@ -115,6 +115,7 @@ public class FetchImageTask {
             }
         }
 
+        long startTime = System.currentTimeMillis();
         executor.execute(() -> {
             try {
                 Bitmap image = fetchImage();
@@ -124,15 +125,16 @@ public class FetchImageTask {
                         if (imageView != null) {
                             imageView.setBackgroundColor(0);
 
-                            if (isFadedIn) {
+                            boolean isWaitingLong = (System.currentTimeMillis() - startTime) > Config.ANIMATION_IMAGE_LOADING_TIMEOUT;
+                            if (isFadedIn && isWaitingLong) {
                                 imageView.setImageAlpha(0);
                             }
 
                             imageView.setImageBitmap(image);
 
-                            if (isFadedIn) {
+                            if (isFadedIn && isWaitingLong) {
                                 ValueAnimator animation = ValueAnimator.ofInt(0, 255);
-                                animation.setDuration(Config.APP_ANIMATION_DURATION);
+                                animation.setDuration(Config.ANIMATION_DURATION);
                                 animation.setInterpolator(new AccelerateDecelerateInterpolator());
                                 animation.addUpdateListener(animator -> {
                                     imageView.setImageAlpha((int)animator.getAnimatedValue());

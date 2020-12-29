@@ -4,7 +4,9 @@ public class Config {
     private Config() {}
 
     public static final String APP_OVERRIDE_STORE_PAGE_URL = "https://github.com/bplaat/bassietest-android";
-    public static final int APP_ANIMATION_DURATION = 200;
+
+    public static final int ANIMATION_DURATION = 200;
+    public static final int ANIMATION_IMAGE_LOADING_TIMEOUT = 50;
 
     public static final int SETTINGS_LANGUAGE_ENGLISH = 0;
     public static final int SETTINGS_LANGUAGE_DUTCH = 1;
