@@ -13,17 +13,17 @@ import java.security.MessageDigest;
 public class Utils {
     private Utils() {}
 
-    // Function that hashes its input data to a md5 hash
+    // Function that hashes its input data to a md5 hash string
     public static String md5(String data) {
         try {
             MessageDigest messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.update(data.getBytes());
             byte[] bytes = messageDigest.digest();
-            String hash = "";
+            StringBuilder hashBuilder = new StringBuilder();
             for (int i = 0; i < bytes.length; i++) {
-                hash += String.format("%02x", bytes[i]);
+                hashBuilder.append(String.format("%02x", bytes[i]));
             }
-            return hash;
+            return hashBuilder.toString();
         }
         catch (Exception exception) {
             exception.printStackTrace();
@@ -51,18 +51,18 @@ public class Utils {
 
     // A function that fades in a textview
     public static void fadeInTextView(Context context, TextView textView) {
-        ValueAnimator backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)textView.getBackground()).getColor(), context.getColor(android.R.color.transparent));
+        ValueAnimator backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)textView.getBackground()).getColor(), 0);
         backgroundColorAnimation.setDuration(Config.APP_ANIMATION_DURATION);
         backgroundColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-        backgroundColorAnimation.addUpdateListener((ValueAnimator animator) -> {
+        backgroundColorAnimation.addUpdateListener(animator -> {
             textView.setBackgroundColor((int)animator.getAnimatedValue());
         });
         backgroundColorAnimation.start();
 
-        ValueAnimator textColorAnimation = ValueAnimator.ofArgb(context.getColor(android.R.color.transparent), textView.getCurrentTextColor());
+        ValueAnimator textColorAnimation = ValueAnimator.ofArgb(0, textView.getCurrentTextColor());
         textColorAnimation.setDuration(Config.APP_ANIMATION_DURATION);
         textColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
-        textColorAnimation.addUpdateListener((ValueAnimator animator) -> {
+        textColorAnimation.addUpdateListener(animator -> {
             textView.setTextColor((int)animator.getAnimatedValue());
         });
         textColorAnimation.start();

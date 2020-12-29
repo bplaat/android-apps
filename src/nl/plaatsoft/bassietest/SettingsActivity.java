@@ -1,8 +1,6 @@
 package nl.plaatsoft.bassietest;
 
 import android.app.AlertDialog;
-import android.content.res.Resources;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -19,21 +17,19 @@ public class SettingsActivity extends BaseActivity {
         setContentView(R.layout.activity_settings);
 
         // Set settings back button click listener
-        ((ImageButton)findViewById(R.id.settings_back_button)).setOnClickListener((View view) -> {
+        ((ImageButton)findViewById(R.id.settings_back_button)).setOnClickListener(view -> {
             finish();
         });
 
-        Resources resources = getResources();
-
         // Init language switcher button
-        String[] languages = resources.getStringArray(R.array.settings_languages);
+        String[] languages = getResources().getStringArray(R.array.settings_languages);
         int language = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);
         ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
 
-        ((LinearLayout)findViewById(R.id.settings_language_button)).setOnClickListener((View view) -> {
+        ((LinearLayout)findViewById(R.id.settings_language_button)).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                 .setTitle(R.string.settings_language_alert_title_label)
-                .setSingleChoiceItems(languages, language, (DialogInterface dialog, int which) -> {
+                .setSingleChoiceItems(languages, language, (dialog, which) -> {
                     dialog.dismiss();
                     if (language != which) {
                         SharedPreferences.Editor settingsEditor = settings.edit();
@@ -47,14 +43,14 @@ public class SettingsActivity extends BaseActivity {
         });
 
         // Init themes switcher button
-        String[] themes = resources.getStringArray(R.array.settings_themes);
+        String[] themes = getResources().getStringArray(R.array.settings_themes);
         int theme = settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT);
         ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
 
-        ((LinearLayout)findViewById(R.id.settings_theme_button)).setOnClickListener((View view) -> {
+        ((LinearLayout)findViewById(R.id.settings_theme_button)).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                 .setTitle(R.string.settings_theme_alert_title_label)
-                .setSingleChoiceItems(themes, theme, (DialogInterface dialog, int which) ->  {
+                .setSingleChoiceItems(themes, theme, (dialog, which) ->  {
                     dialog.dismiss();
                     if (theme != which) {
                         SharedPreferences.Editor settingsEditor = settings.edit();
@@ -75,7 +71,7 @@ public class SettingsActivity extends BaseActivity {
         }
 
         int versionButtonClickCounterHolder[] = { 0 };
-        ((LinearLayout)findViewById(R.id.settings_version_button)).setOnClickListener((View view) -> {
+        ((LinearLayout)findViewById(R.id.settings_version_button)).setOnClickListener(view -> {
             versionButtonClickCounterHolder[0]++;
             if (versionButtonClickCounterHolder[0] == 8) {
                 versionButtonClickCounterHolder[0] = 0;
@@ -85,25 +81,25 @@ public class SettingsActivity extends BaseActivity {
         });
 
         // Init rate button
-        ((LinearLayout)findViewById(R.id.settings_rate_button)).setOnClickListener((View view) -> {
+        ((LinearLayout)findViewById(R.id.settings_rate_button)).setOnClickListener(view -> {
             Utils.openStorePage(this);
         });
 
         // Init share button
-        ((LinearLayout)findViewById(R.id.settings_share_button)).setOnClickListener((View view) -> {
+        ((LinearLayout)findViewById(R.id.settings_share_button)).setOnClickListener(view -> {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.settings_share_message) + " " + Utils.getStorePageUrl(this));
+            intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.settings_share_message) + " " + Utils.getStorePageUrl(this));
             startActivity(Intent.createChooser(intent, null));
         });
 
         // Init about button
-        ((LinearLayout)findViewById(R.id.settings_about_button)).setOnClickListener((View view) -> {
+        ((LinearLayout)findViewById(R.id.settings_about_button)).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                 .setTitle(R.string.settings_about_alert_title_label)
                 .setMessage(R.string.settings_about_alert_message_label)
-                .setNegativeButton(R.string.settings_about_alert_website_button, (DialogInterface dialog, int which) ->  {
+                .setNegativeButton(R.string.settings_about_alert_website_button, (dialog, which) ->  {
                     startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
                 })
                 .setPositiveButton(R.string.settings_about_alert_ok_button, null)
@@ -111,7 +107,7 @@ public class SettingsActivity extends BaseActivity {
         });
 
         // Init footer button
-        ((TextView)findViewById(R.id.settings_footer_button)).setOnClickListener((View view) -> {
+        ((TextView)findViewById(R.id.settings_footer_button)).setOnClickListener(view -> {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
         });
     }

@@ -24,92 +24,117 @@ public class FetchImageTask {
         public abstract void onLoad(Bitmap image);
     }
 
+    public static interface OnErrorListener {
+        public abstract void onError(Exception exception);
+    }
+
     private final Context context;
-    private final ImageView imageView;
-    private final String url;
-    private boolean fadeIn = true;
-    private boolean loadFomCache = true;
-    private boolean saveToCache = true;
+
+    private String url;
+    private boolean isTransparent = false;
+    private boolean isFadedIn = false;
+    private boolean isLoadedFomCache = true;
+    private boolean isSavedToCache = true;
     private OnLoadListener onLoadListener = null;
-    private boolean finished = false;
-    private boolean canceled = false;
+    private OnErrorListener onErrorListener = null;
+    private ImageView imageView;
 
-    public FetchImageTask(Context context, ImageView imageView, String url) {
+    private boolean isFinished = false;
+    private boolean isCanceled = false;
+
+    private FetchImageTask(Context context) {
         this.context = context;
-        this.imageView = imageView;
-        this.url = url;
-        execute();
     }
 
-    public FetchImageTask(Context context, ImageView imageView, String url, boolean fadeIn, boolean loadFomCache, boolean saveToCache) {
-        this.context = context;
-        this.imageView = imageView;
-        this.url = url;
-        this.fadeIn = fadeIn;
-        this.loadFomCache = loadFomCache;
-        this.saveToCache = saveToCache;
-        execute();
+    public static FetchImageTask with(Context context) {
+        return new FetchImageTask(context);
     }
 
-    public FetchImageTask(Context context, ImageView imageView, String url, OnLoadListener onLoadListener) {
-        this.context = context;
-        this.imageView = imageView;
+    public FetchImageTask load(String url) {
         this.url = url;
+        return this;
+    }
+
+    public FetchImageTask transparent() {
+        this.isTransparent = true;
+        return this;
+    }
+
+    public FetchImageTask fadeIn() {
+        this.isFadedIn = true;
+        return this;
+    }
+
+    public FetchImageTask noCache() {
+        this.isLoadedFomCache = false;
+        this.isSavedToCache = false;
+        return this;
+    }
+
+    public FetchImageTask notFromCache() {
+        this.isLoadedFomCache = false;
+        return this;
+    }
+
+    public FetchImageTask notToCache() {
+        this.isSavedToCache = false;
+        return this;
+    }
+
+    public FetchImageTask then(OnLoadListener onLoadListener) {
         this.onLoadListener = onLoadListener;
-        execute();
+        return this;
     }
 
-    public FetchImageTask(Context context, ImageView imageView, String url, boolean fadeIn, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
-        this.context = context;
-        this.imageView = imageView;
-        this.url = url;
-        this.fadeIn = fadeIn;
-        this.loadFomCache = loadFomCache;
-        this.saveToCache = saveToCache;
+    public FetchImageTask then(OnLoadListener onLoadListener, OnErrorListener onErrorListener) {
         this.onLoadListener = onLoadListener;
-        execute();
+        this.onErrorListener = onErrorListener;
+        return this;
     }
 
-    public boolean isFinished() {
-        return finished;
+    public FetchImageTask into(ImageView imageView) {
+        this.imageView = imageView;
+        return this;
     }
 
-    public boolean isCanceled() {
-        return canceled;
-    }
+    public FetchImageTask fetch() {
+        if (imageView != null) {
+            FetchImageTask previousFetchImageTask = (FetchImageTask)imageView.getTag();
+            if (previousFetchImageTask != null) {
+                if (url != previousFetchImageTask.getUrl()) {
+                    if (!previousFetchImageTask.isFinished()) {
+                        previousFetchImageTask.cancel();
+                    }
 
-    public void cancel() {
-        canceled = true;
-    }
+                    imageView.setTag(this);
+                    imageView.setImageBitmap(null);
+                } else {
+                    cancel();
+                    return this;
+                }
+            }
+        }
 
-    private void execute() {
-        if (!(imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
-            imageView.setTag(url);
-            imageView.setImageBitmap(null);
-
-            // Fetch the image an another thread
-            executor.execute(() -> {
+        executor.execute(() -> {
+            try {
                 Bitmap image = fetchImage();
+                handler.post(() -> {
+                    finish();
+                    if (!isCanceled) {
+                        if (imageView != null) {
+                            imageView.setBackgroundColor(0);
 
-                // Set the image on the UI thread when not canceled and run send onLoad event
-                if (!canceled) {
-                    handler.post(() -> {
-                        finished = true;
-
-                        if ((imageView.getTag() != null ? (String)imageView.getTag() : "").equals(url)) {
-                            // When fading in set image alpha to zero
-                            if (fadeIn) {
+                            if (isFadedIn) {
                                 imageView.setImageAlpha(0);
                             }
 
                             imageView.setImageBitmap(image);
 
-                            // And animate the property to full opaque
-                            if (fadeIn) {
+                            if (isFadedIn) {
                                 ValueAnimator animation = ValueAnimator.ofInt(0, 255);
                                 animation.setDuration(Config.APP_ANIMATION_DURATION);
                                 animation.setInterpolator(new AccelerateDecelerateInterpolator());
-                                animation.addUpdateListener((ValueAnimator animator) -> {
+                                animation.addUpdateListener(animator -> {
                                     imageView.setImageAlpha((int)animator.getAnimatedValue());
                                 });
                                 animation.start();
@@ -119,50 +144,78 @@ public class FetchImageTask {
                         if (onLoadListener != null) {
                             onLoadListener.onLoad(image);
                         }
-                    });
-                }
-            });
-        } else {
-            finished = true;
+                    }
+                });
+            } catch (Exception exception) {
+                handler.post(() -> {
+                    finish();
+                    if (!isCanceled) {
+                        if (onErrorListener != null) {
+                            onErrorListener.onError(exception);
+                        } else {
+                            exception.printStackTrace();
+                        }
+                    }
+                });
+            }
+        });
+
+        return this;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public boolean isFinished() {
+        return isFinished;
+    }
+
+    public boolean isCanceled() {
+        return isCanceled;
+    }
+
+    public void cancel() {
+        isCanceled = true;
+        finish();
+    }
+
+    private void finish() {
+        isFinished = true;
+        if (imageView != null) {
+            imageView.setTag(null);
         }
     }
 
-    private Bitmap fetchImage() {
-        try {
-            // Check if the file exists in the cache
-            File file = new File(context.getCacheDir(), Utils.md5(url));
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.RGB_565;
-            if (loadFomCache && file.exists()) {
-                // The read it
-                return BitmapFactory.decodeFile(file.getPath(), options);
-            }
-
-            // Or fetch the image from the internet in to a byte array buffer
-            BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
-            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[1024];
-            int number_read = 0;
-            while ((number_read = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, number_read);
-            }
-            byteArrayOutputStream.close();
-            bufferedInputStream.close();
-
-            byte[] image = byteArrayOutputStream.toByteArray();
-
-            // When needed save the image to a cache file
-            if (saveToCache) {
-                FileOutputStream fileOutputStream = new FileOutputStream(file);
-                fileOutputStream.write(image);
-                fileOutputStream.close();
-            }
-
-            return BitmapFactory.decodeByteArray(image, 0, image.length, options);
+    private Bitmap fetchImage() throws Exception {
+        // Check if the file exists in the cache
+        File file = new File(context.getCacheDir(), Utils.md5(url));
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inPreferredConfig = isTransparent ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
+        if (isLoadedFomCache && file.exists()) {
+            return BitmapFactory.decodeFile(file.getPath(), options);
         }
-        catch (Exception exception) {
-            exception.printStackTrace();
-            return null;
+
+        // Or fetch the image from the internet in to a byte array buffer
+        BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int number_read = 0;
+        while ((number_read = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, number_read);
         }
+        byteArrayOutputStream.close();
+        bufferedInputStream.close();
+
+        byte[] image = byteArrayOutputStream.toByteArray();
+
+        // When needed save the image to a cache file
+        if (isSavedToCache) {
+            FileOutputStream fileOutputStream = new FileOutputStream(file);
+            fileOutputStream.write(image);
+            fileOutputStream.close();
+        }
+
+        return BitmapFactory.decodeByteArray(image, 0, image.length, options);
     }
 }

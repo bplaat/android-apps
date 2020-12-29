@@ -1,7 +1,6 @@
 package nl.plaatsoft.bassietest;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,19 +15,22 @@ import org.json.JSONObject;
 public class MainActivity extends BaseActivity {
     public static final int SETTINGS_REQUEST_CODE = 1;
 
+    private Handler handler = new Handler(Looper.getMainLooper());
+
     private ScrollView landingPage;
     private ScrollView dataPage;
-    private boolean imageLoaded = false;
-    private boolean infoLoaded = false;
+
     private int oldLanguage = -1;
     private int oldTheme = -1;
+    private boolean imageLoaded = false;
+    private boolean infoLoaded = false;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         // Init settings button
-        ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener((View view) -> {
+        ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
             oldLanguage = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);
             oldTheme = settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT);
             startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
@@ -38,19 +40,25 @@ public class MainActivity extends BaseActivity {
         dataPage = (ScrollView)findViewById(R.id.main_data_page);
 
         // Init landing action button
-        ((Button)findViewById(R.id.main_landing_hero_button)).setOnClickListener((View view) -> {
+        ((Button)findViewById(R.id.main_landing_hero_button)).setOnClickListener(view -> {
             Utils.fadeInOut(landingPage, dataPage);
 
             // Fetch random Unsplash image
-            if (!imageLoaded ) {
-                new FetchImageTask(this, (ImageView)findViewById(R.id.main_data_random_image), "https://source.unsplash.com/random", true, false, false, (Bitmap image) -> {
-                    imageLoaded = true;
-                });
+            if (!imageLoaded) {
+                FetchImageTask.with(this)
+                    .load("https://source.unsplash.com/random/" + 320 * 4 + "x" + 240 * 4)
+                    .noCache()
+                    .then(image -> {
+                        imageLoaded = true;
+                    })
+                    .fadeIn()
+                    .into((ImageView)findViewById(R.id.main_data_random_image))
+                    .fetch();
             }
 
             // Fetch IP information
             if (!infoLoaded) {
-                new FetchDataTask(this, "https://ipinfo.io/json", (String data) -> {
+                FetchDataTask.with(this).load("https://ipinfo.io/json").then(data -> {
                     try {
                         JSONObject jsondata = new JSONObject(data);
 
@@ -62,14 +70,11 @@ public class MainActivity extends BaseActivity {
                     } catch (Exception exception) {
                         exception.printStackTrace();
                     }
-                });
+                }).fetch();
             }
         });
-    }
 
-    // Everytime the main activity opens update / show rate alert
-    public void onResume() {
-        super.onResume();
+        // Everytime the main activity is created update / show rating alert
         RatingAlert.updateAndShow(this);
     }
 
@@ -81,7 +86,6 @@ public class MainActivity extends BaseActivity {
                     oldLanguage != settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT) ||
                     oldTheme != settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT)
                 ) {
-                    Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(() -> {
                         recreate();
                     });

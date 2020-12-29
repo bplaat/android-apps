@@ -2,10 +2,7 @@ package nl.plaatsoft.bassietest;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 
 public class RatingAlert {
     public static void updateAndShow(Context context) {
@@ -41,20 +38,20 @@ public class RatingAlert {
             new AlertDialog.Builder(context)
                 .setTitle(R.string.rating_alert_title_label)
                 .setMessage(R.string.rating_alert_message_label)
-                .setNeutralButton(R.string.rating_alert_later_button, (DialogInterface dialog, int whichButton) -> {
+                .setNeutralButton(R.string.rating_alert_later_button, (dialog, whichButton) -> {
                     // Reset the rating counters
                     SharedPreferences.Editor otherSettingsEditor = settings.edit();
                     otherSettingsEditor.putInt("rating_alert_launch_count", 0);
                     otherSettingsEditor.putLong("rating_alert_first_launch_time", System.currentTimeMillis());
                     otherSettingsEditor.commit();
                 })
-                .setNegativeButton(R.string.rating_alert_never_button, (DialogInterface dialog, int whichButton)-> {
+                .setNegativeButton(R.string.rating_alert_never_button, (dialog, whichButton)-> {
                     // Set the rating hidden flag
                     SharedPreferences.Editor otherSettingsEditor = settings.edit();
                     otherSettingsEditor.putBoolean("rating_alert_hidden", true);
                     otherSettingsEditor.commit();
                 })
-                .setPositiveButton(R.string.rating_alert_rating_button, (DialogInterface dialog, int whichButton) -> {
+                .setPositiveButton(R.string.rating_alert_rating_button, (dialog, whichButton) -> {
                     Utils.openStorePage(context);
 
                     // Set the rating hidden flag
