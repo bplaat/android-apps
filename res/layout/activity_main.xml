@@ -4,7 +4,7 @@
 
     <!-- Webview page -->
     <WebView android:id="@+id/main_webview_page"
-        style="@style/Webview" />
+        style="@style/Root" />
 
     <!-- Disconnected page -->
     <LinearLayout android:id="@+id/main_disconnected_page"

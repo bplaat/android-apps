@@ -34,12 +34,6 @@
         <item name="android:fillViewport">true</item>
     </style>
 
-    <style name="Webview">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:background">@android:color/transparent</item>
-    </style>
-
     <!-- Action bar -->
     <style name="ActionBar">
         <item name="android:layout_width">match_parent</item>

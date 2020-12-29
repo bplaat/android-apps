@@ -29,6 +29,7 @@ public class MainActivity extends Activity {
 
         // Webview page
         webviewPage = (WebView)findViewById(R.id.main_webview_page);
+        webviewPage.setBackgroundColor(0);
 
         WebSettings webSettings = webviewPage.getSettings();
         webSettings.setJavaScriptEnabled(true);
