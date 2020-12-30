@@ -46,7 +46,7 @@ public class MainActivity extends BaseActivity {
             // Fetch random Unsplash image
             if (!imageLoaded) {
                 FetchImageTask.with(this)
-                    .load("https://source.unsplash.com/random/" + 320 * 4 + "x" + 240 * 4)
+                    .load("https://source.unsplash.com/collection/141706/" + Utils.convertDpToPixel(this, 320) + "x" + Utils.convertDpToPixel(this, 240))
                     .noCache()
                     .then(image -> {
                         imageLoaded = true;

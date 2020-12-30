@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.util.DisplayMetrics;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.View;
 import android.widget.TextView;
@@ -29,6 +30,11 @@ public class Utils {
             exception.printStackTrace();
             return null;
         }
+    }
+
+    // A function that converts device pixels to real pixels
+    public static int convertDpToPixel(Context context, float dp) {
+        return (int)(dp * ((float)context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT));
     }
 
     // A function that fades a view out and a view in
