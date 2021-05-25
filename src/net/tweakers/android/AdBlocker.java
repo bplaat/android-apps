@@ -22,7 +22,9 @@ public class AdBlocker {
         try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open("blacklist-adservers.txt")))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
-                hostsBlacklist.add(line);
+                if (line.length() > 0) {
+                    hostsBlacklist.add(line);
+                }
             }
         } catch (Exception exception) {
             exception.printStackTrace();
