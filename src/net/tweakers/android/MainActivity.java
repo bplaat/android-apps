@@ -1,10 +1,13 @@
 package net.tweakers.android;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Build;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebResourceError;
@@ -29,10 +32,16 @@ public class MainActivity extends Activity {
 
         // Webview page
         webviewPage = (WebView)findViewById(R.id.main_webview_page);
-        webviewPage.setBackgroundColor(0);
+        webviewPage.setBackgroundColor(Color.TRANSPARENT);
 
         WebSettings webSettings = webviewPage.getSettings();
         webSettings.setJavaScriptEnabled(true);
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
+            (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
+        ) {
+            webSettings.setForceDark(WebSettings.FORCE_DARK_ON);
+        }
 
         // Disconnected page
         disconnectedPage = (LinearLayout)findViewById(R.id.main_disconnected_page);
