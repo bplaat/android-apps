@@ -42,6 +42,9 @@ public class GamePage extends View {
         height = (int)(metrics.heightPixels / scale);
 
         paint = new Paint();
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
+        paint.setTextSize(16 * scale);
 
         scoreLabelString = getResources().getString(R.string.game_score_label);
         timeLabelString = getResources().getString(R.string.game_time_label);
@@ -71,9 +74,12 @@ public class GamePage extends View {
         redsquare = new RedSquare(((width - redsquareSize) / 2) * scale, ((height - redsquareSize) / 2) * scale, redsquareSize * scale, redsquareSize * scale);
 
         blueSquares = new BlueSquare[4];
+
         blueSquares[0] = new BlueSquare(scale, scale, Random.rand(50, 100) * scale, Random.rand(75, 125) * scale, 1, 1, 0.5f * scale);
+
         int _width = Random.rand(125, 150);
         blueSquares[1] = new BlueSquare((width - _width - 1) * scale, scale, _width * scale, Random.rand(50, 100) * scale, -1, 1, 0.5f * scale);
+
         int _height = Random.rand(75, 125);
         blueSquares[2] = new BlueSquare(2 * scale, (height - _height - 1) * scale, Random.rand(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
 
@@ -108,7 +114,6 @@ public class GamePage extends View {
 
             for (BlueSquare blueSquare : blueSquares) {
                 blueSquare.update(canvas);
-
                 if (blueSquare.collision(redsquare)) {
                     gameover();
                 }
@@ -126,22 +131,16 @@ public class GamePage extends View {
 
         canvas.drawColor(Color.TRANSPARENT);
 
-        paint.setAntiAlias(true);
-        paint.setStyle(Paint.Style.FILL);
         paint.setColor(0x22ffffff);
         canvas.drawRect(borderWidth * scale, borderWidth * scale, (width - borderWidth) * scale, (height - borderWidth) * scale, paint);
 
         for (int i = 0; i < blueSquares.length; i++) {
             blueSquares[i].draw(canvas);
         }
-
         redsquare.draw(canvas);
 
-        paint.setStyle(Paint.Style.FILL);
         paint.setColor(Utils.getColor(getContext(), R.color.primary_text_color));
-        paint.setTextSize(16 * scale);
         paint.setTextAlign(Paint.Align.LEFT);
-
         canvas.drawText(String.format(scoreLabelString, score), 16 * scale, (16 + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
@@ -170,27 +169,22 @@ public class GamePage extends View {
             ) {
                 dragging = true;
             }
-
             return true;
         }
 
-        else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
             if (dragging) {
                 redsquare.setX(touchX - redsquare.getWidth() / 2);
                 redsquare.setY(touchY - redsquare.getHeight() / 2);
             }
-
             return true;
         }
 
-        else if (event.getAction() == MotionEvent.ACTION_UP) {
+        if (event.getAction() == MotionEvent.ACTION_UP) {
             dragging = false;
-
             return true;
         }
 
-        else {
-            return false;
-        }
+        return false;
     }
 }
