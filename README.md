@@ -1,2 +1,2 @@
-# coinlist-android
+# bplaat/coinlist-android
 The coinlist website on your phone!

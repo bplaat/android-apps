@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:descendantFocusability="blocksDescendants"
+    style="@style/ListItemButton">
+
+    <ImageView android:id="@+id/coin_image"
+        style="@style/ListItemButtonIcon" />
+
+    <LinearLayout style="@style/CoinContainer">
+
+        <TextView android:id="@+id/coin_name"
+            style="@style/CoinName" />
+
+        <TextView android:id="@+id/coin_rank"
+            style="@style/CoinRank" />
+    </LinearLayout>
+
+    <TextView android:id="@+id/coin_price"
+        style="@style/ListItemButtonMeta"/>
+
+    <ImageButton android:id="@+id/coin_star_button"
+        android:src="@drawable/ic_star_outline"
+        style="@style/ListItemButtonIconAction" />
+</LinearLayout>
