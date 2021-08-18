@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import org.json.JSONArray;
@@ -69,6 +71,15 @@ public class MainActivity extends BaseActivity {
         coinsList = (ListView)findViewById(R.id.main_coins_list);
         coinsAdapter = new CoinsAdapter(this);
         coinsList.setAdapter(coinsAdapter);
+        coinsList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
+            Coin coin = coinsAdapter.getItem(position);
+            if (coin.getExtraIndex() == 2) {
+                coin.setExtraIndex(0);
+            } else {
+                coin.setExtraIndex(coin.getExtraIndex() + 1);
+            }
+            coinsAdapter.notifyDataSetChanged();
+        });
 
         loadCoins();
     }
@@ -106,11 +117,8 @@ public class MainActivity extends BaseActivity {
                             break;
                         }
                     }
-
-                    if (starredOnly) {
-                        if (!isStarred) {
-                            continue;
-                        }
+                    if (starredOnly && !isStarred) {
+                        continue;
                     }
 
                     coinsAdapter.add(new Coin(
@@ -119,6 +127,9 @@ public class MainActivity extends BaseActivity {
                         jsonCoin.getString("name"),
                         jsonCoin.getString("image"),
                         jsonCoin.getDouble("current_price"),
+                        jsonCoin.getDouble("market_cap"),
+                        jsonCoin.getDouble("total_volume"),
+                        jsonCoin.getDouble("circulating_supply"),
                         isStarred
                     ));
                 }

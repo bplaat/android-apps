@@ -17,6 +17,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
         public TextView coinName;
         public TextView coinRank;
         public TextView coinPrice;
+        public TextView coinExtra;
         public ImageButton coinStarButton;
     }
 
@@ -33,6 +34,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
             viewHolder.coinName = (TextView)convertView.findViewById(R.id.coin_name);
             viewHolder.coinRank = (TextView)convertView.findViewById(R.id.coin_rank);
             viewHolder.coinPrice = (TextView)convertView.findViewById(R.id.coin_price);
+            viewHolder.coinExtra = (TextView)convertView.findViewById(R.id.coin_extra);
             viewHolder.coinStarButton = (ImageButton)convertView.findViewById(R.id.coin_star_button);
             convertView.setTag(viewHolder);
         } else {
@@ -51,7 +53,16 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
         viewHolder.coinName.setText(coin.getName());
         viewHolder.coinRank.setText("#" + coin.getRank());
 
-        viewHolder.coinPrice.setText(coin.getPriceFormatted());
+        viewHolder.coinPrice.setText(Coin.formatMoney(coin.getPrice()));
+        if (coin.getExtraIndex() == 0) {
+            viewHolder.coinExtra.setText("MCap " + Coin.formatMoney(coin.getMarketcap()));
+        }
+        if (coin.getExtraIndex() == 1) {
+            viewHolder.coinExtra.setText("Volume " + Coin.formatMoney(coin.getVolume()));
+        }
+        if (coin.getExtraIndex() == 2) {
+            viewHolder.coinExtra.setText("Supply " + Coin.formatNumber(coin.getSupply()));
+        }
 
         if (coin.getStarred()) {
             viewHolder.coinStarButton.setImageResource(R.drawable.ic_star);

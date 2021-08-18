@@ -6,8 +6,7 @@
     <ImageView android:id="@+id/coin_image"
         style="@style/ListItemButtonIcon" />
 
-    <LinearLayout style="@style/CoinContainer">
-
+    <LinearLayout style="@style/CoinContainerLeft">
         <TextView android:id="@+id/coin_name"
             style="@style/CoinName" />
 
@@ -15,8 +14,13 @@
             style="@style/CoinRank" />
     </LinearLayout>
 
-    <TextView android:id="@+id/coin_price"
-        style="@style/ListItemButtonMeta"/>
+    <LinearLayout style="@style/CoinContainerRight">
+        <TextView android:id="@+id/coin_price"
+            style="@style/CoinPrice"/>
+
+        <TextView android:id="@+id/coin_extra"
+            style="@style/CoinExtra"/>
+    </LinearLayout>
 
     <ImageButton android:id="@+id/coin_star_button"
         android:src="@drawable/ic_star_outline"
