@@ -19,6 +19,20 @@
                 style="@style/ListItemSubtitle"/>
 
             <LinearLayout style="@style/ListGroup">
+                <!-- Currency button -->
+                <LinearLayout android:id="@+id/settings_currency_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_cash_multiple"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_currency_button"
+                        style="@style/ListItemButtonLabel" />
+
+                    <TextView android:id="@+id/settings_currency_label"
+                        style="@style/ListItemButtonMeta" />
+                </LinearLayout>
+
                 <!-- Language button -->
                 <LinearLayout android:id="@+id/settings_language_button"
                     style="@style/ListItemButton">

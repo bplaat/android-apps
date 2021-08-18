@@ -21,6 +21,27 @@ public class SettingsActivity extends BaseActivity {
             finish();
         });
 
+        // Init currency switcher button
+        String[] currencies = getResources().getStringArray(R.array.settings_currencies);
+        int currency = settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT);
+        ((TextView)findViewById(R.id.settings_currency_label)).setText(currencies[currency]);
+
+        ((LinearLayout)findViewById(R.id.settings_currency_button)).setOnClickListener(view -> {
+            new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_currency_alert_title_label)
+                .setSingleChoiceItems(currencies, currency, (dialog, which) -> {
+                    dialog.dismiss();
+                    if (currency != which) {
+                        SharedPreferences.Editor settingsEditor = settings.edit();
+                        settingsEditor.putInt("currency", which);
+                        settingsEditor.apply();
+                        recreate();
+                    }
+                })
+                .setNegativeButton(R.string.settings_currency_alert_cancel_button, null)
+                .show();
+        });
+
         // Init language switcher button
         String[] languages = getResources().getStringArray(R.array.settings_languages);
         int language = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);

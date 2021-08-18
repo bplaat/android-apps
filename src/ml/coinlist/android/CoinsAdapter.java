@@ -60,12 +60,12 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
         }
         viewHolder.coinChange.setText(Coin.formatPercent(coin.getChange()));
 
-        viewHolder.coinPrice.setText(Coin.formatMoney(coin.getPrice()));
+        viewHolder.coinPrice.setText(Coin.formatMoney(getContext(), coin.getPrice()));
         if (coin.getExtraIndex() == 0) {
-            viewHolder.coinExtra.setText("MCap " + Coin.formatMoney(coin.getMarketcap()));
+            viewHolder.coinExtra.setText("MCap " + Coin.formatMoney(getContext(), coin.getMarketcap()));
         }
         if (coin.getExtraIndex() == 1) {
-            viewHolder.coinExtra.setText("Volume " + Coin.formatMoney(coin.getVolume()));
+            viewHolder.coinExtra.setText("Volume " + Coin.formatMoney(getContext(), coin.getVolume()));
         }
         if (coin.getExtraIndex() == 2) {
             viewHolder.coinExtra.setText("Supply " + Coin.formatNumber(coin.getSupply()));

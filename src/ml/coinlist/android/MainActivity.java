@@ -18,6 +18,7 @@ public class MainActivity extends BaseActivity {
     private Handler handler;
     private int oldLanguage = -1;
     private int oldTheme = -1;
+    private int oldCurrency = -1;
 
     private boolean starredOnly;
     private ListView coinsList;
@@ -64,6 +65,7 @@ public class MainActivity extends BaseActivity {
         ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
             oldLanguage = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);
             oldTheme = settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT);
+            oldCurrency = settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT);
             startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
         });
 
@@ -97,13 +99,19 @@ public class MainActivity extends BaseActivity {
                     });
                 }
             }
+            if (oldCurrency != -1) {
+                if (oldCurrency != settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)) {
+                    loadCoins();
+                }
+            }
         }
     }
 
     // Load coin information
     private void loadCoins() {
         coinsAdapter.clear();
-        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd").then(data -> {
+        String[] currencyStrings = { "usd", "eur", "btc", "sats", "eth", "bnb" };
+        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + currencyStrings[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)]).then(data -> {
             try {
                 JSONArray jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
                 JSONArray jsonCoins = new JSONArray(data);

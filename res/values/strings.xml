@@ -9,6 +9,10 @@
 
     <string name="settings_display_label">Display</string>
 
+    <string name="settings_currency_button">Currency</string>
+    <string name="settings_currency_alert_title_label">Currency</string>
+    <string name="settings_currency_alert_cancel_button">Cancel</string>
+
     <string name="settings_language_button">Language</string>
     <string name="settings_language_alert_title_label">Language</string>
     <string name="settings_language_alert_cancel_button">Cancel</string>
@@ -30,6 +34,15 @@
     <string name="settings_about_alert_message_label">This application is made by Bastiaan van der Plaat</string>
     <string name="settings_about_alert_website_button">Website</string>
     <string name="settings_about_alert_ok_button">OK</string>
+
+    <string-array name="settings_currencies">
+        <item>US Dollar (USD)</item>
+        <item>Euro (EUR)</item>
+        <item>Bitcoin (BTC)</item>
+        <item>Satoshi (SATS)</item>
+        <item>Ethereum (ETH)</item>
+        <item>Binance Coin (BNB)</item>
+    </string-array>
 
     <string-array name="settings_languages">
         <item>English</item>

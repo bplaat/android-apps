@@ -7,6 +7,10 @@
 
     <string name="settings_display_label">Weergave</string>
 
+    <string name="settings_currency_button">Munteenheid</string>
+    <string name="settings_currency_alert_title_label">Munteenheid</string>
+    <string name="settings_currency_alert_cancel_button">Annuleren</string>
+
     <string name="settings_language_button">Taal</string>
     <string name="settings_language_alert_title_label">Taal</string>
     <string name="settings_language_alert_cancel_button">Annuleren</string>

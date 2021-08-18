@@ -1,5 +1,7 @@
 package ml.coinlist.android;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import java.text.NumberFormat;
 
 public class Coin {
@@ -84,18 +86,46 @@ public class Coin {
         this.starred = starred;
     }
 
-    public static String formatMoney(double number) {
+    public static String formatMoney(Context context, double number) {
+        SharedPreferences settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        int currency = settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT);
+
         NumberFormat format = NumberFormat.getInstance();
+        String formatted;
         if (number > 1000000000) {
             format.setMaximumFractionDigits(2);
-            return "$" + format.format(number / 1000000000) + " Bn";
+            formatted = format.format(number / 1000000000) + " Bn";
         } else if (number > 1000000) {
             format.setMaximumFractionDigits(2);
-            return "$" + format.format(number / 1000000) + " M";
+            formatted = format.format(number / 1000000) + " M";
         } else {
-            format.setMaximumFractionDigits(number < 10 ? (number < 0.1 ? 8 : 4) : 2);
-            return "$" + format.format(number);
+            int decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
+            if (currency == Config.SETTINGS_CURRENCY_BTC || currency == Config.SETTINGS_CURRENCY_ETH || currency == Config.SETTINGS_CURRENCY_BNB) {
+                decimals = number < 10 ? (number < 0.1 ? 12 : 6) : 4;
+            }
+            if (currency == Config.SETTINGS_CURRENCY_SATS) {
+                decimals = number < 1 ? 4 : 0;
+            }
+            format.setMaximumFractionDigits(decimals);
+            formatted = format.format(number);
         }
+
+        if (currency == Config.SETTINGS_CURRENCY_EUR) {
+            return "\u20ac" + formatted;
+        }
+        if (currency == Config.SETTINGS_CURRENCY_BTC) {
+            return "\uu20bf" + formatted;
+        }
+        if (currency == Config.SETTINGS_CURRENCY_SATS) {
+            return formatted + " SATS";
+        }
+        if (currency == Config.SETTINGS_CURRENCY_ETH) {
+            return "\u039e" + formatted;
+        }
+        if (currency == Config.SETTINGS_CURRENCY_BNB) {
+            return formatted + " BNB";
+        }
+        return "$" + formatted;
     }
 
     public static String formatPercent(double number) {
