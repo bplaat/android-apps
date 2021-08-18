@@ -84,13 +84,17 @@ public class MainActivity extends BaseActivity {
         coinsList.setAdapter(coinsAdapter);
 
         coinsList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
-            Coin coin = coinsAdapter.getItem(position - 1);
-            if (coin.getExtraIndex() == 2) {
-                coin.setExtraIndex(0);
+            if (position == 0) {
+                loadGlobalInfo();
             } else {
-                coin.setExtraIndex(coin.getExtraIndex() + 1);
+                Coin coin = coinsAdapter.getItem(position - 1);
+                if (coin.getExtraIndex() == 2) {
+                    coin.setExtraIndex(0);
+                } else {
+                    coin.setExtraIndex(coin.getExtraIndex() + 1);
+                }
+                coinsAdapter.notifyDataSetChanged();
             }
-            coinsAdapter.notifyDataSetChanged();
         });
         loadCoins();
     }
