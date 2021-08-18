@@ -12,6 +12,7 @@
         android:theme="@style/Theme.App">
 
         <activity android:name=".MainActivity"
+            android:icon="@mipmap/ic_launcher"
             android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize">
 
