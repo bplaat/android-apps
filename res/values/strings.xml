@@ -7,6 +7,10 @@
     <string name="main_global_volume">Volume (24h)</string>
     <string name="main_global_dominance">Dominance</string>
 
+    <string name="main_extra_marketcap">MCap</string>
+    <string name="main_extra_volume">Volume</string>
+    <string name="main_extra_supply">Supply</string>
+
     <!-- Settings activity -->
     <string name="settings_title_label">Settings</string>
 

@@ -62,13 +62,16 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
 
         viewHolder.coinPrice.setText(Coin.formatMoney(getContext(), coin.getPrice()));
         if (coin.getExtraIndex() == 0) {
-            viewHolder.coinExtra.setText("MCap " + Coin.formatMoney(getContext(), coin.getMarketcap()));
+            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_marketcap) + " " +
+                Coin.formatMoney(getContext(), coin.getMarketcap()));
         }
         if (coin.getExtraIndex() == 1) {
-            viewHolder.coinExtra.setText("Volume " + Coin.formatMoney(getContext(), coin.getVolume()));
+            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_volume) + " " +
+                Coin.formatMoney(getContext(), coin.getVolume()));
         }
         if (coin.getExtraIndex() == 2) {
-            viewHolder.coinExtra.setText("Supply " + Coin.formatNumber(coin.getSupply()));
+            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_supply) + " " +
+                Coin.formatNumber(coin.getSupply()));
         }
 
         if (coin.getStarred()) {

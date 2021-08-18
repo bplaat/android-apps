@@ -94,9 +94,11 @@ public class Coin {
         String formatted;
         if (number > 1000000000) {
             format.setMaximumFractionDigits(2);
+            format.setMinimumFractionDigits(2);
             formatted = format.format(number / 1000000000) + " Bn";
         } else if (number > 1000000) {
             format.setMaximumFractionDigits(2);
+            format.setMinimumFractionDigits(2);
             formatted = format.format(number / 1000000) + " M";
         } else {
             int decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
@@ -107,6 +109,7 @@ public class Coin {
                 decimals = number < 1 ? 4 : 0;
             }
             format.setMaximumFractionDigits(decimals);
+            format.setMinimumFractionDigits(decimals);
             formatted = format.format(number);
         }
 
@@ -131,6 +134,7 @@ public class Coin {
     public static String formatPercent(double number) {
         NumberFormat format = NumberFormat.getInstance();
         format.setMaximumFractionDigits(2);
+        format.setMinimumFractionDigits(2);
         return format.format(number) + "%";
     }
 
@@ -142,9 +146,11 @@ public class Coin {
         NumberFormat format = NumberFormat.getInstance();
         if (number > 1000000000) {
             format.setMaximumFractionDigits(2);
+            format.setMinimumFractionDigits(2);
             return format.format(number / 1000000000) + " Bn";
         } else if (number > 1000000) {
             format.setMaximumFractionDigits(2);
+            format.setMinimumFractionDigits(2);
             return format.format(number / 1000000) + " M";
         } else {
             format.setMaximumFractionDigits(0);
