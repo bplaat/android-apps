@@ -8,7 +8,9 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -21,6 +23,7 @@ public class MainActivity extends BaseActivity {
     private int oldCurrency = -1;
 
     private boolean starredOnly;
+    private LinearLayout globalInfo;
     private ListView coinsList;
     private CoinsAdapter coinsAdapter;
 
@@ -58,6 +61,7 @@ public class MainActivity extends BaseActivity {
 
         // Init refresh button
         ((ImageButton)findViewById(R.id.main_refresh_button)).setOnClickListener(view -> {
+            loadGlobalInfo();
             loadCoins();
         });
 
@@ -71,8 +75,14 @@ public class MainActivity extends BaseActivity {
 
         // Load coins data
         coinsList = (ListView)findViewById(R.id.main_coins_list);
+
+        globalInfo = (LinearLayout)getLayoutInflater().inflate(R.layout.view_coins_header, coinsList, false);
+        coinsList.addHeaderView(globalInfo);
+        loadGlobalInfo();
+
         coinsAdapter = new CoinsAdapter(this);
         coinsList.setAdapter(coinsAdapter);
+
         coinsList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
             Coin coin = coinsAdapter.getItem(position);
             if (coin.getExtraIndex() == 2) {
@@ -82,7 +92,6 @@ public class MainActivity extends BaseActivity {
             }
             coinsAdapter.notifyDataSetChanged();
         });
-
         loadCoins();
     }
 
@@ -101,18 +110,40 @@ public class MainActivity extends BaseActivity {
             }
             if (oldCurrency != -1) {
                 if (oldCurrency != settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)) {
+                    loadGlobalInfo();
                     loadCoins();
                 }
             }
         }
     }
 
+    // Load global information
+    private void loadGlobalInfo() {
+        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/global").then(data -> {
+            try {
+                JSONObject jsonData = new JSONObject(data).getJSONObject("data");
+
+                ((TextView)globalInfo.findViewById(R.id.global_info_first_line)).setText(getResources().getString(R.string.main_global_marketcap) + ": " +
+                    Coin.formatMoney(this, jsonData.getJSONObject("total_market_cap").getDouble(Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)])));
+
+                ((TextView)globalInfo.findViewById(R.id.global_info_second_line)).setText(getResources().getString(R.string.main_global_volume) + ": " +
+                    Coin.formatMoney(this, jsonData.getJSONObject("total_volume").getDouble(Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)])));
+
+                ((TextView)globalInfo.findViewById(R.id.global_info_third_line)).setText(getResources().getString(R.string.main_global_dominance) + ": " +
+                    "BTC " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("btc")) + "  " +
+                    "ETH " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("eth")));
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }).fetch();
+    }
+
     // Load coin information
     private void loadCoins() {
-        coinsAdapter.clear();
-        String[] currencyStrings = { "usd", "eur", "btc", "sats", "eth", "bnb" };
-        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + currencyStrings[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)]).then(data -> {
+        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)]).then(data -> {
             try {
+                coinsAdapter.clear();
+
                 JSONArray jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
                 JSONArray jsonCoins = new JSONArray(data);
                 for (int i = 0; i < jsonCoins.length(); i++) {

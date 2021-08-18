@@ -3,6 +3,9 @@
     <string name="app_name" translatable="false">CoinList</string>
 
     <!-- Main activity -->
+    <string name="main_global_marketcap">Total Market Cap</string>
+    <string name="main_global_volume">Volume (24h)</string>
+    <string name="main_global_dominance">Dominance</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Settings</string>

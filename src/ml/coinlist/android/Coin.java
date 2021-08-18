@@ -131,7 +131,11 @@ public class Coin {
     public static String formatPercent(double number) {
         NumberFormat format = NumberFormat.getInstance();
         format.setMaximumFractionDigits(2);
-        return (number > 0 ? "\u25b2" : (number < 0 ? "\u25bc" : "")) + format.format(number) + "%";
+        return format.format(number) + "%";
+    }
+
+    public static String formatChangePercent(double number) {
+        return (number > 0 ? "\u25b2" : (number < 0 ? "\u25bc" : "")) + formatPercent(number);
     }
 
     public static String formatNumber(double number) {

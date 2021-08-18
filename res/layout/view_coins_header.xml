@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/GlobalInfo">
+
+    <TextView android:id="@+id/global_info_first_line"
+        style="@style/GlobalInfoLine" />
+
+    <TextView android:id="@+id/global_info_second_line"
+        style="@style/GlobalInfoLine" />
+
+    <TextView android:id="@+id/global_info_third_line"
+        style="@style/GlobalInfoLastLine" />
+</LinearLayout>

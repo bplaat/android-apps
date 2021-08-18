@@ -23,19 +23,22 @@ public class SettingsActivity extends BaseActivity {
 
         // Init currency switcher button
         String[] currencies = getResources().getStringArray(R.array.settings_currencies);
-        int currency = settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT);
-        ((TextView)findViewById(R.id.settings_currency_label)).setText(currencies[currency]);
+        int currencyHolder[] = { settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT) };
+        TextView currencyLabel = (TextView)findViewById(R.id.settings_currency_label);
+        currencyLabel.setText(currencies[currencyHolder[0]]);
 
         ((LinearLayout)findViewById(R.id.settings_currency_button)).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                 .setTitle(R.string.settings_currency_alert_title_label)
-                .setSingleChoiceItems(currencies, currency, (dialog, which) -> {
+                .setSingleChoiceItems(currencies, currencyHolder[0], (dialog, which) -> {
                     dialog.dismiss();
-                    if (currency != which) {
+                    if (currencyHolder[0] != which) {
+                        currencyHolder[0] = which;
+                        currencyLabel.setText(currencies[currencyHolder[0]]);
+
                         SharedPreferences.Editor settingsEditor = settings.edit();
                         settingsEditor.putInt("currency", which);
                         settingsEditor.apply();
-                        recreate();
                     }
                 })
                 .setNegativeButton(R.string.settings_currency_alert_cancel_button, null)

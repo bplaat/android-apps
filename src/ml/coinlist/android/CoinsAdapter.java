@@ -58,7 +58,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
                 viewHolder.coinChange.setTextColor(Utils.getColor(getContext(), R.color.secondary_text_color));
             }
         }
-        viewHolder.coinChange.setText(Coin.formatPercent(coin.getChange()));
+        viewHolder.coinChange.setText(Coin.formatChangePercent(coin.getChange()));
 
         viewHolder.coinPrice.setText(Coin.formatMoney(getContext(), coin.getPrice()));
         if (coin.getExtraIndex() == 0) {
