@@ -84,7 +84,7 @@ public class MainActivity extends BaseActivity {
         coinsList.setAdapter(coinsAdapter);
 
         coinsList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
-            Coin coin = coinsAdapter.getItem(position);
+            Coin coin = coinsAdapter.getItem(position - 1);
             if (coin.getExtraIndex() == 2) {
                 coin.setExtraIndex(0);
             } else {
@@ -123,13 +123,26 @@ public class MainActivity extends BaseActivity {
             try {
                 JSONObject jsonData = new JSONObject(data).getJSONObject("data");
 
-                ((TextView)globalInfo.findViewById(R.id.global_info_first_line)).setText(getResources().getString(R.string.main_global_marketcap) + ": " +
+                ((TextView)globalInfo.findViewById(R.id.global_info_marketcap)).setText(getResources().getString(R.string.main_global_marketcap) + ": " +
                     Coin.formatMoney(this, jsonData.getJSONObject("total_market_cap").getDouble(Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)])));
 
-                ((TextView)globalInfo.findViewById(R.id.global_info_second_line)).setText(getResources().getString(R.string.main_global_volume) + ": " +
+                double marketcapChange = jsonData.getDouble("market_cap_change_percentage_24h_usd");
+                TextView marketcapChangeLabel = (TextView)globalInfo.findViewById(R.id.global_info_marketcap_change);
+                if (marketcapChange > 0) {
+                    marketcapChangeLabel.setTextColor(Utils.getColor(this, R.color.positive_color));
+                } else {
+                    if (marketcapChange < 0) {
+                        marketcapChangeLabel.setTextColor(Utils.getColor(this, R.color.negative_color));
+                    } else {
+                        marketcapChangeLabel.setTextColor(Utils.getColor(this, R.color.secondary_text_color));
+                    }
+                }
+                marketcapChangeLabel.setText(Coin.formatChangePercent(marketcapChange));
+
+                ((TextView)globalInfo.findViewById(R.id.global_info_volume)).setText(getResources().getString(R.string.main_global_volume) + ": " +
                     Coin.formatMoney(this, jsonData.getJSONObject("total_volume").getDouble(Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)])));
 
-                ((TextView)globalInfo.findViewById(R.id.global_info_third_line)).setText(getResources().getString(R.string.main_global_dominance) + ": " +
+                ((TextView)globalInfo.findViewById(R.id.global_info_dominance)).setText(getResources().getString(R.string.main_global_dominance) + ": " +
                     "BTC " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("btc")) + "  " +
                     "ETH " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("eth")));
             } catch (Exception exception) {

@@ -2,12 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/GlobalInfo">
 
-    <TextView android:id="@+id/global_info_first_line"
-        style="@style/GlobalInfoLine" />
+    <LinearLayout style="@style/GlobalInfoMarketcap">
+        <TextView android:id="@+id/global_info_marketcap"
+            style="@style/GlobalInfoMarketcapText" />
 
-    <TextView android:id="@+id/global_info_second_line"
-        style="@style/GlobalInfoLine" />
+        <TextView android:id="@+id/global_info_marketcap_change"
+            style="@style/GlobalInfoMarketcapChange" />
+    </LinearLayout>
 
-    <TextView android:id="@+id/global_info_third_line"
-        style="@style/GlobalInfoLastLine" />
+    <TextView android:id="@+id/global_info_volume"
+        style="@style/GlobalInfoVolume" />
+
+    <TextView android:id="@+id/global_info_dominance"
+        style="@style/GlobalInfoDominance" />
 </LinearLayout>
