@@ -16,6 +16,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
         public ImageView coinImage;
         public TextView coinName;
         public TextView coinRank;
+        public TextView coinChange;
         public TextView coinPrice;
         public TextView coinExtra;
         public ImageButton coinStarButton;
@@ -33,6 +34,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
             viewHolder.coinImage = (ImageView)convertView.findViewById(R.id.coin_image);
             viewHolder.coinName = (TextView)convertView.findViewById(R.id.coin_name);
             viewHolder.coinRank = (TextView)convertView.findViewById(R.id.coin_rank);
+            viewHolder.coinChange = (TextView)convertView.findViewById(R.id.coin_change);
             viewHolder.coinPrice = (TextView)convertView.findViewById(R.id.coin_price);
             viewHolder.coinExtra = (TextView)convertView.findViewById(R.id.coin_extra);
             viewHolder.coinStarButton = (ImageButton)convertView.findViewById(R.id.coin_star_button);
@@ -43,15 +45,20 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
 
         Coin coin = getItem(position);
 
-        FetchImageTask.with(getContext())
-                    .load(coin.getImageUrl())
-                    .transparent()
-                    .fadeIn()
-                    .into(viewHolder.coinImage)
-                    .fetch();
+        FetchImageTask.with(getContext()).load(coin.getImageUrl()).transparent().fadeIn().into(viewHolder.coinImage).fetch();
 
         viewHolder.coinName.setText(coin.getName());
         viewHolder.coinRank.setText("#" + coin.getRank());
+        if (coin.getChange() > 0) {
+            viewHolder.coinChange.setTextColor(Utils.getColor(getContext(), R.color.positive_color));
+        } else {
+            if (coin.getChange() < 0) {
+                viewHolder.coinChange.setTextColor(Utils.getColor(getContext(), R.color.negative_color));
+            } else {
+                viewHolder.coinChange.setTextColor(Utils.getColor(getContext(), R.color.secondary_text_color));
+            }
+        }
+        viewHolder.coinChange.setText(Coin.formatPercent(coin.getChange()));
 
         viewHolder.coinPrice.setText(Coin.formatMoney(coin.getPrice()));
         if (coin.getExtraIndex() == 0) {

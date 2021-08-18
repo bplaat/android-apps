@@ -103,7 +103,7 @@ public class MainActivity extends BaseActivity {
     // Load coin information
     private void loadCoins() {
         coinsAdapter.clear();
-        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/coins/markets?page=1&vs_currency=usd&price_change_percentage=1h,24h,7d").then(data -> {
+        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd").then(data -> {
             try {
                 JSONArray jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
                 JSONArray jsonCoins = new JSONArray(data);
@@ -127,6 +127,7 @@ public class MainActivity extends BaseActivity {
                         jsonCoin.getString("name"),
                         jsonCoin.getString("image"),
                         jsonCoin.getDouble("current_price"),
+                        jsonCoin.getDouble("price_change_percentage_24h"),
                         jsonCoin.getDouble("market_cap"),
                         jsonCoin.getDouble("total_volume"),
                         jsonCoin.getDouble("circulating_supply"),

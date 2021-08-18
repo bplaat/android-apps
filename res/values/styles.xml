@@ -188,46 +188,66 @@
         <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
-    <style name="CoinContainerLeft">
+    <style name="CoinIcon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
+
+    <style name="CoinContainer">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">2</item>
+        <item name="android:layout_weight">1</item>
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="CoinContainerRight">
-        <item name="android:layout_width">0dp</item>
+    <style name="CoinFirstLine">
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_weight">3</item>
-        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginBottom">4dp</item>
     </style>
 
     <style name="CoinName">
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">4dp</item>
-        <item name="android:maxLines">2</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginRight">8dp</item>
+        <item name="android:singleLine">true</item>
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="CoinRank">
-        <item name="android:layout_width">match_parent</item>
+    <style name="CoinPrice">
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textColor">@color/secondary_text_color</item>
     </style>
 
-    <style name="CoinPrice">
+    <style name="CoinSecondLine">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">4dp</item>
-        <item name="android:gravity">right</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="CoinRank">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">4dp</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
+    </style>
+
+    <style name="CoinChange">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">8dp</item>
     </style>
 
     <style name="CoinExtra">
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">12sp</item>
-        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
         <item name="android:gravity">right</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
     </style>
 </resources>

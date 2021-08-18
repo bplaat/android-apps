@@ -6,4 +6,6 @@
     <color name="divider_color">#333</color>
     <color name="background_color">#111</color>
     <color name="icon_color">#fff</color>
+    <color name="positive_color">#66bb6a</color>
+    <color name="negative_color">#ef5350</color>
 </resources>

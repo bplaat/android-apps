@@ -4,22 +4,28 @@
     style="@style/ListItemButton">
 
     <ImageView android:id="@+id/coin_image"
-        style="@style/ListItemButtonIcon" />
+        style="@style/CoinIcon" />
 
-    <LinearLayout style="@style/CoinContainerLeft">
-        <TextView android:id="@+id/coin_name"
-            style="@style/CoinName" />
+    <LinearLayout style="@style/CoinContainer">
+        <LinearLayout style="@style/CoinFirstLine">
 
-        <TextView android:id="@+id/coin_rank"
-            style="@style/CoinRank" />
-    </LinearLayout>
+            <TextView android:id="@+id/coin_name"
+                style="@style/CoinName" />
 
-    <LinearLayout style="@style/CoinContainerRight">
-        <TextView android:id="@+id/coin_price"
-            style="@style/CoinPrice"/>
+            <TextView android:id="@+id/coin_price"
+                style="@style/CoinPrice"/>
+        </LinearLayout>
 
-        <TextView android:id="@+id/coin_extra"
-            style="@style/CoinExtra"/>
+        <LinearLayout style="@style/CoinSecondLine">
+            <TextView android:id="@+id/coin_rank"
+                style="@style/CoinRank" />
+
+            <TextView android:id="@+id/coin_change"
+                style="@style/CoinChange" />
+
+            <TextView android:id="@+id/coin_extra"
+                style="@style/CoinExtra"/>
+        </LinearLayout>
     </LinearLayout>
 
     <ImageButton android:id="@+id/coin_star_button"

@@ -1,18 +1,25 @@
 package ml.coinlist.android;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
-import android.util.DisplayMetrics;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.os.Build;
 import android.view.View;
-import android.widget.TextView;
 import java.security.MessageDigest;
 
 public class Utils {
     private Utils() {}
+
+    // Function to get color resource value
+    @SuppressWarnings("deprecation")
+    public static int getColor(Context context, int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return new ContextWrapper(context).getColor(id);
+        } else {
+            return context.getResources().getColor(id);
+        }
+    }
 
     // Function that hashes its input data to a md5 hash string
     public static String md5(String data) {

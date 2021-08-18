@@ -8,4 +8,6 @@
     <color name="divider_color">#ddd</color>
     <color name="background_color">#fff</color>
     <color name="icon_color">#333</color>
+    <color name="positive_color">#388e3c</color>
+    <color name="negative_color">#d32f2f</color>
 </resources>

@@ -8,20 +8,23 @@ public class Coin {
     private String name;
     private String imageUrl;
     private double price;
+    private double change;
     private double marketcap;
     private double volume;
     private double supply;
     private int extraIndex;
     private boolean starred;
 
-    public Coin(String id, int rank, String name, String imageUrl, double price,
-        double marketcap, double volume, double supply, boolean starred
+    public Coin(
+        String id, int rank, String name, String imageUrl, double price,
+        double change, double marketcap, double volume, double supply, boolean starred
     ) {
         this.id = id;
         this.rank = rank;
         this.name = name;
         this.imageUrl = imageUrl;
         this.price = price;
+        this.change = change;
         this.marketcap = marketcap;
         this.volume = volume;
         this.supply = supply;
@@ -47,6 +50,10 @@ public class Coin {
 
     public double getPrice() {
         return price;
+    }
+
+    public double getChange() {
+        return change;
     }
 
     public double getMarketcap() {
@@ -89,6 +96,12 @@ public class Coin {
             format.setMaximumFractionDigits(number < 10 ? (number < 0.1 ? 8 : 4) : 2);
             return "$" + format.format(number);
         }
+    }
+
+    public static String formatPercent(double number) {
+        NumberFormat format = NumberFormat.getInstance();
+        format.setMaximumFractionDigits(2);
+        return (number > 0 ? "\u25b2" : (number < 0 ? "\u25bc" : "")) + format.format(number) + "%";
     }
 
     public static String formatNumber(double number) {
