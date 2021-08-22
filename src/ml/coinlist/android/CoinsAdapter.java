@@ -71,7 +71,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
         }
         if (coin.getExtraIndex() == 2) {
             viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_supply) + " " +
-                Coin.formatNumber(coin.getSupply()));
+                Coin.formatNumber(getContext(), coin.getSupply()));
         }
 
         if (coin.getStarred()) {

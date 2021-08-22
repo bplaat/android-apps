@@ -56,13 +56,13 @@ public class MainActivity extends BaseActivity {
             settingsEditor.putBoolean("starred_only", starredOnly);
             settingsEditor.apply();
 
-            loadCoins();
+            loadCoins(true);
         });
 
         // Init refresh button
         ((ImageButton)findViewById(R.id.main_refresh_button)).setOnClickListener(view -> {
-            loadGlobalInfo();
-            loadCoins();
+            loadGlobalInfo(false);
+            loadCoins(false);
         });
 
         // Init settings button
@@ -78,14 +78,14 @@ public class MainActivity extends BaseActivity {
 
         globalInfo = (LinearLayout)getLayoutInflater().inflate(R.layout.view_coins_header, coinsList, false);
         coinsList.addHeaderView(globalInfo);
-        loadGlobalInfo();
 
         coinsAdapter = new CoinsAdapter(this);
         coinsList.setAdapter(coinsAdapter);
 
         coinsList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
             if (position == 0) {
-                loadGlobalInfo();
+                loadGlobalInfo(false);
+                loadCoins(false);
             } else {
                 Coin coin = coinsAdapter.getItem(position - 1);
                 if (coin.getExtraIndex() == 2) {
@@ -96,7 +96,9 @@ public class MainActivity extends BaseActivity {
                 coinsAdapter.notifyDataSetChanged();
             }
         });
-        loadCoins();
+
+        loadGlobalInfo(!(System.currentTimeMillis() - settings.getLong("global_load_time", 0) >= Config.SETTINGS_REFRESH_TIMEOUT));
+        loadCoins(!(System.currentTimeMillis() - settings.getLong("coins_load_time", 0) >= Config.SETTINGS_REFRESH_TIMEOUT));
     }
 
     // When come back of the settings activity check for restart
@@ -114,17 +116,21 @@ public class MainActivity extends BaseActivity {
             }
             if (oldCurrency != -1) {
                 if (oldCurrency != settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)) {
-                    loadGlobalInfo();
-                    loadCoins();
+                    loadGlobalInfo(true);
+                    loadCoins(true);
                 }
             }
         }
     }
 
     // Load global information
-    private void loadGlobalInfo() {
-        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/global").then(data -> {
+    private void loadGlobalInfo(boolean fromCache) {
+        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/global").fromCache(fromCache).toCache().then(data -> {
             try {
+                SharedPreferences.Editor settingsEditor = settings.edit();
+                settingsEditor.putLong("global_load_time", System.currentTimeMillis());
+                settingsEditor.apply();
+
                 JSONObject jsonData = new JSONObject(data).getJSONObject("data");
 
                 ((TextView)globalInfo.findViewById(R.id.global_info_marketcap)).setText(getResources().getString(R.string.main_global_marketcap) + ": " +
@@ -156,9 +162,14 @@ public class MainActivity extends BaseActivity {
     }
 
     // Load coin information
-    private void loadCoins() {
-        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)]).then(data -> {
+    private void loadCoins(boolean fromCache) {
+        String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)];
+        FetchDataTask.with(this).load(url).fromCache(fromCache).toCache().then(data -> {
             try {
+                SharedPreferences.Editor settingsEditor = settings.edit();
+                settingsEditor.putLong("coins_load_time", System.currentTimeMillis());
+                settingsEditor.apply();
+
                 coinsAdapter.clear();
 
                 JSONArray jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));

@@ -17,6 +17,10 @@ elif [ "$1" == "log" ]; then
     adb logcat -c
     adb logcat *:E
 
+elif [ "$1" == "clear" ]; then
+    adb shell pm clear $package
+    adb shell am start -n $package/.MainActivity
+
 else
     mkdir res-compiled
     if aapt2 compile --dir res -o res-compiled; then
@@ -27,12 +31,20 @@ else
             if javac -Xlint -cp $PLATFORM -d src-compiled @sources.txt; then
 
                 find src-compiled -name *.class > classes.txt
-                d8 --release --lib $PLATFORM --min-api 21 @classes.txt
+                if [ "$(uname -s)" == "Linux" ]; then
+                    d8 --release --lib $PLATFORM --min-api 21 @classes.txt
+                else
+                    d8.bat --release --lib $PLATFORM --min-api 21 @classes.txt
+                fi
                 aapt add $name-unaligned.apk classes.dex > /dev/null
 
                 zipalign -f -p 4 $name-unaligned.apk $name.apk
 
-                apksigner sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
+                if [ "$(uname -s)" == "Linux" ]; then
+                    apksigner sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
+                else
+                    apksigner.bat sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
+                fi
 
                 adb install -r $name.apk
                 adb shell am start -n $package/.MainActivity

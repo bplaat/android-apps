@@ -10,6 +10,8 @@ public class Config {
 
     public static final boolean SETTINGS_STARRED_ONLY_DEFAULT = false;
 
+    public static final int SETTINGS_REFRESH_TIMEOUT = 60 * 1000;
+
     public static final int SETTINGS_CURRENCY_USD = 0;
     public static final int SETTINGS_CURRENCY_EUR = 1;
     public static final int SETTINGS_CURRENCY_BTC = 2;
@@ -17,6 +19,7 @@ public class Config {
     public static final int SETTINGS_CURRENCY_ETH = 4;
     public static final int SETTINGS_CURRENCY_BNB = 5;
     public static final int SETTINGS_CURRENCY_DEFAULT = Config.SETTINGS_CURRENCY_USD;
+    public static final String[] SETTINGS_CURRENCY_NAMES = { "usd", "eur", "btc", "sats", "eth", "bnb" };
 
     public static final int SETTINGS_LANGUAGE_ENGLISH = 0;
     public static final int SETTINGS_LANGUAGE_DUTCH = 1;

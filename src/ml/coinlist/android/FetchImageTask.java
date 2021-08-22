@@ -76,8 +76,18 @@ public class FetchImageTask {
         return this;
     }
 
+    public FetchImageTask notFromCache(boolean notFromCache) {
+        this.isLoadedFomCache = notFromCache;
+        return this;
+    }
+
     public FetchImageTask notToCache() {
         this.isSavedToCache = false;
+        return this;
+    }
+
+    public FetchImageTask notToCache(boolean notToCache) {
+        this.isSavedToCache = notToCache;
         return this;
     }
 

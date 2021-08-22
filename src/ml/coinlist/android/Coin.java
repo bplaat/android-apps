@@ -92,14 +92,18 @@ public class Coin {
 
         NumberFormat format = NumberFormat.getInstance();
         String formatted;
-        if (number > 1000000000) {
+        if (number > 1e12 && currency == Config.SETTINGS_CURRENCY_SATS) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
-            formatted = format.format(number / 1000000000) + " Bn";
-        } else if (number > 1000000) {
+            formatted = format.format(number / 1e12) + " T";
+        } else if (number > 1e9) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
-            formatted = format.format(number / 1000000) + " M";
+            formatted = format.format(number / 1e9) + " Bn";
+        } else if (number > 1e6) {
+            format.setMaximumFractionDigits(2);
+            format.setMinimumFractionDigits(2);
+            formatted = format.format(number / 1e6) + " M";
         } else {
             int decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
             if (currency == Config.SETTINGS_CURRENCY_BTC || currency == Config.SETTINGS_CURRENCY_ETH || currency == Config.SETTINGS_CURRENCY_BNB) {
@@ -142,16 +146,23 @@ public class Coin {
         return (number > 0 ? "\u25b2" : (number < 0 ? "\u25bc" : "")) + formatPercent(number);
     }
 
-    public static String formatNumber(double number) {
+    public static String formatNumber(Context context, double number) {
+        SharedPreferences settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        int currency = settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT);
+
         NumberFormat format = NumberFormat.getInstance();
-        if (number > 1000000000) {
+        if (number > 1e12 && currency == Config.SETTINGS_CURRENCY_SATS) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
-            return format.format(number / 1000000000) + " Bn";
-        } else if (number > 1000000) {
+            return format.format(number / 1e12) + " T";
+        } else if (number > 1e9) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
-            return format.format(number / 1000000) + " M";
+            return format.format(number / 1e9) + " Bn";
+        } else if (number > 1e6) {
+            format.setMaximumFractionDigits(2);
+            format.setMinimumFractionDigits(2);
+            return format.format(number / 1e6) + " M";
         } else {
             format.setMaximumFractionDigits(0);
             return format.format(number);
