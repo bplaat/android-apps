@@ -74,26 +74,19 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
                 Coin.formatNumber(getContext(), coin.getSupply()));
         }
 
-        if (coin.getStarred()) {
-            viewHolder.coinStarButton.setImageResource(R.drawable.ic_star);
-        } else {
-            viewHolder.coinStarButton.setImageResource(R.drawable.ic_star_outline);
-        }
+        viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
         viewHolder.coinStarButton.setOnClickListener((View view) -> {
             coin.setStarred(!coin.getStarred());
+            viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
 
             try {
                 SharedPreferences settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
                 JSONArray jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
                 SharedPreferences.Editor settingsEditor = settings.edit();
                 if (coin.getStarred()) {
-                    viewHolder.coinStarButton.setImageResource(R.drawable.ic_star);
-
                     jsonStarredCoins.put(coin.getId());
                 } else {
-                    viewHolder.coinStarButton.setImageResource(R.drawable.ic_star_outline);
-
-                    for (int i = 0; i  < jsonStarredCoins.length(); i++) {
+                    for (int i = 0; i < jsonStarredCoins.length(); i++) {
                         if (coin.getId().equals(jsonStarredCoins.getString(i))) {
                             jsonStarredCoins.remove(i);
                             break;

@@ -35,14 +35,8 @@ public class MainActivity extends BaseActivity {
 
         // Init starred button
         ImageButton starredButton = (ImageButton)findViewById(R.id.main_starred_button);
-
         starredOnly = settings.getBoolean("starred_only", Config.SETTINGS_STARRED_ONLY_DEFAULT);
-        if (starredOnly) {
-            starredButton.setImageResource(R.drawable.ic_star);
-        } else {
-            starredButton.setImageResource(R.drawable.ic_star_outline);
-        }
-
+        starredButton.setImageResource(starredOnly ? R.drawable.ic_star : R.drawable.ic_star_outline);
         starredButton.setOnClickListener(view -> {
             starredOnly = !starredOnly;
 
@@ -93,10 +87,26 @@ public class MainActivity extends BaseActivity {
                 } else {
                     coin.setExtraIndex(coin.getExtraIndex() + 1);
                 }
-                coinsAdapter.notifyDataSetChanged();
+
+                TextView coinExtra = (TextView)view.findViewById(R.id.coin_extra);
+                if (coin.getExtraIndex() == 0) {
+                    coinExtra.setText(getResources().getString(R.string.main_extra_marketcap) + " " +
+                        Coin.formatMoney(this, coin.getMarketcap()));
+                }
+                if (coin.getExtraIndex() == 1) {
+                    coinExtra.setText(getResources().getString(R.string.main_extra_volume) + " " +
+                        Coin.formatMoney(this, coin.getVolume()));
+                }
+                if (coin.getExtraIndex() == 2) {
+                    coinExtra.setText(getResources().getString(R.string.main_extra_supply) + " " +
+                        Coin.formatNumber(this, coin.getSupply()));
+                }
             }
         });
+    }
 
+    public void onResume() {
+        super.onResume();
         loadGlobalInfo(!(System.currentTimeMillis() - settings.getLong("global_load_time", 0) >= Config.SETTINGS_REFRESH_TIMEOUT));
         loadCoins(!(System.currentTimeMillis() - settings.getLong("coins_load_time", 0) >= Config.SETTINGS_REFRESH_TIMEOUT));
     }
