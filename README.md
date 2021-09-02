@@ -1,2 +1,2 @@
-# rfidviewer-android
-A simple Android that can read Mifare Classic RFID cards 
+# bplaat/rfidviewer-android
+A simple Android that can read Mifare Classic RFID cards

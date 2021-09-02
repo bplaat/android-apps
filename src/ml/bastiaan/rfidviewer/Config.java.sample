@@ -1,0 +1,19 @@
+package ml.bastiaan.rfidviewer;
+
+public class Config {
+    private Config() {}
+
+    public static final String APP_OVERRIDE_STORE_PAGE_URL = "https://bit.ly/3jB72LJ";
+
+    public static final int SETTINGS_LANGUAGE_ENGLISH = 0;
+    public static final int SETTINGS_LANGUAGE_DUTCH = 1;
+    public static final int SETTINGS_LANGUAGE_SYSTEM = 2;
+    public static final int SETTINGS_LANGUAGE_DEFAULT = Config.SETTINGS_LANGUAGE_SYSTEM;
+
+    public static final int SETTINGS_THEME_LIGHT = 0;
+    public static final int SETTINGS_THEME_DARK = 1;
+    public static final int SETTINGS_THEME_SYSTEM = 2;
+    public static final int SETTINGS_THEME_DEFAULT = Config.SETTINGS_THEME_SYSTEM;
+
+    public static final String SETTINGS_ABOUT_WEBSITE_URL = "https://bastiaan.ml/";
+}
