@@ -44,9 +44,10 @@ public class ReadMifareTask {
     }
 
     public ReadMifareTask read() {
+        // Create async task to read mifire classic tag
         executor.execute(() -> {
             try {
-                byte[] data = readCard();
+                byte[] data = readTag();
                 handler.post(() -> {
                     isFinished = true;
                     if (!isCanceled && onLoadListener != null) {
@@ -82,7 +83,8 @@ public class ReadMifareTask {
         isFinished = true;
     }
 
-    private byte[] readCard() throws Exception {
+    private byte[] readTag() throws Exception {
+        // Connect to the tag and read block for block into byte buffer
         mfc.connect();
         byte[] data = new byte[mfc.getSize()];
         int pos = 0;

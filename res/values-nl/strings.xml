@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main activity -->
-    <string name="main_scan_tag">Scan een RFID kaart en beweeg hem niet voor een paar seconden...</string>
-    <string name="main_reading_tag">Kaart aan het lezen, niet bewegen!</string>
-    <string name="main_reading_error">Er is iets fout gegaan tijdens het lezen van de kaart</string>
+    <string name="main_landing_title_label">Scan een RFID-tag</string>
+    <string name="main_landing_description_label">Scan een RFID-tag en verplaats deze een paar seconden niet...</string>
+
+    <string name="main_reading_title_label">RFID-tag lezen</string>
+    <string name="main_reading_description_label">Lees de RFID-tag, verplaats de tag niet!</string>
+
+    <string name="main_error_title_label">RFID-leesfout</string>
+    <string name="main_error_description_label">Er ging iets mis tijdens het lezen van de tag</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Instellingen</string>

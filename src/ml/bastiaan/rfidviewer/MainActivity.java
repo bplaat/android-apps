@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ScrollView;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,11 +21,24 @@ public class MainActivity extends BaseActivity {
     private Handler handler = new Handler(Looper.getMainLooper());
     private int oldLanguage = -1;
     private int oldTheme = -1;
-    private TextView outputText;
+    private ReadMifareTask readMifareTask;
+
+    private ScrollView landingPage;
+    private ScrollView readingPage;
+    private ScrollView dataPage;
+    private TextView dataOutputLabel;
+    private ScrollView errorPage;
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Select all page views
+        landingPage = (ScrollView)findViewById(R.id.main_landing_page);
+        readingPage = (ScrollView)findViewById(R.id.main_reading_page);
+        dataPage = (ScrollView)findViewById(R.id.main_data_page);
+        dataOutputLabel = (TextView)findViewById(R.id.main_data_output_label);
+        errorPage = (ScrollView)findViewById(R.id.main_error_page);
 
         // Init settings button
         ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
@@ -33,11 +47,14 @@ public class MainActivity extends BaseActivity {
             startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
         });
 
-        outputText = (TextView)findViewById(R.id.main_output);
+        // Pass intent of to intent handler
+        Intent intent = getIntent();
+        if (intent != null) handleIntent(intent);
     }
 
-    // When come back of the settings activity check for restart
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Restart activity when the langage or theme change in settings activity
         if (requestCode == MainActivity.SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
                 if (
@@ -52,30 +69,59 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    // On new intent
+    // When back button press go back to landing page
+    public void onBackPressed() {
+        if (landingPage.getVisibility() != View.VISIBLE) {
+            // When a mifare task is runningcancel it
+            if (readingPage.getVisibility() == View.VISIBLE && readMifareTask != null) {
+                readMifareTask.cancel();
+            }
+
+            landingPage.setVisibility(View.VISIBLE);
+            readingPage.setVisibility(View.GONE);
+            dataPage.setVisibility(View.GONE);
+            errorPage.setVisibility(View.GONE);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
     public void onNewIntent(Intent intent) {
-        if (intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
+        super.onNewIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        // Handle new incoming RFID tag messages
+        if (intent.getAction() != null && intent.getAction().equals(NfcAdapter.ACTION_TAG_DISCOVERED)) {
             Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
 
+            // Create an output string add uid line
             StringBuilder output = new StringBuilder();
             output.append("Tag UID: ");
             byte[] uid = tag.getId();
             for (int i = 0; i < uid.length; i++) {
-                output.append(String.format("%02x ", uid[i]));
+                output.append(String.format("%02x", uid[i]));
+                output.append(i < uid.length - 1 ? " " : "\n");
             }
-            output.append("\n");
 
             // Check if tag is mifare classic
             if ((Arrays.asList(tag.getTechList())).contains(MifareClassic.class.getName())) {
-                outputText.setText(getResources().getString(R.string.main_reading_tag));
+                // Show reading page
+                landingPage.setVisibility(View.GONE);
+                readingPage.setVisibility(View.VISIBLE);
+                dataPage.setVisibility(View.GONE);
+                errorPage.setVisibility(View.GONE);
 
-                MifareClassic mc = MifareClassic.get(tag);
-                ReadMifareTask.with(mc).then(data -> {
+                // Read Mifare Classic tag async
+                MifareClassic mfc = MifareClassic.get(tag);
+                readMifareTask = ReadMifareTask.with(mfc).then(data -> {
                     try {
+                        // Generate output lines
                         output.append("Mifare Classic (" + data.length + " bytes):\n\n");
-                        for (int i = 0; i < mc.getSize() / 16; i++) {
+                        for (int i = 0; i < mfc.getSize() / 16; i++) {
                             output.append("Block " + i + ":\n");
-                            // First half
+                            // First half off the block
                             for (int j = 0; j < 8; j++) {
                                 output.append(String.format("%02x ", data[i * 16 + j]));
                             }
@@ -85,7 +131,7 @@ public class MainActivity extends BaseActivity {
                                 output.append(j < 8 - 1 ? " " : "\n");
                             }
 
-                            // Second half
+                            // Second half off the block
                             for (int j = 0; j < 8; j++) {
                                 output.append(String.format("%02x ", data[i * 16 + 8 + j]));
                             }
@@ -96,18 +142,31 @@ public class MainActivity extends BaseActivity {
                             }
                         }
 
-                        outputText.setText(output.toString());
+                        // Set lines in data output label and show data page
+                        dataOutputLabel.setText(output.toString());
+                        landingPage.setVisibility(View.GONE);
+                        readingPage.setVisibility(View.GONE);
+                        dataPage.setVisibility(View.VISIBLE);
+                        errorPage.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }, exception -> {
-                    outputText.setText(getResources().getString(R.string.main_reading_error));
+                    // When exception occurt show error page
+                    landingPage.setVisibility(View.GONE);
+                    readingPage.setVisibility(View.GONE);
+                    dataPage.setVisibility(View.GONE);
+                    errorPage.setVisibility(View.VISIBLE);
                 }).read();
             } else {
-                // Print general tag stuff
+                // Not an mifare classic tag print techs list, set data output string and show data page
                 output.append("Not Mifare Classic: " + String.join(",", Arrays.asList(tag.getTechList())));
+                dataOutputLabel.setText(output.toString());
 
-                outputText.setText(output.toString());
+                landingPage.setVisibility(View.GONE);
+                readingPage.setVisibility(View.GONE);
+                dataPage.setVisibility(View.VISIBLE);
+                errorPage.setVisibility(View.GONE);
             }
         }
     }
