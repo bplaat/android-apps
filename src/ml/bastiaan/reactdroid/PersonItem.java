@@ -34,7 +34,7 @@ public class PersonItem extends AbsComponent {
                         refresh();
                     }))
                     .child(Button.create(context).text("-").onClick(view -> {
-                        person.age--;
+                        if (person.age > 0) person.age--;
                         refresh();
                     }))
             )

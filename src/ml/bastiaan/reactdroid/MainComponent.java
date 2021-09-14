@@ -44,7 +44,7 @@ public class MainComponent extends AbsComponent {
                     persons.add(new Person("Person " + (persons.size() + 1), (int)(Math.random() * 100)));
                     refresh();
                 }))
-                .children(
+                .child(
                     persons.stream().map(person -> PersonItem.create(context).person(person))
                         .collect(Collectors.toList())
                 )

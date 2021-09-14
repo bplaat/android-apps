@@ -16,7 +16,7 @@ public abstract class AbsContainer extends Component {
         return this;
     }
 
-    public AbsContainer children(List<AbsComponent> children) {
+    public AbsContainer child(List<AbsComponent> children) {
         this.children.addAll(children);
         return this;
     }
