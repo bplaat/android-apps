@@ -16,7 +16,7 @@ public class Column extends Container {
         LinearLayout linearLayout = new LinearLayout(context.getContext());
         linearLayout.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
-        for (Component child : children) {
+        for (AbsComponent child : children) {
             linearLayout.addView(child.build());
         }
         view = (View)linearLayout;

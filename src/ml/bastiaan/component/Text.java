@@ -3,7 +3,7 @@ package ml.bastiaan.component;
 import android.view.View;
 import android.widget.TextView;
 
-public class Text extends ViewComponent {
+public class Text extends Component {
     protected String text;
 
     protected Text(ComponentContext context) {

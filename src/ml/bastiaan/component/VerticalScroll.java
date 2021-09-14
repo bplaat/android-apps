@@ -3,8 +3,8 @@ package ml.bastiaan.component;
 import android.view.View;
 import android.widget.ScrollView;
 
-public class VerticalScroll extends ViewComponent {
-    protected Component child;
+public class VerticalScroll extends Component {
+    protected AbsComponent child;
 
     protected VerticalScroll(ComponentContext context) {
         super(context);
@@ -14,7 +14,7 @@ public class VerticalScroll extends ViewComponent {
         return new VerticalScroll(context);
     }
 
-    public VerticalScroll child(Component child) {
+    public VerticalScroll child(AbsComponent child) {
         this.child = child;
         return this;
     }

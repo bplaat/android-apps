@@ -15,7 +15,7 @@ public class Row extends Container {
     public View build() {
         LinearLayout linearLayout = new LinearLayout(context.getContext());
         linearLayout.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-        for (Component child : children) {
+        for (AbsComponent child : children) {
             linearLayout.addView(child.build());
         }
         view = (View)linearLayout;

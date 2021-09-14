@@ -1,13 +1,13 @@
 package ml.bastiaan.reactdroid;
 
 import android.view.View;
-import ml.bastiaan.component.ButtonComponent;
-import ml.bastiaan.component.Component;
-import ml.bastiaan.component.ComponentContext;
+import ml.bastiaan.component.AbsComponent;
+import ml.bastiaan.component.Button;
 import ml.bastiaan.component.Column;
+import ml.bastiaan.component.ComponentContext;
 import ml.bastiaan.component.Text;
 
-public class HelloComponent extends Component {
+public class HelloComponent extends AbsComponent {
     protected String name;
     protected int counter = 0;
 
@@ -27,7 +27,7 @@ public class HelloComponent extends Component {
     public View build() {
         view = Column.create(context)
             .child(Text.create(context).text("Hello " + name + "!"))
-            .child(ButtonComponent.create(context).text("Click counter: " + counter).onClick(view -> {
+            .child(Button.create(context).text("Click counter: " + counter).onClick(view -> {
                 this.counter++;
                 refresh();
             }))
