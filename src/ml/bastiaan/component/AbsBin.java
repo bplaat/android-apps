@@ -1,7 +1,5 @@
 package ml.bastiaan.component;
 
-import java.util.ArrayList;
-
 public abstract class AbsBin extends Component {
     protected AbsComponent child;
 

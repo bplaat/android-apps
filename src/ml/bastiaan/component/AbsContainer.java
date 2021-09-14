@@ -1,9 +1,10 @@
 package ml.bastiaan.component;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public abstract class AbsContainer extends Component {
-    protected ArrayList<AbsComponent> children;
+    protected List<AbsComponent> children;
 
     protected AbsContainer(ComponentContext context) {
         super(context);
@@ -12,6 +13,11 @@ public abstract class AbsContainer extends Component {
 
     public AbsContainer child(AbsComponent child) {
         children.add(child);
+        return this;
+    }
+
+    public AbsContainer children(List<AbsComponent> children) {
+        this.children.addAll(children);
         return this;
     }
 }
