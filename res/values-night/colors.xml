@@ -2,5 +2,6 @@
 <resources>
     <color name="primary_color">#222</color>
     <color name="primary_text_color">#fff</color>
+    <color name="secondary_text_color">#888</color>
     <color name="background_color">#111</color>
 </resources>

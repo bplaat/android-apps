@@ -49,8 +49,8 @@ public class Component extends AbsComponent {
         return this;
     }
 
-    public View build() {
-        view = new View(context.getContext());
+    public View view() {
+        View view = new View(context.getContext());
         view.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
         return view;
     }

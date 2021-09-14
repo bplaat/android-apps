@@ -23,12 +23,11 @@ public class Button extends Text {
         return this;
     }
 
-    public View build() {
+    public android.widget.Button view() {
         android.widget.Button button = new android.widget.Button(context.getContext());
         button.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
         if (text != null) button.setText(text);
         if (clickListener != null) button.setOnClickListener(clickListener);
-        view = (View)button;
-        return view;
+        return button;
     }
 }

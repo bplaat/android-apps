@@ -6,10 +6,11 @@ import ml.bastiaan.component.Button;
 import ml.bastiaan.component.Column;
 import ml.bastiaan.component.ComponentContext;
 import ml.bastiaan.component.Text;
+import ml.bastiaan.component.Row;
 
 public class HelloComponent extends AbsComponent {
     protected String name;
-    protected int counter = 0;
+    protected int years;
 
     protected HelloComponent(ComponentContext context) {
         super(context);
@@ -24,15 +25,26 @@ public class HelloComponent extends AbsComponent {
         return this;
     }
 
-    public View build() {
-        view = Column.create(context)
-            .child(Text.create(context).text("Hello " + name + "!"))
-            .child(Button.create(context).text("Click counter: " + counter).onClick(view -> {
-                this.counter++;
-                refresh();
-            }))
+    public HelloComponent years(int years) {
+        this.years = years;
+        return this;
+    }
+
+    public View view() {
+        return Column.create(context)
+            .child(Text.create(context).text("Hello " + name + ", i'm " + years + " old!"))
+            .child(
+                Row.create(context)
+                    .child(Button.create(context).text("+").onClick(view -> {
+                        this.years++;
+                        refresh();
+                    }))
+                    .child(Button.create(context).text("-").onClick(view -> {
+                        this.years--;
+                        refresh();
+                    }))
+            )
             .paddingDp(8, 16)
             .build();
-        return view;
     }
 }

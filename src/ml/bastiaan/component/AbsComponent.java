@@ -11,7 +11,12 @@ public abstract class AbsComponent {
         this.context = context;
     }
 
-    public abstract View build();
+    public abstract View view();
+
+    public View build() {
+        view = view();
+        return view;
+    }
 
     public void refresh() {
         ViewGroup parent = (ViewGroup)view.getParent();
