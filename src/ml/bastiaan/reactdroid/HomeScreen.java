@@ -1,20 +1,14 @@
 package ml.bastiaan.reactdroid;
 
-import android.view.View;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 import java.util.List;
-import ml.bastiaan.component.AbsComponent;
-import ml.bastiaan.component.Button;
-import ml.bastiaan.component.Column;
-import ml.bastiaan.component.ComponentContext;
-import ml.bastiaan.component.Text;
-import ml.bastiaan.component.VerticalScroll;
+import ml.bastiaan.widgets.*;
 
-public class MainComponent extends AbsComponent {
+public class HomeScreen extends StatefulWidget {
     protected List<Person> persons;
 
-    protected MainComponent(ComponentContext context) {
+    protected HomeScreen(WidgetContext context) {
         super(context);
 
         persons = new ArrayList<Person>();
@@ -26,13 +20,13 @@ public class MainComponent extends AbsComponent {
         persons.add(new Person("Jiska", 13));
     }
 
-    public static MainComponent create(ComponentContext context) {
-        return new MainComponent(context);
+    public static HomeScreen create(WidgetContext context) {
+        return new HomeScreen(context);
     }
 
-    public View view() {
-        return VerticalScroll.create(context)
-            .child(Column.create(context)
+    public Widget build() {
+        return Scroll.create(context)
+            .child(Box.create(context)
                 .child(
                     Text.create(context)
                         .text("ReactDroid")
@@ -48,13 +42,16 @@ public class MainComponent extends AbsComponent {
                     persons.stream().map(person -> PersonItem.create(context).person(person))
                         .collect(Collectors.toList())
                 )
+                .child(Button.create(context).text("Add person").onClick(view -> {
+                    persons.add(new Person("Person " + (persons.size() + 1), (int)(Math.random() * 100)));
+                    refresh();
+                }))
                 .child(
                     Text.create(context)
                         .text("Made by Bastiaan van der Plaat")
                         .textColorRes(R.color.secondary_text_color)
                         .paddingDp(16)
                 )
-            )
-            .build();
+            );
     }
 }

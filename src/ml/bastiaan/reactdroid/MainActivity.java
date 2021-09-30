@@ -2,12 +2,16 @@ package ml.bastiaan.reactdroid;
 
 import android.app.Activity;
 import android.os.Bundle;
-import ml.bastiaan.component.ComponentContext;
+import android.widget.FrameLayout;
+import ml.bastiaan.widgets.WidgetContext;
 
 public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ComponentContext context = new ComponentContext(this);
-        setContentView(MainComponent.create(context).build());
+        WidgetContext context = new WidgetContext(this);
+
+        FrameLayout root = new FrameLayout(this);
+        HomeScreen.create(context).render(root, null);
+        setContentView(root);
     }
 }
