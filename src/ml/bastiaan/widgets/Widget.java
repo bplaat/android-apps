@@ -16,6 +16,11 @@ abstract public class Widget {
         this.context = context;
     }
 
+    public Widget key(long key) {
+        this.key = key;
+        return this;
+    }
+
     public Widget paddingDp(float padding) {
         paddingTop = (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, padding, context.getContext().getResources().getDisplayMetrics());
         paddingRight = paddingTop;

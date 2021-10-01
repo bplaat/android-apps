@@ -12,12 +12,12 @@ public class HomeScreen extends StatefulWidget {
         super(context);
 
         persons = new ArrayList<Person>();
-        persons.add(new Person("Willem", 51));
-        persons.add(new Person("Wietske", 47));
-        persons.add(new Person("Bastiaan", 19));
-        persons.add(new Person("Sander", 17));
-        persons.add(new Person("Leonard", 14));
-        persons.add(new Person("Jiska", 13));
+        persons.add(new Person(1, "Willem", 51));
+        persons.add(new Person(2, "Wietske", 47));
+        persons.add(new Person(3, "Bastiaan", 19));
+        persons.add(new Person(4, "Sander", 17));
+        persons.add(new Person(5, "Leonard", 14));
+        persons.add(new Person(6, "Jiska", 13));
     }
 
     public static HomeScreen create(WidgetContext context) {
@@ -35,15 +35,15 @@ public class HomeScreen extends StatefulWidget {
                         .paddingDp(16)
                 )
                 .child(Button.create(context).text("Add person").onClick(view -> {
-                    persons.add(new Person("Person " + (persons.size() + 1), (int)(Math.random() * 100)));
+                    persons.add(new Person(persons.size() + 1, "Person " + (persons.size() + 1), (int)(Math.random() * 100)));
                     refresh();
                 }))
                 .child(
-                    persons.stream().map(person -> PersonItem.create(context).person(person))
+                    persons.stream().map(person -> PersonItem.create(context).person(person).key(person.id))
                         .collect(Collectors.toList())
                 )
                 .child(Button.create(context).text("Add person").onClick(view -> {
-                    persons.add(new Person("Person " + (persons.size() + 1), (int)(Math.random() * 100)));
+                    persons.add(new Person(persons.size() + 1, "Person " + (persons.size() + 1), (int)(Math.random() * 100)));
                     refresh();
                 }))
                 .child(
