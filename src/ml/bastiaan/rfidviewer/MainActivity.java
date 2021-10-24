@@ -106,7 +106,7 @@ public class MainActivity extends BaseActivity {
             }
 
             // Check if tag is mifare classic
-            if ((Arrays.asList(tag.getTechList())).contains(MifareClassic.class.getName())) {
+            if (Arrays.asList(tag.getTechList()).contains(MifareClassic.class.getName())) {
                 // Show reading page
                 landingPage.setVisibility(View.GONE);
                 readingPage.setVisibility(View.VISIBLE);
@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity {
                 }).read();
             } else {
                 // Not an mifare classic tag print techs list, set data output string and show data page
-                output.append("Not Mifare Classic: " + String.join(",", Arrays.asList(tag.getTechList())));
+                output.append("Not Mifare Classic: " + String.join(",", tag.getTechList()));
                 dataOutputLabel.setText(output.toString());
 
                 landingPage.setVisibility(View.GONE);
