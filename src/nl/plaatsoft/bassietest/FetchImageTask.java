@@ -4,6 +4,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Looper;
 import android.os.Handler;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -105,14 +106,14 @@ public class FetchImageTask {
                     if (!previousFetchImageTask.isFinished()) {
                         previousFetchImageTask.cancel();
                     }
-
-                    imageView.setTag(this);
-                    imageView.setImageBitmap(null);
                 } else {
                     cancel();
                     return this;
                 }
             }
+
+            imageView.setTag(this);
+            imageView.setImageBitmap(null);
         }
 
         long startTime = System.currentTimeMillis();
@@ -123,7 +124,9 @@ public class FetchImageTask {
                     finish();
                     if (!isCanceled) {
                         if (imageView != null) {
-                            imageView.setBackgroundColor(0);
+                            if (isTransparent) {
+                                imageView.setBackgroundColor(Color.TRANSPARENT);
+                            }
 
                             boolean isWaitingLong = (System.currentTimeMillis() - startTime) > Config.ANIMATION_IMAGE_LOADING_TIMEOUT;
                             if (isFadedIn && isWaitingLong) {
@@ -184,9 +187,6 @@ public class FetchImageTask {
 
     private void finish() {
         isFinished = true;
-        if (imageView != null) {
-            imageView.setTag(null);
-        }
     }
 
     private Bitmap fetchImage() throws Exception {
