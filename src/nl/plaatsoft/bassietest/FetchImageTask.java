@@ -101,7 +101,7 @@ public class FetchImageTask {
         if (imageView != null) {
             FetchImageTask previousFetchImageTask = (FetchImageTask)imageView.getTag();
             if (previousFetchImageTask != null) {
-                if (url != previousFetchImageTask.getUrl()) {
+                if (!url.equals(previousFetchImageTask.getUrl())) {
                     if (!previousFetchImageTask.isFinished()) {
                         previousFetchImageTask.cancel();
                     }
