@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -12,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class SettingsActivity extends BaseActivity {
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
@@ -67,7 +69,7 @@ public class SettingsActivity extends BaseActivity {
         try {
             ((TextView)findViewById(R.id.settings_version_label)).setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Log.e(Config.LOG_TAG, "An exception catched!", exception);
         }
 
         int versionButtonClickCounterHolder[] = { 0 };

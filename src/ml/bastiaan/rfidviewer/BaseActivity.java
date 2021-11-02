@@ -11,6 +11,7 @@ import java.util.Locale;
 public abstract class BaseActivity extends Activity {
     protected SharedPreferences settings;
 
+    @Override
     public void attachBaseContext(Context context) {
         // Get settings
         settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);

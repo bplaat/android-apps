@@ -5,6 +5,8 @@ public class Config {
 
     public static final String APP_OVERRIDE_STORE_PAGE_URL = "https://github.com/bplaat/rfidviewer-android";
 
+    public static final String LOG_TAG = "RFIDViewer";
+
     public static final int SETTINGS_LANGUAGE_ENGLISH = 0;
     public static final int SETTINGS_LANGUAGE_DUTCH = 1;
     public static final int SETTINGS_LANGUAGE_SYSTEM = 2;
