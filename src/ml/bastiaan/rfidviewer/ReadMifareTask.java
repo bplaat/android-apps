@@ -7,7 +7,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class ReadMifareTask {
-    private static final Executor executor = Executors.newFixedThreadPool(4);
+    private static final Executor executor = Executors.newFixedThreadPool(2);
     private static final Handler handler = new Handler(Looper.getMainLooper());
 
     public static interface OnLoadListener {
