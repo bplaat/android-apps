@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer;
+package ml.bastiaan.rfidviewer.tasks;
 
 import android.nfc.tech.MifareClassic;
 import android.os.Looper;
@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import ml.bastiaan.rfidviewer.Config;
 
 public class MifareReadTask {
     private static final Executor executor = Executors.newFixedThreadPool(1);

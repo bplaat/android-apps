@@ -7,10 +7,33 @@
     <string name="main_landing_description_label">Scan an RFID tag and don\'t move it for few seconds...</string>
 
     <string name="main_reading_title_label">Reading RFID tag</string>
-    <string name="main_reading_description_label">Reading the RFID tag, don\'t move the tag!</string>
+    <string name="main_reading_description_label">Reading the RFID tag, don\'t move the tag...</string>
 
     <string name="main_error_title_label">RFID reading error</string>
     <string name="main_error_description_label">Something went wrong while reading the tag</string>
+
+    <!-- Write activity -->
+    <string name="write_title_label">Write block</string>
+
+    <string name="write_form_description_label">Enter the block id and the data in ascii or hex form of the block that you want to write to</string>
+    <string name="write_form_block_id_label">Block id</string>
+    <string name="write_form_data_ascii_label">Data ASCII (max 16 bytes)</string>
+    <string name="write_form_data_hex_label">Data hex (max 16 bytes)</string>
+    <string name="write_form_button">Write block</string>
+
+    <string name="write_waiting_title_label">Scan an RFID tag</string>
+    <string name="write_waiting_description_label">Scan an RFID tag and don\'t move it for few seconds...</string>
+
+    <string name="write_writing_title_label">Writing RFID tag</string>
+    <string name="write_writing_description_label">Writing the RFID tag, don\'t move the tag...</string>
+
+    <string name="write_success_title_label">RFID write successfull</string>
+    <string name="write_success_description_label">Your block is successfully written to the tag</string>
+    <string name="write_success_button">Write another</string>
+
+    <string name="write_error_title_label">RFID writing error</string>
+    <string name="write_error_description_label">Something went wrong while writing the tag</string>
+    <string name="write_error_button">Retry write</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Settings</string>

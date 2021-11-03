@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer;
+package ml.bastiaan.rfidviewer.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -11,6 +11,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import ml.bastiaan.rfidviewer.Config;
+import ml.bastiaan.rfidviewer.R;
+import ml.bastiaan.rfidviewer.Utils;
 
 public class SettingsActivity extends BaseActivity {
     @Override
@@ -18,7 +21,7 @@ public class SettingsActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
 
-        // Set settings back button click listener
+        // Set back button click listener
         ((ImageButton)findViewById(R.id.settings_back_button)).setOnClickListener(view -> {
             finish();
         });

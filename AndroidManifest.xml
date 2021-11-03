@@ -13,7 +13,7 @@
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.App">
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".activities.MainActivity"
             android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize">
 
@@ -30,7 +30,13 @@
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
 
-        <activity android:name=".SettingsActivity"
+        <activity android:name=".activities.WriteActivity"
+            android:parentActivityName=".WriteActivity"
+            android:launchMode="singleTop"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize" />
+
+        <activity android:name=".activities.SettingsActivity"
             android:parentActivityName=".MainActivity"
             android:launchMode="singleTop"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize" />

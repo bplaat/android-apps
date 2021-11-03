@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer;
+package ml.bastiaan.rfidviewer.activities;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -17,11 +17,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ScrollView;
 import java.util.Arrays;
+import ml.bastiaan.rfidviewer.tasks.MifareReadTask;
+import ml.bastiaan.rfidviewer.Config;
+import ml.bastiaan.rfidviewer.R;
 
 public class MainActivity extends BaseActivity {
     public static final int SETTINGS_REQUEST_CODE = 1;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private Handler handler;
     private int oldLanguage = -1;
     private int oldTheme = -1;
     private MifareReadTask mifareReadTask;
@@ -42,12 +45,19 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        handler = new Handler(Looper.getMainLooper());
+
         // Select all page views
         landingPage = (ScrollView)findViewById(R.id.main_landing_page);
         readingPage = (ScrollView)findViewById(R.id.main_reading_page);
         dataPage = (ScrollView)findViewById(R.id.main_data_page);
         dataOutputLabel = (TextView)findViewById(R.id.main_data_output_label);
         errorPage = (ScrollView)findViewById(R.id.main_error_page);
+
+        // Init write button
+        ((ImageButton)findViewById(R.id.main_write_button)).setOnClickListener(view -> {
+            startActivity(new Intent(this, WriteActivity.class));
+        });
 
         // Init settings button
         ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
@@ -111,11 +121,7 @@ public class MainActivity extends BaseActivity {
             if (readingPage.getVisibility() == View.VISIBLE && mifareReadTask != null) {
                 mifareReadTask.cancel();
             }
-
-            landingPage.setVisibility(View.VISIBLE);
-            readingPage.setVisibility(View.GONE);
-            dataPage.setVisibility(View.GONE);
-            errorPage.setVisibility(View.GONE);
+            openPage(landingPage);
         } else {
             super.onBackPressed();
         }
@@ -140,11 +146,7 @@ public class MainActivity extends BaseActivity {
 
             // Check if tag is mifare classic
             if (Arrays.asList(tag.getTechList()).contains(MifareClassic.class.getName())) {
-                // Show reading page
-                landingPage.setVisibility(View.GONE);
-                readingPage.setVisibility(View.VISIBLE);
-                dataPage.setVisibility(View.GONE);
-                errorPage.setVisibility(View.GONE);
+                openPage(readingPage);
 
                 // Read Mifare Classic tag async
                 MifareClassic mfc = MifareClassic.get(tag);
@@ -177,32 +179,27 @@ public class MainActivity extends BaseActivity {
 
                         // Set lines in data output label and show data page
                         dataOutputLabel.setText(output.toString());
-                        landingPage.setVisibility(View.GONE);
-                        readingPage.setVisibility(View.GONE);
-                        dataPage.setVisibility(View.VISIBLE);
-                        errorPage.setVisibility(View.GONE);
+                        openPage(dataPage);
                     } catch (Exception exception) {
                         Log.e(Config.LOG_TAG, "An exception catched!", exception);
                     }
                 }, exception -> {
                     Log.e(Config.LOG_TAG, "An exception catched!", exception);
-
-                    // When exception occurt show error page
-                    landingPage.setVisibility(View.GONE);
-                    readingPage.setVisibility(View.GONE);
-                    dataPage.setVisibility(View.GONE);
-                    errorPage.setVisibility(View.VISIBLE);
+                    openPage(errorPage);
                 }).read();
             } else {
                 // Not an mifare classic tag print techs list, set data output string and show data page
                 output.append("Not Mifare Classic: " + String.join(",", tag.getTechList()));
                 dataOutputLabel.setText(output.toString());
-
-                landingPage.setVisibility(View.GONE);
-                readingPage.setVisibility(View.GONE);
-                dataPage.setVisibility(View.VISIBLE);
-                errorPage.setVisibility(View.GONE);
+                openPage(dataPage);
             }
         }
+    }
+
+    private void openPage(ScrollView page) {
+        landingPage.setVisibility(page.equals(landingPage) ? View.VISIBLE : View.GONE);
+        readingPage.setVisibility(page.equals(readingPage) ? View.VISIBLE : View.GONE);
+        dataPage.setVisibility(page.equals(dataPage) ? View.VISIBLE : View.GONE);
+        errorPage.setVisibility(page.equals(errorPage) ? View.VISIBLE : View.GONE);
     }
 }
