@@ -44,19 +44,19 @@ else
 
                 echo "Packing and signing application"
                 find src-compiled -name *.class > classes.txt
-                if [ "$(uname -o)" == "Msys" ]; then
-                    d8.bat --release --lib $PLATFORM --min-api 21 @classes.txt
-                else
+                if [ "$(uname -s)" == "Linux" ]; then
                     d8 --release --lib $PLATFORM --min-api 21 @classes.txt
+                else
+                    d8.bat --release --lib $PLATFORM --min-api 21 @classes.txt
                 fi
                 aapt add $name-unaligned.apk classes.dex > /dev/null
 
                 zipalign -f -p 4 $name-unaligned.apk $name.apk
 
-                if [ "$(uname -o)" == "Msys" ]; then
-                    apksigner.bat sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
-                else
+                if [ "$(uname -s)" == "Linux" ]; then
                     apksigner sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
+                else
+                    apksigner.bat sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
                 fi
 
                 if [ "$1" == "inspect" ]; then
