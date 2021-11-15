@@ -1,7 +1,15 @@
 #!/bin/bash
 
-# The default gradle Android build toolchain is slow on my old laptop and produces bloated apks
-# So I use this bullshit build script to get the job done!
+# --- Bassie Android Build Script v1.0 ---
+
+# The default gradle Android build toolchain is so slow and produces bloated apks
+# So I use this nice build shell script to get the job done!
+
+# Install the OpenJDK JDK 8 and add all binaries to your path
+# Install your Android SDK at ~/android-sdk/ with the following packages:
+# platform-tools, platforms;android-30, build-tools;30.0.3
+# Run this script with bash on Linux or a Git Bash / Msys install on Windows
+# For inspecting apks you need to install Jadx GUI and add it to your path
 
 PATH=$PATH:~/android-sdk/build-tools/30.0.3:~/android-sdk/platform-tools
 PLATFORM=~/android-sdk/platforms/android-30/android.jar
@@ -9,6 +17,7 @@ PLATFORM=~/android-sdk/platforms/android-30/android.jar
 name="coinlist"
 package="ml.coinlist.android"
 password="android"
+main_activity=".MainActivity"
 
 if [ "$1" == "key" ]; then
     keytool -genkey -validity 7120 -keystore keystore.jks -keyalg RSA -keysize 4096 -storepass $password -keypass $password
@@ -18,18 +27,22 @@ elif [ "$1" == "log" ]; then
     adb logcat *:E
 
 elif [ "$1" == "clear" ]; then
+    echo "Clearing data and opening application"
     adb shell pm clear $package
-    adb shell am start -n $package/.MainActivity
+    adb shell am start -n $package/$main_activity
 
 else
     mkdir res-compiled
+    echo "Compiling resources files"
     if aapt2 compile --dir res -o res-compiled; then
         if aapt2 link res-compiled/*.flat --manifest AndroidManifest.xml --java src -I $PLATFORM -o $name-unaligned.apk; then
 
+            echo "Compiling java code"
             mkdir src-compiled
             find src -name *.java > sources.txt
             if javac -Xlint -cp $PLATFORM -d src-compiled @sources.txt; then
 
+                echo "Packing and signing application"
                 find src-compiled -name *.class > classes.txt
                 if [ "$(uname -s)" == "Linux" ]; then
                     d8 --release --lib $PLATFORM --min-api 21 @classes.txt
@@ -46,8 +59,14 @@ else
                     apksigner.bat sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
                 fi
 
-                adb install -r $name.apk
-                adb shell am start -n $package/.MainActivity
+                if [ "$1" == "inspect" ]; then
+                    echo "Inspecting application"
+                    jadx-gui $name.apk
+                else
+                    echo "Installing and opening application"
+                    adb install -r $name.apk
+                    adb shell am start -n $package/$main_activity
+                fi
 
                 rm -f classes.txt classes.dex
             fi
