@@ -187,6 +187,9 @@ public class FetchImageTask {
 
     private void finish() {
         isFinished = true;
+        if (imageView != null) {
+            imageView.setTag(null);
+        }
     }
 
     private Bitmap fetchImage() throws Exception {
