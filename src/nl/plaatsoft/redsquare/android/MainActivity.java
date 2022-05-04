@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
         }
 
         ((TextView)findViewById(R.id.menu_about_label)).setOnClickListener((View view) -> {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bastiaan.ml/")));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bplaat.nl/")));
         });
 
         // Game page
