@@ -6,9 +6,9 @@
 # So I use this nice build shell script to get the job done!
 
 # Install the OpenJDK JDK 8 and add all binaries to your path
-# Install your Android SDK at ~/android-sdk/ with the following packages:
-# platform-tools, platforms;android-31, build-tools;31.0.0
-# Run this script with bash on Linux or a Git Bash / Msys install on Windows
+# Install your Android SDK and set the $ANDROID_HOME with the path with
+# the following packages: platform-tools platforms;android-31 build-tools;31.0.0
+# Run this script with bash on Linux, macOS or a Git Bash / Msys install on Windows
 # For inspecting apks you need to install Jadx GUI and add it to your path
 
 PATH=$PATH:$ANDROID_HOME/build-tools/31.0.0:$ANDROID_HOME/platform-tools
