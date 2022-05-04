@@ -1,18 +1,18 @@
 #!/bin/bash
 
-# --- Bassie Android Build Script v1.0 ---
+# --- Bassie Android Build Script v1.1 ---
 
 # The default gradle Android build toolchain is so slow and produces bloated apks
 # So I use this nice build shell script to get the job done!
 
 # Install the OpenJDK JDK 8 and add all binaries to your path
-# Install your Android SDK at ~/android-sdk/ with the following packages:
-# platform-tools, platforms;android-30, build-tools;30.0.3
-# Run this script with bash on Linux or a Git Bash / Msys install on Windows
+# Install your Android SDK and set the $ANDROID_HOME with the path with
+# the following packages: platform-tools platforms;android-31 build-tools;31.0.0
+# Run this script with bash on Linux, macOS or a Git Bash / Msys install on Windows
 # For inspecting apks you need to install Jadx GUI and add it to your path
 
-PATH=$PATH:~/android-sdk/build-tools/30.0.3:~/android-sdk/platform-tools
-PLATFORM=~/android-sdk/platforms/android-30/android.jar
+PATH=$PATH:$ANDROID_HOME/build-tools/31.0.0:$ANDROID_HOME/platform-tools
+PLATFORM=$ANDROID_HOME/platforms/android-31/android.jar
 
 name="coinlist"
 package="ml.coinlist.android"
@@ -44,7 +44,7 @@ else
 
                 echo "Packing and signing application"
                 find src-compiled -name *.class > classes.txt
-                if [ "$(uname -s)" == "Linux" ]; then
+                if [ "$(uname -s)" == "Linux" ] || [ "$(uname -s)" == "Darwin" ]; then
                     d8 --release --lib $PLATFORM --min-api 21 @classes.txt
                 else
                     d8.bat --release --lib $PLATFORM --min-api 21 @classes.txt
@@ -53,7 +53,7 @@ else
 
                 zipalign -f -p 4 $name-unaligned.apk $name.apk
 
-                if [ "$(uname -s)" == "Linux" ]; then
+                if [ "$(uname -s)" == "Linux" ] || [ "$(uname -s)" == "Darwin" ]; then
                     apksigner sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
                 else
                     apksigner.bat sign --v4-signing-enabled false --ks keystore.jks --ks-pass pass:$password --ks-pass pass:$password $name.apk
