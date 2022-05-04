@@ -17,5 +17,5 @@ public class Config {
     public static final int SETTINGS_THEME_SYSTEM = 2;
     public static final int SETTINGS_THEME_DEFAULT = Config.SETTINGS_THEME_SYSTEM;
 
-    public static final String SETTINGS_ABOUT_WEBSITE_URL = "https://bastiaan.ml/";
+    public static final String SETTINGS_ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 }
