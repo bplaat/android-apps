@@ -75,7 +75,7 @@ public class MainActivity extends BaseActivity {
         });
 
         ((TextView)findViewById(R.id.settings_about_button)).setOnClickListener((View view) -> {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bastiaan.ml/")));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bplaat.nl/")));
         });
 
         // Bottom bar
