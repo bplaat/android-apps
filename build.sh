@@ -35,7 +35,7 @@ else
     mkdir res-compiled
     echo "Compiling resources files"
     if aapt2 compile --dir res -o res-compiled; then
-        if aapt2 link res-compiled/*.flat --manifest AndroidManifest.xml --java src -I $PLATFORM -o $name-unaligned.apk; then
+        if aapt2 link res-compiled/*.flat --manifest AndroidManifest.xml -A assets --java src -I $PLATFORM -o $name-unaligned.apk; then
 
             echo "Compiling java code"
             mkdir src-compiled
