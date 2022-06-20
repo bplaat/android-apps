@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.inputmethod.EditorInfo;
 import android.view.WindowInsetsController;
 import android.view.WindowInsets;
+import android.view.WindowManager;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,14 @@ public class MainActivity extends BaseActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            getWindow().setDecorFitsSystemWindows(false);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            WindowManager.LayoutParams attributes = getWindow().getAttributes();
+            attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
+            getWindow().setAttributes(attributes);
+        }
         setContentView(R.layout.activity_main);
 
         menuPage = (RelativeLayout)findViewById(R.id.menu_page);
@@ -289,11 +298,10 @@ public class MainActivity extends BaseActivity {
     @SuppressWarnings("deprecation")
     private void hideSystemUI() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            getWindow().setDecorFitsSystemWindows(false);
             WindowInsetsController controller = getWindow().getInsetsController();
             if (controller != null) {
-                controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
                 controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+                controller.hide(WindowInsets.Type.systemBars());
             }
         } else {
             getWindow().getDecorView().setSystemUiVisibility(
