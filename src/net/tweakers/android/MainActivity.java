@@ -31,7 +31,7 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         // Webview page
-        webviewPage = (WebView)findViewById(R.id.main_webview_page);
+        webviewPage = findViewById(R.id.main_webview_page);
         webviewPage.setBackgroundColor(Color.TRANSPARENT);
 
         WebSettings webSettings = webviewPage.getSettings();
@@ -44,7 +44,7 @@ public class MainActivity extends Activity {
         }
 
         // Disconnected page
-        disconnectedPage = (LinearLayout)findViewById(R.id.main_disconnected_page);
+        disconnectedPage = findViewById(R.id.main_disconnected_page);
 
         View.OnClickListener refreshOnClick = (View view) -> {
             webviewPage.reload();
