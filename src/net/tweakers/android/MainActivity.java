@@ -138,6 +138,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (disconnectedPage.getVisibility() == View.VISIBLE) {
             super.onBackPressed();
