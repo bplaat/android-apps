@@ -36,12 +36,6 @@ public class MainActivity extends Activity {
 
         WebSettings webSettings = webviewPage.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        if (
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-            (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES
-        ) {
-            webSettings.setForceDark(WebSettings.FORCE_DARK_ON);
-        }
 
         // Disconnected page
         disconnectedPage = findViewById(R.id.main_disconnected_page);
