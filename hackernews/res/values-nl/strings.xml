@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="main_disconnected_title_label">Verbinding verbroken</string>
+    <string name="main_disconnected_description_label">Kan geen verbinding maken met de HackerNews-website waarschijnlijk omdat u geen internetverbinding hebt, maak opnieuw verbinding met internet om deze app weer te gebruiken</string>
+    <string name="main_disconnected_hero_button">Pagina herladen</string>
+</resources>

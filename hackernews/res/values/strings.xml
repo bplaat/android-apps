@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">HackerNews</string>
+
+    <string name="main_disconnected_title_label">Disconnected</string>
+    <string name="main_disconnected_description_label">Can\'t connect to the HackerNews website probably because you don\'t have an internet connection, connect to the internet again to use this app again</string>
+    <string name="main_disconnected_hero_button">Refresh page</string>
+</resources>
