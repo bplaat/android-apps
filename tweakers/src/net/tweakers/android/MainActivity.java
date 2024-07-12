@@ -59,7 +59,7 @@ public class MainActivity extends Activity {
             }
 
             private boolean shouldOverrideUrlLoading(WebView view, Uri uri) {
-                if (uri.getScheme().equals("https") && uri.getHost().equals("tweakers.net")) {
+                if (uri.getScheme().equals("https") && (uri.getHost().endsWith("tweakers.net") || uri.getHost().equals("myprivacy.dpgmedia.nl"))) {
                     return false;
                 } else {
                     try {
