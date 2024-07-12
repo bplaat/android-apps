@@ -1,2 +1,3 @@
-keystore.jks
+target/
+*.jks
 .DS_Store
