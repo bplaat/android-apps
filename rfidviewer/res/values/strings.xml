@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">RFID Viewer</string>
+
+    <!-- Main activity -->
+    <string name="main_landing_title_label">Scan an RFID tag</string>
+    <string name="main_landing_description_label">Scan an RFID tag and don\'t move it for few seconds...</string>
+
+    <string name="main_reading_title_label">Reading RFID tag</string>
+    <string name="main_reading_description_label">Reading the RFID tag, don\'t move the tag...</string>
+
+    <string name="main_error_title_label">RFID reading error</string>
+    <string name="main_error_description_label">Something went wrong while reading the tag</string>
+
+    <!-- Write activity -->
+    <string name="write_title_label">Write block</string>
+
+    <string name="write_form_description_label">Enter the block id and the data in ascii or hex form of the block that you want to write to</string>
+    <string name="write_form_block_id_label">Block id</string>
+    <string name="write_form_data_ascii_label">Data ASCII (max 16 bytes)</string>
+    <string name="write_form_data_hex_label">Data hex (max 16 bytes)</string>
+    <string name="write_form_button">Write block</string>
+
+    <string name="write_waiting_title_label">Scan an RFID tag</string>
+    <string name="write_waiting_description_label">Scan an RFID tag and don\'t move it for few seconds...</string>
+
+    <string name="write_writing_title_label">Writing RFID tag</string>
+    <string name="write_writing_description_label">Writing the RFID tag, don\'t move the tag...</string>
+
+    <string name="write_success_title_label">RFID write successfull</string>
+    <string name="write_success_description_label">Your block is successfully written to the tag</string>
+    <string name="write_success_button">Write another</string>
+
+    <string name="write_error_title_label">RFID writing error</string>
+    <string name="write_error_description_label">Something went wrong while writing the tag</string>
+    <string name="write_error_button">Retry write</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title_label">Settings</string>
+
+    <string name="settings_display_label">Display</string>
+
+    <string name="settings_language_button">Language</string>
+    <string name="settings_language_alert_title_label">Language</string>
+    <string name="settings_language_alert_cancel_button">Cancel</string>
+
+    <string name="settings_theme_button">Theme</string>
+    <string name="settings_theme_alert_title_label">Theme</string>
+    <string name="settings_theme_alert_cancel_button">Cancel</string>
+
+    <string name="settings_information_label">Information</string>
+    <string name="settings_version_button">App version</string>
+    <string name="settings_version_message">Who, you are an amazing hacker!</string>
+    <string name="settings_rate_button">Rate this app</string>
+    <string name="settings_share_button">Share this app</string>
+    <string name="settings_share_message">Check out this cool app:</string>
+    <string name="settings_about_button">About this app</string>
+    <string name="settings_footer_button">This application is made by Bastiaan van der Plaat</string>
+
+    <string name="settings_about_alert_title_label">About this app</string>
+    <string name="settings_about_alert_message_label">This application is made by Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+
+    <string-array name="settings_languages">
+        <item>English</item>
+        <item>Nederlands</item>
+        <item>Use system default</item>
+    </string-array>
+
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Set by Battery Saver</item>
+    </string-array>
+</resources>

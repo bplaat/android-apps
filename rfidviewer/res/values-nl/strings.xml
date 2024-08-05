@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main activity -->
+    <string name="main_landing_title_label">Scan een RFID-tag</string>
+    <string name="main_landing_description_label">Scan een RFID-tag en verplaats deze een paar seconden niet...</string>
+
+    <string name="main_reading_title_label">RFID-tag lezen</string>
+    <string name="main_reading_description_label">Lees de RFID-tag, verplaats de tag niet...</string>
+
+    <string name="main_error_title_label">RFID-leesfout</string>
+    <string name="main_error_description_label">Er ging iets mis tijdens het lezen van de tag</string>
+
+    <!-- Write activity -->
+    <string name="write_title_label">Schrijf blok</string>
+
+    <string name="write_form_description_label">Voer de blok id in en de gegevens in ascii- of hex-vorm van het blok waarnaar u wilt schrijven </string>
+    <string name="write_form_block_id_label">Blok id</string>
+    <string name="write_form_data_ascii_label">Data ASCII (max 16 bytes)</string>
+    <string name="write_form_data_hex_label">Data hex (max 16 bytes)</string>
+    <string name="write_form_button">Schrijf blok</string>
+
+    <string name="write_waiting_title_label">Scan een RFID-tag</string>
+    <string name="write_waiting_description_label">Scan een RFID-tag en verplaats deze een paar seconden niet...</string>
+
+    <string name="write_writing_title_label">RFID-tag schrijven</string>
+    <string name="write_writing_description_label">RFID-tag aan het schrijfven, verplaats de tag niet...</string>
+
+    <string name="write_success_title_label">RFID schrijven succesvol</string>
+    <string name="write_success_description_label">Je blok is met succes naar de tag geschreven </string>
+    <string name="write_success_button">Schrijf nog eens</string>
+
+    <string name="write_error_title_label">RFID-schrijffout</string>
+    <string name="write_error_description_label">Er ging iets mis tijdens het schrijven van de tag </string>
+    <string name="write_error_button">Opnieuw proberen</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title_label">Instellingen</string>
+
+    <string name="settings_display_label">Weergave</string>
+
+    <string name="settings_language_button">Taal</string>
+    <string name="settings_language_alert_title_label">Taal</string>
+    <string name="settings_language_alert_cancel_button">Annuleren</string>
+
+    <string name="settings_theme_button">Thema</string>
+    <string name="settings_theme_alert_title_label">Thema</string>
+    <string name="settings_theme_alert_cancel_button">Annuleren</string>
+
+    <string name="settings_information_label">Informatie</string>
+    <string name="settings_version_button">App versie</string>
+    <string name="settings_version_message">Who, jij bent een geweldige hacker!</string>
+    <string name="settings_rate_button">Beoordeel deze app</string>
+    <string name="settings_share_button">Deel deze app</string>
+    <string name="settings_share_message">Bekijk deze coole app:</string>
+    <string name="settings_about_button">Over deze app</string>
+    <string name="settings_footer_button">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+
+    <string name="settings_about_alert_title_label">Over deze app</string>
+    <string name="settings_about_alert_message_label">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+
+    <string-array name="settings_languages">
+        <item>English</item>
+        <item>Nederlands</item>
+        <item>Gebruik systeemstandaard</item>
+    </string-array>
+
+    <string-array name="settings_themes">
+        <item>Licht</item>
+        <item>Donker</item>
+        <item>Ingesteld door batterijbesparing</item>
+    </string-array>
+</resources>
