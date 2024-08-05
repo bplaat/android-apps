@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/CoinItem">
+
+    <ImageView android:id="@+id/coin_image"
+        style="@style/CoinIcon" />
+
+    <LinearLayout style="@style/CoinContainer">
+        <LinearLayout style="@style/CoinFirstLine">
+
+            <TextView android:id="@+id/coin_name"
+                style="@style/CoinName" />
+
+            <TextView android:id="@+id/coin_price"
+                style="@style/CoinPrice"/>
+        </LinearLayout>
+
+        <LinearLayout style="@style/CoinSecondLine">
+            <TextView android:id="@+id/coin_rank"
+                style="@style/CoinRank" />
+
+            <TextView android:id="@+id/coin_change"
+                style="@style/CoinChange" />
+
+            <TextView android:id="@+id/coin_extra"
+                style="@style/CoinExtra"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <ImageButton android:id="@+id/coin_star_button"
+        android:src="@drawable/ic_star_outline"
+        style="@style/ListItemButtonIconAction" />
+</LinearLayout>
