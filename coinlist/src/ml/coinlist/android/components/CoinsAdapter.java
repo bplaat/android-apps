@@ -1,7 +1,8 @@
-package ml.coinlist.android;
+package ml.coinlist.android.components;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import org.json.JSONArray;
 
-public class CoinsAdapter extends ArrayAdapter<Coin>{
+import ml.coinlist.android.tasks.FetchImageTask;
+import ml.coinlist.android.models.Coin;
+import ml.coinlist.android.Consts;
+import ml.coinlist.android.Utils;
+import ml.coinlist.android.R;
+
+public class CoinsAdapter extends ArrayAdapter<Coin> {
     private static class ViewHolder {
         public ImageView coinImage;
         public TextView coinName;
@@ -50,12 +57,12 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
         viewHolder.coinName.setText(coin.getName());
         viewHolder.coinRank.setText("#" + coin.getRank());
         if (coin.getChange() > 0) {
-            viewHolder.coinChange.setTextColor(Utils.getColor(getContext(), R.color.positive_color));
+            viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.positive_color));
         } else {
             if (coin.getChange() < 0) {
-                viewHolder.coinChange.setTextColor(Utils.getColor(getContext(), R.color.negative_color));
+                viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.negative_color));
             } else {
-                viewHolder.coinChange.setTextColor(Utils.getColor(getContext(), R.color.secondary_text_color));
+                viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.secondary_text_color));
             }
         }
         viewHolder.coinChange.setText(Coin.formatChangePercent(coin.getChange()));
@@ -96,7 +103,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin>{
                 settingsEditor.putString("starred_coins", jsonStarredCoins.toString());
                 settingsEditor.apply();
             } catch (Exception exception) {
-                exception.printStackTrace();
+                Log.e(Consts.LOG_TAG, "Can't update coin list item view", exception);
             }
         });
 

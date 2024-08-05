@@ -1,10 +1,11 @@
-package ml.coinlist.android;
+package ml.coinlist.android.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
@@ -13,6 +14,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import ml.coinlist.android.components.CoinsAdapter;
+import ml.coinlist.android.tasks.FetchDataTask;
+import ml.coinlist.android.models.Coin;
+import ml.coinlist.android.Consts;
+import ml.coinlist.android.Utils;
+import ml.coinlist.android.R;
 
 public class MainActivity extends BaseActivity {
     public static final int SETTINGS_REQUEST_CODE = 1;
@@ -35,7 +43,7 @@ public class MainActivity extends BaseActivity {
 
         // Init starred button
         ImageButton starredButton = (ImageButton)findViewById(R.id.main_starred_button);
-        starredOnly = settings.getBoolean("starred_only", Config.SETTINGS_STARRED_ONLY_DEFAULT);
+        starredOnly = settings.getBoolean("starred_only", Consts.Settings.STARRED_ONLY_DEFAULT);
         starredButton.setImageResource(starredOnly ? R.drawable.ic_star : R.drawable.ic_star_outline);
         starredButton.setOnClickListener(view -> {
             starredOnly = !starredOnly;
@@ -61,9 +69,9 @@ public class MainActivity extends BaseActivity {
 
         // Init settings button
         ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
-            oldLanguage = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT);
-            oldCurrency = settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT);
+            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+            oldCurrency = settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT);
             startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
         });
 
@@ -107,8 +115,8 @@ public class MainActivity extends BaseActivity {
 
     public void onResume() {
         super.onResume();
-        loadGlobalInfo(!(System.currentTimeMillis() - settings.getLong("global_load_time", 0) >= Config.SETTINGS_REFRESH_TIMEOUT));
-        loadCoins(!(System.currentTimeMillis() - settings.getLong("coins_load_time", 0) >= Config.SETTINGS_REFRESH_TIMEOUT));
+        loadGlobalInfo(!(System.currentTimeMillis() - settings.getLong("global_load_time", 0) >= Consts.REFRESH_TIMEOUT));
+        loadCoins(!(System.currentTimeMillis() - settings.getLong("coins_load_time", 0) >= Consts.REFRESH_TIMEOUT));
     }
 
     // When come back of the settings activity check for restart
@@ -116,8 +124,8 @@ public class MainActivity extends BaseActivity {
         if (requestCode == MainActivity.SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
                 if (
-                    oldLanguage != settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT) ||
-                    oldTheme != settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT)
+                    oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
+                    oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
                 ) {
                     handler.post(() -> {
                         recreate();
@@ -125,7 +133,7 @@ public class MainActivity extends BaseActivity {
                 }
             }
             if (oldCurrency != -1) {
-                if (oldCurrency != settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)) {
+                if (oldCurrency != settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)) {
                     loadGlobalInfo(true);
                     loadCoins(true);
                 }
@@ -144,36 +152,36 @@ public class MainActivity extends BaseActivity {
                 JSONObject jsonData = new JSONObject(data).getJSONObject("data");
 
                 ((TextView)globalInfo.findViewById(R.id.global_info_marketcap)).setText(getResources().getString(R.string.main_global_marketcap) + ": " +
-                    Coin.formatMoney(this, jsonData.getJSONObject("total_market_cap").getDouble(Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)])));
+                    Coin.formatMoney(this, jsonData.getJSONObject("total_market_cap").getDouble(Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)])));
 
                 double marketcapChange = jsonData.getDouble("market_cap_change_percentage_24h_usd");
                 TextView marketcapChangeLabel = (TextView)globalInfo.findViewById(R.id.global_info_marketcap_change);
                 if (marketcapChange > 0) {
-                    marketcapChangeLabel.setTextColor(Utils.getColor(this, R.color.positive_color));
+                    marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.positive_color));
                 } else {
                     if (marketcapChange < 0) {
-                        marketcapChangeLabel.setTextColor(Utils.getColor(this, R.color.negative_color));
+                        marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.negative_color));
                     } else {
-                        marketcapChangeLabel.setTextColor(Utils.getColor(this, R.color.secondary_text_color));
+                        marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.secondary_text_color));
                     }
                 }
                 marketcapChangeLabel.setText(Coin.formatChangePercent(marketcapChange));
 
                 ((TextView)globalInfo.findViewById(R.id.global_info_volume)).setText(getResources().getString(R.string.main_global_volume) + ": " +
-                    Coin.formatMoney(this, jsonData.getJSONObject("total_volume").getDouble(Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)])));
+                    Coin.formatMoney(this, jsonData.getJSONObject("total_volume").getDouble(Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)])));
 
                 ((TextView)globalInfo.findViewById(R.id.global_info_dominance)).setText(getResources().getString(R.string.main_global_dominance) + ": " +
                     "BTC " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("btc")) + "  " +
                     "ETH " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("eth")));
             } catch (Exception exception) {
-                exception.printStackTrace();
+                Log.e(Consts.LOG_TAG, "Can't parse global data", exception);
             }
         }).fetch();
     }
 
     // Load coin information
     private void loadCoins(boolean fromCache) {
-        String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + Config.SETTINGS_CURRENCY_NAMES[settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT)];
+        String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)];
         FetchDataTask.with(this).load(url).fromCache(fromCache).toCache().then(data -> {
             try {
                 SharedPreferences.Editor settingsEditor = settings.edit();
@@ -212,7 +220,7 @@ public class MainActivity extends BaseActivity {
                     ));
                 }
             } catch (Exception exception) {
-                exception.printStackTrace();
+                Log.e(Consts.LOG_TAG, "Can't parse coins data", exception);
             }
         }).fetch();
     }

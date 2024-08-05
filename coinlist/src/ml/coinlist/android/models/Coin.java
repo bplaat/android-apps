@@ -1,8 +1,10 @@
-package ml.coinlist.android;
+package ml.coinlist.android.models;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import java.text.NumberFormat;
+
+import ml.coinlist.android.Consts;
 
 public class Coin {
     private String id;
@@ -88,11 +90,11 @@ public class Coin {
 
     public static String formatMoney(Context context, double number) {
         SharedPreferences settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        int currency = settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT);
+        int currency = settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT);
 
         NumberFormat format = NumberFormat.getInstance();
         String formatted;
-        if (number > 1e12 && currency == Config.SETTINGS_CURRENCY_SATS) {
+        if (number > 1e12 && currency == Consts.Settings.CURRENCY_SATS) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
             formatted = format.format(number / 1e12) + " T";
@@ -106,10 +108,10 @@ public class Coin {
             formatted = format.format(number / 1e6) + " M";
         } else {
             int decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
-            if (currency == Config.SETTINGS_CURRENCY_BTC || currency == Config.SETTINGS_CURRENCY_ETH || currency == Config.SETTINGS_CURRENCY_BNB) {
+            if (currency == Consts.Settings.CURRENCY_BTC || currency == Consts.Settings.CURRENCY_ETH || currency == Consts.Settings.CURRENCY_BNB) {
                 decimals = number < 10 ? (number < 0.1 ? 12 : 6) : 4;
             }
-            if (currency == Config.SETTINGS_CURRENCY_SATS) {
+            if (currency == Consts.Settings.CURRENCY_SATS) {
                 decimals = number < 1 ? 4 : 0;
             }
             format.setMaximumFractionDigits(decimals);
@@ -117,19 +119,19 @@ public class Coin {
             formatted = format.format(number);
         }
 
-        if (currency == Config.SETTINGS_CURRENCY_EUR) {
+        if (currency == Consts.Settings.CURRENCY_EUR) {
             return "\u20ac" + formatted;
         }
-        if (currency == Config.SETTINGS_CURRENCY_BTC) {
+        if (currency == Consts.Settings.CURRENCY_BTC) {
             return "\uu20bf" + formatted;
         }
-        if (currency == Config.SETTINGS_CURRENCY_SATS) {
+        if (currency == Consts.Settings.CURRENCY_SATS) {
             return formatted + " SATS";
         }
-        if (currency == Config.SETTINGS_CURRENCY_ETH) {
+        if (currency == Consts.Settings.CURRENCY_ETH) {
             return "\u039e" + formatted;
         }
-        if (currency == Config.SETTINGS_CURRENCY_BNB) {
+        if (currency == Consts.Settings.CURRENCY_BNB) {
             return formatted + " BNB";
         }
         return "$" + formatted;
@@ -148,10 +150,10 @@ public class Coin {
 
     public static String formatNumber(Context context, double number) {
         SharedPreferences settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        int currency = settings.getInt("currency", Config.SETTINGS_CURRENCY_DEFAULT);
+        int currency = settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT);
 
         NumberFormat format = NumberFormat.getInstance();
-        if (number > 1e12 && currency == Config.SETTINGS_CURRENCY_SATS) {
+        if (number > 1e12 && currency == Consts.Settings.CURRENCY_SATS) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
             return format.format(number / 1e12) + " T";

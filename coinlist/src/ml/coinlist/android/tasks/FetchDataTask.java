@@ -1,8 +1,9 @@
-package ml.coinlist.android;
+package ml.coinlist.android.tasks;
 
 import android.content.Context;
 import android.os.Looper;
 import android.os.Handler;
+import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.File;
@@ -11,6 +12,9 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import ml.coinlist.android.Consts;
+import ml.coinlist.android.Utils;
 
 public class FetchDataTask {
     private static final Executor executor = Executors.newFixedThreadPool(8);
@@ -102,7 +106,7 @@ public class FetchDataTask {
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
-                            exception.printStackTrace();
+                            Log.e(Consts.LOG_TAG, "Can't fetch data", exception);
                         }
                     }
                 });

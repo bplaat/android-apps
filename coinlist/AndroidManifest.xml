@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="ml.coinlist.android"
-    android:versionCode="12"
-    android:versionName="1.2">
+    android:versionCode="000001000"
+    android:versionName="0.1.0">
 
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34" />
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="35" />
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,7 +12,7 @@
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.App">
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".activities.MainActivity"
             android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
             android:exported="true">
@@ -23,10 +23,10 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity"
+        <activity android:name=".activities.SettingsActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:launchMode="singleTop"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
-            android:exported="true" />
+            android:exported="false" />
     </application>
 </manifest>
