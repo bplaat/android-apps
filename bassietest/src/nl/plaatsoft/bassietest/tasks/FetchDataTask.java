@@ -1,8 +1,9 @@
-package nl.plaatsoft.bassietest;
+package nl.plaatsoft.bassietest.tasks;
 
 import android.content.Context;
 import android.os.Looper;
 import android.os.Handler;
+import android.util.Log;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.File;
@@ -11,6 +12,9 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import nl.plaatsoft.bassietest.Consts;
+import nl.plaatsoft.bassietest.Utils;
 
 public class FetchDataTask {
     private static final Executor executor = Executors.newFixedThreadPool(8);
@@ -92,7 +96,7 @@ public class FetchDataTask {
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
-                            exception.printStackTrace();
+                            Log.e(Consts.LOG_TAG, "Can't fetch data", exception);
                         }
                     }
                 });

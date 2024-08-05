@@ -1,4 +1,4 @@
-package nl.plaatsoft.bassietest;
+package nl.plaatsoft.bassietest.tasks;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Looper;
 import android.os.Handler;
+import android.util.Log;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import java.io.BufferedInputStream;
@@ -16,6 +17,9 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import nl.plaatsoft.bassietest.Consts;
+import nl.plaatsoft.bassietest.Utils;
 
 public class FetchImageTask {
     private static final Executor executor = Executors.newFixedThreadPool(8);
@@ -128,7 +132,7 @@ public class FetchImageTask {
                                 imageView.setBackgroundColor(Color.TRANSPARENT);
                             }
 
-                            boolean isWaitingLong = (System.currentTimeMillis() - startTime) > Config.ANIMATION_IMAGE_LOADING_TIMEOUT;
+                            boolean isWaitingLong = (System.currentTimeMillis() - startTime) > Consts.ANIMATION_IMAGE_LOADING_TIMEOUT;
                             if (isFadedIn && isWaitingLong) {
                                 imageView.setImageAlpha(0);
                             }
@@ -137,7 +141,7 @@ public class FetchImageTask {
 
                             if (isFadedIn && isWaitingLong) {
                                 ValueAnimator animation = ValueAnimator.ofInt(0, 255);
-                                animation.setDuration(Config.ANIMATION_DURATION);
+                                animation.setDuration(Consts.ANIMATION_DURATION);
                                 animation.setInterpolator(new AccelerateDecelerateInterpolator());
                                 animation.addUpdateListener(animator -> {
                                     imageView.setImageAlpha((int)animator.getAnimatedValue());
@@ -158,7 +162,7 @@ public class FetchImageTask {
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
-                            exception.printStackTrace();
+                            Log.e(Consts.LOG_TAG, "Can't fetch image", exception);
                         }
                     }
                 });

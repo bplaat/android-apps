@@ -1,8 +1,14 @@
-package nl.plaatsoft.bassietest;
+package nl.plaatsoft.bassietest.components;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
+
+import nl.plaatsoft.bassietest.Consts;
+import nl.plaatsoft.bassietest.Utils;
+import nl.plaatsoft.bassietest.R;
 
 public class RatingAlert {
     public static void updateAndShow(Context context) {
@@ -31,8 +37,8 @@ public class RatingAlert {
 
         // Wait at least n days before opening
         if (
-            launchCount >= Config.RATING_ALERT_LAUNCHES_UNTIL_PROMPT &&
-            System.currentTimeMillis() - firstLaunchTime >= Config.RATING_ALERT_TIME_UNTIL_PROMPT
+            launchCount >= Consts.RATING_ALERT_LAUNCHES_UNTIL_PROMPT &&
+            System.currentTimeMillis() - firstLaunchTime >= Consts.RATING_ALERT_TIME_UNTIL_PROMPT
         ) {
             // Show rating alert
             new AlertDialog.Builder(context)
@@ -52,7 +58,7 @@ public class RatingAlert {
                     otherSettingsEditor.commit();
                 })
                 .setPositiveButton(R.string.rating_alert_rating_button, (dialog, whichButton) -> {
-                    Utils.openStorePage(context);
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Consts.STORE_PAGE_URL)));
 
                     // Set the rating hidden flag
                     SharedPreferences.Editor otherSettingsEditor = settings.edit();

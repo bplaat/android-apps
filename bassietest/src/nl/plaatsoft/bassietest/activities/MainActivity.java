@@ -1,9 +1,10 @@
-package nl.plaatsoft.bassietest;
+package nl.plaatsoft.bassietest.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -11,6 +12,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.ScrollView;
 import org.json.JSONObject;
+
+import nl.plaatsoft.bassietest.components.RatingAlert;
+import nl.plaatsoft.bassietest.tasks.FetchDataTask;
+import nl.plaatsoft.bassietest.tasks.FetchImageTask;
+import nl.plaatsoft.bassietest.Consts;
+import nl.plaatsoft.bassietest.Utils;
+import nl.plaatsoft.bassietest.R;
 
 public class MainActivity extends BaseActivity {
     public static final int SETTINGS_REQUEST_CODE = 1;
@@ -31,8 +39,8 @@ public class MainActivity extends BaseActivity {
 
         // Init settings button
         ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
-            oldLanguage = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT);
+            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
             startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
         });
 
@@ -62,13 +70,13 @@ public class MainActivity extends BaseActivity {
                     try {
                         JSONObject jsondata = new JSONObject(data);
 
-                        TextView locationLabel = (TextView)findViewById(R.id.main_data_location_label);
+                        TextView locationLabel = findViewById(R.id.main_data_location_label);
                         Utils.fadeInTextView(this, locationLabel);
                         locationLabel.setText(jsondata.getString("city") + ", " + jsondata.getString("region"));
 
                         infoLoaded = true;
                     } catch (Exception exception) {
-                        exception.printStackTrace();
+                        Log.e(Consts.LOG_TAG, "Can't fetch ip info", exception);
                     }
                 }).fetch();
             }
@@ -83,8 +91,8 @@ public class MainActivity extends BaseActivity {
         if (requestCode == MainActivity.SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
                 if (
-                    oldLanguage != settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT) ||
-                    oldTheme != settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT)
+                    oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
+                    oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
                 ) {
                     handler.post(() -> {
                         recreate();
@@ -95,6 +103,7 @@ public class MainActivity extends BaseActivity {
     }
 
     // When back button press go back to landing page
+    @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (dataPage.getVisibility() == View.VISIBLE) {
             Utils.fadeInOut(dataPage, landingPage);
