@@ -1,0 +1,8 @@
+package nl.plaatsoft.redsquare.android;
+
+public class Config {
+    private Config() {}
+
+    public static final String API_URL = "";
+    public static final String API_KEY = "";
+}

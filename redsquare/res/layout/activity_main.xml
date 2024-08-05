@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:keepScreenOn="true">
+
+    <!-- Menu page -->
+    <RelativeLayout android:id="@+id/menu_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingLeft="32dp"
+            android:paddingRight="32dp"
+            android:gravity="center">
+
+            <TextView android:text="@string/app_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="32sp" />
+
+            <Button android:id="@+id/menu_play_button"
+                android:text="@string/menu_play_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
+                android:textSize="20sp" />
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginRight="16dp">
+
+                    <Button android:id="@+id/menu_local_highscore_button"
+                        android:text="@string/menu_local_highscore_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:textSize="20sp" />
+
+                    <Button android:id="@+id/menu_global_highscore_button"
+                        android:text="@string/menu_global_highscore_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:textSize="20sp" />
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <Button android:id="@+id/menu_help_button"
+                        android:text="@string/menu_help_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:textSize="20sp" />
+
+                    <Button android:id="@+id/menu_settings_button"
+                        android:text="@string/menu_settings_button"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp"
+                        android:paddingBottom="12dp"
+                        android:textSize="20sp" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView android:id="@+id/menu_version_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="16dp"
+            android:layout_marginRight="16dp"
+            android:textSize="18sp" />
+
+        <TextView android:id="@+id/menu_about_label"
+            android:text="@string/menu_about_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="16dp"
+            android:textSize="18sp" />
+    </RelativeLayout>
+
+    <!-- Game page -->
+    <nl.plaatsoft.redsquare.android.GamePage android:id="@+id/game_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <!-- Game Over page -->
+    <LinearLayout android:id="@+id/gameover_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/overlay_background_color"
+        android:visibility="gone">
+
+        <TextView android:text="@string/gameover_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="32sp" />
+
+        <TextView android:id="@+id/gameover_score_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textSize="24sp" />
+
+        <TextView android:id="@+id/gameover_time_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textSize="24sp" />
+
+        <TextView android:id="@+id/gameover_level_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:textSize="24sp" />
+
+        <Button android:id="@+id/gameover_back_button"
+            android:text="@string/gameover_back_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <!-- Local High Score page -->
+    <LinearLayout android:id="@+id/local_highscore_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView android:text="@string/local_highscore_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="32sp" />
+
+        <ListView android:id="@+id/local_highscore_list"
+            android:layout_width="400dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="16dp"
+            android:divider="@null" />
+
+        <Button android:id="@+id/local_highscore_back_button"
+            android:text="@string/local_highscore_back_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <!-- Global High Score page -->
+    <LinearLayout android:id="@+id/global_highscore_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView android:text="@string/global_highscore_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="32sp" />
+
+        <RelativeLayout android:layout_width="400dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_marginBottom="16dp">
+
+            <ListView android:id="@+id/global_highscore_list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="@null"
+                android:visibility="gone" />
+
+            <TextView android:id="@+id/global_highscore_list_loading"
+                android:text="@string/global_highscore_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"
+                android:textSize="20sp" />
+
+            <TextView android:id="@+id/global_highscore_list_error"
+                android:text="@string/global_highscore_error"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <Button android:id="@+id/global_highscore_back_button"
+            android:text="@string/global_highscore_back_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <!-- Help page -->
+    <LinearLayout android:id="@+id/help_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView android:text="@string/help_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="32sp" />
+
+        <TextView android:text="@string/help_text_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:lineSpacingMultiplier="1.2" />
+
+        <Button android:id="@+id/help_back_button"
+            android:text="@string/help_back_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+    <!-- Settings page -->
+    <LinearLayout android:id="@+id/settings_page"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView android:text="@string/settings_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:textSize="32sp" />
+
+        <LinearLayout android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp">
+
+            <TextView android:text="@string/settings_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:textSize="20sp" />
+
+            <EditText android:id="@+id/settings_name_input"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp"
+                android:inputType="text"
+                android:imeOptions="actionDone"
+                android:maxLength="32" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/settings_language_button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp">
+
+            <TextView android:text="@string/settings_language"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp" />
+
+            <TextView android:id="@+id/settings_language_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary_text_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/settings_theme_button"
+            android:layout_width="400dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp">
+
+            <TextView android:text="@string/settings_theme"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textSize="20sp" />
+
+            <TextView android:id="@+id/settings_theme_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/secondary_text_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <Button android:id="@+id/settings_back_button"
+            android:text="@string/settings_back_button"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            android:textSize="20sp" />
+    </LinearLayout>
+</FrameLayout>
