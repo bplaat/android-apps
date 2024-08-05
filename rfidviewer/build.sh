@@ -7,7 +7,7 @@
 # - Set $ANDROID_HOME
 
 name="rfidviewer"
-package="ml.bastiaan.rfidviewer"
+package="nl.plaatsoft.rfidviewer"
 password="android"
 main_activity=".activities.MainActivity"
 

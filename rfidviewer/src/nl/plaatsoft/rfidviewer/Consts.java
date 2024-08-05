@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer;
+package nl.plaatsoft.rfidviewer;
 
 public class Consts {
     private Consts() {}

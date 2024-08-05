@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer.activities;
+package nl.plaatsoft.rfidviewer.activities;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -19,10 +19,10 @@ import android.widget.Toast;
 import android.widget.ScrollView;
 import java.util.Arrays;
 
-import ml.bastiaan.rfidviewer.tasks.MifareReadTask;
-import ml.bastiaan.rfidviewer.Consts;
-import ml.bastiaan.rfidviewer.Utils;
-import ml.bastiaan.rfidviewer.R;
+import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
+import nl.plaatsoft.rfidviewer.Consts;
+import nl.plaatsoft.rfidviewer.Utils;
+import nl.plaatsoft.rfidviewer.R;
 
 public class MainActivity extends BaseActivity {
     public static final int SETTINGS_REQUEST_CODE = 1;

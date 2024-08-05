@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer.activities;
+package nl.plaatsoft.rfidviewer.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -12,8 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import ml.bastiaan.rfidviewer.Consts;
-import ml.bastiaan.rfidviewer.R;
+import nl.plaatsoft.rfidviewer.Consts;
+import nl.plaatsoft.rfidviewer.R;
 
 public class SettingsActivity extends BaseActivity {
     @Override

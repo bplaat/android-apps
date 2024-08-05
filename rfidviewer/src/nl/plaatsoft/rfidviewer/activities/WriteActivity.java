@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer.activities;
+package nl.plaatsoft.rfidviewer.activities;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -19,10 +19,10 @@ import android.widget.ImageButton;
 import android.widget.ScrollView;
 import java.util.Arrays;
 
-import ml.bastiaan.rfidviewer.tasks.MifareWriteTask;
-import ml.bastiaan.rfidviewer.Consts;
-import ml.bastiaan.rfidviewer.Utils;
-import ml.bastiaan.rfidviewer.R;
+import nl.plaatsoft.rfidviewer.tasks.MifareWriteTask;
+import nl.plaatsoft.rfidviewer.Consts;
+import nl.plaatsoft.rfidviewer.Utils;
+import nl.plaatsoft.rfidviewer.R;
 
 public class WriteActivity extends BaseActivity {
     private NfcAdapter nfcAdapter;

@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer;
+package nl.plaatsoft.rfidviewer;
 
 import android.content.Intent;
 import android.os.Build;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="ml.bastiaan.rfidviewer"
+    package="nl.plaatsoft.rfidviewer"
     android:versionCode="000001000"
     android:versionName="0.1.0">
 

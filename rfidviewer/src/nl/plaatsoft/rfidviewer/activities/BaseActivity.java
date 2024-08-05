@@ -1,4 +1,4 @@
-package ml.bastiaan.rfidviewer.activities;
+package nl.plaatsoft.rfidviewer.activities;
 
 import android.app.Activity;
 import android.content.res.Configuration;
@@ -8,7 +8,7 @@ import android.os.Build;
 import android.os.PowerManager;
 import java.util.Locale;
 
-import ml.bastiaan.rfidviewer.Consts;
+import nl.plaatsoft.rfidviewer.Consts;
 
 public abstract class BaseActivity extends Activity {
     protected SharedPreferences settings;
