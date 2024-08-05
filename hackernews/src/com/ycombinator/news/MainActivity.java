@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     private WebView webviewPage;
     private LinearLayout disconnectedPage;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -36,7 +37,7 @@ public class MainActivity extends Activity {
 
         WebSettings webSettings = webviewPage.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webSettingsForceDark(webSettings);
+        webSettingsSetForceDark(webSettings);
 
         // Disconnected page
         disconnectedPage = findViewById(R.id.main_disconnected_page);
@@ -116,17 +117,7 @@ public class MainActivity extends Activity {
         }
     }
 
-    @SuppressWarnings("deprecation")
-    private void webSettingsForceDark(WebSettings webSettings) {
-        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                webSettings.setAlgorithmicDarkeningAllowed(true);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                webSettings.setForceDark(WebSettings.FORCE_DARK_ON);
-            }
-        }
-    }
-
+    @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getAction() == Intent.ACTION_VIEW) {
@@ -134,6 +125,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
     @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (disconnectedPage.getVisibility() == View.VISIBLE) {
@@ -148,6 +140,17 @@ public class MainActivity extends Activity {
             webviewPage.goBack();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private void webSettingsSetForceDark(WebSettings webSettings) {
+        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                webSettings.setAlgorithmicDarkeningAllowed(true);
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                webSettings.setForceDark(WebSettings.FORCE_DARK_ON);
+            }
         }
     }
 }

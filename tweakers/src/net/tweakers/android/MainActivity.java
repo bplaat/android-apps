@@ -26,6 +26,7 @@ public class MainActivity extends Activity {
     private WebView webviewPage;
     private LinearLayout disconnectedPage;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -131,6 +132,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         if (intent.getAction() == Intent.ACTION_VIEW) {
@@ -138,6 +140,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
     @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (disconnectedPage.getVisibility() == View.VISIBLE) {

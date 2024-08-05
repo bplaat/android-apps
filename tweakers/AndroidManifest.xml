@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.tweakers.android"
-    android:versionCode="000001002"
-    android:versionName="0.1.2">
+    android:versionCode="000001000"
+    android:versionName="0.1.0">
 
     <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="35" />
 
