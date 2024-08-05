@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">BassieTest</string>
+
+    <!-- Main activity -->
+    <string name="main_landing_title_label">Coming soon...</string>
+    <string name="main_landing_description_label">We are working hard on this app</string>
+    <string name="main_landing_hero_button">Load information</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title_label">Settings</string>
+
+    <string name="settings_display_label">Display</string>
+
+    <string name="settings_language_button">Language</string>
+    <string name="settings_language_alert_title_label">Language</string>
+    <string name="settings_language_alert_cancel_button">Cancel</string>
+
+    <string name="settings_theme_button">Theme</string>
+    <string name="settings_theme_alert_title_label">Theme</string>
+    <string name="settings_theme_alert_cancel_button">Cancel</string>
+
+    <string name="settings_information_label">Information</string>
+    <string name="settings_version_button">App version</string>
+    <string name="settings_version_message">Who, you are an amazing hacker!</string>
+    <string name="settings_rate_button">Rate this app</string>
+    <string name="settings_share_button">Share this app</string>
+    <string name="settings_share_message">Check out this cool app:</string>
+    <string name="settings_about_button">About this app</string>
+    <string name="settings_footer_button">This application is made by Bastiaan van der Plaat</string>
+
+    <string name="settings_about_alert_title_label">About this app</string>
+    <string name="settings_about_alert_message_label">This application is made by Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+
+    <string-array name="settings_languages">
+        <item>English</item>
+        <item>Nederlands</item>
+        <item>Use system default</item>
+    </string-array>
+
+    <string-array name="settings_themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Set by Battery Saver</item>
+    </string-array>
+
+    <!-- Rating alert -->
+    <string name="rating_alert_title_label">Rate BassieTest?</string>
+    <string name="rating_alert_message_label">If you like the BassieTest app, please take a moment to rate it. Thanks for your support!</string>
+    <string name="rating_alert_rating_button">Rate</string>
+    <string name="rating_alert_later_button">Later</string>
+    <string name="rating_alert_never_button">Never</string>
+</resources>

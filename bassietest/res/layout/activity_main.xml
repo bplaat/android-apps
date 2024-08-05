@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Root">
+
+    <LinearLayout style="@style/ActionBar">
+        <TextView android:text="@string/app_name"
+            style="@style/ActionBarTitle" />
+
+        <ImageButton android:id="@+id/main_settings_button"
+            android:src="@drawable/ic_settings"
+            style="@style/ActionBarIconButton" />
+    </LinearLayout>
+
+    <FrameLayout style="@style/Container">
+        <!-- Landing page -->
+        <ScrollView android:id="@+id/main_landing_page"
+            style="@style/Scroll">
+
+            <LinearLayout style="@style/Hero">
+                <ImageView android:src="@drawable/ic_clock"
+                    style="@style/HeroIcon" />
+
+                <TextView android:text="@string/main_landing_title_label"
+                    style="@style/HeroTitle" />
+
+                <TextView android:text="@string/main_landing_description_label"
+                    style="@style/HeroDescription" />
+
+                <Button android:id="@+id/main_landing_hero_button"
+                    android:text="@string/main_landing_hero_button"
+                    style="@style/HeroButton" />
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Data page -->
+        <ScrollView android:id="@+id/main_data_page"
+            android:visibility="gone"
+            style="@style/Scroll">
+
+            <LinearLayout style="@style/Hero">
+                <ImageView android:id="@+id/main_data_random_image"
+                    android:layout_width="320dp"
+                    android:layout_height="240dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@color/loading_background_color"
+                    android:scaleType="centerCrop" />
+
+                <TextView android:id="@+id/main_data_location_label"
+                    android:layout_width="320dp"
+                    android:gravity="center_horizontal"
+                    android:background="@color/loading_background_color"
+                    style="@style/HeroDescription" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+</LinearLayout>
