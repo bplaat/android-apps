@@ -1,16 +1,13 @@
 package nl.plaatsoft.redsquare.android;
 
-public class Random {
-    public static long seed = 1;
+public class Random extends java.util.Random {
+    public static final long serialVersionUID = 1;
 
-    private Random() {}
-
-    public static double random() {
-        double x = Math.sin(seed++) * 10000;
-        return x - Math.floor(x);
+    public Random(long seed) {
+        super(seed);
     }
 
-    public static int rand(int min, int max) {
-        return (int)(random() * (max - min + 1)) + min;
+    public int nextInt(int min, int max) {
+        return nextInt(max - min + 1) + min;
     }
 }

@@ -1,4 +1,4 @@
-package nl.plaatsoft.redsquare.android;
+package nl.plaatsoft.redsquare.android.components;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -9,21 +9,29 @@ import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 
+import nl.plaatsoft.redsquare.android.models.BlueSquare;
+import nl.plaatsoft.redsquare.android.models.RedSquare;
+import nl.plaatsoft.redsquare.android.Utils;
+import nl.plaatsoft.redsquare.android.R;
+import nl.plaatsoft.redsquare.android.Random;
+
 public class GamePage extends View {
     public interface OnEventListener {
         public void onGameover(int score, int seconds, int level);
     }
 
+    private boolean started = false;
     private boolean running = false;
+    private float scale;
+    private int width;
+    private int height;
     private boolean dragging = false;
     private int score;
     private long startTime;
     private long levelTime;
     private int level;
-    private float scale;
-    private int width;
-    private int height;
     private int borderWidth;
+    private Random random;
     private RedSquare redsquare;
     private BlueSquare[] blueSquares;
     private Paint paint;
@@ -36,15 +44,9 @@ public class GamePage extends View {
     public GamePage(Context context, AttributeSet attrs) {
         super(context, attrs);
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        scale = metrics.density;
-        width = (int)(metrics.widthPixels / scale);
-        height = (int)(metrics.heightPixels / scale);
-
         paint = new Paint();
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
-        paint.setTextSize(16 * scale);
 
         scoreLabelString = getResources().getString(R.string.game_score_label);
         timeLabelString = getResources().getString(R.string.game_time_label);
@@ -60,37 +62,44 @@ public class GamePage extends View {
     }
 
     public void start() {
+        started = true;
         running = true;
+
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        scale = metrics.density;
+        width = (int)(getWidth() / scale);
+        height = (int)(getHeight() / scale);
+        paint.setTextSize(16 * scale);
 
         score = 0;
         startTime = System.currentTimeMillis();
         levelTime = startTime;
         level = 1;
         borderWidth = 0;
-
-        Random.seed = startTime;
+        random = new Random(startTime);
 
         int redsquareSize = 60;
         redsquare = new RedSquare(((width - redsquareSize) / 2) * scale, ((height - redsquareSize) / 2) * scale, redsquareSize * scale, redsquareSize * scale);
 
         blueSquares = new BlueSquare[4];
 
-        blueSquares[0] = new BlueSquare(scale, scale, Random.rand(50, 100) * scale, Random.rand(75, 125) * scale, 1, 1, 0.5f * scale);
+        blueSquares[0] = new BlueSquare(random, scale, scale, random.nextInt(50, 100) * scale, random.nextInt(75, 125) * scale, 1, 1, 0.5f * scale);
 
-        int _width = Random.rand(125, 150);
-        blueSquares[1] = new BlueSquare((width - _width - 1) * scale, scale, _width * scale, Random.rand(50, 100) * scale, -1, 1, 0.5f * scale);
+        int _width = random.nextInt(125, 150);
+        blueSquares[1] = new BlueSquare(random, (width - _width - 1) * scale, scale, _width * scale, random.nextInt(50, 100) * scale, -1, 1, 0.5f * scale);
 
-        int _height = Random.rand(75, 125);
-        blueSquares[2] = new BlueSquare(2 * scale, (height - _height - 1) * scale, Random.rand(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
+        int _height = random.nextInt(75, 125);
+        blueSquares[2] = new BlueSquare(random, 2 * scale, (height - _height - 1) * scale, random.nextInt(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
 
-        _width = Random.rand(75, 125);
-        _height = Random.rand(125, 150);
-        blueSquares[3] = new BlueSquare((width - _width - 1) * scale, (height - _height - 1) * scale, _width * scale, _height * scale, -1, -1, 0.5f * scale);
+        _width = random.nextInt(75, 125);
+        _height = random.nextInt(125, 150);
+        blueSquares[3] = new BlueSquare(random, (width - _width - 1) * scale, (height - _height - 1) * scale, _width * scale, _height * scale, -1, -1, 0.5f * scale);
 
         invalidate();
     }
 
     public void stop() {
+        started = false;
         running = false;
     }
 
@@ -101,10 +110,12 @@ public class GamePage extends View {
     }
 
     protected void onDraw(Canvas canvas) {
+        if (!started) return;
+
         if (running) {
             if (System.currentTimeMillis() - levelTime > 10000) {
                 level++;
-                borderWidth += Random.rand(4, 12);
+                borderWidth += random.nextInt(4, 12);
                 levelTime = System.currentTimeMillis();
 
                 for (BlueSquare blueSquare : blueSquares) {
@@ -139,16 +150,17 @@ public class GamePage extends View {
         }
         redsquare.draw(canvas);
 
-        paint.setColor(Utils.getColor(getContext(), R.color.primary_text_color));
+        float textPadding = 24;
+        paint.setColor(Utils.contextGetColor(getContext(), R.color.primary_text_color));
         paint.setTextAlign(Paint.Align.LEFT);
-        canvas.drawText(String.format(scoreLabelString, score), 16 * scale, (16 + 8) * scale, paint);
+        canvas.drawText(String.format(scoreLabelString, score), textPadding * scale, (textPadding + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
         int seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
-        canvas.drawText(String.format(timeLabelString, seconds / 60, seconds % 60), (width / 2) * scale, (16 + 8) * scale, paint);
+        canvas.drawText(String.format(timeLabelString, seconds / 60, seconds % 60), (width / 2) * scale, (textPadding + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(String.format(levelLabelString, level), (width - 16) * scale, (16 + 8) * scale, paint);
+        canvas.drawText(String.format(levelLabelString, level), (width - textPadding) * scale, (textPadding + 8) * scale, paint);
 
         if (running) {
             invalidate();
@@ -157,6 +169,8 @@ public class GamePage extends View {
     }
 
     public boolean onTouchEvent(MotionEvent event) {
+        if (!started) return false;
+
         float touchX = event.getX();
         float touchY = event.getY();
 

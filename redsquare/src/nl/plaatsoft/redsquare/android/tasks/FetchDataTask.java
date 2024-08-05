@@ -1,4 +1,4 @@
-package nl.plaatsoft.redsquare.android;
+package nl.plaatsoft.redsquare.android.tasks;
 
 import android.content.Context;
 import android.os.Looper;
@@ -11,6 +11,8 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import nl.plaatsoft.redsquare.android.Utils;
 
 public class FetchDataTask {
     private static final Executor executor = Executors.newFixedThreadPool(4);

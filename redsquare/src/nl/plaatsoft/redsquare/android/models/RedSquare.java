@@ -1,4 +1,4 @@
-package nl.plaatsoft.redsquare.android;
+package nl.plaatsoft.redsquare.android.models;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;

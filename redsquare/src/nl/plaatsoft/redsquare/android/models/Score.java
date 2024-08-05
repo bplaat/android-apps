@@ -1,4 +1,4 @@
-package nl.plaatsoft.redsquare.android;
+package nl.plaatsoft.redsquare.android.models;
 
 public class Score {
     private String name;

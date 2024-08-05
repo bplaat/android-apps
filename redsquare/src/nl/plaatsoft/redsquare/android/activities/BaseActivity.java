@@ -1,4 +1,4 @@
-package nl.plaatsoft.redsquare.android;
+package nl.plaatsoft.redsquare.android.activities;
 
 import android.app.Activity;
 import android.content.res.Configuration;

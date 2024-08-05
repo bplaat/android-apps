@@ -1,4 +1,4 @@
-package nl.plaatsoft.redsquare.android;
+package nl.plaatsoft.redsquare.android.components;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
+import nl.plaatsoft.redsquare.android.models.Score;
+import nl.plaatsoft.redsquare.android.Utils;
+import nl.plaatsoft.redsquare.android.R;
 
 public class ScoreAdapter extends ArrayAdapter<Score> {
     private class ViewHolder {
@@ -22,8 +26,8 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_score, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.scoreName = (TextView)convertView.findViewById(R.id.score_name);
-            viewHolder.scoreScore = (TextView)convertView.findViewById(R.id.score_score);
+            viewHolder.scoreName = convertView.findViewById(R.id.score_name);
+            viewHolder.scoreScore = convertView.findViewById(R.id.score_score);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)convertView.getTag();

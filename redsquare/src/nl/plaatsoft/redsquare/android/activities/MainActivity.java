@@ -1,4 +1,4 @@
-package nl.plaatsoft.redsquare.android;
+package nl.plaatsoft.redsquare.android.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -7,6 +7,8 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.inputmethod.EditorInfo;
 import android.view.WindowInsetsController;
 import android.view.WindowInsets;
@@ -24,12 +26,21 @@ import java.util.Comparator;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import nl.plaatsoft.redsquare.android.components.GamePage;
+import nl.plaatsoft.redsquare.android.components.ScoreAdapter;
+import nl.plaatsoft.redsquare.android.models.Score;
+import nl.plaatsoft.redsquare.android.tasks.FetchDataTask;
+import nl.plaatsoft.redsquare.android.Config;
+import nl.plaatsoft.redsquare.android.Utils;
+import nl.plaatsoft.redsquare.android.R;
+
 public class MainActivity extends BaseActivity {
     public static final String SCORE_DEFAULT = "[]";
     public static final String NAME_DEFAULT = "Anonymous";
     public static final int LANGUAGE_DEFAULT = 2;
     public static final int THEME_DEFAULT = 2;
 
+    private Handler handler = new Handler(Looper.getMainLooper());
     private GamePage gamePage;
     private RelativeLayout menuPage;
     private LinearLayout settingsPage;
@@ -37,7 +48,7 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            getWindow().setDecorFitsSystemWindows(false);
+            Utils.windowSetDecorFitsSystemWindows(getWindow(), false);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             WindowManager.LayoutParams attributes = getWindow().getAttributes();
@@ -69,8 +80,9 @@ public class MainActivity extends BaseActivity {
         ((Button)findViewById(R.id.menu_play_button)).setOnClickListener((View view) -> {
             menuPage.setVisibility(View.GONE);
             gamePage.setVisibility(View.VISIBLE);
-
-            gamePage.start();
+            handler.post(() -> {
+                gamePage.start();
+            });
         });
 
         // Game Over page
@@ -267,7 +279,7 @@ public class MainActivity extends BaseActivity {
                 .show();
         });
 
-        ((Button)findViewById(R.id.settings_back_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.settings_back_button).setOnClickListener((View view) -> {
             settingsPage.setVisibility(View.GONE);
             menuPage.setVisibility(View.VISIBLE);
         });
