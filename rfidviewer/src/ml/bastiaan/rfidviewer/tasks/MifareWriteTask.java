@@ -8,7 +8,8 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.List;
-import ml.bastiaan.rfidviewer.Config;
+
+import ml.bastiaan.rfidviewer.Consts;
 
 public class MifareWriteTask {
     private static final Executor executor = Executors.newFixedThreadPool(1);
@@ -100,7 +101,7 @@ public class MifareWriteTask {
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
-                            Log.e(Config.LOG_TAG, "An exception catched!", exception);
+                            Log.e(Consts.LOG_TAG, "Can't write Mifare Classic tag", exception);
                         }
                     }
                 });

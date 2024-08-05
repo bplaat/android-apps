@@ -6,7 +6,8 @@ import android.os.Handler;
 import android.util.Log;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import ml.bastiaan.rfidviewer.Config;
+
+import ml.bastiaan.rfidviewer.Consts;
 
 public class MifareReadTask {
     private static final Executor executor = Executors.newFixedThreadPool(1);
@@ -75,7 +76,7 @@ public class MifareReadTask {
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
-                            Log.e(Config.LOG_TAG, "An exception catched!", exception);
+                            Log.e(Consts.LOG_TAG, "Can't read Mifare Classic tag", exception);
                         }
                     }
                 });

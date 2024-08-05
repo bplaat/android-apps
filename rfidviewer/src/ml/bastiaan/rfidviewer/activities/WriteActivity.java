@@ -8,6 +8,7 @@ import android.nfc.tech.NfcA;
 import android.nfc.tech.MifareClassic;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
@@ -17,8 +18,10 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import java.util.Arrays;
+
 import ml.bastiaan.rfidviewer.tasks.MifareWriteTask;
-import ml.bastiaan.rfidviewer.Config;
+import ml.bastiaan.rfidviewer.Consts;
+import ml.bastiaan.rfidviewer.Utils;
 import ml.bastiaan.rfidviewer.R;
 
 public class WriteActivity extends BaseActivity {
@@ -87,7 +90,7 @@ public class WriteActivity extends BaseActivity {
                 isWritePending = true;
                 openPage(waitingPage);
             } catch (Exception exception) {
-                Log.e(Config.LOG_TAG, "An exception catched!", exception);
+                Log.e(Consts.LOG_TAG, "Can't parse input", exception);
             }
         });
 
@@ -112,7 +115,7 @@ public class WriteActivity extends BaseActivity {
         // Variables for NFC foreground intent dispatch
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter != null) {
-            pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
             intentFiltersArray = new IntentFilter[] { new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED) };
             techListsArray = new String[][] { new String[] { NfcA.class.getName(), MifareClassic.class.getName() } };
         }
@@ -136,6 +139,7 @@ public class WriteActivity extends BaseActivity {
 
     // When back button press go back to landing page
     @Override
+    @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (formPage.getVisibility() != View.VISIBLE) {
             // When a mifare task is running cancel it
@@ -155,7 +159,7 @@ public class WriteActivity extends BaseActivity {
         // Handle new incoming RFID tag messages when a write is pending
         if (intent.getAction() != null && intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED) && isWritePending) {
             isWritePending = false;
-            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            Tag tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Check if tag is mifare classic
             if (Arrays.asList(tag.getTechList()).contains(MifareClassic.class.getName())) {
@@ -166,7 +170,7 @@ public class WriteActivity extends BaseActivity {
                 mifareWriteTask = MifareWriteTask.with(mfc).writeBlock(pendingBlockId, pendingBlockData).then(() -> {
                     openPage(successPage);
                 }, exception -> {
-                    Log.e(Config.LOG_TAG, "An exception catched!", exception);
+                    Log.e(Consts.LOG_TAG, "Can't write Mifare Classic tag", exception);
                     openPage(errorPage);
                 }).write();
             }

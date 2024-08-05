@@ -7,6 +7,7 @@ import android.nfc.tech.NfcA;
 import android.nfc.tech.MifareClassic;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -17,8 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ScrollView;
 import java.util.Arrays;
+
 import ml.bastiaan.rfidviewer.tasks.MifareReadTask;
-import ml.bastiaan.rfidviewer.Config;
+import ml.bastiaan.rfidviewer.Consts;
+import ml.bastiaan.rfidviewer.Utils;
 import ml.bastiaan.rfidviewer.R;
 
 public class MainActivity extends BaseActivity {
@@ -61,15 +64,15 @@ public class MainActivity extends BaseActivity {
 
         // Init settings button
         ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
-            oldLanguage = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT);
+            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
             startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
         });
 
         // Variables for NFC foreground intent dispatch
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter != null) {
-            pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+            pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
             intentFiltersArray = new IntentFilter[] { new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED) };
             techListsArray = new String[][] { new String[] { NfcA.class.getName(), MifareClassic.class.getName() } };
         }
@@ -102,8 +105,8 @@ public class MainActivity extends BaseActivity {
         if (requestCode == MainActivity.SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
                 if (
-                    oldLanguage != settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT) ||
-                    oldTheme != settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT)
+                    oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
+                    oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
                 ) {
                     handler.post(() -> {
                         recreate();
@@ -115,6 +118,7 @@ public class MainActivity extends BaseActivity {
 
     // When back button press go back to landing page
     @Override
+    @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (landingPage.getVisibility() != View.VISIBLE) {
             // When a mifare task is runningcancel it
@@ -133,7 +137,7 @@ public class MainActivity extends BaseActivity {
 
         // Handle new incoming RFID tag messages
         if (intent.getAction() != null && intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED)) {
-            Tag tag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
+            Tag tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Create an output string add uid line
             StringBuilder output = new StringBuilder();
@@ -181,10 +185,10 @@ public class MainActivity extends BaseActivity {
                         dataOutputLabel.setText(output.toString());
                         openPage(dataPage);
                     } catch (Exception exception) {
-                        Log.e(Config.LOG_TAG, "An exception catched!", exception);
+                        Log.e(Consts.LOG_TAG, "Can't read Mifare Classic tag", exception);
                     }
                 }, exception -> {
-                    Log.e(Config.LOG_TAG, "An exception catched!", exception);
+                    Log.e(Consts.LOG_TAG, "Can't read Mifare Classic tag", exception);
                     openPage(errorPage);
                 }).read();
             } else {
