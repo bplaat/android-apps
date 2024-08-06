@@ -13,6 +13,7 @@ import nl.plaatsoft.bassietest.Consts;
 public abstract class BaseActivity extends Activity {
     protected SharedPreferences settings;
 
+    @Override
     public void attachBaseContext(Context context) {
         settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
         var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);

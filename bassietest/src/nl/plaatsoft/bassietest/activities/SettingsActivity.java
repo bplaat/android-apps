@@ -16,6 +16,7 @@ import nl.plaatsoft.bassietest.R;
 public class SettingsActivity extends BaseActivity {
     private int versionButtonClickCounter = 0;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);

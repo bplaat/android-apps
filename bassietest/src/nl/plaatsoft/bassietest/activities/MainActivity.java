@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 import org.json.JSONObject;
@@ -18,7 +21,7 @@ import nl.plaatsoft.bassietest.tasks.FetchImageTask;
 import nl.plaatsoft.bassietest.Consts;
 import nl.plaatsoft.bassietest.R;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     public static final int SETTINGS_REQUEST_CODE = 1;
 
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -28,16 +31,18 @@ public class MainActivity extends BaseActivity {
     private boolean imageLoaded = false;
     private boolean infoLoaded = false;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pageSwitcher = findViewById(R.id.main_page_switcher);
 
-        // Settings button
-        findViewById(R.id.main_settings_button).setOnClickListener(view -> {
-            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
-            startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
+        // Options menu button
+        findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
+            PopupMenu optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
+            optionsMenu.getMenuInflater().inflate(R.menu.options_menu, optionsMenu.getMenu());
+            optionsMenu.setOnMenuItemClickListener(this);
+            optionsMenu.show();
         });
 
         // Landing action button
@@ -78,6 +83,18 @@ public class MainActivity extends BaseActivity {
         RatingAlert.updateAndShow(this);
     }
 
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.options_menu_settings) {
+            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+            startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // When settings activity is closed check for restart
         if (requestCode == MainActivity.SETTINGS_REQUEST_CODE) {
@@ -92,6 +109,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Override
     @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (pageSwitcher.getDisplayedChild() == 1) {

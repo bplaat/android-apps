@@ -6,8 +6,8 @@
         <TextView android:text="@string/app_name"
             style="@style/ActionBarTitle" />
 
-        <ImageButton android:id="@+id/main_settings_button"
-            android:src="@drawable/ic_settings"
+        <ImageButton android:id="@+id/main_options_menu_button"
+            android:src="@drawable/ic_dots_vertical"
             style="@style/ActionBarIconButton" />
     </LinearLayout>
 
