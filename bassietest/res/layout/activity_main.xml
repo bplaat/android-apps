@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Root">
+    style="@style/Fill">
 
     <LinearLayout style="@style/ActionBar">
         <TextView android:text="@string/app_name"
@@ -11,11 +11,13 @@
             style="@style/ActionBarIconButton" />
     </LinearLayout>
 
-    <FrameLayout style="@style/Container">
-        <!-- Landing page -->
-        <ScrollView android:id="@+id/main_landing_page"
-            style="@style/Scroll">
+    <ViewSwitcher android:id="@+id/main_page_switcher"
+        android:inAnimation="@anim/fade_in"
+        android:outAnimation="@anim/fade_out"
+        style="@style/Flex">
 
+        <!-- Landing page -->
+        <ScrollView style="@style/Fill">
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_clock"
                     style="@style/HeroIcon" />
@@ -33,10 +35,7 @@
         </ScrollView>
 
         <!-- Data page -->
-        <ScrollView android:id="@+id/main_data_page"
-            android:visibility="gone"
-            style="@style/Scroll">
-
+        <ScrollView style="@style/Fill">
             <LinearLayout style="@style/Hero">
                 <ImageView android:id="@+id/main_data_random_image"
                     android:layout_width="320dp"
@@ -53,5 +52,5 @@
                     style="@style/HeroDescription" />
             </LinearLayout>
         </ScrollView>
-    </FrameLayout>
+    </ViewSwitcher>
 </LinearLayout>
