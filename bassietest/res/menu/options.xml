@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/options_menu_settings"
+    <item android:id="@+id/menu_options_settings"
         android:title="@string/settings_title_label" />
 </menu>

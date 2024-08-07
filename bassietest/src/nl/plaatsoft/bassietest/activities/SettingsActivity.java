@@ -78,7 +78,7 @@ public class SettingsActivity extends BaseActivity {
         try {
             ((TextView)findViewById(R.id.settings_version_label)).setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (Exception exception) {
-            Log.e(Consts.LOG_TAG, "Can't get app version", exception);
+            Log.e(getPackageName(), "Can't get app version", exception);
         }
         findViewById(R.id.settings_version_button).setOnClickListener(view -> {
             versionButtonClickCounter++;

@@ -14,8 +14,6 @@ import java.security.MessageDigest;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import nl.plaatsoft.bassietest.Consts;
-
 public class FetchDataTask {
     public static interface OnLoadListener {
         public abstract void onLoad(byte[] data);
@@ -109,7 +107,7 @@ public class FetchDataTask {
                     if (onErrorListener != null) {
                         onErrorListener.onError(exception);
                     } else {
-                        Log.e(Consts.LOG_TAG, "Can't fetch data", exception);
+                        Log.e(context.getPackageName(), "Can't fetch data", exception);
                     }
                 });
             }

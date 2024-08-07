@@ -3,7 +3,6 @@ package nl.plaatsoft.bassietest;
 public class Consts {
     private Consts() {}
 
-    public static final String LOG_TAG = "BassieTest";
     public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bassietest";
 
     public class Settings {

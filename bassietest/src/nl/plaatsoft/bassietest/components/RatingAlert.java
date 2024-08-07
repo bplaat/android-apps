@@ -5,14 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 
-import nl.plaatsoft.bassietest.Consts;
 import nl.plaatsoft.bassietest.R;
 
 public class RatingAlert {
     private static final int LAUNCHES_UNTIL_PROMPT = 5;
     private static final int TIME_UNTIL_PROMPT = 2 * 24 * 60 * 60 * 1000;
 
-    public static void updateAndShow(Context context) {
+    public static void updateAndShow(Context context, String storePageUrl) {
         var settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
         if (settings.getBoolean("rating_alert_hidden", false))
             return;
@@ -51,7 +50,7 @@ public class RatingAlert {
                     settingsEditor.commit();
                 })
                 .setPositiveButton(R.string.rating_alert_rating_button, (dialog, whichButton) -> {
-                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Consts.STORE_PAGE_URL)));
+                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storePageUrl)));
                     var settingsEditor = settings.edit();
                     settingsEditor.putBoolean("rating_alert_hidden", true);
                     settingsEditor.commit();

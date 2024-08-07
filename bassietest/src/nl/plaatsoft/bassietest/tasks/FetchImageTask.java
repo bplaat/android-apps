@@ -19,7 +19,6 @@ import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import nl.plaatsoft.bassietest.Consts;
 import nl.plaatsoft.bassietest.R;
 
 public class FetchImageTask {
@@ -154,7 +153,7 @@ public class FetchImageTask {
                     if (onErrorListener != null) {
                         onErrorListener.onError(exception);
                     } else {
-                        Log.e(Consts.LOG_TAG, "Can't fetch or decode image", exception);
+                        Log.e(context.getPackageName(), "Can't fetch or decode image", exception);
                     }
                 });
             }

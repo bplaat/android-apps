@@ -40,7 +40,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Options menu button
         findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
             PopupMenu optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
-            optionsMenu.getMenuInflater().inflate(R.menu.options_menu, optionsMenu.getMenu());
+            optionsMenu.getMenuInflater().inflate(R.menu.options, optionsMenu.getMenu());
             optionsMenu.setOnMenuItemClickListener(this);
             optionsMenu.show();
         });
@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 infoLoaded = true;
                 FetchDataTask.with(this).load("https://ipinfo.io/json").then(data -> {
                     try {
-                        var jsonData = new JSONObject(new String(data));
+                        var jsonData = new JSONObject(new String(data, "UTF-8"));
                         TextView locationLabel = findViewById(R.id.main_data_location_label);
                         locationLabel.setText(jsonData.getString("city") + ", " + jsonData.getString("region"));
 
@@ -74,18 +74,18 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         set.setTarget(locationLabel);
                         set.start();
                     } catch (Exception exception) {
-                        Log.e(Consts.LOG_TAG, "Can't parse IP info", exception);
+                        Log.e(getPackageName(), "Can't parse IP info", exception);
                     }
                 }).fetch();
             }
         });
 
-        RatingAlert.updateAndShow(this);
+        RatingAlert.updateAndShow(this, Consts.STORE_PAGE_URL);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.options_menu_settings) {
+        if (item.getItemId() == R.id.menu_options_settings) {
             oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
             oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
             startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
