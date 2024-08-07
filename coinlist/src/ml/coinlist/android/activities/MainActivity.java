@@ -120,7 +120,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         if (item.getItemId() == R.id.menu_options_settings) {
             oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
             oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
-            startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
+            startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
             return true;
         }
         return false;
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == MainActivity.SETTINGS_REQUEST_CODE) {
+        if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldCurrency != -1) {
                 if (oldCurrency != settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)) {
                     loadGlobalInfo(true);

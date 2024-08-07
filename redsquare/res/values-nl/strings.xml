@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Menu page -->
     <string name="menu_play_button">Spelen</string>
     <string name="menu_local_highscore_button">Lokale Hoogste Scores</string>
     <string name="menu_global_highscore_button">Globale Hoogste Scores</string>
@@ -7,24 +8,29 @@
     <string name="menu_settings_button">Instellingen</string>
     <string name="menu_about_label">Gemaakt door Bastiaan van der Plaat</string>
 
+    <!-- Game page -->
     <string name="game_score_label" formatted="false">Score: %d</string>
     <string name="game_time_label" formatted="false">Tijd: %d:%02d</string>
     <string name="game_level_label" formatted="false">Level: %d</string>
 
+    <!-- Game Over page -->
     <string name="gameover_title">Spel Over</string>
     <string name="gameover_score_label" formatted="false">Score: %d</string>
     <string name="gameover_time_label" formatted="false">Tijd: %d:%02d</string>
     <string name="gameover_level_label" formatted="false">Level: %d</string>
     <string name="gameover_back_button">Terug</string>
 
+    <!-- Local highscore page -->
     <string name="local_highscore_title">Lokale Hoogste Scores</string>
     <string name="local_highscore_back_button">Terug</string>
 
+    <!-- Global highscore page -->
     <string name="global_highscore_title">Globale Hoogste Scores</string>
     <string name="global_highscore_loading">Globale Hoogste Scores laden...</string>
     <string name="global_highscore_error">We kunen de Globale Hoogste Scores niet laden</string>
     <string name="global_highscore_back_button">Terug</string>
 
+    <!-- Help page -->
     <string name="help_title">Help</string>
     <string name="help_text_label">
         RedSquare is een klassiek 2D-actiespel.\n
@@ -36,22 +42,22 @@
     </string>
     <string name="help_back_button">Terug</string>
 
+    <!-- Settings page -->
     <string name="settings_title">Instellingen</string>
     <string name="settings_name">Spelers naam</string>
+
     <string name="settings_language">Taal</string>
+    <string name="settings_language_alert_title_label">Taal</string>
+    <string name="settings_language_alert_cancel_button">Annuleren</string>
+    <string name="settings_language_system">Gebruik systeemstandaard</string>
+
     <string name="settings_theme">Thema</string>
-    <string name="settings_cancel">Annuleren</string>
+    <string name="settings_theme_alert_title_label">Thema</string>
+    <string name="settings_theme_alert_cancel_button">Annuleren</string>
+    <string name="settings_theme_light">Licht</string>
+    <string name="settings_theme_dark">Donker</string>
+    <string name="settings_theme_battery_saver">Ingesteld door batterijbesparing</string>
+    <string name="settings_theme_system">Gebruik systeemstandaard</string>
+
     <string name="settings_back_button">Terug</string>
-
-    <string-array name="languages">
-        <item>English</item>
-        <item>Nederlands</item>
-        <item>Gebruik systeemstandaard</item>
-    </string-array>
-
-    <string-array name="themes">
-        <item>Licht</item>
-        <item>Donker</item>
-        <item>Ingesteld door batterijbesparing</item>
-    </string-array>
 </resources>

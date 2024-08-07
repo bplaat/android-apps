@@ -21,6 +21,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
        super(context, 0);
     }
 
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
@@ -33,7 +34,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        Score score = getItem(position);
+        var score = getItem(position);
         viewHolder.scoreName.setText(score.getName());
         viewHolder.scoreScore.setText(String.valueOf(score.getScore()));
         return convertView;

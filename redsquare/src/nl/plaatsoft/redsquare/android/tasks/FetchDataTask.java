@@ -1,104 +1,163 @@
 package nl.plaatsoft.redsquare.android.tasks;
 
 import android.content.Context;
-import android.os.Looper;
 import android.os.Handler;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import android.os.Looper;
+import android.util.Log;
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.net.URL;
+import java.security.MessageDigest;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import nl.plaatsoft.redsquare.android.Utils;
-
 public class FetchDataTask {
-    private static final Executor executor = Executors.newFixedThreadPool(4);
-    private static final Handler handler = new Handler(Looper.getMainLooper());
-
     public static interface OnLoadListener {
-        public abstract void onLoad(String data);
+        public abstract void onLoad(byte[] data);
+    }
+    public static interface OnErrorListener {
+        public abstract void onError(Exception exception);
     }
 
+    private static final Handler handler = new Handler(Looper.getMainLooper());
+    private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+
     private final Context context;
-    private final String url;
-    private final boolean loadFomCache;
-    private final boolean saveToCache;
-    private final OnLoadListener onLoadListener;
-    private boolean finished;
-    private boolean canceled;
+    private String url;
+    private boolean isLoadedFomCache = false;
+    private boolean isSavedToCache = false;
+    private OnLoadListener onLoadListener = null;
+    private OnErrorListener onErrorListener = null;
+    private boolean isPending = false;
+    private boolean isLoaded = false;
+    private boolean isError = false;
 
-    public FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
+    private FetchDataTask(Context context) {
         this.context = context;
-        this.url = url;
-        this.loadFomCache = loadFomCache;
-        this.saveToCache = saveToCache;
-        this.onLoadListener = onLoadListener;
-        finished = false;
-        canceled = false;
+    }
+    public static FetchDataTask with(Context context) {
+        return new FetchDataTask(context);
+    }
 
+    public FetchDataTask load(String url) {
+        this.url = url;
+        return this;
+    }
+
+    public FetchDataTask withCache() {
+        isLoadedFomCache = true;
+        isSavedToCache = true;
+        return this;
+    }
+
+    public FetchDataTask noCache() {
+        isLoadedFomCache = false;
+        isSavedToCache = false;
+        return this;
+    }
+
+    public FetchDataTask loadFromCache(boolean isLoadedFomCache) {
+        this.isLoadedFomCache = isLoadedFomCache;
+        return this;
+    }
+
+    public FetchDataTask saveToCache(boolean isSavedToCache) {
+        this.isSavedToCache = isSavedToCache;
+        return this;
+    }
+
+    public FetchDataTask then(OnLoadListener onLoadListener) {
+        this.onLoadListener = onLoadListener;
+        return this;
+    }
+    public FetchDataTask then(OnLoadListener onLoadListener, OnErrorListener onErrorListener) {
+        this.onLoadListener = onLoadListener;
+        this.onErrorListener = onErrorListener;
+        return this;
+    }
+
+    public boolean isPending() {
+        return isPending;
+    }
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+    public boolean isError() {
+        return isLoaded;
+    }
+
+    public FetchDataTask fetch() {
         executor.execute(() -> {
-            String data = fetchData();
-            if (!canceled) {
+            try {
+                isPending = true;
+                var data = fetchData(context, url, isLoadedFomCache, isSavedToCache);
                 handler.post(() -> {
-                    finished = true;
-                    if (onLoadListener != null) {
+                    isPending = false;
+                    isLoaded = true;
+                    if (onLoadListener != null)
                         onLoadListener.onLoad(data);
+                });
+            } catch (Exception exception) {
+                handler.post(() -> {
+                    isPending = false;
+                    isError = true;
+                    if (onErrorListener != null) {
+                        onErrorListener.onError(exception);
+                    } else {
+                        Log.e(context.getPackageName(), "Can't fetch data", exception);
                     }
                 });
             }
         });
+        return this;
     }
 
-    public boolean isFinished() {
-        return finished;
-    }
+    public static byte[] fetchData(Context context, String url, boolean isLoadedFomCache, boolean isSavedToCache) throws Exception {
+        // Get MD5 hash of url
+        var messageDigest = MessageDigest.getInstance("MD5");
+        messageDigest.update(url.getBytes());
+        var hashBytes = messageDigest.digest();
+        var hashStringBuilder = new StringBuilder();
+        for (int i = 0; i < hashBytes.length; i++)
+            hashStringBuilder.append(String.format("%02x", hashBytes[i]));
+        var urlHash = hashStringBuilder.toString();
 
-    public boolean isCanceled() {
-        return canceled;
-    }
-
-    public void cancel() {
-        canceled = true;
-    }
-
-    private String fetchData() {
-        try {
-            File file = new File(context.getCacheDir(), Utils.md5(url));
-            if (loadFomCache && file.exists()) {
-                BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-                StringBuilder stringBuilder = new StringBuilder();
-                String line;
-                while ((line = bufferedReader.readLine()) != null) {
-                    stringBuilder.append(line);
-                    stringBuilder.append(System.lineSeparator());
-                }
-                bufferedReader.close();
-                return stringBuilder.toString();
+        // Try to load url from cache
+        File cacheFile = new File(context.getCacheDir(), urlHash);
+        if (isLoadedFomCache && cacheFile.exists()) {
+            var fileInputStream = new FileInputStream(cacheFile);
+            var byteArrayOutputStream = new ByteArrayOutputStream();
+            var buffer = new byte[1024];
+            int bytesRead = 0;
+            while ((bytesRead = fileInputStream.read(buffer, 0, buffer.length)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
             }
-
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(url).openStream()));
-            StringBuilder stringBuilder = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                stringBuilder.append(line);
-                stringBuilder.append(System.lineSeparator());
-            }
-            bufferedReader.close();
-
-            String data = stringBuilder.toString();
-            if (saveToCache) {
-                FileWriter fileWriter = new FileWriter(file);
-                fileWriter.write(data);
-                fileWriter.close();
-            }
-            return data;
+            byteArrayOutputStream.close();
+            fileInputStream.close();
+            return byteArrayOutputStream.toByteArray();
         }
-        catch (Exception exception) {
-            exception.printStackTrace();
-            return null;
+
+        // Load url from network
+        var bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
+        var byteArrayOutputStream = new ByteArrayOutputStream();
+        var buffer = new byte[1024];
+        int bytesRead = 0;
+        while ((bytesRead = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
+            byteArrayOutputStream.write(buffer, 0, bytesRead);
         }
+        byteArrayOutputStream.close();
+        bufferedInputStream.close();
+        var data = byteArrayOutputStream.toByteArray();
+
+        // Save data to cache
+        if (isSavedToCache) {
+            var fileOutputStream = new FileOutputStream(cacheFile);
+            fileOutputStream.write(data);
+            fileOutputStream.close();
+        }
+        return data;
     }
 }

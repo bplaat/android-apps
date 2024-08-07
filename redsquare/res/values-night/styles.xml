@@ -4,5 +4,8 @@
         <!-- Make status and navigation bar dark -->
         <item name="android:statusBarColor">@color/primary_color</item>
         <item name="android:navigationBarColor">@color/primary_color</item>
+
+        <!-- Disable force dark mode -->
+        <item name="android:forceDarkAllowed">false</item>
     </style>
 </resources>

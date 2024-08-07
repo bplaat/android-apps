@@ -83,7 +83,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         }
 
         viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
-        viewHolder.coinStarButton.setOnClickListener((View view) -> {
+        viewHolder.coinStarButton.setOnClickListener(view -> {
             coin.setStarred(!coin.getStarred());
             viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
 

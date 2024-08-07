@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.inputmethod.EditorInfo;
 import android.view.WindowInsetsController;
 import android.view.WindowInsets;
@@ -31,15 +32,11 @@ import nl.plaatsoft.redsquare.android.components.ScoreAdapter;
 import nl.plaatsoft.redsquare.android.models.Score;
 import nl.plaatsoft.redsquare.android.tasks.FetchDataTask;
 import nl.plaatsoft.redsquare.android.Config;
+import nl.plaatsoft.redsquare.android.Consts;
 import nl.plaatsoft.redsquare.android.Utils;
 import nl.plaatsoft.redsquare.android.R;
 
 public class MainActivity extends BaseActivity {
-    public static final String SCORE_DEFAULT = "[]";
-    public static final String NAME_DEFAULT = "Anonymous";
-    public static final int LANGUAGE_DEFAULT = 2;
-    public static final int THEME_DEFAULT = 2;
-
     private Handler handler = new Handler(Looper.getMainLooper());
     private GamePage gamePage;
     private RelativeLayout menuPage;
@@ -51,90 +48,84 @@ public class MainActivity extends BaseActivity {
             Utils.windowSetDecorFitsSystemWindows(getWindow(), false);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            WindowManager.LayoutParams attributes = getWindow().getAttributes();
+            var attributes = getWindow().getAttributes();
             attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;
             getWindow().setAttributes(attributes);
         }
         setContentView(R.layout.activity_main);
 
-        menuPage = (RelativeLayout)findViewById(R.id.menu_page);
-        gamePage = (GamePage)findViewById(R.id.game_page);
-        LinearLayout gameoverPage = (LinearLayout)findViewById(R.id.gameover_page);
-        LinearLayout localHighscorePage = (LinearLayout)findViewById(R.id.local_highscore_page);
-        LinearLayout globalHighscorePage = (LinearLayout)findViewById(R.id.global_highscore_page);
-        LinearLayout helpPage = (LinearLayout)findViewById(R.id.help_page);
-        settingsPage = (LinearLayout)findViewById(R.id.settings_page);
+        menuPage = findViewById(R.id.menu_page);
+        gamePage = findViewById(R.id.game_page);
+        var gameoverPage = (LinearLayout)findViewById(R.id.gameover_page);
+        var localHighscorePage = (LinearLayout)findViewById(R.id.local_highscore_page);
+        var globalHighscorePage = (LinearLayout)findViewById(R.id.global_highscore_page);
+        var helpPage = findViewById(R.id.help_page);
+        settingsPage = findViewById(R.id.settings_page);
 
         // Menu page
         try {
             ((TextView)findViewById(R.id.menu_version_label)).setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Log.e(getPackageName(), "Can't get app version", exception);
         }
-
-        ((TextView)findViewById(R.id.menu_about_label)).setOnClickListener((View view) -> {
+        findViewById(R.id.menu_about_label).setOnClickListener(view -> {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://bplaat.nl/")));
         });
 
         // Game page
-        ((Button)findViewById(R.id.menu_play_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.menu_play_button).setOnClickListener(view -> {
             menuPage.setVisibility(View.GONE);
             gamePage.setVisibility(View.VISIBLE);
-            handler.post(() -> {
-                gamePage.start();
-            });
+            handler.post(() -> gamePage.start());
         });
 
         // Game Over page
-        TextView gameoverScoreLabel = (TextView)findViewById(R.id.gameover_score_label);
-        String scoreLabelString = getResources().getString(R.string.gameover_score_label);
-        TextView gameoverTimeLabel = (TextView)findViewById(R.id.gameover_time_label);
-        String timeLabelString = getResources().getString(R.string.gameover_time_label);
-        TextView gameoverLevelLabel = (TextView)findViewById(R.id.gameover_level_label);
-        String levelLabelString = getResources().getString(R.string.gameover_level_label);
+        var gameoverScoreLabel = (TextView)findViewById(R.id.gameover_score_label);
+        var scoreLabelString = getResources().getString(R.string.gameover_score_label);
+        var gameoverTimeLabel = (TextView)findViewById(R.id.gameover_time_label);
+        var timeLabelString = getResources().getString(R.string.gameover_time_label);
+        var gameoverLevelLabel = (TextView)findViewById(R.id.gameover_level_label);
+        var levelLabelString = getResources().getString(R.string.gameover_level_label);
 
         gamePage.setOnEventListener((int score, int seconds, int level) -> {
             try {
-                new FetchDataTask(MainActivity.this, Config.API_URL + "?key=" + Config.API_KEY + "&name=" + URLEncoder.encode(settings.getString("name", MainActivity.NAME_DEFAULT), "UTF-8") + "&score=" + score, false, false, null);
+                FetchDataTask.with(this).load(Config.API_URL + "?key=" + Config.API_KEY + "&name=" + URLEncoder.encode(settings.getString("name", Consts.Settings.NAME_DEFAULT), "UTF-8") + "&score=" + score).fetch();
 
-                JSONArray scoresJSON = new JSONArray(settings.getString("scores", MainActivity.SCORE_DEFAULT));
+                var scoresJSON = new JSONArray(settings.getString("scores", Consts.Settings.SCORE_DEFAULT));
 
-                JSONObject newScoreJSON = new JSONObject();
-                newScoreJSON.put("name", settings.getString("name", MainActivity.NAME_DEFAULT));
+                var newScoreJSON = new JSONObject();
+                newScoreJSON.put("name", settings.getString("name", Consts.Settings.NAME_DEFAULT));
                 newScoreJSON.put("score", score);
                 scoresJSON.put(newScoreJSON);
 
-                SharedPreferences.Editor settingsEditor = settings.edit();
+                var settingsEditor = settings.edit();
                 settingsEditor.putString("scores", scoresJSON.toString());
                 settingsEditor.apply();
             } catch (Exception exception) {
-                exception.printStackTrace();
+                Log.e(getPackageName(), "Can't parse local highscores", exception);
             }
 
             gameoverScoreLabel.setText(String.format(scoreLabelString, score));
-
             gameoverTimeLabel.setText(String.format(timeLabelString, seconds / 60, seconds % 60));
-
             gameoverLevelLabel.setText(String.format(levelLabelString, level));
-
             gameoverPage.setVisibility(View.VISIBLE);
         });
 
-        ((Button)findViewById(R.id.gameover_back_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.gameover_back_button).setOnClickListener(view -> {
             gamePage.setVisibility(View.GONE);
             gameoverPage.setVisibility(View.GONE);
             menuPage.setVisibility(View.VISIBLE);
         });
 
         // Local High Score page
-        ScoreAdapter localHighscoreAdapter = new ScoreAdapter(this);
-        ListView localHighscoreList = (ListView)findViewById(R.id.local_highscore_list);
+        var localHighscoreAdapter = new ScoreAdapter(this);
+        var localHighscoreList = (ListView)findViewById(R.id.local_highscore_list);
         localHighscoreList.setAdapter(localHighscoreAdapter);
 
-        ((Button)findViewById(R.id.menu_local_highscore_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.menu_local_highscore_button).setOnClickListener(view -> {
             try {
                 localHighscoreAdapter.clear();
-                JSONArray scoresJSON = new JSONArray(settings.getString("scores", MainActivity.SCORE_DEFAULT));
+                JSONArray scoresJSON = new JSONArray(settings.getString("scores", Consts.Settings.SCORE_DEFAULT));
                 for (int i = 0; i < scoresJSON.length(); i++) {
                     JSONObject scoreJSON = scoresJSON.getJSONObject(i);
                     localHighscoreAdapter.add(new Score(
@@ -146,171 +137,188 @@ public class MainActivity extends BaseActivity {
                 localHighscoreAdapter.sort((Score a, Score b) -> b.getScore() - a.getScore());
                 localHighscoreAdapter.notifyDataSetChanged();
             } catch (Exception exception) {
-                exception.printStackTrace();
+                Log.e(getPackageName(), "Can't parse local highscores", exception);
             }
 
             menuPage.setVisibility(View.GONE);
             localHighscorePage.setVisibility(View.VISIBLE);
         });
 
-        ((Button)findViewById(R.id.local_highscore_back_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.local_highscore_back_button).setOnClickListener(view -> {
             localHighscorePage.setVisibility(View.GONE);
             menuPage.setVisibility(View.VISIBLE);
         });
 
         // Global High Score page
-        ScoreAdapter globalHighscoreAdapter = new ScoreAdapter(this);
-        ListView globalHighscoreList = (ListView)findViewById(R.id.global_highscore_list);
+        var globalHighscoreAdapter = new ScoreAdapter(this);
+        var globalHighscoreList = (ListView)findViewById(R.id.global_highscore_list);
         globalHighscoreList.setAdapter(globalHighscoreAdapter);
-        TextView globalHighscoreListLoading = (TextView)findViewById(R.id.global_highscore_list_loading);
-        TextView globalHighscoreListError = (TextView)findViewById(R.id.global_highscore_list_error);
+        var globalHighscoreListLoading = (TextView)findViewById(R.id.global_highscore_list_loading);
+        var globalHighscoreListError = (TextView)findViewById(R.id.global_highscore_list_error);
 
-        ((Button)findViewById(R.id.menu_global_highscore_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.menu_global_highscore_button).setOnClickListener(view -> {
             globalHighscoreAdapter.clear();
             globalHighscoreList.setVisibility(View.GONE);
             globalHighscoreListLoading.setVisibility(View.VISIBLE);
             globalHighscoreListError.setVisibility(View.GONE);
 
-            new FetchDataTask(MainActivity.this, Config.API_URL + "?key=" + Config.API_KEY + "&page=1&limit=50", false, false, (String data) -> {
-                if (data != null) {
-                    try {
-                        JSONObject dataJSON = new JSONObject(data);
-                        JSONArray scoresJSON = dataJSON.getJSONArray("scores");
-                        for (int i = 0; i < scoresJSON.length(); i++) {
-                            JSONObject scoreJSON = scoresJSON.getJSONObject(i);
-                            globalHighscoreAdapter.add(new Score(
-                                scoreJSON.getString("name"),
-                                scoreJSON.getInt("score")
-                            ));
-                        }
-
-                        globalHighscoreList.setVisibility(View.VISIBLE);
-                        globalHighscoreListLoading.setVisibility(View.GONE);
-                        globalHighscoreListError.setVisibility(View.GONE);
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
+            FetchDataTask.with(this).load(Config.API_URL + "?key=" + Config.API_KEY + "&page=1&limit=50").then(data -> {
+                try {
+                    var dataJSON = new JSONObject(new String(data, "UTF-8"));
+                    var scoresJSON = dataJSON.getJSONArray("scores");
+                    for (int i = 0; i < scoresJSON.length(); i++) {
+                        var scoreJSON = scoresJSON.getJSONObject(i);
+                        globalHighscoreAdapter.add(new Score(
+                            scoreJSON.getString("name"),
+                            scoreJSON.getInt("score")
+                        ));
                     }
-                } else {
-                    globalHighscoreList.setVisibility(View.GONE);
+
+                    globalHighscoreList.setVisibility(View.VISIBLE);
                     globalHighscoreListLoading.setVisibility(View.GONE);
-                    globalHighscoreListError.setVisibility(View.VISIBLE);
+                    globalHighscoreListError.setVisibility(View.GONE);
+                } catch (Exception exception) {
+                    Log.e(getPackageName(), "Can't parse global highscores", exception);
                 }
-            });
+            }, exception -> {
+                Log.e(getPackageName(), "Can't fetch global highscores", exception);
+                globalHighscoreList.setVisibility(View.GONE);
+                globalHighscoreListLoading.setVisibility(View.GONE);
+                globalHighscoreListError.setVisibility(View.VISIBLE);
+            }).fetch();
 
             menuPage.setVisibility(View.GONE);
             globalHighscorePage.setVisibility(View.VISIBLE);
         });
 
-        ((Button)findViewById(R.id.global_highscore_back_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.global_highscore_back_button).setOnClickListener(view -> {
             globalHighscorePage.setVisibility(View.GONE);
             menuPage.setVisibility(View.VISIBLE);
         });
 
         // Help page
-        ((Button)findViewById(R.id.menu_help_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.menu_help_button).setOnClickListener(view -> {
             menuPage.setVisibility(View.GONE);
             helpPage.setVisibility(View.VISIBLE);
         });
 
-        ((Button)findViewById(R.id.help_back_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.help_back_button).setOnClickListener(view -> {
             helpPage.setVisibility(View.GONE);
             menuPage.setVisibility(View.VISIBLE);
         });
 
         // Settings page
-        EditText settingsNameInput = (EditText)findViewById(R.id.settings_name_input);
-        settingsNameInput.setText(settings.getString("name", MainActivity.NAME_DEFAULT));
-        settingsNameInput.setSelection(settingsNameInput.getText().length());
+        findViewById(R.id.menu_settings_button).setOnClickListener(view -> {
+            menuPage.setVisibility(View.GONE);
+            settingsPage.setVisibility(View.VISIBLE);
+        });
 
+        // Name input
+        var settingsNameInput = (EditText)findViewById(R.id.settings_name_input);
+        settingsNameInput.setText(settings.getString("name", Consts.Settings.NAME_DEFAULT));
+        settingsNameInput.setSelection(settingsNameInput.getText().length());
         settingsNameInput.setOnEditorActionListener((TextView view, int actionId, KeyEvent event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                SharedPreferences.Editor settingsEditor = settings.edit();
+                var settingsEditor = settings.edit();
                 settingsEditor.putString("name", settingsNameInput.getText().toString());
                 settingsEditor.apply();
-
                 hideSystemUI();
             }
             return false;
         });
 
-        ((Button)findViewById(R.id.menu_settings_button)).setOnClickListener((View view) -> {
-            settingsNameInput.setText(settings.getString("name", MainActivity.NAME_DEFAULT));
-            settingsNameInput.setSelection(settingsNameInput.getText().length());
-
-            menuPage.setVisibility(View.GONE);
-            settingsPage.setVisibility(View.VISIBLE);
-        });
-
-        String[] languages = getResources().getStringArray(R.array.languages);
-        int language = settings.getInt("language", MainActivity.LANGUAGE_DEFAULT);
+        // Language button
+        var languages = new String[] {
+            getResources().getString(R.string.settings_language_english),
+            getResources().getString(R.string.settings_language_dutch),
+            getResources().getString(R.string.settings_language_system)
+        };
+        var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
         ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
-
-        ((LinearLayout)findViewById(R.id.settings_language_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.settings_language_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
-                .setTitle(getResources().getString(R.string.settings_language))
+                .setTitle(R.string.settings_language_alert_title_label)
                 .setSingleChoiceItems(languages, language, (DialogInterface dialog, int which) -> {
-                    SharedPreferences.Editor settingsEditor = settings.edit();
+                    var settingsEditor = settings.edit();
                     settingsEditor.putInt("language", which);
                     settingsEditor.apply();
-
                     dialog.dismiss();
                     recreate();
                 })
-                .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
+                .setNegativeButton(R.string.settings_language_alert_cancel_button, null)
                 .show();
         });
 
-        String[] themes = getResources().getStringArray(R.array.themes);
-        int theme = settings.getInt("theme", MainActivity.THEME_DEFAULT);
+        // Theme button
+        var themes = new String[] {
+            getResources().getString(R.string.settings_theme_light),
+            getResources().getString(R.string.settings_theme_dark),
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+                ? getResources().getString(R.string.settings_theme_battery_saver)
+                : getResources().getString(R.string.settings_theme_system)
+        };
+        var theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
         ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
-
-        ((LinearLayout)findViewById(R.id.settings_theme_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
-                .setTitle(getResources().getString(R.string.settings_theme))
+                .setTitle(R.string.settings_theme_alert_title_label)
                 .setSingleChoiceItems(themes, theme, (DialogInterface dialog, int which) -> {
-                    SharedPreferences.Editor settingsEditor = settings.edit();
+                    var settingsEditor = settings.edit();
                     settingsEditor.putInt("theme", which);
                     settingsEditor.apply();
-
                     dialog.dismiss();
                     recreate();
                 })
-                .setNegativeButton(getResources().getString(R.string.settings_cancel), null)
+                .setNegativeButton(R.string.settings_theme_alert_cancel_button, null)
                 .show();
         });
 
-        findViewById(R.id.settings_back_button).setOnClickListener((View view) -> {
+        findViewById(R.id.settings_back_button).setOnClickListener(view -> {
             settingsPage.setVisibility(View.GONE);
             menuPage.setVisibility(View.VISIBLE);
         });
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putBoolean("settingsPageOpen", settingsPage.getVisibility() == View.VISIBLE);
+    }
+
+    @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
         if (savedInstanceState.getBoolean("settingsPageOpen", false)) {
             menuPage.setVisibility(View.GONE);
             settingsPage.setVisibility(View.VISIBLE);
         }
     }
 
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-        savedInstanceState.putBoolean("settingsPageOpen", settingsPage.getVisibility() == View.VISIBLE);
-    }
-
+    @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus) {
+        if (hasFocus)
             hideSystemUI();
-        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (gamePage.getVisibility() == View.VISIBLE)
+            gamePage.start();
+    }
+
+    @Override
+    public void onPause() {
+        if (gamePage.isRunning())
+            gamePage.stop();
+        super.onPause();
     }
 
     @SuppressWarnings("deprecation")
     private void hideSystemUI() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            WindowInsetsController controller = getWindow().getInsetsController();
+            var controller = getWindow().getInsetsController();
             if (controller != null) {
                 controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
                 controller.hide(WindowInsets.Type.systemBars());
@@ -325,19 +333,5 @@ public class MainActivity extends BaseActivity {
                 View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
             );
         }
-    }
-
-    public void onResume() {
-        super.onResume();
-        if (gamePage.getVisibility() == View.VISIBLE) {
-            gamePage.start();
-        }
-    }
-
-    public void onPause() {
-        if (gamePage.isRunning()) {
-            gamePage.stop();
-        }
-        super.onPause();
     }
 }

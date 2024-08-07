@@ -85,10 +85,10 @@ public class GamePage extends View {
 
         blueSquares[0] = new BlueSquare(random, scale, scale, random.nextInt(50, 100) * scale, random.nextInt(75, 125) * scale, 1, 1, 0.5f * scale);
 
-        int _width = random.nextInt(125, 150);
+        var _width = random.nextInt(125, 150);
         blueSquares[1] = new BlueSquare(random, (width - _width - 1) * scale, scale, _width * scale, random.nextInt(50, 100) * scale, -1, 1, 0.5f * scale);
 
-        int _height = random.nextInt(75, 125);
+        var _height = random.nextInt(75, 125);
         blueSquares[2] = new BlueSquare(random, 2 * scale, (height - _height - 1) * scale, random.nextInt(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
 
         _width = random.nextInt(75, 125);
@@ -113,7 +113,7 @@ public class GamePage extends View {
         if (!started) return;
 
         if (running) {
-            if (System.currentTimeMillis() - levelTime > 10000) {
+            if (System.currentTimeMillis() - levelTime > 5000) {
                 level++;
                 borderWidth += random.nextInt(4, 12);
                 levelTime = System.currentTimeMillis();
@@ -142,7 +142,7 @@ public class GamePage extends View {
 
         canvas.drawColor(Color.TRANSPARENT);
 
-        paint.setColor(0x22ffffff);
+        paint.setColor(Utils.contextGetColor(getContext(), R.color.border_background_color));
         canvas.drawRect(borderWidth * scale, borderWidth * scale, (width - borderWidth) * scale, (height - borderWidth) * scale, paint);
 
         for (int i = 0; i < blueSquares.length; i++) {
@@ -156,7 +156,7 @@ public class GamePage extends View {
         canvas.drawText(String.format(scoreLabelString, score), textPadding * scale, (textPadding + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
-        int seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
+        var seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
         canvas.drawText(String.format(timeLabelString, seconds / 60, seconds % 60), (width / 2) * scale, (textPadding + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
@@ -171,8 +171,8 @@ public class GamePage extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (!started) return false;
 
-        float touchX = event.getX();
-        float touchY = event.getY();
+        var touchX = event.getX();
+        var touchY = event.getY();
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             if (
