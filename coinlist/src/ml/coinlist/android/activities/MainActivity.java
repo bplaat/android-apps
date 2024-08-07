@@ -1,16 +1,18 @@
 package ml.coinlist.android.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -22,57 +24,50 @@ import ml.coinlist.android.Consts;
 import ml.coinlist.android.Utils;
 import ml.coinlist.android.R;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     public static final int SETTINGS_REQUEST_CODE = 1;
+    public static final int REFRESH_TIMEOUT = 60 * 1000;
 
-    private Handler handler;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private int oldCurrency = -1;
     private int oldLanguage = -1;
     private int oldTheme = -1;
-    private int oldCurrency = -1;
-
     private boolean starredOnly;
     private LinearLayout globalInfo;
     private ListView coinsList;
     private CoinsAdapter coinsAdapter;
 
+    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        handler = new Handler(Looper.getMainLooper());
-
-        // Init starred button
-        ImageButton starredButton = (ImageButton)findViewById(R.id.main_starred_button);
+        // Starred button
+        var starredButton = (ImageButton)findViewById(R.id.main_starred_button);
         starredOnly = settings.getBoolean("starred_only", Consts.Settings.STARRED_ONLY_DEFAULT);
         starredButton.setImageResource(starredOnly ? R.drawable.ic_star : R.drawable.ic_star_outline);
         starredButton.setOnClickListener(view -> {
             starredOnly = !starredOnly;
-
-            if (starredOnly) {
-                starredButton.setImageResource(R.drawable.ic_star);
-            } else {
-                starredButton.setImageResource(R.drawable.ic_star_outline);
-            }
-
-            SharedPreferences.Editor settingsEditor = settings.edit();
+            starredButton.setImageResource(starredOnly ? R.drawable.ic_star : R.drawable.ic_star_outline);
+            var settingsEditor = settings.edit();
             settingsEditor.putBoolean("starred_only", starredOnly);
             settingsEditor.apply();
 
             loadCoins(true);
         });
 
-        // Init refresh button
-        ((ImageButton)findViewById(R.id.main_refresh_button)).setOnClickListener(view -> {
+        // Refresh button
+        findViewById(R.id.main_refresh_button).setOnClickListener(view -> {
             loadGlobalInfo(false);
             loadCoins(false);
         });
 
-        // Init settings button
-        ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
-            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
-            oldCurrency = settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT);
-            startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
+        // Options menu button
+        findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
+            PopupMenu optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
+            optionsMenu.getMenuInflater().inflate(R.menu.options, optionsMenu.getMenu());
+            optionsMenu.setOnMenuItemClickListener(this);
+            optionsMenu.show();
         });
 
         // Load coins data
@@ -89,14 +84,14 @@ public class MainActivity extends BaseActivity {
                 loadGlobalInfo(false);
                 loadCoins(false);
             } else {
-                Coin coin = coinsAdapter.getItem(position - 1);
+                var coin = coinsAdapter.getItem(position - 1);
                 if (coin.getExtraIndex() == 2) {
                     coin.setExtraIndex(0);
                 } else {
                     coin.setExtraIndex(coin.getExtraIndex() + 1);
                 }
 
-                TextView coinExtra = (TextView)view.findViewById(R.id.coin_extra);
+                var coinExtra = (TextView)view.findViewById(R.id.coin_extra);
                 if (coin.getExtraIndex() == 0) {
                     coinExtra.setText(getResources().getString(R.string.main_extra_marketcap) + " " +
                         Coin.formatMoney(this, coin.getMarketcap()));
@@ -113,49 +108,58 @@ public class MainActivity extends BaseActivity {
         });
     }
 
+    @Override
     public void onResume() {
         super.onResume();
-        loadGlobalInfo(!(System.currentTimeMillis() - settings.getLong("global_load_time", 0) >= Consts.REFRESH_TIMEOUT));
-        loadCoins(!(System.currentTimeMillis() - settings.getLong("coins_load_time", 0) >= Consts.REFRESH_TIMEOUT));
+        loadGlobalInfo(!(System.currentTimeMillis() - settings.getLong("global_load_time", 0) >= REFRESH_TIMEOUT));
+        loadCoins(!(System.currentTimeMillis() - settings.getLong("coins_load_time", 0) >= REFRESH_TIMEOUT));
     }
 
-    // When come back of the settings activity check for restart
+    @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.menu_options_settings) {
+            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+            startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MainActivity.SETTINGS_REQUEST_CODE) {
-            if (oldLanguage != -1 && oldTheme != -1) {
-                if (
-                    oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
-                    oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
-                ) {
-                    handler.post(() -> {
-                        recreate();
-                    });
-                }
-            }
             if (oldCurrency != -1) {
                 if (oldCurrency != settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)) {
                     loadGlobalInfo(true);
                     loadCoins(true);
                 }
             }
+            if (oldLanguage != -1 && oldTheme != -1) {
+                if (
+                    oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
+                    oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
+                ) {
+                    handler.post(() -> recreate());
+                }
+            }
         }
     }
 
-    // Load global information
-    private void loadGlobalInfo(boolean fromCache) {
-        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/global").fromCache(fromCache).toCache().then(data -> {
+    private void loadGlobalInfo(boolean loadFromCache) {
+        FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/global").loadFromCache(loadFromCache).saveToCache(true).then(data -> {
             try {
-                SharedPreferences.Editor settingsEditor = settings.edit();
+                var settingsEditor = settings.edit();
                 settingsEditor.putLong("global_load_time", System.currentTimeMillis());
                 settingsEditor.apply();
 
-                JSONObject jsonData = new JSONObject(data).getJSONObject("data");
+                var jsonData = new JSONObject(new String(data, "UTF-8")).getJSONObject("data");
 
                 ((TextView)globalInfo.findViewById(R.id.global_info_marketcap)).setText(getResources().getString(R.string.main_global_marketcap) + ": " +
                     Coin.formatMoney(this, jsonData.getJSONObject("total_market_cap").getDouble(Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)])));
 
-                double marketcapChange = jsonData.getDouble("market_cap_change_percentage_24h_usd");
-                TextView marketcapChangeLabel = (TextView)globalInfo.findViewById(R.id.global_info_marketcap_change);
+                var marketcapChange = jsonData.getDouble("market_cap_change_percentage_24h_usd");
+                var marketcapChangeLabel = (TextView)globalInfo.findViewById(R.id.global_info_marketcap_change);
                 if (marketcapChange > 0) {
                     marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.positive_color));
                 } else {
@@ -174,28 +178,26 @@ public class MainActivity extends BaseActivity {
                     "BTC " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("btc")) + "  " +
                     "ETH " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("eth")));
             } catch (Exception exception) {
-                Log.e(Consts.LOG_TAG, "Can't parse global data", exception);
+                Log.e(getPackageName(), "Can't parse global data", exception);
             }
         }).fetch();
     }
 
-    // Load coin information
-    private void loadCoins(boolean fromCache) {
+    private void loadCoins(boolean loadFromCache) {
         String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)];
-        FetchDataTask.with(this).load(url).fromCache(fromCache).toCache().then(data -> {
+        FetchDataTask.with(this).load(url).loadFromCache(loadFromCache).saveToCache(true).then(data -> {
             try {
-                SharedPreferences.Editor settingsEditor = settings.edit();
+                var settingsEditor = settings.edit();
                 settingsEditor.putLong("coins_load_time", System.currentTimeMillis());
                 settingsEditor.apply();
 
                 coinsAdapter.clear();
-
-                JSONArray jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
-                JSONArray jsonCoins = new JSONArray(data);
+                var jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
+                var jsonCoins = new JSONArray(new String(data, "UTF-8"));
                 for (int i = 0; i < jsonCoins.length(); i++) {
                     JSONObject jsonCoin = jsonCoins.getJSONObject(i);
 
-                    boolean isStarred = false;
+                    var isStarred = false;
                     for (int j = 0; j < jsonStarredCoins.length(); j++) {
                         if (jsonCoin.getString("id").equals(jsonStarredCoins.getString(j))) {
                             isStarred = true;
@@ -220,7 +222,7 @@ public class MainActivity extends BaseActivity {
                     ));
                 }
             } catch (Exception exception) {
-                Log.e(Consts.LOG_TAG, "Can't parse coins data", exception);
+                Log.e(getPackageName(), "Can't parse coins data", exception);
             }
         }).fetch();
     }

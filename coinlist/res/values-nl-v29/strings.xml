@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- Settings activity -->
-    <string-array name="settings_themes">
-        <item>Licht</item>
-        <item>Donker</item>
-        <item>Gebruik systeemstandaard</item>
-    </string-array>
-</resources>

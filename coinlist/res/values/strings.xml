@@ -19,14 +19,29 @@
     <string name="settings_currency_button">Currency</string>
     <string name="settings_currency_alert_title_label">Currency</string>
     <string name="settings_currency_alert_cancel_button">Cancel</string>
+    <string-array name="settings_currencies">
+        <item>US Dollar (USD)</item>
+        <item>Euro (EUR)</item>
+        <item>Bitcoin (BTC)</item>
+        <item>Satoshi (SATS)</item>
+        <item>Ethereum (ETH)</item>
+        <item>Binance Coin (BNB)</item>
+    </string-array>
 
     <string name="settings_language_button">Language</string>
     <string name="settings_language_alert_title_label">Language</string>
     <string name="settings_language_alert_cancel_button">Cancel</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_dutch">Nederlands</string>
+    <string name="settings_language_system">Use system default</string>
 
     <string name="settings_theme_button">Theme</string>
     <string name="settings_theme_alert_title_label">Theme</string>
     <string name="settings_theme_alert_cancel_button">Cancel</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_battery_saver">Set by Battery Saver</string>
+    <string name="settings_theme_system">Use system default</string>
 
     <string name="settings_information_label">Information</string>
     <string name="settings_version_button">App version</string>
@@ -41,25 +56,4 @@
     <string name="settings_about_alert_message_label">This application is made by Bastiaan van der Plaat</string>
     <string name="settings_about_alert_website_button">Website</string>
     <string name="settings_about_alert_ok_button">OK</string>
-
-    <string-array name="settings_currencies">
-        <item>US Dollar (USD)</item>
-        <item>Euro (EUR)</item>
-        <item>Bitcoin (BTC)</item>
-        <item>Satoshi (SATS)</item>
-        <item>Ethereum (ETH)</item>
-        <item>Binance Coin (BNB)</item>
-    </string-array>
-
-    <string-array name="settings_languages">
-        <item>English</item>
-        <item>Nederlands</item>
-        <item>Use system default</item>
-    </string-array>
-
-    <string-array name="settings_themes">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Set by Battery Saver</item>
-    </string-array>
 </resources>

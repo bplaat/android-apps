@@ -33,24 +33,25 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         super(context, 0);
     }
 
+    @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_coin, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.coinImage = (ImageView)convertView.findViewById(R.id.coin_image);
-            viewHolder.coinName = (TextView)convertView.findViewById(R.id.coin_name);
-            viewHolder.coinRank = (TextView)convertView.findViewById(R.id.coin_rank);
-            viewHolder.coinChange = (TextView)convertView.findViewById(R.id.coin_change);
-            viewHolder.coinPrice = (TextView)convertView.findViewById(R.id.coin_price);
-            viewHolder.coinExtra = (TextView)convertView.findViewById(R.id.coin_extra);
-            viewHolder.coinStarButton = (ImageButton)convertView.findViewById(R.id.coin_star_button);
+            viewHolder.coinImage = convertView.findViewById(R.id.coin_image);
+            viewHolder.coinName = convertView.findViewById(R.id.coin_name);
+            viewHolder.coinRank = convertView.findViewById(R.id.coin_rank);
+            viewHolder.coinChange = convertView.findViewById(R.id.coin_change);
+            viewHolder.coinPrice = convertView.findViewById(R.id.coin_price);
+            viewHolder.coinExtra = convertView.findViewById(R.id.coin_extra);
+            viewHolder.coinStarButton = convertView.findViewById(R.id.coin_star_button);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        Coin coin = getItem(position);
+        var coin = getItem(position);
 
         FetchImageTask.with(getContext()).load(coin.getImageUrl()).transparent().fadeIn().into(viewHolder.coinImage).fetch();
 
@@ -87,9 +88,9 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
             viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
 
             try {
-                SharedPreferences settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
-                JSONArray jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
-                SharedPreferences.Editor settingsEditor = settings.edit();
+                var settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
+                var jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
+                var settingsEditor = settings.edit();
                 if (coin.getStarred()) {
                     jsonStarredCoins.put(coin.getId());
                 } else {
@@ -103,10 +104,9 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
                 settingsEditor.putString("starred_coins", jsonStarredCoins.toString());
                 settingsEditor.apply();
             } catch (Exception exception) {
-                Log.e(Consts.LOG_TAG, "Can't update coin list item view", exception);
+                Log.e(getContext().getPackageName(), "Can't update coin list item view", exception);
             }
         });
-
         return convertView;
     }
 }

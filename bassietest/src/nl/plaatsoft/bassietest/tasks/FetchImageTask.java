@@ -1,10 +1,13 @@
 package nl.plaatsoft.bassietest.tasks;
+import nl.plaatsoft.bassietest.R;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Looper;
 import android.os.Handler;
 import android.util.Log;
@@ -18,8 +21,6 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-
-import nl.plaatsoft.bassietest.R;
 
 public class FetchImageTask {
     public static interface OnLoadListener {
@@ -81,19 +82,19 @@ public class FetchImageTask {
         return this;
     }
 
-    public FetchImageTask loadFromCache() {
-        isLoadedFomCache = true;
-        return this;
-    }
-
-    public FetchImageTask saveToCache() {
-        isSavedToCache = true;
-        return this;
-    }
-
     public FetchImageTask noCache() {
         isLoadedFomCache = false;
         isSavedToCache = false;
+        return this;
+    }
+
+    public FetchImageTask loadFromCache(boolean isLoadedFomCache) {
+        this.isLoadedFomCache = isLoadedFomCache;
+        return this;
+    }
+
+    public FetchImageTask saveToCache(boolean isSavedToCache) {
+        this.isSavedToCache = isSavedToCache;
         return this;
     }
 
@@ -137,6 +138,9 @@ public class FetchImageTask {
             return this;
         }
 
+        if (imageView != null && isTransparent)
+            imageView.setBackgroundColor(contextGetColor(context, R.color.loading_background_color));
+
         executor.execute(() -> {
             try {
                 var data = FetchDataTask.fetchData(context, url, isLoadedFomCache, isSavedToCache);
@@ -167,26 +171,43 @@ public class FetchImageTask {
         if (imageView != null) {
             FetchImageTask imageViewTask = (FetchImageTask)imageView.getTag();
             if (url.equals(imageViewTask.getUrl())) {
-                if (isTransparent)
-                    imageView.setBackgroundColor(Color.TRANSPARENT);
-
                 boolean fadeIn = isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT;
-                if (fadeIn)
+                if (fadeIn) {
                     imageView.setImageAlpha(0);
+                } else if (isTransparent) {
+                    imageView.setBackgroundColor(Color.TRANSPARENT);
+                }
                 imageView.setImageBitmap(image);
 
                 if (fadeIn) {
-                    ValueAnimator animation = ValueAnimator.ofInt(0, 255);
-                    animation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
-                    animation.setInterpolator(new AccelerateDecelerateInterpolator());
-                    animation.addUpdateListener(animator -> {
-                        imageView.setImageAlpha((int)animator.getAnimatedValue());
+                    if (isTransparent) {
+                        var backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)imageView.getBackground()).getColor(), 0);
+                        backgroundColorAnimation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
+                        backgroundColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+                        backgroundColorAnimation.addUpdateListener(animator -> {
+                            imageView.setBackgroundColor((int)backgroundColorAnimation.getAnimatedValue());
+                        });
+                        backgroundColorAnimation.start();
+                    }
+
+                    var alphaAnimation = ValueAnimator.ofInt(0, 255);
+                    alphaAnimation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
+                    alphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+                    alphaAnimation.addUpdateListener(animator -> {
+                        imageView.setImageAlpha((int)alphaAnimation.getAnimatedValue());
                     });
-                    animation.start();
+                    alphaAnimation.start();
                 }
             }
         }
         if (onLoadListener != null)
             onLoadListener.onLoad(image);
+    }
+
+    @SuppressWarnings("deprecation")
+    private static int contextGetColor(Context context, int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            return context.getResources().getColor(id, null);
+        return context.getResources().getColor(id);
     }
 }

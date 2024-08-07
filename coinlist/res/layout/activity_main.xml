@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Root">
+    style="@style/Fill">
 
     <LinearLayout style="@style/ActionBar">
         <TextView android:text="@string/app_name"
@@ -14,11 +14,11 @@
             android:src="@drawable/ic_refresh"
             style="@style/ActionBarIconButton" />
 
-        <ImageButton android:id="@+id/main_settings_button"
-            android:src="@drawable/ic_settings"
+        <ImageButton android:id="@+id/main_options_menu_button"
+            android:src="@drawable/ic_dots_vertical"
             style="@style/ActionBarIconButton" />
     </LinearLayout>
 
     <ListView android:id="@+id/main_coins_list"
-        style="@style/ListContainer" />
+        style="@style/ListFlex" />
 </LinearLayout>

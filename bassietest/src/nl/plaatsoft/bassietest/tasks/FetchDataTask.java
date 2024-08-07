@@ -53,19 +53,19 @@ public class FetchDataTask {
         return this;
     }
 
-    public FetchDataTask loadFromCache() {
-        isLoadedFomCache = true;
-        return this;
-    }
-
-    public FetchDataTask saveToCache() {
-        isSavedToCache = true;
-        return this;
-    }
-
     public FetchDataTask noCache() {
         isLoadedFomCache = false;
         isSavedToCache = false;
+        return this;
+    }
+
+    public FetchDataTask loadFromCache(boolean isLoadedFomCache) {
+        this.isLoadedFomCache = isLoadedFomCache;
+        return this;
+    }
+
+    public FetchDataTask saveToCache(boolean isSavedToCache) {
+        this.isSavedToCache = isSavedToCache;
         return this;
     }
 

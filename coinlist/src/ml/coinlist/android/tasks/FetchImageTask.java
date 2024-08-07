@@ -1,13 +1,17 @@
 package ml.coinlist.android.tasks;
+import ml.coinlist.android.R;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Looper;
 import android.os.Handler;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import java.io.BufferedInputStream;
@@ -18,23 +22,26 @@ import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import ml.coinlist.android.Consts;
-import ml.coinlist.android.Utils;
-
 public class FetchImageTask {
-    private static final Executor executor = Executors.newFixedThreadPool(8);
-    private static final Handler handler = new Handler(Looper.getMainLooper());
-
     public static interface OnLoadListener {
         public abstract void onLoad(Bitmap image);
     }
-
     public static interface OnErrorListener {
         public abstract void onError(Exception exception);
     }
 
-    private final Context context;
+    private static final int ANIMATION_IMAGE_LOADING_TIMEOUT = 50;
 
+    private static final Handler handler = new Handler(Looper.getMainLooper());
+    private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private static final LruCache<String, Bitmap> bitmapCache = new LruCache<String, Bitmap>((int)(Runtime.getRuntime().freeMemory() / 4)) {
+        @Override
+        protected int sizeOf(String url, Bitmap bitmap) {
+            return bitmap.getByteCount();
+        }
+    };
+
+    private final Context context;
     private String url;
     private boolean isTransparent = false;
     private boolean isFadedIn = false;
@@ -43,14 +50,13 @@ public class FetchImageTask {
     private OnLoadListener onLoadListener = null;
     private OnErrorListener onErrorListener = null;
     private ImageView imageView;
-
-    private boolean isFinished = false;
-    private boolean isCanceled = false;
+    private boolean isPending = false;
+    private boolean isLoaded = false;
+    private boolean isError = false;
 
     private FetchImageTask(Context context) {
         this.context = context;
     }
-
     public static FetchImageTask with(Context context) {
         return new FetchImageTask(context);
     }
@@ -70,29 +76,25 @@ public class FetchImageTask {
         return this;
     }
 
+    public FetchImageTask withCache() {
+        isLoadedFomCache = true;
+        isSavedToCache = true;
+        return this;
+    }
+
     public FetchImageTask noCache() {
-        this.isLoadedFomCache = false;
-        this.isSavedToCache = false;
+        isLoadedFomCache = false;
+        isSavedToCache = false;
         return this;
     }
 
-    public FetchImageTask notFromCache() {
-        this.isLoadedFomCache = false;
+    public FetchImageTask loadFromCache(boolean isLoadedFomCache) {
+        this.isLoadedFomCache = isLoadedFomCache;
         return this;
     }
 
-    public FetchImageTask notFromCache(boolean notFromCache) {
-        this.isLoadedFomCache = notFromCache;
-        return this;
-    }
-
-    public FetchImageTask notToCache() {
-        this.isSavedToCache = false;
-        return this;
-    }
-
-    public FetchImageTask notToCache(boolean notToCache) {
-        this.isSavedToCache = notToCache;
+    public FetchImageTask saveToCache(boolean isSavedToCache) {
+        this.isSavedToCache = isSavedToCache;
         return this;
     }
 
@@ -100,7 +102,6 @@ public class FetchImageTask {
         this.onLoadListener = onLoadListener;
         return this;
     }
-
     public FetchImageTask then(OnLoadListener onLoadListener, OnErrorListener onErrorListener) {
         this.onLoadListener = onLoadListener;
         this.onErrorListener = onErrorListener;
@@ -112,129 +113,101 @@ public class FetchImageTask {
         return this;
     }
 
+    public String getUrl() {
+        return url;
+    }
+    public boolean isPending() {
+        return isPending;
+    }
+    public boolean isLoaded() {
+        return isLoaded;
+    }
+    public boolean isError() {
+        return isError;
+    }
+
     public FetchImageTask fetch() {
         if (imageView != null) {
-            FetchImageTask previousFetchImageTask = (FetchImageTask)imageView.getTag();
-            if (previousFetchImageTask != null) {
-                if (!url.equals(previousFetchImageTask.getUrl())) {
-                    if (!previousFetchImageTask.isFinished()) {
-                        previousFetchImageTask.cancel();
-                    }
-                } else {
-                    cancel();
-                    return this;
-                }
-            }
-
             imageView.setTag(this);
             imageView.setImageBitmap(null);
         }
 
         long startTime = System.currentTimeMillis();
+        if (bitmapCache.get(url) != null) {
+            onLoad(bitmapCache.get(url), startTime);
+            return this;
+        }
+
+        if (imageView != null && isTransparent)
+            imageView.setBackgroundColor(contextGetColor(context, R.color.loading_background_color));
+
         executor.execute(() -> {
             try {
-                Bitmap image = fetchImage();
-                handler.post(() -> {
-                    finish();
-                    if (!isCanceled) {
-                        if (imageView != null) {
-                            if (isTransparent) {
-                                imageView.setBackgroundColor(Color.TRANSPARENT);
-                            }
-
-                            boolean isWaitingLong = (System.currentTimeMillis() - startTime) > Consts.ANIMATION_IMAGE_LOADING_TIMEOUT;
-                            if (isFadedIn && isWaitingLong) {
-                                imageView.setImageAlpha(0);
-                            }
-
-                            imageView.setImageBitmap(image);
-
-                            if (isFadedIn && isWaitingLong) {
-                                ValueAnimator animation = ValueAnimator.ofInt(0, 255);
-                                animation.setDuration(Consts.ANIMATION_DURATION);
-                                animation.setInterpolator(new AccelerateDecelerateInterpolator());
-                                animation.addUpdateListener(animator -> {
-                                    imageView.setImageAlpha((int)animator.getAnimatedValue());
-                                });
-                                animation.start();
-                            }
-                        }
-
-                        if (onLoadListener != null) {
-                            onLoadListener.onLoad(image);
-                        }
-                    }
-                });
+                var data = FetchDataTask.fetchData(context, url, isLoadedFomCache, isSavedToCache);
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = isTransparent ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
+                var image = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                if (bitmapCache.get(url) == null)
+                    bitmapCache.put(url, image);
+                handler.post(() -> onLoad(image, startTime));
             } catch (Exception exception) {
                 handler.post(() -> {
-                    finish();
-                    if (!isCanceled) {
-                        if (onErrorListener != null) {
-                            onErrorListener.onError(exception);
-                        } else {
-                            Log.e(Consts.LOG_TAG, "Can't fetch image", exception);
-                        }
+                    isPending = false;
+                    isError = true;
+                    if (onErrorListener != null) {
+                        onErrorListener.onError(exception);
+                    } else {
+                        Log.e(context.getPackageName(), "Can't fetch or decode image", exception);
                     }
                 });
             }
         });
-
         return this;
     }
 
-    public String getUrl() {
-        return url;
-    }
-
-    public boolean isFinished() {
-        return isFinished;
-    }
-
-    public boolean isCanceled() {
-        return isCanceled;
-    }
-
-    public void cancel() {
-        isCanceled = true;
-        finish();
-    }
-
-    private void finish() {
-        isFinished = true;
+    public void onLoad(Bitmap image, long startTime) {
+        isPending = false;
+        isLoaded = true;
         if (imageView != null) {
-            imageView.setTag(null);
+            FetchImageTask imageViewTask = (FetchImageTask)imageView.getTag();
+            if (url.equals(imageViewTask.getUrl())) {
+                boolean fadeIn = isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT;
+                if (fadeIn) {
+                    imageView.setImageAlpha(0);
+                } else if (isTransparent) {
+                    imageView.setBackgroundColor(Color.TRANSPARENT);
+                }
+                imageView.setImageBitmap(image);
+
+                if (fadeIn) {
+                    if (isTransparent) {
+                        var backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)imageView.getBackground()).getColor(), 0);
+                        backgroundColorAnimation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
+                        backgroundColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+                        backgroundColorAnimation.addUpdateListener(animator -> {
+                            imageView.setBackgroundColor((int)backgroundColorAnimation.getAnimatedValue());
+                        });
+                        backgroundColorAnimation.start();
+                    }
+
+                    var alphaAnimation = ValueAnimator.ofInt(0, 255);
+                    alphaAnimation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
+                    alphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+                    alphaAnimation.addUpdateListener(animator -> {
+                        imageView.setImageAlpha((int)alphaAnimation.getAnimatedValue());
+                    });
+                    alphaAnimation.start();
+                }
+            }
         }
+        if (onLoadListener != null)
+            onLoadListener.onLoad(image);
     }
 
-    private Bitmap fetchImage() throws Exception {
-        // Check if the file exists in the cache
-        File file = new File(context.getCacheDir(), Utils.md5(url));
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inPreferredConfig = isTransparent ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-        if (isLoadedFomCache && file.exists()) {
-            return BitmapFactory.decodeFile(file.getPath(), options);
-        }
-
-        // Or fetch the image from the internet in to a byte array buffer
-        BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        byte[] buffer = new byte[1024];
-        int number_read = 0;
-        while ((number_read = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
-            byteArrayOutputStream.write(buffer, 0, number_read);
-        }
-        byteArrayOutputStream.close();
-        bufferedInputStream.close();
-
-        byte[] image = byteArrayOutputStream.toByteArray();
-
-        // When needed save the image to a cache file
-        if (isSavedToCache) {
-            FileOutputStream fileOutputStream = new FileOutputStream(file);
-            fileOutputStream.write(image);
-            fileOutputStream.close();
-        }
-
-        return BitmapFactory.decodeByteArray(image, 0, image.length, options);
+    @SuppressWarnings("deprecation")
+    private static int contextGetColor(Context context, int id) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            return context.getResources().getColor(id, null);
+        return context.getResources().getColor(id);
     }
 }

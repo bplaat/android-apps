@@ -5,7 +5,7 @@
     <ImageView android:id="@+id/coin_image"
         style="@style/CoinIcon" />
 
-    <LinearLayout style="@style/CoinContainer">
+    <LinearLayout style="@style/CoinFlex">
         <LinearLayout style="@style/CoinFirstLine">
 
             <TextView android:id="@+id/coin_name"

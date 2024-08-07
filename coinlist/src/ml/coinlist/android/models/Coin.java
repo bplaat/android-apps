@@ -89,10 +89,10 @@ public class Coin {
     }
 
     public static String formatMoney(Context context, double number) {
-        SharedPreferences settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        int currency = settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT);
+        var settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        var currency = settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT);
 
-        NumberFormat format = NumberFormat.getInstance();
+        var format = NumberFormat.getInstance();
         String formatted;
         if (number > 1e12 && currency == Consts.Settings.CURRENCY_SATS) {
             format.setMaximumFractionDigits(2);
@@ -108,37 +108,30 @@ public class Coin {
             formatted = format.format(number / 1e6) + " M";
         } else {
             int decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
-            if (currency == Consts.Settings.CURRENCY_BTC || currency == Consts.Settings.CURRENCY_ETH || currency == Consts.Settings.CURRENCY_BNB) {
+            if (currency == Consts.Settings.CURRENCY_BTC || currency == Consts.Settings.CURRENCY_ETH || currency == Consts.Settings.CURRENCY_BNB)
                 decimals = number < 10 ? (number < 0.1 ? 12 : 6) : 4;
-            }
-            if (currency == Consts.Settings.CURRENCY_SATS) {
+            if (currency == Consts.Settings.CURRENCY_SATS)
                 decimals = number < 1 ? 4 : 0;
-            }
             format.setMaximumFractionDigits(decimals);
             format.setMinimumFractionDigits(decimals);
             formatted = format.format(number);
         }
 
-        if (currency == Consts.Settings.CURRENCY_EUR) {
+        if (currency == Consts.Settings.CURRENCY_EUR)
             return "\u20ac" + formatted;
-        }
-        if (currency == Consts.Settings.CURRENCY_BTC) {
+        if (currency == Consts.Settings.CURRENCY_BTC)
             return "\uu20bf" + formatted;
-        }
-        if (currency == Consts.Settings.CURRENCY_SATS) {
+        if (currency == Consts.Settings.CURRENCY_SATS)
             return formatted + " SATS";
-        }
-        if (currency == Consts.Settings.CURRENCY_ETH) {
+        if (currency == Consts.Settings.CURRENCY_ETH)
             return "\u039e" + formatted;
-        }
-        if (currency == Consts.Settings.CURRENCY_BNB) {
+        if (currency == Consts.Settings.CURRENCY_BNB)
             return formatted + " BNB";
-        }
         return "$" + formatted;
     }
 
     public static String formatPercent(double number) {
-        NumberFormat format = NumberFormat.getInstance();
+        var format = NumberFormat.getInstance();
         format.setMaximumFractionDigits(2);
         format.setMinimumFractionDigits(2);
         return format.format(number) + "%";
@@ -149,25 +142,25 @@ public class Coin {
     }
 
     public static String formatNumber(Context context, double number) {
-        SharedPreferences settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        int currency = settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT);
-
-        NumberFormat format = NumberFormat.getInstance();
+        var settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        var currency = settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT);
+        var format = NumberFormat.getInstance();
         if (number > 1e12 && currency == Consts.Settings.CURRENCY_SATS) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
             return format.format(number / 1e12) + " T";
-        } else if (number > 1e9) {
+        }
+        if (number > 1e9) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
             return format.format(number / 1e9) + " Bn";
-        } else if (number > 1e6) {
+        }
+        if (number > 1e6) {
             format.setMaximumFractionDigits(2);
             format.setMinimumFractionDigits(2);
             return format.format(number / 1e6) + " M";
-        } else {
-            format.setMaximumFractionDigits(0);
-            return format.format(number);
         }
+        format.setMaximumFractionDigits(0);
+        return format.format(number);
     }
 }
