@@ -16,8 +16,6 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import java.util.Map;
 import java.util.HashMap;
@@ -35,20 +33,16 @@ public class MainActivity extends Activity {
         webviewPage = findViewById(R.id.main_webview_page);
         webviewPage.setBackgroundColor(Color.TRANSPARENT);
 
-        WebSettings webSettings = webviewPage.getSettings();
+        var webSettings = webviewPage.getSettings();
         webSettings.setJavaScriptEnabled(true);
 
         // Disconnected page
         disconnectedPage = findViewById(R.id.main_disconnected_page);
-
-        View.OnClickListener refreshOnClick = (View view) -> {
-            webviewPage.reload();
-        };
-        ((ImageButton)findViewById(R.id.main_disconnected_refresh_button)).setOnClickListener(refreshOnClick);
-        ((Button)findViewById(R.id.main_disconnected_hero_button)).setOnClickListener(refreshOnClick);
+        findViewById(R.id.main_disconnected_refresh_button).setOnClickListener(view -> webviewPage.reload());
+        findViewById(R.id.main_disconnected_hero_button).setOnClickListener(view -> webviewPage.reload());
 
         // Webview handlers
-        Map<String, Boolean> urlAdCache = new HashMap<String, Boolean>();
+        var urlAdCache = new HashMap<String, Boolean>();
         webviewPage.setWebViewClient(new WebViewClient() {
             @SuppressWarnings("deprecation")
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -60,22 +54,15 @@ public class MainActivity extends Activity {
             }
 
             private boolean shouldOverrideUrlLoading(WebView view, Uri uri) {
-                if (uri.getScheme().equals("https") && (uri.getHost().endsWith("tweakers.net") || uri.getHost().equals("myprivacy.dpgmedia.nl"))) {
+                if (uri.getScheme().equals("https") && (uri.getHost().endsWith("tweakers.net") || uri.getHost().equals("myprivacy.dpgmedia.nl")))
                     return false;
-                } else {
-                    try {
-                        startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                        return true;
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
-                        return false;
-                    }
-                }
+                startActivity(new Intent(Intent.ACTION_VIEW, uri));
+                return true;
             }
 
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
-                AdBlocker adblocker = AdBlocker.getInstance(MainActivity.this);
-                String url = request.getUrl().toString();
+                var adblocker = AdBlocker.getInstance(MainActivity.this);
+                var url = request.getUrl().toString();
 
                 boolean isAd;
                 if (!urlAdCache.containsKey(url)) {
@@ -124,7 +111,7 @@ public class MainActivity extends Activity {
             }
         });
 
-        Intent intent = getIntent();
+        var intent = getIntent();
         if (intent.getAction() == Intent.ACTION_VIEW) {
             webviewPage.loadUrl(intent.getDataString());
         } else {

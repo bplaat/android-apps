@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Root">
+    style="@style/Fill">
 
     <!-- Webview page -->
     <WebView android:id="@+id/main_webview_page"
-        style="@style/Root" />
+        style="@style/Fill" />
 
     <!-- Disconnected page -->
     <LinearLayout android:id="@+id/main_disconnected_page"
         android:visibility="gone"
-        style="@style/Root">
+        style="@style/Fill">
 
         <LinearLayout style="@style/ActionBar">
             <TextView android:text="@string/app_name"
@@ -21,7 +21,7 @@
         </LinearLayout>
 
         <ScrollView android:id="@+id/main_disconnected_scroll"
-            style="@style/Scroll">
+            style="@style/Flex">
 
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_wifi_off"

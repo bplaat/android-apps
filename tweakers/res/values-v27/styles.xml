@@ -8,5 +8,8 @@
         <!-- Make navigation bar light -->
         <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/primary_color</item>
+
+        <!-- Disable force dark mode -->
+        <item name="android:forceDarkAllowed">false</item>
     </style>
 </resources>

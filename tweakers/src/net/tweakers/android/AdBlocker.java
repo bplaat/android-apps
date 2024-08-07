@@ -2,6 +2,7 @@ package net.tweakers.android;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.webkit.WebResourceResponse;
 import java.io.ByteArrayInputStream;
 import java.io.BufferedReader;
@@ -19,7 +20,7 @@ public class AdBlocker {
         this.context = context;
         hostsBlacklist = new HashSet<String>();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open("blacklist-adservers.txt")))) {
+        try (var bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open("blacklist-adservers.txt")))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.length() > 0) {
@@ -27,7 +28,7 @@ public class AdBlocker {
                 }
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            Log.e(context.getPackageName(), "Can't read / parse adservers hosts file", exception);
         }
     }
 
@@ -47,7 +48,7 @@ public class AdBlocker {
             return false;
         }
 
-        int index = host.indexOf(".");
+        var index = host.indexOf(".");
         return index >= 0 && (hostsBlacklist.contains(host) || index + 1 < host.length() && isAdHost(host.substring(index + 1)));
     }
 
