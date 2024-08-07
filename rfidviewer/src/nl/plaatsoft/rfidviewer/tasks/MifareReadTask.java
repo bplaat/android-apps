@@ -1,5 +1,6 @@
 package nl.plaatsoft.rfidviewer.tasks;
 
+import android.content.Context;
 import android.nfc.tech.MifareClassic;
 import android.os.Looper;
 import android.os.Handler;
@@ -21,13 +22,15 @@ public class MifareReadTask {
         public abstract void onError(Exception exception);
     }
 
+    private Context context;
     private MifareClassic mfc;
     private boolean isCanceled;
     private boolean isFinished;
     private OnLoadListener onLoadListener;
     private OnErrorListener onErrorListener;
 
-    private MifareReadTask(MifareClassic mfc) {
+    private MifareReadTask(Context context, MifareClassic mfc) {
+        this.context = context;
         this.mfc = mfc;
     }
 
@@ -39,8 +42,8 @@ public class MifareReadTask {
         return isFinished;
     }
 
-    public static MifareReadTask with(MifareClassic mfc) {
-        return new MifareReadTask(mfc);
+    public static MifareReadTask with(Context context, MifareClassic mfc) {
+        return new MifareReadTask(context, mfc);
     }
 
     public MifareReadTask then(OnLoadListener onLoadListener) {
@@ -76,7 +79,7 @@ public class MifareReadTask {
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
-                            Log.e(Consts.LOG_TAG, "Can't read Mifare Classic tag", exception);
+                            Log.e(context.getPackageName(), "Can't read Mifare Classic tag", exception);
                         }
                     }
                 });

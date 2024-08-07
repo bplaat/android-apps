@@ -48,35 +48,35 @@ public class WriteActivity extends BaseActivity {
         setContentView(R.layout.activity_write);
 
         // Select all page views
-        formPage = (ScrollView)findViewById(R.id.write_form_page);
-        formBlockIdInput = (EditText)findViewById(R.id.write_form_block_id_input);
-        EditText formDataAsciiInput = (EditText)findViewById(R.id.write_form_data_ascii_input);
-        EditText formDataHexInput = (EditText)findViewById(R.id.write_form_data_hex_input);
-        waitingPage = (ScrollView)findViewById(R.id.write_waiting_page);
-        writingPage = (ScrollView)findViewById(R.id.write_writing_page);
-        successPage = (ScrollView)findViewById(R.id.write_success_page);
-        errorPage = (ScrollView)findViewById(R.id.write_error_page);
+        formPage = findViewById(R.id.write_form_page);
+        formBlockIdInput = findViewById(R.id.write_form_block_id_input);
+        var formDataAsciiInput = (EditText)findViewById(R.id.write_form_data_ascii_input);
+        var formDataHexInput = (EditText)findViewById(R.id.write_form_data_hex_input);
+        waitingPage = findViewById(R.id.write_waiting_page);
+        writingPage = findViewById(R.id.write_writing_page);
+        successPage = findViewById(R.id.write_success_page);
+        errorPage = findViewById(R.id.write_error_page);
 
         // Set back button click listener
-        ((ImageButton)findViewById(R.id.write_back_button)).setOnClickListener(view -> {
+        findViewById(R.id.write_back_button).setOnClickListener(view -> {
             finish();
         });
 
         // Set write button click listener
-        ((Button)findViewById(R.id.write_form_button)).setOnClickListener(view -> {
+        findViewById(R.id.write_form_button).setOnClickListener(view -> {
             try {
                 pendingBlockId = Integer.parseInt(formBlockIdInput.getText().toString());
 
                 pendingBlockData = new byte[16];
 
-                String dataAscii = formDataAsciiInput.getText().toString();
+                var dataAscii = formDataAsciiInput.getText().toString();
                 if (dataAscii.length() > 0) {
                     for (int i = 0; i < dataAscii.length(); i++) {
                         pendingBlockData[i] = (byte)dataAscii.charAt(i);
                     }
                 }
 
-                String dataHex = formDataHexInput.getText().toString();
+                var dataHex = formDataHexInput.getText().toString();
                 if (dataHex.length() > 0) {
                     for (int i = 0; i < dataHex.length(); i += 2) {
                         if (i / 2 < 16) {
@@ -90,12 +90,12 @@ public class WriteActivity extends BaseActivity {
                 isWritePending = true;
                 openPage(waitingPage);
             } catch (Exception exception) {
-                Log.e(Consts.LOG_TAG, "Can't parse input", exception);
+                Log.e(getPackageName(), "Can't parse input", exception);
             }
         });
 
         // Set write success button click listener
-        ((Button)findViewById(R.id.write_success_button)).setOnClickListener(view -> {
+        findViewById(R.id.write_success_button).setOnClickListener(view -> {
             // Clear inputs
             formBlockIdInput.getText().clear();
             formDataAsciiInput.getText().clear();
@@ -106,7 +106,7 @@ public class WriteActivity extends BaseActivity {
         });
 
         // Set write error button click listener
-        ((Button)findViewById(R.id.write_error_button)).setOnClickListener(view -> {
+        findViewById(R.id.write_error_button).setOnClickListener(view -> {
             // Enable writing
             isWritePending = true;
             openPage(waitingPage);
@@ -159,18 +159,18 @@ public class WriteActivity extends BaseActivity {
         // Handle new incoming RFID tag messages when a write is pending
         if (intent.getAction() != null && intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED) && isWritePending) {
             isWritePending = false;
-            Tag tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
+            var tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Check if tag is mifare classic
             if (Arrays.asList(tag.getTechList()).contains(MifareClassic.class.getName())) {
                 openPage(writingPage);
 
                 // Write Mifare Classic tag async
-                MifareClassic mfc = MifareClassic.get(tag);
-                mifareWriteTask = MifareWriteTask.with(mfc).writeBlock(pendingBlockId, pendingBlockData).then(() -> {
+                var mfc = MifareClassic.get(tag);
+                mifareWriteTask = MifareWriteTask.with(this, mfc).writeBlock(pendingBlockId, pendingBlockData).then(() -> {
                     openPage(successPage);
                 }, exception -> {
-                    Log.e(Consts.LOG_TAG, "Can't write Mifare Classic tag", exception);
+                    Log.e(getPackageName(), "Can't write Mifare Classic tag", exception);
                     openPage(errorPage);
                 }).write();
             }
@@ -181,15 +181,15 @@ public class WriteActivity extends BaseActivity {
         if (page.equals(formPage)) {
             // Show keyboard with focus on block id input
             formBlockIdInput.requestFocus();
-            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            var imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(formBlockIdInput, 0);
 
             formPage.setVisibility(View.VISIBLE);
         } else {
             // Hide keyboard
-            View focusView = getCurrentFocus();
+            var focusView = getCurrentFocus();
             if (focusView != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                var imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
             }
 

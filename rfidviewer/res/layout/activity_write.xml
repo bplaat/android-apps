@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Root">
+    style="@style/Fill">
 
     <LinearLayout style="@style/ActionBar">
         <ImageButton android:id="@+id/write_back_button"
@@ -11,12 +11,12 @@
             style="@style/ActionBarTitle" />
     </LinearLayout>
 
-    <FrameLayout style="@style/Container">
+    <FrameLayout style="@style/Flex">
         <!-- Form page -->
         <ScrollView android:id="@+id/write_form_page"
-            style="@style/Scroll">
+            style="@style/Fill">
 
-            <LinearLayout style="@style/FormContainer">
+            <LinearLayout style="@style/FormFlex">
                 <TextView android:text="@string/write_title_label"
                     style="@style/FormTitle" />
 
@@ -52,7 +52,7 @@
         <!-- Waiting page -->
         <ScrollView android:id="@+id/write_waiting_page"
             android:visibility="gone"
-            style="@style/Scroll">
+            style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_credit_card_scan"
@@ -69,7 +69,7 @@
         <!-- Writing page -->
         <ScrollView android:id="@+id/write_writing_page"
             android:visibility="gone"
-            style="@style/Scroll">
+            style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_credit_card_sync"
@@ -86,7 +86,7 @@
         <!-- Success page -->
         <ScrollView android:id="@+id/write_success_page"
             android:visibility="gone"
-            style="@style/Scroll">
+            style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_credit_card_check"
@@ -107,7 +107,7 @@
         <!-- Error page -->
         <ScrollView android:id="@+id/write_error_page"
             android:visibility="gone"
-            style="@style/Scroll">
+            style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_alert"

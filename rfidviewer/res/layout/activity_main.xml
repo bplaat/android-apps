@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Root">
+    style="@style/Fill">
 
     <LinearLayout style="@style/ActionBar">
         <TextView android:text="@string/app_name"
@@ -10,15 +10,15 @@
             android:src="@drawable/ic_application_edit"
             style="@style/ActionBarIconButton" />
 
-        <ImageButton android:id="@+id/main_settings_button"
-            android:src="@drawable/ic_settings"
+        <ImageButton android:id="@+id/main_options_menu_button"
+            android:src="@drawable/ic_dots_vertical"
             style="@style/ActionBarIconButton" />
     </LinearLayout>
 
-    <FrameLayout style="@style/Container">
+    <FrameLayout style="@style/Flex">
         <!-- Landing page -->
         <ScrollView android:id="@+id/main_landing_page"
-            style="@style/Scroll">
+            style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_credit_card_scan"
@@ -35,7 +35,7 @@
         <!-- Reading page -->
         <ScrollView android:id="@+id/main_reading_page"
             android:visibility="gone"
-            style="@style/Scroll">
+            style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_credit_card_sync"
@@ -52,7 +52,7 @@
         <!-- Data page -->
         <ScrollView android:id="@+id/main_data_page"
             android:visibility="gone"
-            style="@style/Scroll">
+            style="@style/Fill">
 
             <TextView android:id="@+id/main_data_output_label"
                 style="@style/Output" />
@@ -61,7 +61,7 @@
         <!-- Error page -->
         <ScrollView android:id="@+id/main_error_page"
             android:visibility="gone"
-            style="@style/Scroll">
+            style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_alert"

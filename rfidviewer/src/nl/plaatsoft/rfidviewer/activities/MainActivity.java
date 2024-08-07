@@ -12,10 +12,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.ScrollView;
 import java.util.Arrays;
 
@@ -24,10 +25,10 @@ import nl.plaatsoft.rfidviewer.Consts;
 import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     public static final int SETTINGS_REQUEST_CODE = 1;
 
-    private Handler handler;
+    private Handler handler = new Handler(Looper.getMainLooper());
     private int oldLanguage = -1;
     private int oldTheme = -1;
     private MifareReadTask mifareReadTask;
@@ -47,26 +48,23 @@ public class MainActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        landingPage = findViewById(R.id.main_landing_page);
+        readingPage = findViewById(R.id.main_reading_page);
+        dataPage = findViewById(R.id.main_data_page);
+        dataOutputLabel = findViewById(R.id.main_data_output_label);
+        errorPage = findViewById(R.id.main_error_page);
 
-        handler = new Handler(Looper.getMainLooper());
-
-        // Select all page views
-        landingPage = (ScrollView)findViewById(R.id.main_landing_page);
-        readingPage = (ScrollView)findViewById(R.id.main_reading_page);
-        dataPage = (ScrollView)findViewById(R.id.main_data_page);
-        dataOutputLabel = (TextView)findViewById(R.id.main_data_output_label);
-        errorPage = (ScrollView)findViewById(R.id.main_error_page);
-
-        // Init write button
-        ((ImageButton)findViewById(R.id.main_write_button)).setOnClickListener(view -> {
+        // Write button
+        findViewById(R.id.main_write_button).setOnClickListener(view -> {
             startActivity(new Intent(this, WriteActivity.class));
         });
 
-        // Init settings button
-        ((ImageButton)findViewById(R.id.main_settings_button)).setOnClickListener(view -> {
-            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
-            startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
+        // Options menu button
+        findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
+            PopupMenu optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
+            optionsMenu.getMenuInflater().inflate(R.menu.options, optionsMenu.getMenu());
+            optionsMenu.setOnMenuItemClickListener(this);
+            optionsMenu.show();
         });
 
         // Variables for NFC foreground intent dispatch
@@ -78,7 +76,7 @@ public class MainActivity extends BaseActivity {
         }
 
         // Pass intent of to intent handler
-        Intent intent = getIntent();
+        var intent = getIntent();
         if (intent != null) onNewIntent(intent);
     }
 
@@ -99,9 +97,19 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.menu_options_settings) {
+            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+            startActivityForResult(new Intent(this, SettingsActivity.class), MainActivity.SETTINGS_REQUEST_CODE);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        // Restart activity when the langage or theme change in settings activity
+        // When settings activity is closed check for restart
         if (requestCode == MainActivity.SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
                 if (
@@ -121,7 +129,7 @@ public class MainActivity extends BaseActivity {
     @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (landingPage.getVisibility() != View.VISIBLE) {
-            // When a mifare task is runningcancel it
+            // When a mifare task is running cancel it
             if (readingPage.getVisibility() == View.VISIBLE && mifareReadTask != null) {
                 mifareReadTask.cancel();
             }
@@ -137,12 +145,12 @@ public class MainActivity extends BaseActivity {
 
         // Handle new incoming RFID tag messages
         if (intent.getAction() != null && intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED)) {
-            Tag tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
+            var tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Create an output string add uid line
             StringBuilder output = new StringBuilder();
             output.append("Tag UID: ");
-            byte[] uid = tag.getId();
+            var uid = tag.getId();
             for (int i = 0; i < uid.length; i++) {
                 output.append(String.format("%02x", uid[i]));
                 output.append(i < uid.length - 1 ? " " : "\n");
@@ -153,8 +161,8 @@ public class MainActivity extends BaseActivity {
                 openPage(readingPage);
 
                 // Read Mifare Classic tag async
-                MifareClassic mfc = MifareClassic.get(tag);
-                mifareReadTask = MifareReadTask.with(mfc).then(data -> {
+                var mfc = MifareClassic.get(tag);
+                mifareReadTask = MifareReadTask.with(this, mfc).then(data -> {
                     try {
                         // Generate output lines
                         output.append("Mifare Classic (" + data.length + " bytes):\n\n");
@@ -185,10 +193,10 @@ public class MainActivity extends BaseActivity {
                         dataOutputLabel.setText(output.toString());
                         openPage(dataPage);
                     } catch (Exception exception) {
-                        Log.e(Consts.LOG_TAG, "Can't read Mifare Classic tag", exception);
+                        Log.e(getPackageName(), "Can't read Mifare Classic tag", exception);
                     }
                 }, exception -> {
-                    Log.e(Consts.LOG_TAG, "Can't read Mifare Classic tag", exception);
+                    Log.e(getPackageName(), "Can't read Mifare Classic tag", exception);
                     openPage(errorPage);
                 }).read();
             } else {

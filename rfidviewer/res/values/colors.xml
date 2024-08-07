@@ -3,8 +3,8 @@
     <color name="primary_color">#fff</color>
     <color name="primary_dark_color">#111</color>
     <color name="accent_color">#009688</color>
+    <color name="background_color">#fff</color>
     <color name="primary_text_color">#111</color>
     <color name="secondary_text_color">#777</color>
-    <color name="background_color">#fff</color>
     <color name="icon_color">#333</color>
 </resources>

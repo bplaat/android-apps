@@ -3,8 +3,6 @@ package nl.plaatsoft.rfidviewer;
 public class Consts {
     private Consts() {}
 
-    public static final String LOG_TAG = "RFIDViewer";
-
     public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/rfidviewer";
 
     public class Settings {

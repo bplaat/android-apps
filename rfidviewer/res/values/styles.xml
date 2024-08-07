@@ -13,28 +13,18 @@
         <item name="android:colorPrimary">@color/primary_color</item>
         <item name="android:colorPrimaryDark">@color/primary_color</item>
         <item name="android:colorAccent">@color/accent_color</item>
+        <item name="android:overlapAnchor">true</item>
     </style>
 
     <!-- Containers -->
-    <style name="Root">
+    <style name="Fill">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
-    </style>
-
-    <style name="Container">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">1</item>
-    </style>
-
-    <style name="Scroll">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
         <item name="android:fillViewport">true</item>
     </style>
 
-    <style name="ScrollContainer">
+    <style name="Flex">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
@@ -174,7 +164,7 @@
     </style>
 
     <!-- Form -->
-    <style name="FormContainer">
+    <style name="FormFlex">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>

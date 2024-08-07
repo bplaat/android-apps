@@ -15,43 +15,32 @@ public abstract class BaseActivity extends Activity {
 
     @Override
     public void attachBaseContext(Context context) {
-        // Get settings
         settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
+        var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+        var theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
 
-        // Get selected language and theme
-        int language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-        int theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
-
-        // Check if they differ from system defaults or when in battery saver mode
+        // Update configuration when they differ from system defaults or when in battery saver mode
         if (
             language != Consts.Settings.LANGUAGE_SYSTEM ||
             theme != Consts.Settings.THEME_SYSTEM ||
             (theme == Consts.Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
         ) {
-            // Create a new updated configuration
-            Configuration configuration = new Configuration(context.getResources().getConfiguration());
+            var configuration = new Configuration(context.getResources().getConfiguration());
 
-            // Force a language
-            if (language == Consts.Settings.LANGUAGE_ENGLISH) {
+            if (language == Consts.Settings.LANGUAGE_ENGLISH)
                 configuration.setLocale(new Locale("en"));
-            }
-
-            if (language == Consts.Settings.LANGUAGE_DUTCH) {
+            if (language == Consts.Settings.LANGUAGE_DUTCH)
                 configuration.setLocale(new Locale("nl"));
-            }
 
-            // Force a UI night mode
             if (theme == Consts.Settings.THEME_LIGHT) {
                 configuration.uiMode |= Configuration.UI_MODE_NIGHT_NO;
                 configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_YES;
             }
-
             if (theme == Consts.Settings.THEME_DARK) {
                 configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
                 configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
             }
-
-            // Or set dark mode on when in battery saver mode
+            // Set dark mode on when in battery saver mode
             if (theme == Consts.Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 if (((PowerManager)context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode()) {
                     configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
@@ -62,12 +51,9 @@ public abstract class BaseActivity extends Activity {
                 }
             }
 
-            // Update the context
             super.attachBaseContext(context.createConfigurationContext(configuration));
             return;
         }
-
-        // Use the default context
         super.attachBaseContext(context);
     }
 }

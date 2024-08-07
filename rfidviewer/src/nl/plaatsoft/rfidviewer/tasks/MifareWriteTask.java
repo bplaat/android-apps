@@ -1,5 +1,6 @@
 package nl.plaatsoft.rfidviewer.tasks;
 
+import android.content.Context;
 import android.nfc.tech.MifareClassic;
 import android.os.Looper;
 import android.os.Handler;
@@ -36,6 +37,7 @@ public class MifareWriteTask {
         }
     }
 
+    private Context context;
     private MifareClassic mfc;
     private boolean isCanceled = false;
     private boolean isFinished = false;
@@ -43,9 +45,14 @@ public class MifareWriteTask {
     private OnErrorListener onErrorListener = null;
     private List<PendingWrite> pendingWrites;
 
-    private MifareWriteTask(MifareClassic mfc) {
+    private MifareWriteTask(Context context, MifareClassic mfc) {
+        this.context = context;
         this.mfc = mfc;
         pendingWrites = new ArrayList<PendingWrite>();
+    }
+
+    public static MifareWriteTask with(Context context, MifareClassic mfc) {
+        return new MifareWriteTask(context, mfc);
     }
 
     public boolean isCanceled() {
@@ -54,10 +61,6 @@ public class MifareWriteTask {
 
     public boolean isFinished() {
         return isFinished;
-    }
-
-    public static MifareWriteTask with(MifareClassic mfc) {
-        return new MifareWriteTask(mfc);
     }
 
     public MifareWriteTask writeBlock(int blockIndex, byte[] data) {
@@ -101,7 +104,7 @@ public class MifareWriteTask {
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
-                            Log.e(Consts.LOG_TAG, "Can't write Mifare Classic tag", exception);
+                            Log.e(context.getPackageName(), "Can't write Mifare Classic tag", exception);
                         }
                     }
                 });
