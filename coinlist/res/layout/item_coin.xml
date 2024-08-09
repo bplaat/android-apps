@@ -6,7 +6,8 @@
         style="@style/CoinIcon" />
 
     <LinearLayout style="@style/CoinFlex">
-        <LinearLayout style="@style/CoinFirstLine">
+        <LinearLayout android:id="@+id/coin_first_line"
+            style="@style/CoinFirstLine">
 
             <TextView android:id="@+id/coin_name"
                 style="@style/CoinName" />
@@ -15,7 +16,9 @@
                 style="@style/CoinPrice"/>
         </LinearLayout>
 
-        <LinearLayout style="@style/CoinSecondLine">
+        <LinearLayout android:id="@+id/coin_second_line"
+            style="@style/CoinSecondLine">
+
             <TextView android:id="@+id/coin_rank"
                 style="@style/CoinRank" />
 

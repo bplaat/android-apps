@@ -178,6 +178,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:background">@color/loading_background_color</item>
     </style>
 
     <style name="GlobalInfoMarketcapText">
@@ -196,11 +197,13 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:background">@color/loading_background_color</item>
     </style>
 
     <style name="GlobalInfoDominance">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/loading_background_color</item>
     </style>
 
     <!-- Coin Item -->
@@ -233,6 +236,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">4dp</item>
+        <item name="android:background">@color/loading_background_color</item>
     </style>
 
     <style name="CoinName">
@@ -254,6 +258,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:textSize">12sp</item>
+        <item name="android:background">@color/loading_background_color</item>
     </style>
 
     <style name="CoinRank">

@@ -1,6 +1,10 @@
 package ml.coinlist.android.activities;
 
+import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -52,7 +56,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             var settingsEditor = settings.edit();
             settingsEditor.putBoolean("starred_only", starredOnly);
             settingsEditor.apply();
-
             loadCoins(true);
         });
 
@@ -78,6 +81,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         coinsAdapter = new CoinsAdapter(this);
         coinsList.setAdapter(coinsAdapter);
+        for (int i = 0; i < 100; i++)
+            coinsAdapter.add(Coin.createEmpty());
 
         coinsList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
             if (position == 0) {
@@ -85,24 +90,26 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 loadCoins(false);
             } else {
                 var coin = coinsAdapter.getItem(position - 1);
-                if (coin.getExtraIndex() == 2) {
-                    coin.setExtraIndex(0);
-                } else {
-                    coin.setExtraIndex(coin.getExtraIndex() + 1);
-                }
+                if (!coin.isEmpty()) {
+                    if (coin.getExtraIndex() == 2) {
+                        coin.setExtraIndex(0);
+                    } else {
+                        coin.setExtraIndex(coin.getExtraIndex() + 1);
+                    }
 
-                var coinExtra = (TextView)view.findViewById(R.id.coin_extra);
-                if (coin.getExtraIndex() == 0) {
-                    coinExtra.setText(getResources().getString(R.string.main_extra_marketcap) + " " +
-                        Coin.formatMoney(this, coin.getMarketcap()));
-                }
-                if (coin.getExtraIndex() == 1) {
-                    coinExtra.setText(getResources().getString(R.string.main_extra_volume) + " " +
-                        Coin.formatMoney(this, coin.getVolume()));
-                }
-                if (coin.getExtraIndex() == 2) {
-                    coinExtra.setText(getResources().getString(R.string.main_extra_supply) + " " +
-                        Coin.formatNumber(this, coin.getSupply()));
+                    var coinExtra = (TextView)view.findViewById(R.id.coin_extra);
+                    if (coin.getExtraIndex() == 0) {
+                        coinExtra.setText(getResources().getString(R.string.main_extra_marketcap) + " " +
+                            Coin.formatMoney(this, coin.getMarketcap()));
+                    }
+                    if (coin.getExtraIndex() == 1) {
+                        coinExtra.setText(getResources().getString(R.string.main_extra_volume) + " " +
+                            Coin.formatMoney(this, coin.getVolume()));
+                    }
+                    if (coin.getExtraIndex() == 2) {
+                        coinExtra.setText(getResources().getString(R.string.main_extra_supply) + " " +
+                            Coin.formatNumber(this, coin.getSupply()));
+                    }
                 }
             }
         });
@@ -155,28 +162,43 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
                 var jsonData = new JSONObject(new String(data, "UTF-8")).getJSONObject("data");
 
-                ((TextView)globalInfo.findViewById(R.id.global_info_marketcap)).setText(getResources().getString(R.string.main_global_marketcap) + ": " +
+                ((TextView)globalInfo.findViewById(R.id.global_info_marketcap_text)).setText(getResources().getString(R.string.main_global_marketcap) + ": " +
                     Coin.formatMoney(this, jsonData.getJSONObject("total_market_cap").getDouble(Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)])));
-
                 var marketcapChange = jsonData.getDouble("market_cap_change_percentage_24h_usd");
                 var marketcapChangeLabel = (TextView)globalInfo.findViewById(R.id.global_info_marketcap_change);
+                marketcapChangeLabel.setText(Coin.formatChangePercent(marketcapChange));
                 if (marketcapChange > 0) {
                     marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.positive_color));
+                } else if (marketcapChange < 0) {
+                    marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.negative_color));
                 } else {
-                    if (marketcapChange < 0) {
-                        marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.negative_color));
-                    } else {
-                        marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.secondary_text_color));
-                    }
+                    marketcapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.secondary_text_color));
                 }
-                marketcapChangeLabel.setText(Coin.formatChangePercent(marketcapChange));
+                var marketcap = globalInfo.findViewById(R.id.global_info_marketcap);
+                if (((ColorDrawable)marketcap.getBackground()).getColor() != Color.TRANSPARENT) {
+                    var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.fade_in);
+                    set.setTarget(marketcap);
+                    set.start();
+                }
 
-                ((TextView)globalInfo.findViewById(R.id.global_info_volume)).setText(getResources().getString(R.string.main_global_volume) + ": " +
+                var volumeLabel = (TextView)globalInfo.findViewById(R.id.global_info_volume);
+                volumeLabel.setText(getResources().getString(R.string.main_global_volume) + ": " +
                     Coin.formatMoney(this, jsonData.getJSONObject("total_volume").getDouble(Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)])));
+                if (((ColorDrawable)volumeLabel.getBackground()).getColor() != Color.TRANSPARENT) {
+                    var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
+                    set.setTarget(volumeLabel);
+                    set.start();
+                }
 
-                ((TextView)globalInfo.findViewById(R.id.global_info_dominance)).setText(getResources().getString(R.string.main_global_dominance) + ": " +
+                var dominanceLabel = (TextView)globalInfo.findViewById(R.id.global_info_dominance);
+                dominanceLabel.setText(getResources().getString(R.string.main_global_dominance) + ": " +
                     "BTC " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("btc")) + "  " +
                     "ETH " + Coin.formatPercent(jsonData.getJSONObject("market_cap_percentage").getDouble("eth")));
+                if (((ColorDrawable)dominanceLabel.getBackground()).getColor() != Color.TRANSPARENT) {
+                    var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
+                    set.setTarget(dominanceLabel);
+                    set.start();
+                }
             } catch (Exception exception) {
                 Log.e(getPackageName(), "Can't parse global data", exception);
             }
@@ -208,7 +230,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         continue;
                     }
 
-                    coinsAdapter.add(new Coin(
+                    coinsAdapter.add(Coin.createNormal(
                         jsonCoin.getString("id"),
                         jsonCoin.getInt("market_cap_rank"),
                         jsonCoin.getString("name"),

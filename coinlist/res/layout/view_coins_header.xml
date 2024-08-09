@@ -2,8 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/GlobalInfo">
 
-    <LinearLayout style="@style/GlobalInfoMarketcap">
-        <TextView android:id="@+id/global_info_marketcap"
+    <LinearLayout android:id="@+id/global_info_marketcap"
+        style="@style/GlobalInfoMarketcap">
+
+        <TextView android:id="@+id/global_info_marketcap_text"
             style="@style/GlobalInfoMarketcapText" />
 
         <TextView android:id="@+id/global_info_marketcap_change"

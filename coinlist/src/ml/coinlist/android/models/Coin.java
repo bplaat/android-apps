@@ -7,22 +7,28 @@ import java.text.NumberFormat;
 import ml.coinlist.android.Consts;
 
 public class Coin {
-    private final String id;
-    private final int rank;
-    private final String name;
-    private final String imageUrl;
-    private final double price;
-    private final double change;
-    private final double marketcap;
-    private final double volume;
-    private final double supply;
+    private final boolean empty;
+    private String id;
+    private int rank;
+    private String name;
+    private String imageUrl;
+    private double price;
+    private double change;
+    private double marketcap;
+    private double volume;
+    private double supply;
     private int extraIndex;
     private boolean starred;
 
-    public Coin(
+    private Coin() {
+        this.empty = true;
+    }
+
+    private Coin(
         String id, int rank, String name, String imageUrl, double price,
         double change, double marketcap, double volume, double supply, boolean starred
     ) {
+        this.empty = false;
         this.id = id;
         this.rank = rank;
         this.name = name;
@@ -34,6 +40,21 @@ public class Coin {
         this.supply = supply;
         this.extraIndex = 0;
         this.starred = starred;
+    }
+
+    public static Coin createEmpty() {
+        return new Coin();
+    }
+
+    public static Coin createNormal(
+        String id, int rank, String name, String imageUrl, double price,
+        double change, double marketcap, double volume, double supply, boolean starred
+    ) {
+        return new Coin(id, rank, name, imageUrl, price, change, marketcap, volume, supply, starred);
+    }
+
+    public boolean isEmpty() {
+        return empty;
     }
 
     public String getId() {
