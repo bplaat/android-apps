@@ -47,7 +47,7 @@ public class MifareWriteTask {
     private MifareWriteTask(Context context, MifareClassic mfc) {
         this.context = context;
         this.mfc = mfc;
-        pendingWrites = new ArrayList<PendingWrite>();
+        pendingWrites = new ArrayList<>();
     }
 
     public static MifareWriteTask with(Context context, MifareClassic mfc) {

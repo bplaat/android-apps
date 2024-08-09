@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Main activity -->
-    <string name="main_global_marketcap">Totale Markt Kap</string>
+    <string name="main_global_market_cap">Totale Markt Kap</string>
     <string name="main_global_volume">Volume (24h)</string>
     <string name="main_global_dominance">Dominantie</string>
 
-    <string name="main_extra_marketcap">MKap</string>
+    <string name="main_extra_market_cap">MKap</string>
     <string name="main_extra_volume">Volume</string>
     <string name="main_extra_supply">Hoeveel</string>
 

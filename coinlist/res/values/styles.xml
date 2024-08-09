@@ -174,20 +174,20 @@
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="GlobalInfoMarketcap">
+    <style name="GlobalInfoMarketCap">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">4dp</item>
         <item name="android:background">@color/loading_background_color</item>
     </style>
 
-    <style name="GlobalInfoMarketcapText">
+    <style name="GlobalInfoMarketCapText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">4dp</item>
     </style>
 
-    <style name="GlobalInfoMarketcapChange">
+    <style name="GlobalInfoMarketCapChange">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/secondary_text_color</item>

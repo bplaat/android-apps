@@ -18,7 +18,7 @@ public class AdBlocker {
 
     private AdBlocker(Context context) {
         this.context = context;
-        hostsBlacklist = new HashSet<String>();
+        hostsBlacklist = new HashSet<>();
 
         try (var bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open("blacklist-adservers.txt")))) {
             String line;
