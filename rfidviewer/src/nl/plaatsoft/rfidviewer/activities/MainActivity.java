@@ -28,7 +28,7 @@ import nl.plaatsoft.rfidviewer.R;
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     public static final int SETTINGS_REQUEST_CODE = 1;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private int oldLanguage = -1;
     private int oldTheme = -1;
     private MifareReadTask mifareReadTask;

@@ -13,16 +13,15 @@ import java.util.List;
 import nl.plaatsoft.rfidviewer.Consts;
 
 public class MifareWriteTask {
-    private static final Executor executor = Executors.newFixedThreadPool(1);
-    private static final Handler handler = new Handler(Looper.getMainLooper());
-
     public static interface OnSuccessListener {
         public abstract void onSuccess();
     }
-
     public static interface OnErrorListener {
         public abstract void onError(Exception exception);
     }
+
+    private static final Handler handler = new Handler(Looper.getMainLooper());
+    private static final Executor executor = Executors.newFixedThreadPool(1);
 
     private static class PendingWrite {
         public int blockIndex;
@@ -37,8 +36,8 @@ public class MifareWriteTask {
         }
     }
 
-    private Context context;
-    private MifareClassic mfc;
+    private final Context context;
+    private final MifareClassic mfc;
     private boolean isCanceled = false;
     private boolean isFinished = false;
     private OnSuccessListener onSuccessListener = null;

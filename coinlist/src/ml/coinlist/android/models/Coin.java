@@ -7,15 +7,15 @@ import java.text.NumberFormat;
 import ml.coinlist.android.Consts;
 
 public class Coin {
-    private String id;
-    private int rank;
-    private String name;
-    private String imageUrl;
-    private double price;
-    private double change;
-    private double marketcap;
-    private double volume;
-    private double supply;
+    private final String id;
+    private final int rank;
+    private final String name;
+    private final String imageUrl;
+    private final double price;
+    private final double change;
+    private final double marketcap;
+    private final double volume;
+    private final double supply;
     private int extraIndex;
     private boolean starred;
 

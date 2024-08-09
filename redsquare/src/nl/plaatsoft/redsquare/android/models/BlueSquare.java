@@ -9,8 +9,8 @@ public class BlueSquare extends Square {
     private int vx;
     private int vy;
     private float speed;
-    private Random random;
-    private Paint paint;
+    private final Random random;
+    private final Paint paint;
 
     public BlueSquare(Random random, float x, float y, float width, float height, int vx, int vy, float speed) {
         super(x, y, width, height);

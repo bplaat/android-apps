@@ -34,12 +34,11 @@ public class GamePage extends View {
     private Random random;
     private RedSquare redsquare;
     private BlueSquare[] blueSquares;
-    private Paint paint;
+    private final Paint paint;
+    private final String scoreLabelString;
+    private final String timeLabelString;
+    private final String levelLabelString;
     private OnEventListener onEventListener;
-
-    private String scoreLabelString;
-    private String timeLabelString;
-    private String levelLabelString;
 
     public GamePage(Context context, AttributeSet attrs) {
         super(context, attrs);

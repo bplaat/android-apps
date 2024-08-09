@@ -11,19 +11,18 @@ import java.util.concurrent.Executors;
 import nl.plaatsoft.rfidviewer.Consts;
 
 public class MifareReadTask {
-    private static final Executor executor = Executors.newFixedThreadPool(1);
-    private static final Handler handler = new Handler(Looper.getMainLooper());
-
     public static interface OnLoadListener {
         public abstract void onLoad(byte[] data);
     }
-
     public static interface OnErrorListener {
         public abstract void onError(Exception exception);
     }
 
-    private Context context;
-    private MifareClassic mfc;
+    private static final Handler handler = new Handler(Looper.getMainLooper());
+    private static final Executor executor = Executors.newFixedThreadPool(1);
+
+    private final Context context;
+    private final MifareClassic mfc;
     private boolean isCanceled;
     private boolean isFinished;
     private OnLoadListener onLoadListener;

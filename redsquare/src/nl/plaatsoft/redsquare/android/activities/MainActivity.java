@@ -37,7 +37,7 @@ import nl.plaatsoft.redsquare.android.Utils;
 import nl.plaatsoft.redsquare.android.R;
 
 public class MainActivity extends BaseActivity {
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private GamePage gamePage;
     private RelativeLayout menuPage;
     private LinearLayout settingsPage;

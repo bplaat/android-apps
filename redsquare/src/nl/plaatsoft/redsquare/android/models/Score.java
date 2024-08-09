@@ -1,8 +1,8 @@
 package nl.plaatsoft.redsquare.android.models;
 
 public class Score {
-    private String name;
-    private int score;
+    private final String name;
+    private final int score;
 
     public Score(String name, int score) {
         this.name = name;

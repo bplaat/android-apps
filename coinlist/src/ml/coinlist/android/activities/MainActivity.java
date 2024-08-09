@@ -28,7 +28,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     public static final int SETTINGS_REQUEST_CODE = 1;
     public static final int REFRESH_TIMEOUT = 60 * 1000;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private int oldCurrency = -1;
     private int oldLanguage = -1;
     private int oldTheme = -1;

@@ -13,8 +13,8 @@ import java.util.Set;
 public class AdBlocker {
     private static AdBlocker instance;
 
-    private Context context;
-    private Set<String> hostsBlacklist;
+    private final Context context;
+    private final Set<String> hostsBlacklist;
 
     private AdBlocker(Context context) {
         this.context = context;

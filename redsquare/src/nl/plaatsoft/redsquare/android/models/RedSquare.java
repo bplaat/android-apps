@@ -4,7 +4,7 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 
 public class RedSquare extends Square {
-    private Paint paint;
+    private final Paint paint;
 
     public RedSquare(float x, float y, float width, float height) {
         super(x, y, width, height);

@@ -24,7 +24,7 @@ import nl.plaatsoft.bassietest.R;
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     public static final int SETTINGS_REQUEST_CODE = 1;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private ViewSwitcher pageSwitcher;
     private int oldLanguage = -1;
     private int oldTheme = -1;
