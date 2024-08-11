@@ -32,5 +32,5 @@
 
     <ImageButton android:id="@+id/coin_star_button"
         android:src="@drawable/ic_star_outline"
-        style="@style/ListItemButtonIconAction" />
+        style="@style/CoinStarButton" />
 </LinearLayout>

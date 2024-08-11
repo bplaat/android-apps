@@ -126,7 +126,7 @@ public class FetchDataTask {
         var urlHash = hashStringBuilder.toString();
 
         // Try to load url from cache
-        File cacheFile = new File(context.getCacheDir(), urlHash);
+        var cacheFile = new File(context.getCacheDir(), urlHash);
         if (isLoadedFomCache && cacheFile.exists()) {
             var fileInputStream = new FileInputStream(cacheFile);
             var byteArrayOutputStream = new ByteArrayOutputStream();

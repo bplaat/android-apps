@@ -9,10 +9,8 @@ public class Utils {
 
     @SuppressWarnings("deprecation")
     public static int contextGetColor(Context context, int id) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return new ContextWrapper(context).getColor(id);
-        } else {
-            return context.getResources().getColor(id);
-        }
+        return context.getResources().getColor(id);
     }
 }

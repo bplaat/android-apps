@@ -68,7 +68,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Options menu button
         findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
-            PopupMenu optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
+            var optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
             optionsMenu.getMenuInflater().inflate(R.menu.options, optionsMenu.getMenu());
             optionsMenu.setOnMenuItemClickListener(this);
             optionsMenu.show();
@@ -89,29 +89,26 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             if (position == 0) {
                 loadGlobalInfo(false);
                 loadCoins(false);
-            } else {
-                var coin = coinsAdapter.getItem(position - 1);
-                if (!coin.isEmpty()) {
-                    if (coin.getExtraIndex() == 2) {
-                        coin.setExtraIndex(0);
-                    } else {
-                        coin.setExtraIndex(coin.getExtraIndex() + 1);
-                    }
+                return;
+            }
 
-                    var coinExtra = (TextView)view.findViewById(R.id.coin_extra);
-                    if (coin.getExtraIndex() == 0) {
-                        coinExtra.setText(getResources().getString(R.string.main_extra_market_cap) + " " +
-                            Formatters.money(this, coin.getMarketCap()));
-                    }
-                    if (coin.getExtraIndex() == 1) {
-                        coinExtra.setText(getResources().getString(R.string.main_extra_volume) + " " +
-                            Formatters.money(this, coin.getVolume()));
-                    }
-                    if (coin.getExtraIndex() == 2) {
-                        coinExtra.setText(getResources().getString(R.string.main_extra_supply) + " " +
-                            Formatters.number(this, coin.getSupply()));
-                    }
-                }
+            var coin = coinsAdapter.getItem(position - 1);
+            if (coin.isEmpty())
+                return;
+
+            coin.setExtraIndex(coin.getExtraIndex() == 2 ? 0 : coin.getExtraIndex() + 1);
+            var coinExtra = (TextView)view.findViewById(R.id.coin_extra);
+            if (coin.getExtraIndex() == 0) {
+                coinExtra.setText(getResources().getString(R.string.main_extra_market_cap) + " " +
+                    Formatters.money(this, coin.getMarketCap()));
+            }
+            if (coin.getExtraIndex() == 1) {
+                coinExtra.setText(getResources().getString(R.string.main_extra_volume) + " " +
+                    Formatters.money(this, coin.getVolume()));
+            }
+            if (coin.getExtraIndex() == 2) {
+                coinExtra.setText(getResources().getString(R.string.main_extra_supply) + " " +
+                    Formatters.number(this, coin.getSupply()));
             }
         });
     }

@@ -2,11 +2,14 @@ package ml.coinlist.android.components;
 
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,75 +65,95 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         }
 
         var coin = getItem(position);
-        if (!coin.isEmpty()) {
-            FetchImageTask.with(getContext()).load(coin.getImageUrl()).transparent().fadeIn().into(viewHolder.coinImage).fetch();
+        if (coin.isEmpty()) {
+            viewHolder.coinStarButton.setImageAlpha(0);
+            return convertView;
+        }
 
-            viewHolder.coinName.setText(coin.getName());
-            viewHolder.coinPrice.setText(Formatters.money(getContext(), coin.getPrice()));
+        FetchImageTask.with(getContext()).load(coin.getImageUrl()).transparent().fadeIn().into(viewHolder.coinImage).fetch();
 
-            if (((ColorDrawable)viewHolder.coinFirstLine.getBackground()).getColor() != Color.TRANSPARENT) {
-                var set = (AnimatorSet)AnimatorInflater.loadAnimator(getContext(), R.animator.fade_in);
-                set.setTarget(viewHolder.coinFirstLine);
-                set.start();
-            }
+        viewHolder.coinName.setText(coin.getName());
+        viewHolder.coinPrice.setText(Formatters.money(getContext(), coin.getPrice()));
+        if (((ColorDrawable)viewHolder.coinFirstLine.getBackground()).getColor() != Color.TRANSPARENT) {
+            var set = (AnimatorSet)AnimatorInflater.loadAnimator(getContext(), R.animator.fade_in);
+            set.setTarget(viewHolder.coinFirstLine);
+            set.start();
+        }
 
-            viewHolder.coinRank.setText("#" + coin.getRank());
-            viewHolder.coinChange.setText(Formatters.changePercent(coin.getChange()));
-            if (coin.getChange() > 0) {
-                viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.positive_color));
-            } else if (coin.getChange() < 0) {
-                viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.negative_color));
-            } else {
-                viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.secondary_text_color));
-            }
+        viewHolder.coinRank.setText("#" + coin.getRank());
+        viewHolder.coinChange.setText(Formatters.changePercent(coin.getChange()));
+        if (coin.getChange() > 0) {
+            viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.positive_color));
+        } else if (coin.getChange() < 0) {
+            viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.negative_color));
+        } else {
+            viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.secondary_text_color));
+        }
 
-            if (coin.getExtraIndex() == 0) {
-                viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_market_cap) + " " +
-                    Formatters.money(getContext(), coin.getMarketCap()));
-            }
-            if (coin.getExtraIndex() == 1) {
-                viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_volume) + " " +
-                    Formatters.money(getContext(), coin.getVolume()));
-            }
-            if (coin.getExtraIndex() == 2) {
-                viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_supply) + " " +
-                    Formatters.number(getContext(), coin.getSupply()));
-            }
+        if (coin.getExtraIndex() == 0) {
+            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_market_cap) + " " +
+                Formatters.money(getContext(), coin.getMarketCap()));
+        }
+        if (coin.getExtraIndex() == 1) {
+            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_volume) + " " +
+                Formatters.money(getContext(), coin.getVolume()));
+        }
+        if (coin.getExtraIndex() == 2) {
+            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_supply) + " " +
+                Formatters.number(getContext(), coin.getSupply()));
+        }
 
-            if (((ColorDrawable)viewHolder.coinSecondLine.getBackground()).getColor() != Color.TRANSPARENT) {
-                var set = (AnimatorSet)AnimatorInflater.loadAnimator(getContext(), R.animator.fade_in);
-                set.setTarget(viewHolder.coinSecondLine);
-                set.start();
-            }
+        if (((ColorDrawable)viewHolder.coinSecondLine.getBackground()).getColor() != Color.TRANSPARENT) {
+            var set = (AnimatorSet)AnimatorInflater.loadAnimator(getContext(), R.animator.fade_in);
+            set.setTarget(viewHolder.coinSecondLine);
+            set.start();
+        }
 
-            viewHolder.coinStarButton.setEnabled(true);
+        viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
+        viewHolder.coinStarButton.setOnClickListener(view -> {
+            coin.setStarred(!coin.getStarred());
             viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
-            viewHolder.coinStarButton.setOnClickListener(view -> {
-                coin.setStarred(!coin.getStarred());
-                viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
 
-                try {
-                    var settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
-                    var jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
-                    var settingsEditor = settings.edit();
-                    if (coin.getStarred()) {
-                        jsonStarredCoins.put(coin.getId());
-                    } else {
-                        for (int i = 0; i < jsonStarredCoins.length(); i++) {
-                            if (coin.getId().equals(jsonStarredCoins.getString(i))) {
-                                jsonStarredCoins.remove(i);
-                                break;
-                            }
+            try {
+                var settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
+                var jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
+                var settingsEditor = settings.edit();
+                if (coin.getStarred()) {
+                    jsonStarredCoins.put(coin.getId());
+                } else {
+                    for (int i = 0; i < jsonStarredCoins.length(); i++) {
+                        if (coin.getId().equals(jsonStarredCoins.getString(i))) {
+                            jsonStarredCoins.remove(i);
+                            break;
                         }
                     }
-                    settingsEditor.putString("starred_coins", jsonStarredCoins.toString());
-                    settingsEditor.apply();
-                } catch (Exception exception) {
-                    Log.e(getContext().getPackageName(), "Can't update coin list item view", exception);
+                }
+                settingsEditor.putString("starred_coins", jsonStarredCoins.toString());
+                settingsEditor.apply();
+            } catch (Exception exception) {
+                Log.e(getContext().getPackageName(), "Can't update coin list item view", exception);
+            }
+        });
+
+        var coinStarBackground = viewHolder.coinStarButton.getBackground();
+        if (coinStarBackground instanceof ColorDrawable && ((ColorDrawable)coinStarBackground).getColor() != Color.TRANSPARENT) {
+            var set = (AnimatorSet)AnimatorInflater.loadAnimator(getContext(), R.animator.fade_in);
+            set.setTarget(viewHolder.coinStarButton);
+            set.start();
+
+            var alphaAnimation = ValueAnimator.ofInt(0, 255);
+            alphaAnimation.setDuration(getContext().getResources().getInteger(R.integer.animation_duration));
+            alphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
+            alphaAnimation.addUpdateListener(animator -> {
+                var value = (int)alphaAnimation.getAnimatedValue();
+                viewHolder.coinStarButton.setImageAlpha(value);
+                if (value == 255) {
+                    TypedValue outValue = new TypedValue();
+                    getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true);
+                    viewHolder.coinStarButton.setBackgroundResource(outValue.resourceId);
                 }
             });
-        } else {
-            viewHolder.coinStarButton.setEnabled(false);
+            alphaAnimation.start();
         }
         return convertView;
     }

@@ -39,7 +39,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Options menu button
         findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
-            PopupMenu optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
+            var optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
             optionsMenu.getMenuInflater().inflate(R.menu.options, optionsMenu.getMenu());
             optionsMenu.setOnMenuItemClickListener(this);
             optionsMenu.show();
