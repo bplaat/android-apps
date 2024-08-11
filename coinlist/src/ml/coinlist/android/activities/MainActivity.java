@@ -30,8 +30,8 @@ import ml.coinlist.android.Utils;
 import ml.coinlist.android.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
-    public static final int SETTINGS_REQUEST_CODE = 1;
-    public static final int REFRESH_TIMEOUT = 60 * 1000;
+    private static final int SETTINGS_REQUEST_CODE = 1;
+    private static final int REFRESH_TIMEOUT = 60 * 1000;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private int oldCurrency = -1;
