@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Fill">
+
+    <LinearLayout style="@style/ActionBar">
+        <TextView android:id="@+id/main_bible_button"
+            style="@style/ActionBarTitle" />
+
+        <TextView android:id="@+id/main_book_button"
+            style="@style/ActionBarTitle" />
+
+        <TextView android:id="@+id/main_chapter_button"
+            style="@style/ActionBarTitle" />
+
+        <ImageButton android:src="@drawable/ic_magnify"
+            style="@style/ActionBarIconButton" />
+
+        <ImageButton android:id="@+id/main_options_menu_button"
+            android:src="@drawable/ic_dots_vertical"
+            style="@style/ActionBarIconButton" />
+    </LinearLayout>
+
+    <ScrollView android:id="@+id/main_chapter_scroll"
+        style="@style/Flex">
+
+        <LinearLayout android:id="@+id/main_chapter_contents"
+            style="@style/ChapterContents">
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
