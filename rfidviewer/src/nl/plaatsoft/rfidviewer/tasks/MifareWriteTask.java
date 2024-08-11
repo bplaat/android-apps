@@ -124,12 +124,12 @@ public class MifareWriteTask {
     private void writeBlocks() throws Exception {
         // Connect to the tag and write pending block writes
         mfc.connect();
-        for (PendingWrite pendingWrite : pendingWrites) {
+        for (var pendingWrite : pendingWrites) {
             if (mfc.authenticateSectorWithKeyA(mfc.blockToSector(pendingWrite.blockIndex), MifareClassic.KEY_DEFAULT)) {
                 mfc.writeBlock(pendingWrite.blockIndex, pendingWrite.data);
 
-                byte[] writtenBytes = mfc.readBlock(pendingWrite.blockIndex);
-                for (int i = 0; i < 16; i++) {
+                var writtenBytes = mfc.readBlock(pendingWrite.blockIndex);
+                for (var i = 0; i < 16; i++) {
                     if (pendingWrite.data[i] != writtenBytes[i]) {
                         throw new FailedWriteException("Failed to write block " + pendingWrite.blockIndex + ": read back data is not the same as written data!");
                     }

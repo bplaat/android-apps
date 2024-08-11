@@ -121,7 +121,7 @@ public class FetchDataTask {
         messageDigest.update(url.getBytes());
         var hashBytes = messageDigest.digest();
         var hashStringBuilder = new StringBuilder();
-        for (int i = 0; i < hashBytes.length; i++)
+        for (var i = 0; i < hashBytes.length; i++)
             hashStringBuilder.append(String.format("%02x", hashBytes[i]));
         var urlHash = hashStringBuilder.toString();
 
@@ -130,33 +130,33 @@ public class FetchDataTask {
         if (isLoadedFomCache && cacheFile.exists()) {
             var fileInputStream = new FileInputStream(cacheFile);
             var byteArrayOutputStream = new ByteArrayOutputStream();
-            var buffer = new byte[1024];
-            int bytesRead = 0;
-            while ((bytesRead = fileInputStream.read(buffer, 0, buffer.length)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            try (fileInputStream; byteArrayOutputStream) {
+                var buffer = new byte[1024];
+                var bytesRead = 0;
+                while ((bytesRead = fileInputStream.read(buffer, 0, buffer.length)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
+                }
             }
-            byteArrayOutputStream.close();
-            fileInputStream.close();
             return byteArrayOutputStream.toByteArray();
         }
 
         // Load url from network
         var bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
         var byteArrayOutputStream = new ByteArrayOutputStream();
-        var buffer = new byte[1024];
-        int bytesRead = 0;
-        while ((bytesRead = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
-            byteArrayOutputStream.write(buffer, 0, bytesRead);
+        try (bufferedInputStream; byteArrayOutputStream) {
+            var buffer = new byte[1024];
+            var bytesRead = 0;
+            while ((bytesRead = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
+                byteArrayOutputStream.write(buffer, 0, bytesRead);
+            }
         }
-        byteArrayOutputStream.close();
-        bufferedInputStream.close();
         var data = byteArrayOutputStream.toByteArray();
 
         // Save data to cache
         if (isSavedToCache) {
-            var fileOutputStream = new FileOutputStream(cacheFile);
-            fileOutputStream.write(data);
-            fileOutputStream.close();
+            try (var fileOutputStream = new FileOutputStream(cacheFile)) {
+                fileOutputStream.write(data);
+            }
         }
         return data;
     }

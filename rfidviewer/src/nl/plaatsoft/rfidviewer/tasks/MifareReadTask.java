@@ -60,7 +60,7 @@ public class MifareReadTask {
         // Create async task to read mifire classic tag
         executor.execute(() -> {
             try {
-                byte[] data = readTag();
+                var data = readTag();
                 handler.post(() -> {
                     if (!isCanceled) {
                         finish();
@@ -99,14 +99,14 @@ public class MifareReadTask {
     private byte[] readTag() throws Exception {
         // Connect to the tag and read block for block into byte buffer
         mfc.connect();
-        byte[] data = new byte[mfc.getSize()];
-        int pos = 0;
-        for (int i = 0; i < mfc.getSectorCount(); i++) {
+        var data = new byte[mfc.getSize()];
+        var pos = 0;
+        for (var i = 0; i < mfc.getSectorCount(); i++) {
             if (mfc.authenticateSectorWithKeyA(i, MifareClassic.KEY_DEFAULT)) {
-                int blockIndex = mfc.sectorToBlock(i);
-                for (int j = 0; j < mfc.getBlockCountInSector(i); j++) {
-                    byte[] bytes = mfc.readBlock(blockIndex++);
-                    for (int k = 0; k < 16; k++) {
+                var blockIndex = mfc.sectorToBlock(i);
+                for (var j = 0; j < mfc.getBlockCountInSector(i); j++) {
+                    var bytes = mfc.readBlock(blockIndex++);
+                    for (var k = 0; k < 16; k++) {
                         data[pos++] = bytes[k];
                     }
                 }

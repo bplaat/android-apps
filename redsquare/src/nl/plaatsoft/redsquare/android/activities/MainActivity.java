@@ -87,7 +87,7 @@ public class MainActivity extends BaseActivity {
         var gameoverLevelLabel = (TextView)findViewById(R.id.gameover_level_label);
         var levelLabelString = getResources().getString(R.string.gameover_level_label);
 
-        gamePage.setOnEventListener((int score, int seconds, int level) -> {
+        gamePage.setOnEventListener((score, seconds, level) -> {
             try {
                 FetchDataTask.with(this).load(Config.API_URL + "?key=" + Config.API_KEY + "&name=" + URLEncoder.encode(settings.getString("name", Consts.Settings.NAME_DEFAULT), "UTF-8") + "&score=" + score).fetch();
 
@@ -125,16 +125,16 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.menu_local_highscore_button).setOnClickListener(view -> {
             try {
                 localHighscoreAdapter.clear();
-                JSONArray scoresJSON = new JSONArray(settings.getString("scores", Consts.Settings.SCORE_DEFAULT));
-                for (int i = 0; i < scoresJSON.length(); i++) {
-                    JSONObject scoreJSON = scoresJSON.getJSONObject(i);
+                var scoresJSON = new JSONArray(settings.getString("scores", Consts.Settings.SCORE_DEFAULT));
+                for (var i = 0; i < scoresJSON.length(); i++) {
+                    var scoreJSON = scoresJSON.getJSONObject(i);
                     localHighscoreAdapter.add(new Score(
                         scoreJSON.getString("name"),
                         scoreJSON.getInt("score")
                     ));
                 }
 
-                localHighscoreAdapter.sort((Score a, Score b) -> b.getScore() - a.getScore());
+                localHighscoreAdapter.sort((a, b) -> b.score() - a.score());
                 localHighscoreAdapter.notifyDataSetChanged();
             } catch (Exception exception) {
                 Log.e(getPackageName(), "Can't parse local highscores", exception);
@@ -166,7 +166,7 @@ public class MainActivity extends BaseActivity {
                 try {
                     var dataJSON = new JSONObject(new String(data, "UTF-8"));
                     var scoresJSON = dataJSON.getJSONArray("scores");
-                    for (int i = 0; i < scoresJSON.length(); i++) {
+                    for (var i = 0; i < scoresJSON.length(); i++) {
                         var scoreJSON = scoresJSON.getJSONObject(i);
                         globalHighscoreAdapter.add(new Score(
                             scoreJSON.getString("name"),
@@ -217,7 +217,7 @@ public class MainActivity extends BaseActivity {
         var settingsNameInput = (EditText)findViewById(R.id.settings_name_input);
         settingsNameInput.setText(settings.getString("name", Consts.Settings.NAME_DEFAULT));
         settingsNameInput.setSelection(settingsNameInput.getText().length());
-        settingsNameInput.setOnEditorActionListener((TextView view, int actionId, KeyEvent event) -> {
+        settingsNameInput.setOnEditorActionListener((view, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 var settingsEditor = settings.edit();
                 settingsEditor.putString("name", settingsNameInput.getText().toString());
@@ -238,7 +238,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.settings_language_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                 .setTitle(R.string.settings_language_alert_title_label)
-                .setSingleChoiceItems(languages, language, (DialogInterface dialog, int which) -> {
+                .setSingleChoiceItems(languages, language, (dialog, which) -> {
                     var settingsEditor = settings.edit();
                     settingsEditor.putInt("language", which);
                     settingsEditor.apply();
@@ -262,7 +262,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                 .setTitle(R.string.settings_theme_alert_title_label)
-                .setSingleChoiceItems(themes, theme, (DialogInterface dialog, int which) -> {
+                .setSingleChoiceItems(themes, theme, (dialog, which) -> {
                     var settingsEditor = settings.edit();
                     settingsEditor.putInt("theme", which);
                     settingsEditor.apply();

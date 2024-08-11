@@ -5,7 +5,7 @@ public class Consts {
 
     public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bassietest";
 
-    public class Settings {
+    public static class Settings {
         private Settings() {}
 
         public static final int LANGUAGE_ENGLISH = 0;

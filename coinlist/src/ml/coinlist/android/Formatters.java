@@ -28,7 +28,7 @@ public class Formatters {
             format.setMinimumFractionDigits(2);
             formatted = format.format(number / 1e6) + " M";
         } else {
-            int decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
+            var decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
             if (currency == Consts.Settings.CURRENCY_BTC || currency == Consts.Settings.CURRENCY_ETH || currency == Consts.Settings.CURRENCY_BNB)
                 decimals = number < 10 ? (number < 0.1 ? 12 : 6) : 4;
             if (currency == Consts.Settings.CURRENCY_SATS)

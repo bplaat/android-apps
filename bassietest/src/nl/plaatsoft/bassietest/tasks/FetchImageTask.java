@@ -132,7 +132,7 @@ public class FetchImageTask {
             imageView.setImageBitmap(null);
         }
 
-        long startTime = System.currentTimeMillis();
+        var startTime = System.currentTimeMillis();
         if (bitmapCache.get(url) != null) {
             onLoad(bitmapCache.get(url), startTime);
             return this;

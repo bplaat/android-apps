@@ -25,11 +25,11 @@ import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
 public class WriteActivity extends BaseActivity {
-    private NfcAdapter nfcAdapter;
+    private NfcAdapter nfcAdapter = null;
     private PendingIntent pendingIntent;
     private IntentFilter[] intentFiltersArray;
     private String[][] techListsArray;
-    private MifareWriteTask mifareWriteTask;
+    private MifareWriteTask mifareWriteTask = null;
 
     private ScrollView formPage;
     private EditText formBlockIdInput;
@@ -71,14 +71,14 @@ public class WriteActivity extends BaseActivity {
 
                 var dataAscii = formDataAsciiInput.getText().toString();
                 if (dataAscii.length() > 0) {
-                    for (int i = 0; i < dataAscii.length(); i++) {
+                    for (var i = 0; i < dataAscii.length(); i++) {
                         pendingBlockData[i] = (byte)dataAscii.charAt(i);
                     }
                 }
 
                 var dataHex = formDataHexInput.getText().toString();
                 if (dataHex.length() > 0) {
-                    for (int i = 0; i < dataHex.length(); i += 2) {
+                    for (var i = 0; i < dataHex.length(); i += 2) {
                         if (i / 2 < 16) {
                             pendingBlockData[i / 2] = (byte)((Character.digit(dataHex.charAt(i), 16) << 4) |
                                 Character.digit(dataHex.charAt(i + 1), 16));

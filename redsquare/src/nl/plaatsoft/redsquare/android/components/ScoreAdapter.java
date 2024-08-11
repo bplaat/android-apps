@@ -12,7 +12,7 @@ import nl.plaatsoft.redsquare.android.Utils;
 import nl.plaatsoft.redsquare.android.R;
 
 public class ScoreAdapter extends ArrayAdapter<Score> {
-    private class ViewHolder {
+    private static class ViewHolder {
         public TextView scoreName;
         public TextView scoreScore;
     }
@@ -35,8 +35,8 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
         }
 
         var score = getItem(position);
-        viewHolder.scoreName.setText(score.getName());
-        viewHolder.scoreScore.setText(String.valueOf(score.getScore()));
+        viewHolder.scoreName.setText(score.name());
+        viewHolder.scoreScore.setText(String.valueOf(score.score()));
         return convertView;
     }
 }

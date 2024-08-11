@@ -16,7 +16,7 @@ import nl.plaatsoft.redsquare.android.R;
 import nl.plaatsoft.redsquare.android.Random;
 
 public class GamePage extends View {
-    public interface OnEventListener {
+    public static interface OnEventListener {
         public void onGameover(int score, int seconds, int level);
     }
 
@@ -77,7 +77,7 @@ public class GamePage extends View {
         borderWidth = 0;
         random = new Random(startTime);
 
-        int redsquareSize = 60;
+        var redsquareSize = 60;
         redsquare = new RedSquare(((width - redsquareSize) / 2) * scale, ((height - redsquareSize) / 2) * scale, redsquareSize * scale, redsquareSize * scale);
 
         blueSquares = new BlueSquare[4];
@@ -104,7 +104,7 @@ public class GamePage extends View {
 
     private void gameover() {
         stop();
-        int seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
+        var seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
         onEventListener.onGameover(score, seconds, level);
     }
 
@@ -144,12 +144,12 @@ public class GamePage extends View {
         paint.setColor(Utils.contextGetColor(getContext(), R.color.border_background_color));
         canvas.drawRect(borderWidth * scale, borderWidth * scale, (width - borderWidth) * scale, (height - borderWidth) * scale, paint);
 
-        for (int i = 0; i < blueSquares.length; i++) {
+        for (var i = 0; i < blueSquares.length; i++) {
             blueSquares[i].draw(canvas);
         }
         redsquare.draw(canvas);
 
-        float textPadding = 24;
+        var textPadding = 24.0f;
         paint.setColor(Utils.contextGetColor(getContext(), R.color.primary_text_color));
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(String.format(scoreLabelString, score), textPadding * scale, (textPadding + 8) * scale, paint);

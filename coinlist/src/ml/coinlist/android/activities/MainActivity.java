@@ -82,10 +82,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         coinsAdapter = new CoinsAdapter(this);
         coinsList.setAdapter(coinsAdapter);
-        for (int i = 0; i < 100; i++)
+        for (var i = 0; i < 100; i++)
             coinsAdapter.add(Coin.createEmpty());
 
-        coinsList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
+        coinsList.setOnItemClickListener((adapterView, view, position, id) -> {
             if (position == 0) {
                 loadGlobalInfo(false);
                 loadCoins(false);
@@ -214,11 +214,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 coinsAdapter.clear();
                 var jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
                 var jsonCoins = new JSONArray(new String(data, "UTF-8"));
-                for (int i = 0; i < jsonCoins.length(); i++) {
+                for (var i = 0; i < jsonCoins.length(); i++) {
                     JSONObject jsonCoin = jsonCoins.getJSONObject(i);
 
                     var isStarred = false;
-                    for (int j = 0; j < jsonStarredCoins.length(); j++) {
+                    for (var j = 0; j < jsonStarredCoins.length(); j++) {
                         if (jsonCoin.getString("id").equals(jsonStarredCoins.getString(j))) {
                             isStarred = true;
                             break;

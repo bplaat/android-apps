@@ -121,7 +121,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
                 if (coin.getStarred()) {
                     jsonStarredCoins.put(coin.getId());
                 } else {
-                    for (int i = 0; i < jsonStarredCoins.length(); i++) {
+                    for (var i = 0; i < jsonStarredCoins.length(); i++) {
                         if (coin.getId().equals(jsonStarredCoins.getString(i))) {
                             jsonStarredCoins.remove(i);
                             break;

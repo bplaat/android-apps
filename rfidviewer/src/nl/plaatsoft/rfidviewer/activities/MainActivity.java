@@ -31,9 +31,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private final Handler handler = new Handler(Looper.getMainLooper());
     private int oldLanguage = -1;
     private int oldTheme = -1;
-    private MifareReadTask mifareReadTask;
+    private MifareReadTask mifareReadTask = null;
 
-    private NfcAdapter nfcAdapter;
+    private NfcAdapter nfcAdapter = null;
     private PendingIntent pendingIntent;
     private IntentFilter[] intentFiltersArray;
     private String[][] techListsArray;
@@ -151,7 +151,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             StringBuilder output = new StringBuilder();
             output.append("Tag UID: ");
             var uid = tag.getId();
-            for (int i = 0; i < uid.length; i++) {
+            for (var i = 0; i < uid.length; i++) {
                 output.append(String.format("%02x", uid[i]));
                 output.append(i < uid.length - 1 ? " " : "\n");
             }
@@ -166,24 +166,24 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     try {
                         // Generate output lines
                         output.append("Mifare Classic (" + data.length + " bytes):\n\n");
-                        for (int i = 0; i < mfc.getSize() / 16; i++) {
+                        for (var i = 0; i < mfc.getSize() / 16; i++) {
                             output.append("Block " + i + ":\n");
                             // First half off the block
-                            for (int j = 0; j < 8; j++) {
+                            for (var j = 0; j < 8; j++) {
                                 output.append(String.format("%02x ", data[i * 16 + j]));
                             }
                             output.append(" ");
-                            for (int j = 0; j < 8; j++) {
+                            for (var j = 0; j < 8; j++) {
                                 output.append(data[i * 16 + j] >= 40 && data[i * 16 + j] <= 176 ? new String(new byte[] { data[i * 16 + j] }, "UTF-8") : ".");
                                 output.append(j < 8 - 1 ? " " : "\n");
                             }
 
                             // Second half off the block
-                            for (int j = 0; j < 8; j++) {
+                            for (var j = 0; j < 8; j++) {
                                 output.append(String.format("%02x ", data[i * 16 + 8 + j]));
                             }
                             output.append(" ");
-                            for (int j = 0; j < 8; j++) {
+                            for (var j = 0; j < 8; j++) {
                                 output.append(data[i * 16 + 8 + j] >= 40 && data[i * 16 + 8 + j] <= 176 ? new String(new byte[] { data[i * 16 + 8 + j] }, "UTF-8") : ".");
                                 output.append(j < 8 - 1 ? " " : "\n");
                             }
