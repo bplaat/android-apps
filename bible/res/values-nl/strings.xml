@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main activity -->
+    <string name="main_bible_alert_title_label">Bijbel Vertaling</string>
+    <string name="main_bible_alert_cancel_button">Annuleren</string>
+
+    <string name="main_book_alert_title_label">Bijbel Boek</string>
+    <string name="main_book_alert_cancel_button">Annuleren</string>
+
+    <string name="main_chapter_alert_title_label">Hoofdstuk</string>
+    <string name="main_chapter_alert_cancel_button">Annuleren</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title_label">Instellingen</string>
+
+    <string name="settings_display_label">Weergave</string>
+
+    <string name="settings_font_button">Lettertype</string>
+    <string name="settings_font_alert_title_label">Lettertype</string>
+    <string name="settings_font_alert_cancel_button">Annuleren</string>
+
+    <string name="settings_language_button">Taal</string>
+    <string name="settings_language_alert_title_label">Taal</string>
+    <string name="settings_language_alert_cancel_button">Annuleren</string>
+    <string name="settings_language_system">Gebruik systeemstandaard</string>
+
+    <string name="settings_theme_button">Thema</string>
+    <string name="settings_theme_alert_title_label">Thema</string>
+    <string name="settings_theme_alert_cancel_button">Annuleren</string>
+    <string name="settings_theme_light">Licht</string>
+    <string name="settings_theme_dark">Donker</string>
+    <string name="settings_theme_battery_saver">Ingesteld door batterijbesparing</string>
+    <string name="settings_theme_system">Gebruik systeemstandaard</string>
+
+    <string name="settings_information_label">Informatie</string>
+    <string name="settings_version_button">App versie</string>
+    <string name="settings_version_message">Who, jij bent een geweldige hacker!</string>
+    <string name="settings_rate_button">Beoordeel deze app</string>
+    <string name="settings_share_button">Deel deze app</string>
+    <string name="settings_share_message">Bekijk deze coole app:</string>
+    <string name="settings_about_button">Over deze app</string>
+    <string name="settings_footer_button">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+
+    <string name="settings_about_alert_title_label">Over deze app</string>
+    <string name="settings_about_alert_message_label">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+</resources>
