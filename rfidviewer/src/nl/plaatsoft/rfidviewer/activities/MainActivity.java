@@ -136,12 +136,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             var tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Create an output string add uid line
-            var output = new StringBuilder();
-            output.append("Tag UID: ");
+            var sb = new StringBuilder();
+            sb.append("Tag UID: ");
             var uid = tag.getId();
             for (var i = 0; i < uid.length; i++) {
-                output.append(String.format("%02x", uid[i]));
-                output.append(i < uid.length - 1 ? " " : "\n");
+                sb.append(String.format("%02x", uid[i]));
+                sb.append(i < uid.length - 1 ? " " : "\n");
             }
 
             // Check if tag is Mifare Classic
@@ -153,36 +153,36 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 mifareReadTask = MifareReadTask.with(this, mfc).then(data -> {
                     try {
                         // Generate output lines
-                        output.append("Mifare Classic (" + data.length + " bytes):\n\n");
+                        sb.append("Mifare Classic (" + data.length + " bytes):\n\n");
                         for (var i = 0; i < mfc.getSize() / 16; i++) {
-                            output.append("Block " + i + ":\n");
+                            sb.append("Block " + i + ":\n");
                             // First half off the block
                             for (var j = 0; j < 8; j++) {
-                                output.append(String.format("%02x ", data[i * 16 + j]));
+                                sb.append(String.format("%02x ", data[i * 16 + j]));
                             }
-                            output.append(" ");
+                            sb.append(" ");
                             for (var j = 0; j < 8; j++) {
-                                output.append(data[i * 16 + j] >= 40 && data[i * 16 + j] <= 176
+                                sb.append(data[i * 16 + j] >= 40 && data[i * 16 + j] <= 176
                                         ? new String(new byte[] { data[i * 16 + j] }, "UTF-8")
                                         : ".");
-                                output.append(j < 8 - 1 ? " " : "\n");
+                                sb.append(j < 8 - 1 ? " " : "\n");
                             }
 
                             // Second half off the block
                             for (var j = 0; j < 8; j++) {
-                                output.append(String.format("%02x ", data[i * 16 + 8 + j]));
+                                sb.append(String.format("%02x ", data[i * 16 + 8 + j]));
                             }
-                            output.append(" ");
+                            sb.append(" ");
                             for (var j = 0; j < 8; j++) {
-                                output.append(data[i * 16 + 8 + j] >= 40 && data[i * 16 + 8 + j] <= 176
+                                sb.append(data[i * 16 + 8 + j] >= 40 && data[i * 16 + 8 + j] <= 176
                                         ? new String(new byte[] { data[i * 16 + 8 + j] }, "UTF-8")
                                         : ".");
-                                output.append(j < 8 - 1 ? " " : "\n");
+                                sb.append(j < 8 - 1 ? " " : "\n");
                             }
                         }
 
                         // Set lines in data output label and show data page
-                        dataOutputLabel.setText(output.toString());
+                        dataOutputLabel.setText(sb.toString());
                         openPage(dataPage);
                     } catch (Exception exception) {
                         Log.e(getPackageName(), "Can't read Mifare Classic tag", exception);
@@ -194,8 +194,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             } else {
                 // Not an Mifare Classic tag print techs list, set data output string and show
                 // data page
-                output.append("Not Mifare Classic: " + String.join(",", tag.getTechList()));
-                dataOutputLabel.setText(output.toString());
+                sb.append("Not Mifare Classic: " + String.join(",", tag.getTechList()));
+                dataOutputLabel.setText(sb.toString());
                 openPage(dataPage);
             }
         }

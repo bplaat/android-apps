@@ -24,9 +24,8 @@ public class BibleService {
     private BibleService() {}
 
     public static BibleService getInstance() {
-        if (instance == null) {
+        if (instance == null)
             instance = new BibleService();
-        }
         return instance;
     }
 
@@ -75,19 +74,19 @@ public class BibleService {
 
     public Bible readBible(Context context, String path, boolean readIndex) {
         try (var database = SQLiteDatabase.openDatabase(context.getFilesDir() + "/" + path, null, SQLiteDatabase.OPEN_READONLY)) {
+            // Read metadata
             var metadata = new HashMap<String, String>();
             try (var cursor = database.rawQuery("SELECT key, value FROM metadata", null)) {
-                while (cursor.moveToNext()) {
+                while (cursor.moveToNext())
                     metadata.put(cursor.getString(cursor.getColumnIndex("key")), cursor.getString(cursor.getColumnIndex("value")));
-                }
             }
-
             var name = metadata.get("name");
             var abbreviation = metadata.get("abbreviation");
             var language = metadata.get("language");
             var copyright = metadata.get("copyright");
             var releasedAt = LocalDateTime.parse(metadata.get("released_at"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
 
+            // Read index
             ArrayList<Testament> testaments = null;
             if (readIndex) {
                 // Read testaments
@@ -109,7 +108,6 @@ public class BibleService {
                                         chapters.add(new Chapter(
                                             chaptersCursor.getInt(chaptersCursor.getColumnIndex("id")),
                                             chaptersCursor.getInt(chaptersCursor.getColumnIndex("number")),
-                                            null,
                                             null
                                         ));
                                     }
@@ -139,45 +137,26 @@ public class BibleService {
 
     public Chapter readChapter(Context context, String path, String bookKey, int chapterNumber) {
         var database = SQLiteDatabase.openDatabase(context.getFilesDir() + "/" + path, null, SQLiteDatabase.OPEN_READONLY);
+        var chapterCursor = database.rawQuery("SELECT id, number FROM chapters WHERE book_id = (SELECT id FROM books WHERE key = ?) AND number = ?", new String[] { bookKey, String.valueOf(chapterNumber) });
+        try (database; chapterCursor) {
+            chapterCursor.moveToNext();
+            var chapterId = chapterCursor.getInt(chapterCursor.getColumnIndex("id"));
 
-        // Read book
-        var bookCursor = database.rawQuery("SELECT id, key, name FROM books WHERE key = ?", new String[] { bookKey });
-        try (database; bookCursor) {
-            bookCursor.moveToNext();
-            var book = new Book(
-                bookCursor.getInt(bookCursor.getColumnIndex("id")),
-                bookCursor.getString(bookCursor.getColumnIndex("key")),
-                bookCursor.getString(bookCursor.getColumnIndex("name")),
-                null
-            );
-
-            // Read chapter
-            var chapterCursor = database.rawQuery("SELECT id, number FROM chapters WHERE book_id = (SELECT id FROM books WHERE key = ?) AND number = ?", new String[] { book.key(), String.valueOf(chapterNumber) });
-            try (chapterCursor) {
-                chapterCursor.moveToNext();
-                var chapterId = chapterCursor.getInt(chapterCursor.getColumnIndex("id"));
-
-                // Read verses
-                var verses = new ArrayList<Verse>();
-                try (var versesCursor = database.rawQuery("SELECT id, number, text, is_subtitle, is_new_paragraph FROM verses WHERE chapter_id = ?", new String[] { String.valueOf(chapterId) })) {
-                    while (versesCursor.moveToNext()) {
-                        verses.add(new Verse(
-                            versesCursor.getInt(versesCursor.getColumnIndex("id")),
-                            versesCursor.getString(versesCursor.getColumnIndex("number")),
-                            versesCursor.getString(versesCursor.getColumnIndex("text")),
-                            versesCursor.getInt(versesCursor.getColumnIndex("is_subtitle")) == 1,
-                            versesCursor.getInt(versesCursor.getColumnIndex("is_new_paragraph")) == 1
-                        ));
-                    }
+            // Read verses
+            var verses = new ArrayList<Verse>();
+            try (var versesCursor = database.rawQuery("SELECT id, number, text, is_subtitle, is_new_paragraph FROM verses WHERE chapter_id = ?", new String[] { String.valueOf(chapterId) })) {
+                while (versesCursor.moveToNext()) {
+                    verses.add(new Verse(
+                        versesCursor.getInt(versesCursor.getColumnIndex("id")),
+                        versesCursor.getString(versesCursor.getColumnIndex("number")),
+                        versesCursor.getString(versesCursor.getColumnIndex("text")),
+                        versesCursor.getInt(versesCursor.getColumnIndex("is_subtitle")) == 1,
+                        versesCursor.getInt(versesCursor.getColumnIndex("is_new_paragraph")) == 1
+                    ));
                 }
-
-                return new Chapter(
-                    chapterId,
-                    chapterCursor.getInt(chapterCursor.getColumnIndex("number")),
-                    book,
-                    verses
-                );
             }
+
+            return new Chapter(chapterId, chapterCursor.getInt(chapterCursor.getColumnIndex("number")), verses);
         }
     }
 }

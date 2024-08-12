@@ -14,6 +14,8 @@ public class Consts {
             "en", "bibles/niv.bible",
             "nl", "bibles/nbv21.bible"
         );
+        public static final String BIBLE_BOOK_DEFAULT = "GEN";
+        public static final int BIBLE_CHAPTER_DEFAULT = 1;
 
         public static final int FONT_SERIF = 0;
         public static final int FONT_SANS_SERIF = 1;
