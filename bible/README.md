@@ -18,14 +18,14 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/) and [d
 App
 - clean up MainActivity.java
     - create view_bible_chapter_viewer.xml BibleChapterViewer
-- better bible selection
-- better book selection
-- better chapter selection
+    - swipeable chapterviewers
+- selection
+    - better bible selection
+    - better book selection
+    - better chapter selection
 - search chapter number / text
-- random chapter
-- verse number gray color
-- import .bible file
-- swipeable chapterviewers
+- menu items
+    - import .bible file
 
 Downloader
 - fix bugs

@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name" translatable="false">CoinList</string>
 
+    <!-- Menu options -->
+    <string name="menu_options_settings">Settings</string>
+
     <!-- Main activity -->
     <string name="main_global_market_cap">Total Market Cap</string>
     <string name="main_global_volume">Volume (24h)</string>
