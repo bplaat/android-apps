@@ -190,17 +190,19 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         }
 
         openBible = bibleService.readBible(this, settings.getString("open_bible", defaultBiblePath), true);
-        bibleButton.setText(openBible.name());
+        bibleButton.setText(openBible.abbreviation());
         openChapter(true);
     }
 
     private void openChapter(boolean scrollToTop) {
-        openChapter = bibleService.readChapter(this, openBible.path(), settings.getString("open_book", "GEN"), settings.getInt("open_chapter", 1));
+        var bookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
+        openChapter = bibleService.readChapter(this, openBible.path(), bookKey, settings.getInt("open_chapter", Consts.Settings.BIBLE_CHAPTER_DEFAULT));
         chapterButton.setText(String.valueOf(openChapter.number()));
 
+        // Get book
         for (var testament : openBible.testaments()) {
             for (var book : testament.books()) {
-                if (book.id() == openChapter.book().id()) {
+                if (book.key() == bookKey) {
                     openBook = book;
                     break;
                 }
@@ -210,7 +212,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Create verse views
         var typefaceBold = Typeface.create(Typeface.SERIF, Typeface.BOLD);
-        var typeface =Typeface.create(Typeface.SERIF, Typeface.NORMAL);
+        var typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
         if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SANS_SERIF) {
             typefaceBold = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
             typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);

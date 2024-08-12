@@ -15,15 +15,19 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/) and [d
 - [King James Version (KJV)](https://www.die-bibel.de/bibel/KJV/GEN.1)
 
 ## TODO
-- app icon
+App
+- clean up MainActivity.java
+    - create view_bible_chapter_viewer.xml BibleChapterViewer
 - better bible selection
 - better book selection
 - better chapter selection
-- search text / chapter
-- random verse
+- search chapter number / text
+- random chapter
 - verse number gray color
-- clean up MainActivity.java and BibleService.java
+- import .bible file
+- swipeable chapterviewers
 
+Downloader
 - fix bugs
 - scrape nbv21 and check
 - scrape all bibles
