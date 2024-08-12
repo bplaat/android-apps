@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Menu options -->
+    <string name="menu_options_settings">Instellingen</string>
+
     <!-- Main activity -->
     <string name="main_landing_title_label">Binnenkort beschikbaar...</string>
     <string name="main_landing_description_label">We werken hard aan deze app</string>

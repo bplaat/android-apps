@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">Bible</string>
+    <string name="app_name">Bible</string>
+
+    <!-- Menu options -->
+    <string name="menu_options_random_chapter">Random chapter</string>
+    <string name="menu_options_settings">Settings</string>
 
     <!-- Main activity -->
     <string name="main_bible_alert_title_label">Bible Translation</string>

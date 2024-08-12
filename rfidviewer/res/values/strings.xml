@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name" translatable="false">RFID Viewer</string>
 
+    <!-- Menu options -->
+    <string name="menu_options_settings">Settings</string>
+
     <!-- Main activity -->
     <string name="main_landing_title_label">Scan an RFID tag</string>
     <string name="main_landing_description_label">Scan an RFID tag and don\'t move it for few seconds...</string>

@@ -6,6 +6,10 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.style.ForegroundColorSpan;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -19,6 +23,7 @@ import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;
 import nl.plaatsoft.bible.services.BibleService;
 import nl.plaatsoft.bible.Consts;
+import nl.plaatsoft.bible.Utils;
 import nl.plaatsoft.bible.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -57,7 +62,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             for (var i = 0; i < bibles.size(); i++) {
                 Bible bible = bibles.get(i);
                 bibleNames[i] = bible.name() + " (" + bible.language() +")";
-                if (openBible.path() == bible.path())
+                if (openBible.path().equals(bible.path()))
                     openBibleIndex = i;
             }
 
@@ -66,11 +71,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 .setSingleChoiceItems(bibleNames, openBibleIndex, (dialog, which) -> {
                     dialog.dismiss();
                     var chosenBible = bibles.get(which);
-                    if (chosenBible.path() != openBible.path()) {
+                    if (!chosenBible.path().equals(openBible.path())) {
                         var settingsEditor = settings.edit();
                         settingsEditor.putString("open_bible", chosenBible.path());
                         settingsEditor.apply();
-                        openBible();
+                        openBibleFromSettings();
                     }
                 })
                 .setNegativeButton(R.string.main_bible_alert_cancel_button, null)
@@ -105,7 +110,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         settingsEditor.putString("open_book", chosenBook.key());
                         settingsEditor.putInt("open_chapter", 1);
                         settingsEditor.apply();
-                        openChapter(true);
+                        openChapterFromSettings(true);
                     }
                 })
                 .setNegativeButton(R.string.main_book_alert_cancel_button, null)
@@ -127,7 +132,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         var settingsEditor = settings.edit();
                         settingsEditor.putInt("open_chapter", chosenChapter.number());
                         settingsEditor.apply();
-                        openChapter(true);
+                        openChapterFromSettings(true);
                     }
                 })
                 .setNegativeButton(R.string.main_chapter_alert_cancel_button, null)
@@ -145,11 +150,23 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Install bibles from assets and open last opened bible
         bibleService.installBiblesFromAssets(this);
         bibles = bibleService.getInstalledBibles(this);
-        openBible();
+        openBibleFromSettings();
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
+        if (item.getItemId() == R.id.menu_options_random_chapter) {
+            // Get random testament
+            var randomTestament = openBible.testaments().get((int)(Math.random() * openBible.testaments().size()));
+            var randomBook = randomTestament.books().get((int)(Math.random() * randomTestament.books().size()));
+            var settingsEditor = settings.edit();
+            settingsEditor.putString("open_book", randomBook.key());
+            settingsEditor.putInt("open_chapter", randomBook.chapters().get((int)(Math.random() * randomBook.chapters().size())).number());
+            settingsEditor.apply();
+            openChapterFromSettings(true);
+            return true;
+        }
+
         if (item.getItemId() == R.id.menu_options_settings) {
             oldFont = settings.getInt("font", Consts.Settings.FONT_DEFAULT);
             oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
@@ -166,7 +183,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldFont != -1 && oldLanguage != -1 && oldTheme != -1) {
                 if (oldFont != settings.getInt("font", Consts.Settings.FONT_DEFAULT))
-                    openChapter(false);
+                    openChapterFromSettings(false);
 
                 if (
                     oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
@@ -178,7 +195,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         }
     }
 
-    private void openBible() {
+    private void openBibleFromSettings() {
+        // Get default bible path
         String defaultBiblePath = Consts.Settings.BIBLE_DEFAULT.get("en");
         var locales = getResources().getConfiguration().getLocales();
         for (var i = 0; i < locales.size(); i++) {
@@ -189,20 +207,22 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             }
         }
 
+        // Open bible and chapter
         openBible = bibleService.readBible(this, settings.getString("open_bible", defaultBiblePath), true);
         bibleButton.setText(openBible.abbreviation());
-        openChapter(true);
+        openChapterFromSettings(true);
     }
 
-    private void openChapter(boolean scrollToTop) {
+    private void openChapterFromSettings(boolean scrollToTop) {
         var bookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
         openChapter = bibleService.readChapter(this, openBible.path(), bookKey, settings.getInt("open_chapter", Consts.Settings.BIBLE_CHAPTER_DEFAULT));
         chapterButton.setText(String.valueOf(openChapter.number()));
 
         // Get book
+        openBook = null;
         for (var testament : openBible.testaments()) {
             for (var book : testament.books()) {
-                if (book.key() == bookKey) {
+                if (book.key().equals(bookKey)) {
                     openBook = book;
                     break;
                 }
@@ -224,26 +244,35 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         if (scrollToTop)
             chapterScroll.scrollTo(0, 0);
+
         chapterContents.removeAllViews();
-        var sb = new StringBuilder();
+        var ssb = new SpannableStringBuilder();
         for (var verse : openChapter.verses()) {
             if (verse.isSubtitle()) {
-                addVerseBlock(verse.text(), typefaceBold);
+                addVerseBlock(new SpannableString(verse.text()), typefaceBold);
                 continue;
             }
-            if (verse.isNewParagraph() && sb.length() > 0) {
-                addVerseBlock(sb.toString(), typeface);
-                sb.setLength(0);
+            if (verse.isNewParagraph() && ssb.length() > 0) {
+                addVerseBlock(ssb, typeface);
+                ssb = new SpannableStringBuilder();
             }
-            if (sb.length() > 0)
-                sb.append(" ");
-            sb.append(verse.number() + ". " + verse.text());
+
+            if (ssb.length() > 0)
+                ssb.append(" ");
+
+            var verseNumber = verse.number() + ".";
+            var verseNumberSpannable = new SpannableString(verseNumber);
+            verseNumberSpannable.setSpan(new ForegroundColorSpan(Utils.contextGetColor(this, R.color.secondary_text_color)), 0, verseNumber.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            ssb.append(verseNumberSpannable);
+
+            ssb.append(" ");
+            ssb.append(verse.text());
         }
-        if (sb.length() > 0)
-            addVerseBlock(sb.toString(), typeface);
+        if (ssb.length() > 0)
+            addVerseBlock(ssb, typeface);
     }
 
-    private void addVerseBlock(String text, Typeface typeface) {
+    private void addVerseBlock(Spannable spannable, Typeface typeface) {
         var verseBlock = new TextView(this);
         verseBlock.setTypeface(typeface);
         verseBlock.setTextSize(18);
@@ -251,7 +280,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         var scale = getResources().getDisplayMetrics().density;
         layoutParams.setMargins(0, (int)(8 * scale), 0, (int)(8 * scale));
         verseBlock.setLayoutParams(layoutParams);
-        verseBlock.setText(text);
+        verseBlock.setText(spannable);
         chapterContents.addView(verseBlock);
     }
 }

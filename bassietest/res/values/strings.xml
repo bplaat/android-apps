@@ -2,6 +2,9 @@
 <resources>
     <string name="app_name" translatable="false">BassieTest</string>
 
+    <!-- Menu options -->
+    <string name="menu_options_settings">Settings</string>
+
     <!-- Main activity -->
     <string name="main_landing_title_label">Coming soon...</string>
     <string name="main_landing_description_label">We are working hard on this app</string>
