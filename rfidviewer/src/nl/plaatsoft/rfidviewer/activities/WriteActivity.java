@@ -137,21 +137,6 @@ public class WriteActivity extends BaseActivity {
         }
     }
 
-    // When back button press go back to landing page
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onBackPressed() {
-        if (formPage.getVisibility() != View.VISIBLE) {
-            // When a mifare task is running cancel it
-            if (writingPage.getVisibility() == View.VISIBLE && mifareWriteTask != null) {
-                mifareWriteTask.cancel();
-            }
-            openPage(formPage);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -174,6 +159,25 @@ public class WriteActivity extends BaseActivity {
                     openPage(errorPage);
                 }).write();
             }
+        }
+    }
+
+    @Override
+    protected boolean shouldBackOverride() {
+        if (formPage.getVisibility() != View.VISIBLE)
+            return true;
+        return false;
+    }
+
+    @Override
+    public void onBackInvoked() {
+        // When back button press go back to form page
+        if (formPage.getVisibility() != View.VISIBLE) {
+            // When a mifare task is running cancel it
+            if (writingPage.getVisibility() == View.VISIBLE && mifareWriteTask != null) {
+                mifareWriteTask.cancel();
+            }
+            openPage(formPage);
         }
     }
 
@@ -200,5 +204,6 @@ public class WriteActivity extends BaseActivity {
         writingPage.setVisibility(page.equals(writingPage) ? View.VISIBLE : View.GONE);
         successPage.setVisibility(page.equals(successPage) ? View.VISIBLE : View.GONE);
         errorPage.setVisibility(page.equals(errorPage) ? View.VISIBLE : View.GONE);
+        updateBackListener();
     }
 }

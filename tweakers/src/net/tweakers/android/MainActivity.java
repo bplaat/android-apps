@@ -17,10 +17,12 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+import android.window.OnBackInvokedCallback;
+import android.window.OnBackInvokedDispatcher;
 import java.util.Map;
 import java.util.HashMap;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements OnBackInvokedCallback {
     private WebView webviewPage;
     private LinearLayout disconnectedPage;
 
@@ -92,6 +94,7 @@ public class MainActivity extends Activity {
                 if (disconnectedPage.getVisibility() == View.GONE) {
                     webviewPage.setVisibility(View.GONE);
                     disconnectedPage.setVisibility(View.VISIBLE);
+                    updateBackListener();
                 }
             }
 
@@ -100,6 +103,7 @@ public class MainActivity extends Activity {
                     disconnectedPage.setVisibility(View.GONE);
                     webviewPage.setVisibility(View.VISIBLE);
                 }
+                updateBackListener();
 
                 super.onPageStarted(view, url, favicon);
             }
@@ -127,21 +131,43 @@ public class MainActivity extends Activity {
         }
     }
 
+    protected boolean shouldBackOverride() {
+        if (disconnectedPage.getVisibility() == View.VISIBLE) {
+            return false;
+        }
+        if (Uri.parse(webviewPage.getUrl()).getPath().equals("/")) {
+            return false;
+        }
+        if (webviewPage.canGoBack()) {
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public void onBackInvoked() {
+        if (webviewPage.canGoBack()) {
+            webviewPage.goBack();
+        }
+    }
+
     @Override
     @SuppressWarnings("deprecation")
     public void onBackPressed() {
-        if (disconnectedPage.getVisibility() == View.VISIBLE) {
-            super.onBackPressed();
-        }
-
-        if (Uri.parse(webviewPage.getUrl()).getPath().equals("/")) {
-            super.onBackPressed();
-        }
-
-        if (webviewPage.canGoBack()) {
-            webviewPage.goBack();
+        if (shouldBackOverride()) {
+            onBackInvoked();
         } else {
             super.onBackPressed();
+        }
+    }
+
+    protected void updateBackListener() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (shouldBackOverride()) {
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, this);
+            } else {
+                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(this);
+            }
         }
     }
 }

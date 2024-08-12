@@ -48,6 +48,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Landing action button
         findViewById(R.id.main_landing_hero_button).setOnClickListener(view -> {
             pageSwitcher.showNext();
+            updateBackListener();
 
             // Fetch random Unsplash image
             if (!imageLoaded) {
@@ -110,12 +111,17 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    @SuppressWarnings("deprecation")
-    public void onBackPressed() {
+    protected boolean shouldBackOverride() {
+        if (pageSwitcher.getDisplayedChild() == 1)
+            return true;
+        return false;
+    }
+
+    @Override
+    public void onBackInvoked() {
         if (pageSwitcher.getDisplayedChild() == 1) {
             pageSwitcher.showPrevious();
-        } else {
-            super.onBackPressed();
+            updateBackListener();
         }
     }
 }

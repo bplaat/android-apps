@@ -18,6 +18,8 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
+import android.window.OnBackInvokedCallback;
+import android.window.OnBackInvokedDispatcher;
 import java.util.Arrays;
 
 import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
@@ -25,7 +27,7 @@ import nl.plaatsoft.rfidviewer.Consts;
 import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
-public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
+public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener, OnBackInvokedCallback {
     private static final int SETTINGS_REQUEST_CODE = 1;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
@@ -124,21 +126,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         }
     }
 
-    // When back button press go back to landing page
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onBackPressed() {
-        if (landingPage.getVisibility() != View.VISIBLE) {
-            // When a mifare task is running cancel it
-            if (readingPage.getVisibility() == View.VISIBLE && mifareReadTask != null) {
-                mifareReadTask.cancel();
-            }
-            openPage(landingPage);
-        } else {
-            super.onBackPressed();
-        }
-    }
-
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
@@ -208,10 +195,29 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         }
     }
 
+    @Override
+    protected boolean shouldBackOverride() {
+        if (landingPage.getVisibility() != View.VISIBLE)
+            return true;
+        return false;
+    }
+
+    @Override
+    public void onBackInvoked() {
+        // When back button press go back to landing page
+        if (landingPage.getVisibility() != View.VISIBLE) {
+            // When a mifare task is running cancel it
+            if (readingPage.getVisibility() == View.VISIBLE && mifareReadTask != null)
+                mifareReadTask.cancel();
+            openPage(landingPage);
+        }
+    }
+
     private void openPage(ScrollView page) {
         landingPage.setVisibility(page.equals(landingPage) ? View.VISIBLE : View.GONE);
         readingPage.setVisibility(page.equals(readingPage) ? View.VISIBLE : View.GONE);
         dataPage.setVisibility(page.equals(dataPage) ? View.VISIBLE : View.GONE);
         errorPage.setVisibility(page.equals(errorPage) ? View.VISIBLE : View.GONE);
+        updateBackListener();
     }
 }

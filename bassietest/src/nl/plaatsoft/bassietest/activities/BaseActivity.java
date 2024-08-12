@@ -6,11 +6,13 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
+import android.window.OnBackInvokedCallback;
+import android.window.OnBackInvokedDispatcher;
 import java.util.Locale;
 
 import nl.plaatsoft.bassietest.Consts;
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends Activity implements OnBackInvokedCallback {
     protected SharedPreferences settings;
 
     @Override
@@ -55,5 +57,33 @@ public abstract class BaseActivity extends Activity {
             return;
         }
         super.attachBaseContext(context);
+    }
+
+    // Back button override
+    protected boolean shouldBackOverride() {
+        return false;
+    }
+
+    @Override
+    public void onBackInvoked() {}
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onBackPressed() {
+        if (shouldBackOverride()) {
+            onBackInvoked();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    protected void updateBackListener() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (shouldBackOverride()) {
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, this);
+            } else {
+                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(this);
+            }
+        }
     }
 }

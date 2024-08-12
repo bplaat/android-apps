@@ -133,6 +133,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldCurrency != -1) {
                 if (oldCurrency != settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)) {
