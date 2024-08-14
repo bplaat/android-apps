@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2024 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package ml.coinlist.android.models;
 
 public class Coin {

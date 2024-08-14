@@ -1,5 +1,10 @@
+/*
+ * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassietest.tasks;
-import nl.plaatsoft.bassietest.R;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -21,6 +26,8 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import nl.plaatsoft.bassietest.R;
 
 public class FetchImageTask {
     public static interface OnLoadListener {

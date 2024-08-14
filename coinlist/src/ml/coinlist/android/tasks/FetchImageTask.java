@@ -1,5 +1,10 @@
+/*
+ * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package ml.coinlist.android.tasks;
-import ml.coinlist.android.R;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
@@ -21,6 +26,8 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import ml.coinlist.android.R;
 
 public class FetchImageTask {
     public static interface OnLoadListener {

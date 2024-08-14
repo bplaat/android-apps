@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassietest.activities;
 
 import android.animation.AnimatorInflater;
