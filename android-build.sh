@@ -1,20 +1,23 @@
 #!/bin/bash
 # --- Bassie Android Build Script v1.3 ---
 # The default gradle Android build toolchain is so slow and produces bloated apks,
-# so I use this nice build shell script to get the job done!
+# so I use this nice build script to get the job done!
 # - Install OpenJDK JDK 17 or 21
 # - Install Android SDK with packages: platform-tools platforms;android-35 build-tools;35.0.0
 # - Set $ANDROID_HOME, $name, $package, $version, $password, $main_activity
 
-PATH=$PATH:$ANDROID_HOME/build-tools/35.0.0:$ANDROID_HOME/platform-tools
-PLATFORM=$ANDROID_HOME/platforms/android-35/android.jar
+min_sdk_version=21
+target_sdk_version=35
+
+################# BUILD SCRIPT #################
 
 if [ -z "$name" ]; then
-    echo "Can't run this script directly!"
+    echo "You haven't set all the required variables!"
     exit 1
 fi
 
 set -e
+PATH=$PATH:$ANDROID_HOME/platform-tools:$(find $ANDROID_HOME/build-tools -name "$target_sdk_version*")
 
 if [ "$1" = "clean" ]; then
     rm -rf target
@@ -41,27 +44,28 @@ mkdir -p target/res && rm -f target/res/*
 aapt2 compile --dir res --no-crunch -o target/res
 IFS="." read -r version_major version_minor version_patch <<< "$version"
 version_code=$((version_major * 10000 + version_minor * 100 + version_patch))
+platform=$ANDROID_HOME/platforms/android-$target_sdk_version/android.jar
 if [ -e assets ]; then
     aapt2 link target/res/*.flat --manifest AndroidManifest.xml -A assets --java target/src-gen \
-        --version-name "$version" --version-code "$version_code" --min-sdk-version 21 --target-sdk-version 35 \
-        -I "$PLATFORM" -o "target/$name-unaligned.apk"
+        --version-name "$version" --version-code "$version_code" --min-sdk-version "$min_sdk_version" \
+        --target-sdk-version "$target_sdk_version" -I "$platform" -o "target/$name-unaligned.apk"
 else
     aapt2 link target/res/*.flat --manifest AndroidManifest.xml --java target/src-gen \
-        --version-name "$version" --version-code "$version_code" --min-sdk-version 21 --target-sdk-version 35 \
-        -I "$PLATFORM" -o "target/$name-unaligned.apk"
+        --version-name "$version" --version-code "$version_code" --min-sdk-version "$min_sdk_version" \
+        --target-sdk-version "$target_sdk_version" -I "$platform" -o "target/$name-unaligned.apk"
 fi
 
 echo "Compiling java..."
 rm -rf target/src
 find src target/src-gen -name "*.java" > target/sources.txt
-javac -Xlint -cp "$PLATFORM" -d target/src @target/sources.txt
+javac -Xlint -cp "$platform" -d target/src @target/sources.txt
 
 echo "Compiling dex..."
 find target/src -name "*.class" > target/classes.txt
 if [ -e "$ANDROID_HOME/build-tools/d8.bat" ]; then
-    d8.bat --release --lib "$PLATFORM" --min-api 21 --output target/ @target/classes.txt
+    d8.bat --release --lib "$platform" --min-api "$min_sdk_version" --output target/ @target/classes.txt
 else
-    d8 --release --lib "$PLATFORM" --min-api 21 --output target/ @target/classes.txt
+    d8 --release --lib "$platform" --min-api "$min_sdk_version" --output target/ @target/classes.txt
 fi
 
 echo "Packing and signing application..."
