@@ -4,7 +4,7 @@
 # so I use this nice build shell script to get the job done!
 # - Install OpenJDK JDK 17 or 21
 # - Install Android SDK with packages: platform-tools platforms;android-35 build-tools;35.0.0
-# - Set $ANDROID_HOME, $name, $package, $password, $main_activity
+# - Set $ANDROID_HOME, $name, $package, $version, $password, $main_activity
 
 PATH=$PATH:$ANDROID_HOME/build-tools/35.0.0:$ANDROID_HOME/platform-tools
 PLATFORM=$ANDROID_HOME/platforms/android-35/android.jar
@@ -37,27 +37,34 @@ if [ "$1" = "clear" ]; then
 fi
 
 echo "Compiling resources..."
-rm -rf target/res && mkdir -p target/res
-aapt2 compile --dir res -o target/res
+mkdir -p target/res && rm -f target/res/*
+aapt2 compile --dir res --no-crunch -o target/res
+IFS="." read -r version_major version_minor version_patch <<< "$version"
+version_code=$((version_major * 10000 + version_minor * 100 + version_patch))
 if [ -e assets ]; then
-    aapt2 link target/res/*.flat --manifest AndroidManifest.xml -A assets --java src -I "$PLATFORM" -o "target/$name-unaligned.apk"
+    aapt2 link target/res/*.flat --manifest AndroidManifest.xml -A assets --java target/src-gen \
+        --version-name "$version" --version-code "$version_code" --min-sdk-version 21 --target-sdk-version 35 \
+        -I "$PLATFORM" -o "target/$name-unaligned.apk"
 else
-    aapt2 link target/res/*.flat --manifest AndroidManifest.xml --java src -I "$PLATFORM" -o "target/$name-unaligned.apk"
+    aapt2 link target/res/*.flat --manifest AndroidManifest.xml --java target/src-gen \
+        --version-name "$version" --version-code "$version_code" --min-sdk-version 21 --target-sdk-version 35 \
+        -I "$PLATFORM" -o "target/$name-unaligned.apk"
 fi
 
-echo "Compiling java code..."
-rm -rf target/src && mkdir target/src
-find src -name "*.java" > target/sources.txt
+echo "Compiling java..."
+rm -rf target/src
+find src target/src-gen -name "*.java" > target/sources.txt
 javac -Xlint -cp "$PLATFORM" -d target/src @target/sources.txt
-rm -f -r src/${package//\./\/}/R.java
 
-echo "Compiling dex, packing and signing application..."
+echo "Compiling dex..."
 find target/src -name "*.class" > target/classes.txt
 if [ -e "$ANDROID_HOME/build-tools/d8.bat" ]; then
     d8.bat --release --lib "$PLATFORM" --min-api 21 --output target/ @target/classes.txt
 else
     d8 --release --lib "$PLATFORM" --min-api 21 --output target/ @target/classes.txt
 fi
+
+echo "Packing and signing application..."
 zip -j "target/$name-unaligned.apk" target/classes.dex > /dev/null
 zipalign -f -p 4 "target/$name-unaligned.apk" "target/$name.apk"
 if [ -e "$ANDROID_HOME/build-tools/apksigner.bat" ]; then

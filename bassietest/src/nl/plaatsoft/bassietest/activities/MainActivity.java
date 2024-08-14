@@ -53,9 +53,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             // Fetch random Unsplash image
             if (!imageLoaded) {
                 imageLoaded = true;
-                var scale = getResources().getDisplayMetrics().density;
+                var density = getResources().getDisplayMetrics().density;
                 FetchImageTask.with(this)
-                    .load("https://picsum.photos/" + (int)(320 * scale) + "/" + (int)(240 * scale))
+                    .load("https://picsum.photos/" + (int)(320 * density) + "/" + (int)(240 * density))
                     .noCache()
                     .fadeIn()
                     .into(findViewById(R.id.main_data_random_image))
