@@ -17,7 +17,7 @@ import nl.plaatsoft.redsquare.android.Random;
 
 public class GamePage extends View {
     public static interface OnEventListener {
-        public void onGameover(int score, int seconds, int level);
+        void onGameover(int score, int seconds, int level);
     }
 
     private boolean started = false;

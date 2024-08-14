@@ -16,10 +16,10 @@ import java.util.concurrent.Executors;
 
 public class FetchDataTask {
     public static interface OnLoadListener {
-        public abstract void onLoad(byte[] data);
+        void onLoad(byte[] data);
     }
     public static interface OnErrorListener {
-        public abstract void onError(Exception exception);
+        void onError(Exception exception);
     }
 
     private static final Handler handler = new Handler(Looper.getMainLooper());

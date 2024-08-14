@@ -24,10 +24,10 @@ import java.util.concurrent.Executors;
 
 public class FetchImageTask {
     public static interface OnLoadListener {
-        public abstract void onLoad(Bitmap image);
+        void onLoad(Bitmap image);
     }
     public static interface OnErrorListener {
-        public abstract void onError(Exception exception);
+        void onError(Exception exception);
     }
 
     private static final int ANIMATION_IMAGE_LOADING_TIMEOUT = 50;

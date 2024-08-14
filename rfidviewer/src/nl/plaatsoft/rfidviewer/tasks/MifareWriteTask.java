@@ -14,19 +14,16 @@ import nl.plaatsoft.rfidviewer.Consts;
 
 public class MifareWriteTask {
     public static interface OnSuccessListener {
-        public abstract void onSuccess();
+        void onSuccess();
     }
     public static interface OnErrorListener {
-        public abstract void onError(Exception exception);
+        void onError(Exception exception);
     }
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
     private static final Executor executor = Executors.newFixedThreadPool(1);
 
-    private static class PendingWrite {
-        public int blockIndex;
-        public byte[] data;
-    }
+    private static record PendingWrite(int blockIndex, byte[] data) {};
 
     public static class FailedWriteException extends Exception {
         private static final long serialVersionUID = 1;
@@ -63,10 +60,7 @@ public class MifareWriteTask {
     }
 
     public MifareWriteTask writeBlock(int blockIndex, byte[] data) {
-        PendingWrite pendingWrite = new PendingWrite();
-        pendingWrite.blockIndex = blockIndex;
-        pendingWrite.data = data;
-        pendingWrites.add(pendingWrite);
+        pendingWrites.add(new PendingWrite(blockIndex, data));
         return this;
     }
 
@@ -125,13 +119,13 @@ public class MifareWriteTask {
         // Connect to the tag and write pending block writes
         mfc.connect();
         for (var pendingWrite : pendingWrites) {
-            if (mfc.authenticateSectorWithKeyA(mfc.blockToSector(pendingWrite.blockIndex), MifareClassic.KEY_DEFAULT)) {
-                mfc.writeBlock(pendingWrite.blockIndex, pendingWrite.data);
+            if (mfc.authenticateSectorWithKeyA(mfc.blockToSector(pendingWrite.blockIndex()), MifareClassic.KEY_DEFAULT)) {
+                mfc.writeBlock(pendingWrite.blockIndex(), pendingWrite.data());
 
-                var writtenBytes = mfc.readBlock(pendingWrite.blockIndex);
+                var writtenBytes = mfc.readBlock(pendingWrite.blockIndex());
                 for (var i = 0; i < 16; i++) {
-                    if (pendingWrite.data[i] != writtenBytes[i]) {
-                        throw new FailedWriteException("Failed to write block " + pendingWrite.blockIndex + ": read back data is not the same as written data!");
+                    if (pendingWrite.data()[i] != writtenBytes[i]) {
+                        throw new FailedWriteException("Failed to write block " + pendingWrite.blockIndex() + ": read back data is not the same as written data!");
                     }
                 }
             }

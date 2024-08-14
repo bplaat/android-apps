@@ -46,11 +46,13 @@ public class MainActivity extends Activity implements OnBackInvokedCallback {
         // Webview handlers
         var urlAdCache = new HashMap<String, Boolean>();
         webviewPage.setWebViewClient(new WebViewClient() {
+            @Override
             @SuppressWarnings("deprecation")
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
                 return shouldOverrideUrlLoading(view, Uri.parse(url));
             }
 
+            @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 return shouldOverrideUrlLoading(view, request.getUrl());
             }
@@ -62,6 +64,7 @@ public class MainActivity extends Activity implements OnBackInvokedCallback {
                 return true;
             }
 
+            @Override
             public WebResourceResponse shouldInterceptRequest(WebView view, WebResourceRequest request) {
                 var adblocker = AdBlocker.getInstance(MainActivity.this);
                 var url = request.getUrl().toString();
@@ -77,11 +80,13 @@ public class MainActivity extends Activity implements OnBackInvokedCallback {
                 return isAd ? adblocker.createEmptyResource() : super.shouldInterceptRequest(view, request);
             }
 
+            @Override
             @SuppressWarnings("deprecation")
             public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
                 onReceivedError(view);
             }
 
+            @Override
             public void onReceivedError(WebView view, WebResourceRequest webResourceRequest, WebResourceError webResourceError) {
                 if (webResourceRequest.isForMainFrame()) {
                     onReceivedError(view);
@@ -98,6 +103,7 @@ public class MainActivity extends Activity implements OnBackInvokedCallback {
                 }
             }
 
+            @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 if (disconnectedPage.getVisibility() == View.VISIBLE) {
                     disconnectedPage.setVisibility(View.GONE);
@@ -108,6 +114,7 @@ public class MainActivity extends Activity implements OnBackInvokedCallback {
                 super.onPageStarted(view, url, favicon);
             }
 
+            @Override
             public void onPageFinished(WebView view, String url) {
                 CookieManager.getInstance().flush();
 

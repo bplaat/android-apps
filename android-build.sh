@@ -17,7 +17,7 @@ if [ -z "$name" ]; then
 fi
 
 set -e
-PATH=$PATH:$ANDROID_HOME/platform-tools:$(find $ANDROID_HOME/build-tools -name "$target_sdk_version*")
+PATH=$PATH:$ANDROID_HOME/platform-tools:$(find "$ANDROID_HOME/build-tools" -name "$target_sdk_version*")
 
 if [ "$1" = "clean" ]; then
     rm -rf target
