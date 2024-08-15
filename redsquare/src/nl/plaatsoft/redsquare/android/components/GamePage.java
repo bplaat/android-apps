@@ -70,8 +70,7 @@ public class GamePage extends View {
         started = true;
         running = true;
 
-        DisplayMetrics metrics = getResources().getDisplayMetrics();
-        scale = metrics.density;
+        scale = getResources().getDisplayMetrics().density;
         width = (int)(getWidth() / scale);
         height = (int)(getHeight() / scale);
         paint.setTextSize(16 * scale);

@@ -211,7 +211,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void loadCoins(boolean loadFromCache) {
-        String url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)];
+        var url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)];
         FetchDataTask.with(this).load(url).loadFromCache(loadFromCache).saveToCache(true).then(data -> {
             try {
                 var settingsEditor = settings.edit();
@@ -222,7 +222,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 var jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
                 var jsonCoins = new JSONArray(new String(data, "UTF-8"));
                 for (var i = 0; i < jsonCoins.length(); i++) {
-                    JSONObject jsonCoin = jsonCoins.getJSONObject(i);
+                    var jsonCoin = jsonCoins.getJSONObject(i);
 
                     var isStarred = false;
                     for (var j = 0; j < jsonStarredCoins.length(); j++) {

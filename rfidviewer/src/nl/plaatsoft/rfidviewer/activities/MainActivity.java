@@ -141,7 +141,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             var tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Create an output string add uid line
-            StringBuilder output = new StringBuilder();
+            var output = new StringBuilder();
             output.append("Tag UID: ");
             var uid = tag.getId();
             for (var i = 0; i < uid.length; i++) {

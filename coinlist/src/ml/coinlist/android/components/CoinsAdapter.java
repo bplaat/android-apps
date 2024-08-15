@@ -154,7 +154,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
                 var value = (int)alphaAnimation.getAnimatedValue();
                 viewHolder.coinStarButton.setImageAlpha(value);
                 if (value == 255) {
-                    TypedValue outValue = new TypedValue();
+                    var outValue = new TypedValue();
                     getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true);
                     viewHolder.coinStarButton.setBackgroundResource(outValue.resourceId);
                 }

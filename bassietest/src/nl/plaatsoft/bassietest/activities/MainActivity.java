@@ -74,7 +74,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 FetchDataTask.with(this).load("https://ipinfo.io/json").then(data -> {
                     try {
                         var jsonData = new JSONObject(new String(data, "UTF-8"));
-                        TextView locationLabel = findViewById(R.id.main_data_location_label);
+                        var locationLabel = (TextView)findViewById(R.id.main_data_location_label);
                         locationLabel.setText(jsonData.getString("city") + ", " + jsonData.getString("region"));
 
                         var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);

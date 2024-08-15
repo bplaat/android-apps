@@ -125,7 +125,7 @@ public class SettingsActivity extends BaseActivity {
 
         // Share button
         findViewById(R.id.settings_share_button).setOnClickListener(view -> {
-            Intent intent = new Intent();
+            var intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.settings_share_message) + " " + Consts.STORE_PAGE_URL);

@@ -151,7 +151,7 @@ public class FetchImageTask {
         executor.execute(() -> {
             try {
                 var data = FetchDataTask.fetchData(context, url, isLoadedFomCache, isSavedToCache);
-                BitmapFactory.Options options = new BitmapFactory.Options();
+                var options = new BitmapFactory.Options();
                 options.inPreferredConfig = isTransparent ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
                 var image = BitmapFactory.decodeByteArray(data, 0, data.length, options);
                 if (bitmapCache.get(url) == null)
@@ -176,9 +176,9 @@ public class FetchImageTask {
         isPending = false;
         isLoaded = true;
         if (imageView != null) {
-            FetchImageTask imageViewTask = (FetchImageTask)imageView.getTag();
+            var imageViewTask = (FetchImageTask)imageView.getTag();
             if (url.equals(imageViewTask.getUrl())) {
-                boolean fadeIn = isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT;
+                var fadeIn = isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT;
                 if (fadeIn) {
                     imageView.setImageAlpha(0);
                 } else if (isTransparent) {
