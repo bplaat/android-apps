@@ -18,7 +18,7 @@ import java.util.Locale;
 
 import nl.plaatsoft.bassietest.Consts;
 
-public abstract class BaseActivity extends Activity implements OnBackInvokedCallback {
+public abstract class BaseActivity extends Activity {
     protected SharedPreferences settings;
 
     @Override
@@ -70,7 +70,6 @@ public abstract class BaseActivity extends Activity implements OnBackInvokedCall
         return false;
     }
 
-    @Override
     public void onBackInvoked() {}
 
     @Override
@@ -86,9 +85,9 @@ public abstract class BaseActivity extends Activity implements OnBackInvokedCall
     protected void updateBackListener() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (shouldBackOverride()) {
-                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, this);
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, (OnBackInvokedCallback)this);
             } else {
-                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(this);
+                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback((OnBackInvokedCallback)this);
             }
         }
     }

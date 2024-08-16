@@ -24,7 +24,6 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
-import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 import java.util.Arrays;
 
@@ -33,7 +32,7 @@ import nl.plaatsoft.rfidviewer.Consts;
 import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
-public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener, OnBackInvokedCallback {
+public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int SETTINGS_REQUEST_CODE = 1;
 
     private final Handler handler = new Handler(Looper.getMainLooper());

@@ -28,7 +28,7 @@ import android.window.OnBackInvokedDispatcher;
 import java.util.Map;
 import java.util.HashMap;
 
-public class MainActivity extends Activity implements OnBackInvokedCallback {
+public class MainActivity extends Activity {
     private WebView webviewPage;
     private LinearLayout disconnectedPage;
 
@@ -157,7 +157,6 @@ public class MainActivity extends Activity implements OnBackInvokedCallback {
         return false;
     }
 
-    @Override
     public void onBackInvoked() {
         if (webviewPage.canGoBack()) {
             webviewPage.goBack();
@@ -177,9 +176,9 @@ public class MainActivity extends Activity implements OnBackInvokedCallback {
     protected void updateBackListener() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (shouldBackOverride()) {
-                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, this);
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, (OnBackInvokedCallback)this);
             } else {
-                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(this);
+                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback((OnBackInvokedCallback)this);
             }
         }
     }
