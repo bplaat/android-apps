@@ -37,8 +37,8 @@ public class SettingsActivity extends BaseActivity {
         var currencyLabel = (TextView)findViewById(R.id.settings_currency_label);
         currencyLabel.setText(currencies[currency]);
         findViewById(R.id.settings_currency_button).setOnClickListener(view -> {
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_currency_alert_title_label)
+            var alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_currency_button)
                 .setSingleChoiceItems(currencies, currency, (dialog, which) -> {
                     dialog.dismiss();
                     if (currency != which) {
@@ -49,8 +49,9 @@ public class SettingsActivity extends BaseActivity {
                         settingsEditor.apply();
                     }
                 })
-                .setNegativeButton(R.string.settings_currency_alert_cancel_button, null)
                 .show();
+            var density = getResources().getDisplayMetrics().density;
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Language button
@@ -62,8 +63,8 @@ public class SettingsActivity extends BaseActivity {
         var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
         ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
         findViewById(R.id.settings_language_button).setOnClickListener(view -> {
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_language_alert_title_label)
+            var alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_language_button)
                 .setSingleChoiceItems(languages, language, (dialog, which) -> {
                     dialog.dismiss();
                     if (language != which) {
@@ -73,8 +74,9 @@ public class SettingsActivity extends BaseActivity {
                         recreate();
                     }
                 })
-                .setNegativeButton(R.string.settings_language_alert_cancel_button, null)
                 .show();
+            var density = getResources().getDisplayMetrics().density;
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Themes button
@@ -88,8 +90,8 @@ public class SettingsActivity extends BaseActivity {
         var theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
         ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
         findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_theme_alert_title_label)
+            var alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_theme_button)
                 .setSingleChoiceItems(themes, theme, (dialog, which) ->  {
                     dialog.dismiss();
                     if (theme != which) {
@@ -99,8 +101,9 @@ public class SettingsActivity extends BaseActivity {
                         recreate();
                     }
                 })
-                .setNegativeButton(R.string.settings_theme_alert_cancel_button, null)
                 .show();
+            var density = getResources().getDisplayMetrics().density;
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Version button easter egg

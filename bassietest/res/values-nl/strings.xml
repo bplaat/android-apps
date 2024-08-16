@@ -11,13 +11,9 @@
     <string name="settings_display_label">Weergave</string>
 
     <string name="settings_language_button">Taal</string>
-    <string name="settings_language_alert_title_label">Taal</string>
-    <string name="settings_language_alert_cancel_button">Annuleren</string>
     <string name="settings_language_system">Gebruik systeemstandaard</string>
 
     <string name="settings_theme_button">Thema</string>
-    <string name="settings_theme_alert_title_label">Thema</string>
-    <string name="settings_theme_alert_cancel_button">Annuleren</string>
     <string name="settings_theme_light">Licht</string>
     <string name="settings_theme_dark">Donker</string>
     <string name="settings_theme_battery_saver">Ingesteld door batterijbesparing</string>
