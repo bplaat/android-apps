@@ -23,7 +23,7 @@
                 <LinearLayout android:id="@+id/settings_language_button"
                     style="@style/ListItemButton">
 
-                    <ImageView android:src="@drawable/ic_language"
+                    <ImageView android:src="@drawable/ic_web"
                         style="@style/ListItemButtonIcon" />
 
                     <TextView android:text="@string/settings_language_button"
@@ -70,7 +70,7 @@
                 <LinearLayout android:id="@+id/settings_rate_button"
                     style="@style/ListItemButton">
 
-                    <ImageView android:src="@drawable/ic_grade"
+                    <ImageView android:src="@drawable/ic_star"
                         style="@style/ListItemButtonIcon" />
 
                     <TextView android:text="@string/settings_rate_button"
@@ -81,7 +81,7 @@
                 <LinearLayout android:id="@+id/settings_share_button"
                     style="@style/ListItemButton">
 
-                    <ImageView android:src="@drawable/ic_share"
+                    <ImageView android:src="@drawable/ic_share_variant"
                         style="@style/ListItemButtonIcon" />
 
                     <TextView android:text="@string/settings_share_button"
@@ -92,7 +92,7 @@
                 <LinearLayout android:id="@+id/settings_about_button"
                     style="@style/ListItemButton">
 
-                    <ImageView android:src="@drawable/ic_supervisor_account"
+                    <ImageView android:src="@drawable/ic_account_supervisor"
                         style="@style/ListItemButtonIcon" />
 
                     <TextView android:text="@string/settings_about_button"
