@@ -17,7 +17,9 @@
         style="@style/Flex">
 
         <!-- Landing page -->
-        <ScrollView style="@style/Fill">
+        <ScrollView android:id="@+id/main_landing_page"
+            style="@style/Fill">
+
             <LinearLayout style="@style/Hero">
                 <ImageView android:src="@drawable/ic_clock"
                     style="@style/HeroIcon" />
@@ -35,7 +37,9 @@
         </ScrollView>
 
         <!-- Data page -->
-        <ScrollView style="@style/Fill">
+        <ScrollView android:id="@+id/main_data_page"
+            style="@style/Fill">
+
             <LinearLayout style="@style/Hero">
                 <ImageView android:id="@+id/main_data_random_image"
                     android:layout_width="320dp"

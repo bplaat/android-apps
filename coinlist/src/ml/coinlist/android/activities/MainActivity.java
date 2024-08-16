@@ -44,14 +44,16 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private int oldLanguage = -1;
     private int oldTheme = -1;
     private boolean starredOnly;
-    private LinearLayout globalInfo;
     private ListView coinsList;
+    private LinearLayout globalInfo;
     private CoinsAdapter coinsAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        coinsList = findViewById(R.id.main_coins_list);
+        useWindowInsets(coinsList);
 
         // Starred button
         var starredButton = (ImageButton)findViewById(R.id.main_starred_button);
@@ -81,10 +83,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         });
 
         // Load coins data
-        coinsList = (ListView)findViewById(R.id.main_coins_list);
-
         globalInfo = (LinearLayout)getLayoutInflater().inflate(R.layout.view_coins_header, coinsList, false);
         coinsList.addHeaderView(globalInfo);
+        coinsList.addFooterView(new View(this));
 
         coinsAdapter = new CoinsAdapter(this);
         coinsList.setAdapter(coinsAdapter);

@@ -26,6 +26,7 @@ public class SettingsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        useWindowInsets(findViewById(R.id.settings_scroll));
 
         // Back button
         findViewById(R.id.settings_back_button).setOnClickListener(view -> finish());

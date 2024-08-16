@@ -62,6 +62,7 @@ public class WriteActivity extends BaseActivity {
         writingPage = findViewById(R.id.write_writing_page);
         successPage = findViewById(R.id.write_success_page);
         errorPage = findViewById(R.id.write_error_page);
+        useWindowInsets(formPage, waitingPage, writingPage, successPage, errorPage);
 
         // Set back button click listener
         findViewById(R.id.write_back_button).setOnClickListener(view -> {

@@ -42,6 +42,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pageSwitcher = findViewById(R.id.main_page_switcher);
+        useWindowInsets(findViewById(R.id.main_landing_page), findViewById(R.id.main_data_page));
 
         // Options menu button
         findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {

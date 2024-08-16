@@ -21,9 +21,4 @@ public class Utils {
             return context.getResources().getColor(id, null);
         return context.getResources().getColor(id);
     }
-
-    @SuppressWarnings("deprecation")
-    public static void windowSetDecorFitsSystemWindows(Window window, boolean decorFitsSystemWindows) {
-        window.setDecorFitsSystemWindows(decorFitsSystemWindows);
-    }
 }

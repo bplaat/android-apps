@@ -50,9 +50,6 @@ public class MainActivity extends BaseActivity {
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            Utils.windowSetDecorFitsSystemWindows(getWindow(), false);
-        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             var attributes = getWindow().getAttributes();
             attributes.layoutInDisplayCutoutMode = WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_ALWAYS;

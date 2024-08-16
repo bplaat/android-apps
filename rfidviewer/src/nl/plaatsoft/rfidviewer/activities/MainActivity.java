@@ -60,6 +60,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         dataPage = findViewById(R.id.main_data_page);
         dataOutputLabel = findViewById(R.id.main_data_output_label);
         errorPage = findViewById(R.id.main_error_page);
+        useWindowInsets(landingPage, readingPage, dataPage, errorPage);
 
         // Write button
         findViewById(R.id.main_write_button).setOnClickListener(view -> {

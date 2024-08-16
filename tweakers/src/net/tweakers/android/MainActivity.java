@@ -6,7 +6,6 @@
 
 package net.tweakers.android;
 
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,12 +22,10 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import android.window.OnBackInvokedCallback;
-import android.window.OnBackInvokedDispatcher;
 import java.util.Map;
 import java.util.HashMap;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
     private WebView webviewPage;
     private LinearLayout disconnectedPage;
 
@@ -36,9 +33,10 @@ public class MainActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        webviewPage = findViewById(R.id.main_webview_page);
+        useWindowInsets(webviewPage);
 
         // Webview page
-        webviewPage = findViewById(R.id.main_webview_page);
         webviewPage.setBackgroundColor(Color.TRANSPARENT);
 
         var webSettings = webviewPage.getSettings();
@@ -122,8 +120,10 @@ public class MainActivity extends Activity {
 
             @Override
             public void onPageFinished(WebView view, String url) {
-                CookieManager.getInstance().flush();
+                var density = getResources().getDisplayMetrics().density;
+                view.loadUrl("javascript:(function(){document.body.style.paddingBottom='" + (int)(view.getPaddingBottom() / density) + "px'})();");
 
+                CookieManager.getInstance().flush();
                 super.onPageFinished(view, url);
             }
         });
@@ -144,6 +144,7 @@ public class MainActivity extends Activity {
         }
     }
 
+    @Override
     protected boolean shouldBackOverride() {
         if (disconnectedPage.getVisibility() == View.VISIBLE) {
             return false;
@@ -157,29 +158,10 @@ public class MainActivity extends Activity {
         return false;
     }
 
+    @Override
     public void onBackInvoked() {
         if (webviewPage.canGoBack()) {
             webviewPage.goBack();
-        }
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onBackPressed() {
-        if (shouldBackOverride()) {
-            onBackInvoked();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    protected void updateBackListener() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (shouldBackOverride()) {
-                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, (OnBackInvokedCallback)this);
-            } else {
-                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback((OnBackInvokedCallback)this);
-            }
         }
     }
 }
