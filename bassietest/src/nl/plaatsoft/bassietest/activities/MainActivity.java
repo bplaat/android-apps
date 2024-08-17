@@ -125,7 +125,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onBackInvoked() {
+    protected void onBack() {
         if (pageSwitcher.getDisplayedChild() == 1) {
             pageSwitcher.showPrevious();
             updateBackListener();

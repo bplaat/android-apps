@@ -177,7 +177,7 @@ public class WriteActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackInvoked() {
+    protected void onBack() {
         // When back button press go back to form page
         if (formPage.getVisibility() != View.VISIBLE) {
             // When a mifare task is running cancel it

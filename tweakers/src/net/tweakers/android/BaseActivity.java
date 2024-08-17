@@ -14,6 +14,8 @@ import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 
 public abstract class BaseActivity extends Activity {
+    private OnBackInvokedCallback onBackCallback = null;
+
     @SuppressWarnings("deprecation")
     protected void useWindowInsets(ViewGroup ...scrollViews) {
         getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
@@ -62,13 +64,13 @@ public abstract class BaseActivity extends Activity {
         return false;
     }
 
-    public void onBackInvoked() {}
+    protected void onBack() {}
 
     @Override
     @SuppressWarnings("deprecation")
     public void onBackPressed() {
         if (shouldBackOverride()) {
-            onBackInvoked();
+            onBack();
         } else {
             super.onBackPressed();
         }
@@ -76,10 +78,12 @@ public abstract class BaseActivity extends Activity {
 
     protected void updateBackListener() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (onBackCallback == null)
+                onBackCallback = () -> onBack();
             if (shouldBackOverride()) {
-                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, (OnBackInvokedCallback)this);
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, onBackCallback);
             } else {
-                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback((OnBackInvokedCallback)this);
+                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackCallback);
             }
         }
     }

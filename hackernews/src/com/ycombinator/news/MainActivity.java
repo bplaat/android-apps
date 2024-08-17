@@ -22,8 +22,6 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import java.util.Map;
-import java.util.HashMap;
 
 public class MainActivity extends BaseActivity {
     private WebView webviewPage;
@@ -123,30 +121,25 @@ public class MainActivity extends BaseActivity {
     @Override
     public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        if (intent.getAction() == Intent.ACTION_VIEW) {
+        if (intent.getAction() == Intent.ACTION_VIEW)
             webviewPage.loadUrl(intent.getDataString());
-        }
     }
 
     @Override
     protected boolean shouldBackOverride() {
-        if (disconnectedPage.getVisibility() == View.VISIBLE) {
+        if (disconnectedPage.getVisibility() == View.VISIBLE)
             return false;
-        }
-        if (Uri.parse(webviewPage.getUrl()).getPath().equals("/")) {
+        if (Uri.parse(webviewPage.getUrl()).getPath().equals("/"))
             return false;
-        }
-        if (webviewPage.canGoBack()) {
+        if (webviewPage.canGoBack())
             return true;
-        }
         return false;
     }
 
     @Override
-    public void onBackInvoked() {
-        if (webviewPage.canGoBack()) {
+    protected void onBack() {
+        if (webviewPage.canGoBack())
             webviewPage.goBack();
-        }
     }
 
     @SuppressWarnings("deprecation")
