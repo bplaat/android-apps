@@ -7,14 +7,19 @@
     <string name="menu_options_settings">Settings</string>
 
     <!-- Main activity -->
-    <string name="main_bible_alert_title_label">Bible Translation</string>
-    <string name="main_bible_alert_cancel_button">Cancel</string>
-
-    <string name="main_book_alert_title_label">Bible Book</string>
-    <string name="main_book_alert_cancel_button">Cancel</string>
-
+    <string name="main_bible_alert_title_label">Bible</string>
+    <string name="main_book_alert_title_label">Book</string>
     <string name="main_chapter_alert_title_label">Chapter</string>
-    <string name="main_chapter_alert_cancel_button">Cancel</string>
+
+    <!-- Search activity -->
+    <string name="search_input_hint">Search</string>
+
+    <string name="search_start_title_label">Start searching...</string>
+    <string name="search_start_description_label">Type your search query and BassieMusic will try to find the right song...</string>
+
+    <string name="search_empty_title_label">No search results</string>
+    <string name="search_empty_description_label">BassieMusic can\'t find any music files with that search query</string>
+    <string name="search_empty_hero_button">Clear search</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Settings</string>
@@ -22,22 +27,16 @@
     <string name="settings_display_label">Display</string>
 
     <string name="settings_font_button">Font</string>
-    <string name="settings_font_alert_title_label">Font</string>
-    <string name="settings_font_alert_cancel_button">Cancel</string>
     <string name="settings_font_serif">Serif</string>
     <string name="settings_font_sans_serif">Sans-Serif</string>
     <string name="settings_font_monospace">Monospace</string>
 
     <string name="settings_language_button">Language</string>
-    <string name="settings_language_alert_title_label">Language</string>
-    <string name="settings_language_alert_cancel_button">Cancel</string>
     <string name="settings_language_english">English</string>
     <string name="settings_language_dutch">Nederlands</string>
     <string name="settings_language_system">Use system default</string>
 
     <string name="settings_theme_button">Theme</string>
-    <string name="settings_theme_alert_title_label">Theme</string>
-    <string name="settings_theme_alert_cancel_button">Cancel</string>
     <string name="settings_theme_light">Light</string>
     <string name="settings_theme_dark">Dark</string>
     <string name="settings_theme_battery_saver">Set by Battery Saver</string>

@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="nl.plaatsoft.bible"
-    android:versionCode="000001000"
-    android:versionName="0.1.0">
-
-    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="35" />
+    package="nl.plaatsoft.bible">
 
     <application android:allowBackup="true"
         android:label="@string/app_name"
         android:icon="@mipmap/ic_launcher"
-        android:theme="@style/Theme.App">
+        android:theme="@style/Theme.App"
+        android:enableOnBackInvokedCallback="true">
 
         <activity android:name=".activities.MainActivity"
             android:launchMode="singleTask"
@@ -22,8 +19,14 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".activities.SearchActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
+            android:exported="false" />
+
         <activity android:name=".activities.SettingsActivity"
-            android:parentActivityName=".MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:launchMode="singleTop"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="false" />

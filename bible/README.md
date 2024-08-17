@@ -16,14 +16,15 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/) and [d
 
 ## TODO
 App
-- clean up MainActivity.java
-    - create view_bible_chapter_viewer.xml BibleChapterViewer
-    - swipeable chapterviewers
 - selection
     - better bible selection
     - better book selection
     - better chapter selection
 - search chapter number / text
+    - random chapter -> random verse
+- clean up MainActivity.java
+    - create view_bible_chapter_viewer.xml BibleChapterViewer
+    - swipeable chapterviewers
 - menu items
     - import .bible file
 

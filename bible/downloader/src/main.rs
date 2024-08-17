@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2024 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 use std::collections::HashMap;
 use std::fs::File;
 use std::io::{Read, Write};

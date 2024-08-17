@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2024 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bible.services;
 
 import android.content.Context;
@@ -6,9 +12,8 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.time.format.DateTimeFormatter;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.zip.GZIPInputStream;
 
@@ -32,11 +37,11 @@ public class BibleService {
     public void installBiblesFromAssets(Context context) {
         // Copy and unzip .bible files from assets dir to app data dir
         try {
-            File biblesDir = new File(context.getFilesDir(), "bibles");
+            var biblesDir = new File(context.getFilesDir(), "bibles");
             if (!biblesDir.exists())
                 biblesDir.mkdirs();
 
-            for (var filename : context.getAssets().list("bibles/")) {
+            for (var filename : context.getAssets().list("bibles")) {
                 if (!filename.endsWith(".bible"))
                     continue;
 
@@ -69,6 +74,8 @@ public class BibleService {
                 Log.e(context.getPackageName(), "Can't read .bible file", exception);
             }
         }
+        Collections.sort(bibles, (a, b) -> a.name().compareTo(b.name()));
+        Collections.sort(bibles, (a, b) -> a.language().compareTo(b.language()));
         return bibles;
     }
 
@@ -84,7 +91,7 @@ public class BibleService {
             var abbreviation = metadata.get("abbreviation");
             var language = metadata.get("language");
             var copyright = metadata.get("copyright");
-            var releasedAt = LocalDateTime.parse(metadata.get("released_at"), DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            var releasedAt = metadata.get("released_at").split("T")[0];
 
             // Read index
             ArrayList<Testament> testaments = null;
