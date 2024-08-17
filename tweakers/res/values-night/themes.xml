@@ -1,24 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.AppBase" parent="@android:style/Theme.Material.Light.NoActionBar">
-        <!-- When available give system bars a light foreground color -->
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
-    </style>
-
-    <style name="Theme.App" parent="Theme.AppBase">
-        <!-- Use edge-to-edge transparent system bars -->
-        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <!-- Disable force dark we provide our own dark theme -->
-        <item name="android:forceDarkAllowed">false</item>
-
-        <item name="android:textColor">@color/primary_text_color</item>
-        <item name="android:windowBackground">@color/background_color</item>
-        <item name="android:colorPrimary">@color/primary_color</item>
-        <item name="android:colorPrimaryDark">@color/primary_color</item>
-        <item name="android:colorAccent">@color/accent_color</item>
-        <item name="android:overlapAnchor">true</item>
-    </style>
+    <style name="Theme.AppBase" parent="@android:style/Theme.Material.NoActionBar"></style>
 </resources>
