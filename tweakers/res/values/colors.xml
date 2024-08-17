@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="ic_launcher_background_color">#dae64a</color>
     <color name="primary_color">#fff</color>
     <color name="accent_color">#dae64a</color>
     <color name="background_color">#fff</color>
