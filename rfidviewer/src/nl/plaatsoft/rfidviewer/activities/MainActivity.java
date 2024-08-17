@@ -33,23 +33,24 @@ import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
+    private static final int PENDING_INTENT_REQUEST_CODE = 0;
     private static final int SETTINGS_REQUEST_CODE = 1;
-
-    private final Handler handler = new Handler(Looper.getMainLooper());
-    private int oldLanguage = -1;
-    private int oldTheme = -1;
-    private MifareReadTask mifareReadTask = null;
-
-    private NfcAdapter nfcAdapter = null;
-    private PendingIntent pendingIntent;
-    private IntentFilter[] intentFiltersArray;
-    private String[][] techListsArray;
 
     private ScrollView landingPage;
     private ScrollView readingPage;
     private ScrollView dataPage;
     private TextView dataOutputLabel;
     private ScrollView errorPage;
+
+    private final Handler handler = new Handler(Looper.getMainLooper());
+    private int oldLanguage = -1;
+    private int oldTheme = -1;
+
+    private MifareReadTask mifareReadTask = null;
+    private NfcAdapter nfcAdapter = null;
+    private PendingIntent pendingIntent;
+    private IntentFilter[] intentFiltersArray;
+    private String[][] techListsArray;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -78,30 +79,29 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Variables for NFC foreground intent dispatch
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter != null) {
-            pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
+            pendingIntent = PendingIntent.getActivity(this, PENDING_INTENT_REQUEST_CODE, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
             intentFiltersArray = new IntentFilter[] { new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED) };
             techListsArray = new String[][] { new String[] { NfcA.class.getName(), MifareClassic.class.getName() } };
         }
 
         // Pass intent of to intent handler
         var intent = getIntent();
-        if (intent != null) onNewIntent(intent);
+        if (intent != null)
+            onNewIntent(intent);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if (nfcAdapter != null) {
+        if (nfcAdapter != null)
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (nfcAdapter != null) {
+        if (nfcAdapter != null)
             nfcAdapter.disableForegroundDispatch(this);
-        }
     }
 
     @Override
@@ -124,9 +124,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
                     oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
                 ) {
-                    handler.post(() -> {
-                        recreate();
-                    });
+                    handler.post(() -> recreate());
                 }
             }
         }
@@ -137,7 +135,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         super.onNewIntent(intent);
 
         // Handle new incoming RFID tag messages
-        if (intent.getAction() != null && intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED)) {
+        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
             var tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Create an output string add uid line
@@ -149,7 +147,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 output.append(i < uid.length - 1 ? " " : "\n");
             }
 
-            // Check if tag is mifare classic
+            // Check if tag is Mifare Classic
             if (Arrays.asList(tag.getTechList()).contains(MifareClassic.class.getName())) {
                 openPage(readingPage);
 
@@ -193,7 +191,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     openPage(errorPage);
                 }).read();
             } else {
-                // Not an mifare classic tag print techs list, set data output string and show data page
+                // Not an Mifare Classic tag print techs list, set data output string and show data page
                 output.append("Not Mifare Classic: " + String.join(",", tag.getTechList()));
                 dataOutputLabel.setText(output.toString());
                 openPage(dataPage);
@@ -212,7 +210,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     protected void onBack() {
         // When back button press go back to landing page
         if (landingPage.getVisibility() != View.VISIBLE) {
-            // When a mifare task is running cancel it
+            // When a Mifare task is running cancel it
             if (readingPage.getVisibility() == View.VISIBLE && mifareReadTask != null)
                 mifareReadTask.cancel();
             openPage(landingPage);

@@ -29,14 +29,17 @@ public class MifareReadTask {
 
     private final Context context;
     private final MifareClassic mfc;
-    private boolean isCanceled;
-    private boolean isFinished;
-    private OnLoadListener onLoadListener;
-    private OnErrorListener onErrorListener;
+    private boolean isCanceled = false;
+    private boolean isFinished = false;
+    private OnLoadListener onLoadListener = null;
+    private OnErrorListener onErrorListener = null;
 
     private MifareReadTask(Context context, MifareClassic mfc) {
         this.context = context;
         this.mfc = mfc;
+    }
+    public static MifareReadTask with(Context context, MifareClassic mfc) {
+        return new MifareReadTask(context, mfc);
     }
 
     public boolean isCanceled() {
@@ -45,10 +48,6 @@ public class MifareReadTask {
 
     public boolean isFinished() {
         return isFinished;
-    }
-
-    public static MifareReadTask with(Context context, MifareClassic mfc) {
-        return new MifareReadTask(context, mfc);
     }
 
     public MifareReadTask then(OnLoadListener onLoadListener) {
@@ -63,24 +62,21 @@ public class MifareReadTask {
     }
 
     public MifareReadTask read() {
-        // Create async task to read mifire classic tag
+        // Create async task to read Mifare Classic tag
         executor.execute(() -> {
             try {
                 var data = readTag();
                 handler.post(() -> {
                     if (!isCanceled) {
                         finish();
-
-                        if (onLoadListener != null) {
+                        if (onLoadListener != null)
                             onLoadListener.onLoad(data);
-                        }
                     }
                 });
             } catch (Exception exception) {
                 handler.post(() -> {
                     if (!isCanceled) {
                         finish();
-
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
@@ -112,9 +108,8 @@ public class MifareReadTask {
                 var blockIndex = mfc.sectorToBlock(i);
                 for (var j = 0; j < mfc.getBlockCountInSector(i); j++) {
                     var bytes = mfc.readBlock(blockIndex++);
-                    for (var k = 0; k < 16; k++) {
+                    for (var k = 0; k < 16; k++)
                         data[pos++] = bytes[k];
-                    }
                 }
             }
         }

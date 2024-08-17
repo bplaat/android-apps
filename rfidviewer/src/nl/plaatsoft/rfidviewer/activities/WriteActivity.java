@@ -31,11 +31,7 @@ import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
 public class WriteActivity extends BaseActivity {
-    private NfcAdapter nfcAdapter = null;
-    private PendingIntent pendingIntent;
-    private IntentFilter[] intentFiltersArray;
-    private String[][] techListsArray;
-    private MifareWriteTask mifareWriteTask = null;
+    private static final int PENDING_INTENT_REQUEST_CODE = 1;
 
     private ScrollView formPage;
     private EditText formBlockIdInput;
@@ -44,6 +40,11 @@ public class WriteActivity extends BaseActivity {
     private ScrollView successPage;
     private ScrollView errorPage;
 
+    private NfcAdapter nfcAdapter = null;
+    private PendingIntent pendingIntent;
+    private IntentFilter[] intentFiltersArray;
+    private String[][] techListsArray;
+    private MifareWriteTask mifareWriteTask = null;
     private boolean isWritePending;
     private int pendingBlockId;
     private byte[] pendingBlockData;
@@ -75,14 +76,12 @@ public class WriteActivity extends BaseActivity {
                 pendingBlockId = Integer.parseInt(formBlockIdInput.getText().toString());
 
                 pendingBlockData = new byte[16];
-
                 var dataAscii = formDataAsciiInput.getText().toString();
                 if (dataAscii.length() > 0) {
                     for (var i = 0; i < dataAscii.length(); i++) {
                         pendingBlockData[i] = (byte)dataAscii.charAt(i);
                     }
                 }
-
                 var dataHex = formDataHexInput.getText().toString();
                 if (dataHex.length() > 0) {
                     for (var i = 0; i < dataHex.length(); i += 2) {
@@ -122,7 +121,7 @@ public class WriteActivity extends BaseActivity {
         // Variables for NFC foreground intent dispatch
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter != null) {
-            pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_IMMUTABLE);
+            pendingIntent = PendingIntent.getActivity(this, PENDING_INTENT_REQUEST_CODE, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
             intentFiltersArray = new IntentFilter[] { new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED) };
             techListsArray = new String[][] { new String[] { NfcA.class.getName(), MifareClassic.class.getName() } };
         }
@@ -131,17 +130,15 @@ public class WriteActivity extends BaseActivity {
     @Override
     public void onResume() {
         super.onResume();
-        if (nfcAdapter != null) {
+        if (nfcAdapter != null)
             nfcAdapter.enableForegroundDispatch(this, pendingIntent, intentFiltersArray, techListsArray);
-        }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (nfcAdapter != null) {
+        if (nfcAdapter != null)
             nfcAdapter.disableForegroundDispatch(this);
-        }
     }
 
     @Override
@@ -149,11 +146,11 @@ public class WriteActivity extends BaseActivity {
         super.onNewIntent(intent);
 
         // Handle new incoming RFID tag messages when a write is pending
-        if (intent.getAction() != null && intent.getAction().equals(NfcAdapter.ACTION_TECH_DISCOVERED) && isWritePending) {
+        if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()) && isWritePending) {
             isWritePending = false;
             var tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
-            // Check if tag is mifare classic
+            // Check if tag is Mifare Classic
             if (Arrays.asList(tag.getTechList()).contains(MifareClassic.class.getName())) {
                 openPage(writingPage);
 

@@ -25,12 +25,6 @@ public class MifareWriteTask {
     public static interface OnErrorListener {
         void onError(Exception exception);
     }
-
-    private static final Handler handler = new Handler(Looper.getMainLooper());
-    private static final Executor executor = Executors.newFixedThreadPool(1);
-
-    private static record PendingWrite(int blockIndex, byte[] data) {};
-
     public static class FailedWriteException extends Exception {
         private static final long serialVersionUID = 1;
 
@@ -38,6 +32,10 @@ public class MifareWriteTask {
             super(message);
         }
     }
+    private static record PendingWrite(int blockIndex, byte[] data) {};
+
+    private static final Handler handler = new Handler(Looper.getMainLooper());
+    private static final Executor executor = Executors.newFixedThreadPool(1);
 
     private final Context context;
     private final MifareClassic mfc;
@@ -45,14 +43,12 @@ public class MifareWriteTask {
     private boolean isFinished = false;
     private OnSuccessListener onSuccessListener = null;
     private OnErrorListener onErrorListener = null;
-    private List<PendingWrite> pendingWrites;
+    private List<PendingWrite> pendingWrites = new ArrayList<>();
 
     private MifareWriteTask(Context context, MifareClassic mfc) {
         this.context = context;
         this.mfc = mfc;
-        pendingWrites = new ArrayList<>();
     }
-
     public static MifareWriteTask with(Context context, MifareClassic mfc) {
         return new MifareWriteTask(context, mfc);
     }
@@ -82,24 +78,21 @@ public class MifareWriteTask {
     }
 
     public MifareWriteTask write() {
-        // Create async task to write blocks to mifire classic tag
+        // Create async task to write blocks to Mifare Classic tag
         executor.execute(() -> {
             try {
                 writeBlocks();
                 handler.post(() -> {
                     if (!isCanceled) {
                         finish();
-
-                        if (onSuccessListener != null) {
+                        if (onSuccessListener != null)
                             onSuccessListener.onSuccess();
-                        }
                     }
                 });
             } catch (Exception exception) {
                 handler.post(() -> {
                     if (!isCanceled) {
                         finish();
-
                         if (onErrorListener != null) {
                             onErrorListener.onError(exception);
                         } else {
@@ -127,7 +120,6 @@ public class MifareWriteTask {
         for (var pendingWrite : pendingWrites) {
             if (mfc.authenticateSectorWithKeyA(mfc.blockToSector(pendingWrite.blockIndex()), MifareClassic.KEY_DEFAULT)) {
                 mfc.writeBlock(pendingWrite.blockIndex(), pendingWrite.data());
-
                 var writtenBytes = mfc.readBlock(pendingWrite.blockIndex());
                 for (var i = 0; i < 16; i++) {
                     if (pendingWrite.data()[i] != writtenBytes[i]) {
