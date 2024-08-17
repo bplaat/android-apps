@@ -7,14 +7,19 @@
     <string name="menu_options_settings">Instellingen</string>
 
     <!-- Main activity -->
-    <string name="main_bible_alert_title_label">Bijbel Vertaling</string>
-    <string name="main_bible_alert_cancel_button">Annuleren</string>
-
-    <string name="main_book_alert_title_label">Bijbel Boek</string>
-    <string name="main_book_alert_cancel_button">Annuleren</string>
-
+    <string name="main_bible_alert_title_label">Bijbel</string>
+    <string name="main_book_alert_title_label">Boek</string>
     <string name="main_chapter_alert_title_label">Hoofdstuk</string>
-    <string name="main_chapter_alert_cancel_button">Annuleren</string>
+
+    <!-- Search activity -->
+    <string name="search_input_hint">Zoeken</string>
+
+    <string name="search_start_title_label">Begin met zoeken...</string>
+    <string name="search_start_description_label">Typ uw zoekopdracht en BassieMusic zal proberen het juiste nummer te vinden...</string>
+
+    <string name="search_empty_title_label">Geen resultaten gevonden</string>
+    <string name="search_empty_description_label">BassieMusic kan geen muziekbestanden vinden met die zoekopdracht</string>
+    <string name="search_empty_hero_button">Zoekveld wissen</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Instellingen</string>
@@ -22,17 +27,11 @@
     <string name="settings_display_label">Weergave</string>
 
     <string name="settings_font_button">Lettertype</string>
-    <string name="settings_font_alert_title_label">Lettertype</string>
-    <string name="settings_font_alert_cancel_button">Annuleren</string>
 
     <string name="settings_language_button">Taal</string>
-    <string name="settings_language_alert_title_label">Taal</string>
-    <string name="settings_language_alert_cancel_button">Annuleren</string>
     <string name="settings_language_system">Gebruik systeemstandaard</string>
 
     <string name="settings_theme_button">Thema</string>
-    <string name="settings_theme_alert_title_label">Thema</string>
-    <string name="settings_theme_alert_cancel_button">Annuleren</string>
     <string name="settings_theme_light">Licht</string>
     <string name="settings_theme_dark">Donker</string>
     <string name="settings_theme_battery_saver">Ingesteld door batterijbesparing</string>

@@ -2,23 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Fill">
 
-    <LinearLayout style="@style/ActionBar">
-        <TextView android:id="@+id/main_bible_button"
-            style="@style/ActionBarTitle" />
+    <FrameLayout style="@style/ActionBar">
+        <LinearLayout style="@style/ActionBarFirstLayer">
+            <TextView android:id="@+id/main_bible_button"
+                style="@style/ActionBarTextButton" />
 
-        <TextView android:id="@+id/main_book_button"
-            style="@style/ActionBarTitle" />
+            <View style="@style/Flex" />
 
-        <TextView android:id="@+id/main_chapter_button"
-            style="@style/ActionBarTitle" />
+            <ImageButton android:src="@drawable/ic_magnify"
+                style="@style/ActionBarIconButton" />
 
-        <ImageButton android:src="@drawable/ic_magnify"
-            style="@style/ActionBarIconButton" />
+            <ImageButton android:id="@+id/main_options_menu_button"
+                android:src="@drawable/ic_dots_vertical"
+                style="@style/ActionBarIconButton" />
+        </LinearLayout>
 
-        <ImageButton android:id="@+id/main_options_menu_button"
-            android:src="@drawable/ic_dots_vertical"
-            style="@style/ActionBarIconButton" />
-    </LinearLayout>
+        <LinearLayout style="@style/ActionBarSecondLayer">
+            <TextView android:id="@+id/main_book_button"
+                style="@style/ActionBarTextButton" />
+
+            <TextView android:id="@+id/main_chapter_button"
+                style="@style/ActionBarChapterButton" />
+        </LinearLayout>
+    </FrameLayout>
 
     <ScrollView android:id="@+id/main_chapter_scroll"
         style="@style/Flex">

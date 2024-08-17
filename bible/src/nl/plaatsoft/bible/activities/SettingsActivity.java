@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2024 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bible.activities;
 
 import android.app.AlertDialog;
@@ -21,6 +27,7 @@ public class SettingsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        useWindowInsets(findViewById(R.id.settings_scroll));
 
         // Back button
         findViewById(R.id.settings_back_button).setOnClickListener(view -> finish());
@@ -35,8 +42,8 @@ public class SettingsActivity extends BaseActivity {
         var fontLabel = (TextView)findViewById(R.id.settings_font_label);
         fontLabel.setText(fonts[font]);
         findViewById(R.id.settings_font_button).setOnClickListener(view -> {
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_font_alert_title_label)
+            var alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_font_button)
                 .setSingleChoiceItems(fonts, font, (dialog, which) -> {
                     dialog.dismiss();
                     if (font != which) {
@@ -47,8 +54,9 @@ public class SettingsActivity extends BaseActivity {
                         settingsEditor.apply();
                     }
                 })
-                .setNegativeButton(R.string.settings_font_alert_cancel_button, null)
                 .show();
+            var density = getResources().getDisplayMetrics().density;
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Language button
@@ -60,8 +68,8 @@ public class SettingsActivity extends BaseActivity {
         var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
         ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
         findViewById(R.id.settings_language_button).setOnClickListener(view -> {
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_language_alert_title_label)
+            var alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_language_button)
                 .setSingleChoiceItems(languages, language, (dialog, which) -> {
                     dialog.dismiss();
                     if (language != which) {
@@ -71,8 +79,9 @@ public class SettingsActivity extends BaseActivity {
                         recreate();
                     }
                 })
-                .setNegativeButton(R.string.settings_language_alert_cancel_button, null)
                 .show();
+            var density = getResources().getDisplayMetrics().density;
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Themes button
@@ -86,8 +95,8 @@ public class SettingsActivity extends BaseActivity {
         var theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
         ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
         findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
-            new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_theme_alert_title_label)
+            var alertDialog = new AlertDialog.Builder(this)
+                .setTitle(R.string.settings_theme_button)
                 .setSingleChoiceItems(themes, theme, (dialog, which) ->  {
                     dialog.dismiss();
                     if (theme != which) {
@@ -96,9 +105,9 @@ public class SettingsActivity extends BaseActivity {
                         settingsEditor.apply();
                         recreate();
                     }
-                })
-                .setNegativeButton(R.string.settings_theme_alert_cancel_button, null)
-                .show();
+                }).show();
+            var density = getResources().getDisplayMetrics().density;
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Version button easter egg
@@ -123,7 +132,7 @@ public class SettingsActivity extends BaseActivity {
 
         // Share button
         findViewById(R.id.settings_share_button).setOnClickListener(view -> {
-            Intent intent = new Intent();
+            var intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.settings_share_message) + " " + Consts.STORE_PAGE_URL);
