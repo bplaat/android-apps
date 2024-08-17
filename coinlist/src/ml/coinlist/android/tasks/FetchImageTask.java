@@ -145,7 +145,7 @@ public class FetchImageTask {
             return this;
         }
 
-        if (imageView != null && isTransparent)
+        if (imageView != null && isFadedIn && isTransparent)
             imageView.setBackgroundColor(contextGetColor(context, R.color.loading_background_color));
 
         executor.execute(() -> {
@@ -178,17 +178,10 @@ public class FetchImageTask {
         if (imageView != null) {
             var imageViewTask = (FetchImageTask)imageView.getTag();
             if (url.equals(imageViewTask.getUrl())) {
-                var fadeIn = isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT;
-                if (fadeIn) {
-                    imageView.setImageAlpha(0);
-                } else if (isTransparent) {
-                    imageView.setBackgroundColor(Color.TRANSPARENT);
-                }
                 imageView.setImageBitmap(image);
-
-                if (fadeIn) {
+                if (isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT) {
                     if (isTransparent) {
-                        var backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)imageView.getBackground()).getColor(), 0);
+                        var backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)imageView.getBackground()).getColor(), Color.TRANSPARENT);
                         backgroundColorAnimation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
                         backgroundColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
                         backgroundColorAnimation.addUpdateListener(animator -> {
@@ -203,7 +196,10 @@ public class FetchImageTask {
                     alphaAnimation.addUpdateListener(animator -> {
                         imageView.setImageAlpha((int)alphaAnimation.getAnimatedValue());
                     });
+                    imageView.setImageAlpha(0);
                     alphaAnimation.start();
+                } else if (isTransparent) {
+                    imageView.setBackgroundColor(Color.TRANSPARENT);
                 }
             }
         }
