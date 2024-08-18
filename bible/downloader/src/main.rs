@@ -14,6 +14,7 @@ use anyhow::{anyhow, bail, Result};
 use clap::Parser;
 use flate2::write::GzEncoder;
 use flate2::Compression;
+use rand::seq::SliceRandom;
 use serde_json::Value;
 use threadpool::ThreadPool;
 
@@ -56,7 +57,7 @@ struct Verse {
     number: Option<String>,
     text: String,
     is_subtitle: bool,
-    is_new_paragraph: bool,
+    is_last: bool,
 }
 
 #[derive(Parser, Debug)]
@@ -117,7 +118,7 @@ fn main() -> Result<()> {
             number TEXT,
             text TEXT,
             is_subtitle BOOL,
-            is_new_paragraph BOOL,
+            is_last BOOL,
             FOREIGN KEY (chapter_id) REFERENCES chapters (id)
         )",
         (),
@@ -147,7 +148,14 @@ fn main() -> Result<()> {
         let mut metadata = HashMap::new();
         metadata.insert("name", translation_metadata.name_local);
         metadata.insert("abbreviation", translation_metadata.abbreviation_local);
-        metadata.insert("language", translation_metadata.language.name_local); // FIXME
+        metadata.insert(
+            "language",
+            match translation_metadata.language.id.as_str() {
+                "eng" => "en".to_string(),
+                "nld" => "nl".to_string(),
+                _ => todo!(),
+            },
+        );
         metadata.insert("copyright", translation_metadata.copyright);
         metadata.insert("released_at", translation_metadata.updated_at);
         for (key, value) in metadata {
@@ -194,20 +202,20 @@ fn main() -> Result<()> {
                         "INSERT INTO chapters (book_id, number) VALUES (?, ?)",
                         (book_id, chapter_number),
                     )?;
-                    if book.id == "GEN" {
-                        // FIXME
-                        chapters.push(Chapter {
-                            id: conn.last_insert_rowid(),
-                            book_key: book.id.clone(),
-                            number: chapter_number,
-                        });
-                    }
+                    chapters.push(Chapter {
+                        id: conn.last_insert_rowid(),
+                        book_key: book.id.clone(),
+                        number: chapter_number,
+                    });
                 }
             }
         }
 
+        // Randomize chapters
+        chapters.shuffle(&mut rand::thread_rng());
+
         // Queue download chapters tasks
-        let pool = ThreadPool::new(8); // FIXME
+        let pool = ThreadPool::new(32);
         let (tx, rx) = mpsc::channel();
         for chapter in chapters {
             let translation_upper = translation_upper.clone();
@@ -218,12 +226,9 @@ fn main() -> Result<()> {
                     "{}/{}/{}.{}",
                     source_url, translation_upper, chapter.book_key, chapter.number
                 ))
-                .unwrap();
+                .expect(format!("Can't fetch {}.{}", chapter.book_key, chapter.number).as_str());
 
                 let mut verses: Vec<Verse> = Vec::new();
-                let mut current_verse_number = None;
-                let mut current_verse_text = String::new();
-                let mut is_new_paragraph = true;
                 for block in &chapter_data.blocks {
                     match block.r#type.as_str() {
                         "paragraph" => {
@@ -231,71 +236,73 @@ fn main() -> Result<()> {
                                 for (i, item) in content.iter().enumerate() {
                                     match item.r#type.as_str() {
                                         "text" => {
-                                            if current_verse_number.is_some() {
-                                                verses.push(Verse {
-                                                    chapter_id: chapter.id,
-                                                    number: current_verse_number.clone(),
-                                                    text: current_verse_text.clone(),
-                                                    is_subtitle: false,
-                                                    is_new_paragraph,
-                                                });
-                                                current_verse_number = None;
-                                                current_verse_text.clear();
-                                                is_new_paragraph = i == 0;
-                                            }
-
                                             verses.push(Verse {
                                                 chapter_id: chapter.id,
                                                 number: None,
-                                                text: item.content.clone().unwrap(),
+                                                text: item
+                                                    .content
+                                                    .as_ref()
+                                                    .unwrap()
+                                                    .as_str()
+                                                    .unwrap()
+                                                    .to_string(),
                                                 is_subtitle: true,
-                                                is_new_paragraph: true,
+                                                is_last: true,
                                             });
                                         }
                                         "verse-number" => {
-                                            if current_verse_number.is_some() {
-                                                verses.push(Verse {
-                                                    chapter_id: chapter.id,
-                                                    number: current_verse_number.clone(),
-                                                    text: current_verse_text.clone(),
-                                                    is_subtitle: false,
-                                                    is_new_paragraph,
-                                                });
-                                                current_verse_text.clear();
-                                                is_new_paragraph = i == 0;
-                                            }
-
-                                            current_verse_number =
-                                                Some(item.content.clone().unwrap());
+                                            verses.push(Verse {
+                                                chapter_id: chapter.id,
+                                                number: Some(
+                                                    item.content
+                                                        .as_ref()
+                                                        .unwrap()
+                                                        .as_str()
+                                                        .unwrap()
+                                                        .to_string(),
+                                                ),
+                                                text: "".to_string(),
+                                                is_subtitle: false,
+                                                is_last: false,
+                                            });
                                         }
                                         "verse-text" | "char" => {
-                                            if let Some(text) = &item.content {
-                                                if text != " " {
-                                                    current_verse_text.push_str(text.as_str());
+                                            if let Some(current_verse) = verses.last_mut() {
+                                                if i == 0 {
+                                                    current_verse.text.push('\n');
+                                                }
+                                                let content = item.content.as_ref().unwrap();
+                                                if content.is_string() {
+                                                    let text = content.as_str().unwrap();
+                                                    if text != " " {
+                                                        current_verse.text.push_str(text);
+                                                    }
                                                 }
                                             }
                                         }
                                         "study" => {}
-                                        _ => todo!(),
+                                        "ref" => {}
+                                        r#type => panic!("Unknown content type: {}", r#type),
                                     }
                                 }
-                                if current_verse_number.is_some() {
-                                    current_verse_text.push('\n');
-                                }
+                                verses.last_mut().unwrap().is_last = true;
                             }
                         }
-                        _ => todo!(),
+                        "table" => {}
+                        r#type => panic!("Unknown block type: {}", r#type),
                     }
                 }
-                if current_verse_number.is_some() {
-                    verses.push(Verse {
-                        chapter_id: chapter.id,
-                        number: current_verse_number.clone(),
-                        text: current_verse_text.clone(),
-                        is_subtitle: false,
-                        is_new_paragraph,
-                    });
-                }
+
+                // for verse in &verses {
+                //     if verse.is_subtitle {
+                //         print!("# {}", verse.text);
+                //     } else {
+                //         print!("{}. {}", verse.number.clone().unwrap(), verse.text);
+                //     }
+                //     if verse.is_last {
+                //         println!();
+                //     }
+                // }
 
                 tx.send(verses).unwrap();
             });
@@ -309,8 +316,8 @@ fn main() -> Result<()> {
             if let Ok(verses) = rx.recv_timeout(Duration::from_millis(100)) {
                 for verse in &verses {
                     conn.execute(
-                        "INSERT INTO verses (chapter_id, number, text, is_subtitle, is_new_paragraph) VALUES (?, ?, ?, ?, ?)",
-                        (verse.chapter_id, &verse.number, &verse.text, verse.is_subtitle, verse.is_new_paragraph),
+                        "INSERT INTO verses (chapter_id, number, text, is_subtitle, is_last) VALUES (?, ?, ?, ?, ?)",
+                        (verse.chapter_id, &verse.number, &verse.text, verse.is_subtitle, verse.is_last),
                     )?;
                 }
                 continue;
