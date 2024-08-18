@@ -27,7 +27,10 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import nl.plaatsoft.bible.components.BooksFlowLayout;
+import nl.plaatsoft.bible.components.ChaptersGridLayout;
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;
@@ -68,7 +71,17 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         chapterContents = findViewById(R.id.main_chapter_contents);
         useWindowInsets(chapterScroll);
 
+        var languages = new HashMap<String, String>();
+        languages.put("en", getResources().getString(R.string.settings_language_english));
+        languages.put("nl", getResources().getString(R.string.settings_language_dutch));
+
         // Bible button
+        var outValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        var selectableItemBackground = outValue.resourceId;
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true);
+        var selectableItemBackgroundBorderless = outValue.resourceId;
+
         bibleButton.setOnClickListener(view -> {
             var density = getResources().getDisplayMetrics().density;
             var alertView = new LinearLayout(this);
@@ -76,29 +89,30 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             alertView.setPadding(0, (int)(16 * density), 0, (int)(16 * density));
 
             var previousLanguage = "";
-            for (var bile : bibles) {
-                if (!previousLanguage.equals(bile.language())) {
-                    previousLanguage = bile.language();
+            for (var bible : bibles) {
+                if (!previousLanguage.equals(bible.language())) {
+                    previousLanguage = bible.language();
                     var languageView = new TextView(this);
-                    languageView.setText(bile.language());
+                    languageView.setText(languages.get(bible.language()));
                     languageView.setTextSize(16);
                     languageView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
+                    languageView.setTextColor(Utils.contextGetColor(this, R.color.secondary_text_color));
                     languageView.setPadding((int)(24 * density), (int)(16 * density), (int)(24 * density), (int)(16 * density));
                     alertView.addView(languageView);
                 }
 
                 var bibleView = new TextView(this);
-                bibleView.setText(bile.name() + " (" + bile.abbreviation() + ")");
+                bibleView.setText(bible.name());
                 bibleView.setTextSize(16);
                 bibleView.setPadding((int)(24 * density), (int)(16 * density), (int)(24 * density), (int)(16 * density));
-                var outValue = new TypedValue();
-                getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-                bibleView.setBackgroundResource(outValue.resourceId);
+                if (bible.path().equals(openBible.path()))
+                    bibleView.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
+                bibleView.setBackgroundResource(selectableItemBackground);
                 bibleView.setOnClickListener(view2 -> {
                     dialog.dismiss();
-                    if (!bile.path().equals(openBible.path())) {
+                    if (!bible.path().equals(openBible.path())) {
                         var settingsEditor = settings.edit();
-                        settingsEditor.putString("open_bible", bile.path());
+                        settingsEditor.putString("open_bible", bible.path());
                         settingsEditor.apply();
                         openBibleFromSettings();
                     }
@@ -116,27 +130,32 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         bookButton.setOnClickListener(view -> {
             var density = getResources().getDisplayMetrics().density;
             var alertView = new ScrollView(this);
-            var alertList = new LinearLayout(this);
-            alertList.setOrientation(LinearLayout.VERTICAL);
-            alertList.setPadding(0, (int)(16 * density), 0, 0);
-            alertView.addView(alertList);
+            var rootList = new LinearLayout(this);
+            rootList.setOrientation(LinearLayout.VERTICAL);
+            rootList.setPadding(0, (int)(16 * density), 0, (int)(16 * density));
+            alertView.addView(rootList);
 
             for (var testament : openBible.testaments()) {
                 var testamentView = new TextView(this);
                 testamentView.setText(testament.name());
-                testamentView.setTextSize(18);
+                testamentView.setTextSize(16);
+                testamentView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
                 testamentView.setTextColor(Utils.contextGetColor(this, R.color.secondary_text_color));
-                testamentView.setPadding((int)(16 * density), (int)(8 * density), (int)(16 * density), (int)(8 * density));
-                alertList.addView(testamentView);
+                testamentView.setPadding((int)(24 * density), (int)(16 * density), (int)(24 * density), (int)(16 * density));
+                rootList.addView(testamentView);
+
+                var booksFlowLayout = new BooksFlowLayout(this);
+                booksFlowLayout.setPadding((int)(16 * density), 0, (int)(16 * density), (int)(16 * density));
+                rootList.addView(booksFlowLayout);
 
                 for (var book : testament.books()) {
                     var bookView = new TextView(this);
                     bookView.setText(book.name());
-                    bookView.setTextSize(18);
-                    bookView.setPadding((int)(16 * density), (int)(16 * density), (int)(16 * density), (int)(16 * density));
-                    var outValue = new TypedValue();
-                    getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-                    bookView.setBackgroundResource(outValue.resourceId);
+                    bookView.setTextSize(16);
+                    bookView.setPadding((int)(8 * density), (int)(8 * density), (int)(8 * density), (int)(8 * density));
+                    if (book.key().equals(openBook.key()))
+                        bookView.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
+                    bookView.setBackgroundResource(selectableItemBackground);
                     bookView.setOnClickListener(view2 -> {
                         dialog.dismiss();
                         if (!book.key().equals(openBook.key())) {
@@ -147,7 +166,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                             openChapterFromSettings(true);
                         }
                     });
-                    alertList.addView(bookView);
+                    booksFlowLayout.addView(bookView);
                 }
             }
 
@@ -160,20 +179,19 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Chapter button
         chapterButton.setOnClickListener(view -> {
             var density = getResources().getDisplayMetrics().density;
-            var alertView = new GridLayout(this);
-            alertView.setColumnCount(6);
-            alertView.setPadding(0, (int)(16 * density), 0, 0);
+            var alertView = new ScrollView(this);
+            var chaptersGrid = new ChaptersGridLayout(this);
+            chaptersGrid.setPadding((int)(8 * density), (int)(16 * density), (int)(8 * density), (int)(16 * density));
+            alertView.addView(chaptersGrid);
 
             for (var chapter : openBook.chapters()) {
                 var chapterView = new TextView(this);
-                chapterView.setWidth((int)(48 * density));
-                chapterView.setHeight((int)(48 * density));
                 chapterView.setText(String.valueOf(chapter.number()));
                 chapterView.setTextSize(20);
+                if (chapter.number() == openChapter.number())
+                    chapterView.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
                 chapterView.setGravity(Gravity.CENTER);
-                var outValue = new TypedValue();
-                getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true);
-                chapterView.setBackgroundResource(outValue.resourceId);
+                chapterView.setBackgroundResource(selectableItemBackgroundBorderless);
                 chapterView.setOnClickListener(view2 -> {
                     dialog.dismiss();
                     if (chapter.number() != openChapter.number()) {
@@ -183,7 +201,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         openChapterFromSettings(true);
                     }
                 });
-                alertView.addView(chapterView);
+                chaptersGrid.addView(chapterView);
             }
 
             dialog = new AlertDialog.Builder(this)
@@ -209,7 +227,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.menu_options_random_chapter) {
-            // Get random testament
             var randomTestament = openBible.testaments().get((int)(Math.random() * openBible.testaments().size()));
             var randomBook = randomTestament.books().get((int)(Math.random() * randomTestament.books().size()));
             var settingsEditor = settings.edit();
@@ -234,10 +251,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // When settings activity is closed check for restarts
         if (requestCode == SETTINGS_REQUEST_CODE) {
-            if (oldFont != -1 && oldLanguage != -1 && oldTheme != -1) {
+            if (oldFont != -1) {
                 if (oldFont != settings.getInt("font", Consts.Settings.FONT_DEFAULT))
                     openChapterFromSettings(false);
-
+            }
+            if (oldLanguage != -1 && oldTheme != -1) {
                 if (
                     oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
                     oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
@@ -284,14 +302,14 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Create verse views
         var typefaceBold = Typeface.create(Typeface.SERIF, Typeface.BOLD);
-        var typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
+        var typefaceNormal = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
         if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SANS_SERIF) {
             typefaceBold = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
-            typeface = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
+            typefaceNormal = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
         }
         if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_MONOSPACE) {
             typefaceBold = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD);
-            typeface = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL);
+            typefaceNormal = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL);
         }
 
         if (scrollToTop)
@@ -304,23 +322,21 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 addVerseBlock(new SpannableString(verse.text()), typefaceBold, true);
                 continue;
             }
-            if (verse.isNewParagraph() && ssb.length() > 0) {
-                addVerseBlock(ssb, typeface, false);
-                ssb = new SpannableStringBuilder();
-            }
 
             if (ssb.length() > 0)
                 ssb.append(" ");
-
             var verseNumberSpannable = new SpannableString(verse.number());
             verseNumberSpannable.setSpan(new ForegroundColorSpan(Utils.contextGetColor(this, R.color.secondary_text_color)), 0, verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             verseNumberSpannable.setSpan(new RelativeSizeSpan(0.75f), 0, verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             ssb.append(verseNumberSpannable);
             ssb.append(" ");
             ssb.append(verse.text());
+
+            if (verse.isLast()) {
+                addVerseBlock(ssb, typefaceNormal, false);
+                ssb = new SpannableStringBuilder();
+            }
         }
-        if (ssb.length() > 0)
-            addVerseBlock(ssb, typeface, false);
     }
 
     private void addVerseBlock(Spannable spannable, Typeface typeface, boolean isSubtitle) {
