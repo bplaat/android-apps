@@ -151,14 +151,14 @@ public class BibleService {
 
             // Read verses
             var verses = new ArrayList<Verse>();
-            try (var versesCursor = database.rawQuery("SELECT id, number, text, is_subtitle, is_new_paragraph FROM verses WHERE chapter_id = ?", new String[] { String.valueOf(chapterId) })) {
+            try (var versesCursor = database.rawQuery("SELECT id, number, text, is_subtitle, is_last FROM verses WHERE chapter_id = ?", new String[] { String.valueOf(chapterId) })) {
                 while (versesCursor.moveToNext()) {
                     verses.add(new Verse(
                         versesCursor.getInt(versesCursor.getColumnIndex("id")),
                         versesCursor.getString(versesCursor.getColumnIndex("number")),
                         versesCursor.getString(versesCursor.getColumnIndex("text")),
                         versesCursor.getInt(versesCursor.getColumnIndex("is_subtitle")) == 1,
-                        versesCursor.getInt(versesCursor.getColumnIndex("is_new_paragraph")) == 1
+                        versesCursor.getInt(versesCursor.getColumnIndex("is_last")) == 1
                     ));
                 }
             }

@@ -16,19 +16,10 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/) and [d
 
 ## TODO
 App
-- selection
-    - better bible selection
-    - better book selection
-    - better chapter selection
 - search chapter number / text
+    - verse highlight
     - random chapter -> random verse
 - clean up MainActivity.java
     - create view_bible_chapter_viewer.xml BibleChapterViewer
     - swipeable chapterviewers
-- menu items
-    - import .bible file
-
-Downloader
-- fix bugs
-- scrape nbv21 and check
-- scrape all bibles
+- book not avialible error
