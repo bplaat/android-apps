@@ -11,6 +11,9 @@
     <string name="main_book_alert_title_label">Boek</string>
     <string name="main_chapter_alert_title_label">Hoofdstuk</string>
 
+    <string name="main_not_available_title_label">Hoofdstuk niet beschikbaar</string>
+    <string name="main_not_available_description_label">Het geselecteerde bijbelboek en hoofdstuk zijn niet gevonden in deze bijbelvertaling</string>
+
     <!-- Search activity -->
     <string name="search_input_hint">Zoeken</string>
 

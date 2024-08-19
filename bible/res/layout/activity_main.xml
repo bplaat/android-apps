@@ -26,6 +26,26 @@
         </LinearLayout>
     </FrameLayout>
 
-    <nl.plaatsoft.bible.components.ChapterView android:id="@+id/main_chapter_view"
-        style="@style/Flex" />
+    <FrameLayout style="@style/Flex">
+        <!-- Chapter page -->
+        <nl.plaatsoft.bible.components.ChapterView android:id="@+id/main_chapter_page"
+            style="@style/Fill" />
+
+        <!-- Not available page -->
+        <ScrollView android:id="@+id/main_not_available_page"
+            android:visibility="gone"
+            style="@style/Fill">
+
+            <LinearLayout style="@style/Hero">
+                <ImageView android:src="@drawable/ic_bookshelf"
+                    style="@style/HeroIcon" />
+
+                <TextView android:text="@string/main_not_available_title_label"
+                    style="@style/HeroTitle" />
+
+                <TextView android:text="@string/main_not_available_description_label"
+                    style="@style/HeroDescription" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 </LinearLayout>

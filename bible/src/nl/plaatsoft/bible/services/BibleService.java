@@ -152,7 +152,9 @@ public class BibleService {
                 "SELECT id, number FROM chapters WHERE book_id = (SELECT id FROM books WHERE key = ?) AND number = ?",
                 new String[] { bookKey, String.valueOf(chapterNumber) });
         try (database; chapterCursor) {
-            chapterCursor.moveToNext();
+            if (!chapterCursor.moveToNext())
+                return null;
+
             var chapterId = chapterCursor.getInt(chapterCursor.getColumnIndex("id"));
 
             // Read verses

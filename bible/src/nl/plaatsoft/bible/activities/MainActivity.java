@@ -15,6 +15,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -39,7 +40,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private TextView bibleButton;
     private TextView bookButton;
     private TextView chapterButton;
-    private ChapterView chapterView;
+    private ChapterView chapterPage;
+    private ScrollView notAvailablePage;
     private AlertDialog dialog;
 
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -59,8 +61,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         bibleButton = findViewById(R.id.main_bible_button);
         bookButton = findViewById(R.id.main_book_button);
         chapterButton = findViewById(R.id.main_chapter_button);
-        chapterView = findViewById(R.id.main_chapter_view);
-        useWindowInsets(chapterView);
+        chapterPage = findViewById(R.id.main_chapter_page);
+        notAvailablePage = findViewById(R.id.main_not_available_page);
+        useWindowInsets(chapterPage, notAvailablePage);
 
         var languages = new HashMap<String, String>();
         languages.put("en", getResources().getString(R.string.settings_language_english));
@@ -282,6 +285,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         var bookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
         openChapter = bibleService.readChapter(this, openBible.path(), bookKey,
                 settings.getInt("open_chapter", Consts.Settings.BIBLE_CHAPTER_DEFAULT));
+        if (openChapter == null) {
+            openPage(notAvailablePage);
+            return;
+        }
+        openPage(chapterPage);
         chapterButton.setText(String.valueOf(openChapter.number()));
 
         // Get book
@@ -298,13 +306,18 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Update chapter view
         if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SERIF)
-            chapterView.setTypeface(Typeface.create(Typeface.SERIF, Typeface.NORMAL));
+            chapterPage.setTypeface(Typeface.create(Typeface.SERIF, Typeface.NORMAL));
         if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SANS_SERIF)
-            chapterView.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
+            chapterPage.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
         if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_MONOSPACE)
-            chapterView.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
+            chapterPage.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
         if (scrollToTop)
-            chapterView.scrollTo(0, 0);
-        chapterView.openChapter(openChapter);
+            chapterPage.scrollTo(0, 0);
+        chapterPage.openChapter(openChapter);
+    }
+
+    private void openPage(View page) {
+        chapterPage.setVisibility(page.equals(chapterPage) ? View.VISIBLE : View.GONE);
+        notAvailablePage.setVisibility(page.equals(notAvailablePage) ? View.VISIBLE : View.GONE);
     }
 }
