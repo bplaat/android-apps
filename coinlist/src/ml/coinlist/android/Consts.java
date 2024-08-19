@@ -7,12 +7,14 @@
 package ml.coinlist.android;
 
 public class Consts {
-    private Consts() {}
+    private Consts() {
+    }
 
     public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/coinlist";
 
     public static class Settings {
-        private Settings() {}
+        private Settings() {
+        }
 
         public static final boolean STARRED_ONLY_DEFAULT = false;
 

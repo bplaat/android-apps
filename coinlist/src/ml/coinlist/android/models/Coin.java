@@ -25,9 +25,8 @@ public class Coin {
     }
 
     private Coin(
-        String id, int rank, String name, String imageUrl, double price,
-        double change, double marketCap, double volume, double supply, boolean starred
-    ) {
+            String id, int rank, String name, String imageUrl, double price,
+            double change, double marketCap, double volume, double supply, boolean starred) {
         this.empty = false;
         this.id = id;
         this.rank = rank;
@@ -47,9 +46,8 @@ public class Coin {
     }
 
     public static Coin createNormal(
-        String id, int rank, String name, String imageUrl, double price,
-        double change, double marketCap, double volume, double supply, boolean starred
-    ) {
+            String id, int rank, String name, String imageUrl, double price,
+            double change, double marketCap, double volume, double supply, boolean starred) {
         return new Coin(id, rank, name, imageUrl, price, change, marketCap, volume, supply, starred);
     }
 

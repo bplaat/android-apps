@@ -11,7 +11,8 @@ import android.content.ContextWrapper;
 import android.os.Build;
 
 public class Utils {
-    private Utils() {}
+    private Utils() {
+    }
 
     @SuppressWarnings("deprecation")
     public static int contextGetColor(Context context, int id) {

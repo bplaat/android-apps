@@ -7,13 +7,11 @@
 package ml.coinlist.android;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import java.text.NumberFormat;
 
-import ml.coinlist.android.Consts;
-
 public class Formatters {
-    private Formatters() {}
+    private Formatters() {
+    }
 
     public static String money(Context context, double number) {
         var settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
@@ -35,7 +33,8 @@ public class Formatters {
             formatted = format.format(number / 1e6) + " M";
         } else {
             var decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
-            if (currency == Consts.Settings.CURRENCY_BTC || currency == Consts.Settings.CURRENCY_ETH || currency == Consts.Settings.CURRENCY_BNB)
+            if (currency == Consts.Settings.CURRENCY_BTC || currency == Consts.Settings.CURRENCY_ETH
+                    || currency == Consts.Settings.CURRENCY_BNB)
                 decimals = number < 10 ? (number < 0.1 ? 12 : 6) : 4;
             if (currency == Consts.Settings.CURRENCY_SATS)
                 decimals = number < 1 ? 4 : 0;
