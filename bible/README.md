@@ -19,7 +19,5 @@ App
 - search chapter number / text
     - verse highlight
     - random chapter -> random verse
-- clean up MainActivity.java
-    - swipeable chapterviewers
-- book not avialible error
+- swipeable chapterviewers
 - fix incomplete books bug

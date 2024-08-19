@@ -11,6 +11,9 @@
     <string name="main_book_alert_title_label">Book</string>
     <string name="main_chapter_alert_title_label">Chapter</string>
 
+    <string name="main_not_available_title_label">Chapter not available</string>
+    <string name="main_not_available_description_label">The select Bible book and chapter are not found in this bible translation</string>
+
     <!-- Search activity -->
     <string name="search_input_hint">Search</string>
 
