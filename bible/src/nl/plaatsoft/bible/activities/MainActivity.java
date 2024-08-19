@@ -13,11 +13,6 @@ import android.util.TypedValue;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
@@ -28,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import nl.plaatsoft.bible.components.BooksFlowLayout;
+import nl.plaatsoft.bible.components.ChapterView;
 import nl.plaatsoft.bible.components.ChaptersGridLayout;
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
@@ -43,8 +39,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private TextView bibleButton;
     private TextView bookButton;
     private TextView chapterButton;
-    private ScrollView chapterScroll;
-    private LinearLayout chapterContents;
+    private ChapterView chapterView;
     private AlertDialog dialog;
 
     private Handler handler = new Handler(Looper.getMainLooper());
@@ -64,9 +59,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         bibleButton = findViewById(R.id.main_bible_button);
         bookButton = findViewById(R.id.main_book_button);
         chapterButton = findViewById(R.id.main_chapter_button);
-        chapterScroll = findViewById(R.id.main_chapter_scroll);
-        chapterContents = findViewById(R.id.main_chapter_contents);
-        useWindowInsets(chapterScroll);
+        chapterView = findViewById(R.id.main_chapter_view);
+        useWindowInsets(chapterView);
 
         var languages = new HashMap<String, String>();
         languages.put("en", getResources().getString(R.string.settings_language_english));
@@ -302,60 +296,15 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         }
         bookButton.setText(openBook.name());
 
-        // Create verse views
-        var typefaceBold = Typeface.create(Typeface.SERIF, Typeface.BOLD);
-        var typefaceNormal = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
-        if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SANS_SERIF) {
-            typefaceBold = Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD);
-            typefaceNormal = Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
-        }
-        if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_MONOSPACE) {
-            typefaceBold = Typeface.create(Typeface.MONOSPACE, Typeface.BOLD);
-            typefaceNormal = Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL);
-        }
-
+        // Update chapter view
+        if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SERIF)
+            chapterView.setTypeface(Typeface.create(Typeface.SERIF, Typeface.NORMAL));
+        if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SANS_SERIF)
+            chapterView.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
+        if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_MONOSPACE)
+            chapterView.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
         if (scrollToTop)
-            chapterScroll.scrollTo(0, 0);
-
-        chapterContents.removeAllViews();
-        var ssb = new SpannableStringBuilder();
-        for (var verse : openChapter.verses()) {
-            if (verse.isSubtitle()) {
-                addVerseBlock(new SpannableString(verse.text()), typefaceBold, true);
-                continue;
-            }
-
-            if (ssb.length() > 0)
-                ssb.append(" ");
-            var verseNumberSpannable = new SpannableString(verse.number());
-            verseNumberSpannable.setSpan(
-                    new ForegroundColorSpan(Utils.contextGetColor(this, R.color.secondary_text_color)), 0,
-                    verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            verseNumberSpannable.setSpan(new RelativeSizeSpan(0.75f), 0, verse.number().length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ssb.append(verseNumberSpannable);
-            ssb.append(" ");
-            ssb.append(verse.text());
-
-            if (verse.isLast()) {
-                addVerseBlock(ssb, typefaceNormal, false);
-                ssb = new SpannableStringBuilder();
-            }
-        }
-    }
-
-    private void addVerseBlock(Spannable spannable, Typeface typeface, boolean isSubtitle) {
-        var verseBlock = new TextView(this);
-        verseBlock.setTypeface(typeface);
-        verseBlock.setTextSize(18);
-        if (!isSubtitle)
-            verseBlock.setLineSpacing(0, 1.2f);
-        var layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        var density = getResources().getDisplayMetrics().density;
-        layoutParams.setMargins(0, (int) (8 * density), 0, (int) (8 * density));
-        verseBlock.setLayoutParams(layoutParams);
-        verseBlock.setText(spannable);
-        chapterContents.addView(verseBlock);
+            chapterView.scrollTo(0, 0);
+        chapterView.openChapter(openChapter);
     }
 }

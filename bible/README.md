@@ -20,6 +20,6 @@ App
     - verse highlight
     - random chapter -> random verse
 - clean up MainActivity.java
-    - create view_bible_chapter_viewer.xml BibleChapterViewer
     - swipeable chapterviewers
 - book not avialible error
+- fix incomplete books bug
