@@ -26,11 +26,6 @@
         </LinearLayout>
     </FrameLayout>
 
-    <ScrollView android:id="@+id/main_chapter_scroll"
-        style="@style/Flex">
-
-        <LinearLayout android:id="@+id/main_chapter_contents"
-            style="@style/ChapterContents">
-        </LinearLayout>
-    </ScrollView>
+    <nl.plaatsoft.bible.components.ChapterView android:id="@+id/main_chapter_view"
+        style="@style/Flex" />
 </LinearLayout>
