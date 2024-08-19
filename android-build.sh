@@ -39,12 +39,22 @@ if [ "$1" = "clear" ]; then
     exit
 fi
 
+# VSCode Java settings
+platform=$ANDROID_HOME/platforms/android-$target_sdk_version/android.jar
+if [ ! -e ../.vscode/settings.json ]; then
+    mkdir -p ../.vscode
+    echo "{\"editor.formatOnSave\":true,\"java.project.sourcePaths\":["> ../.vscode/settings.json
+    for dir in $(find .. -name "src" ! -path "*/target/*") $(find .. -name "src-gen"); do
+        echo "\"${dir:1}\"," >> ../.vscode/settings.json
+    done
+    echo "],\"java.project.referencedLibraries\":[\"$platform\"]}" >> ../.vscode/settings.json
+fi
+
 echo "Compiling resources..."
 mkdir -p target/res && rm -f target/res/*
 aapt2 compile --dir res --no-crunch -o target/res
 IFS="." read -r version_major version_minor version_patch <<< "$version"
 version_code=$((version_major * 10000 + version_minor * 100 + version_patch))
-platform=$ANDROID_HOME/platforms/android-$target_sdk_version/android.jar
 if [ -e assets ]; then
     aapt2 link target/res/*.flat --manifest AndroidManifest.xml -A assets --java target/src-gen \
         --version-name "$version" --version-code "$version_code" --min-sdk-version "$min_sdk_version" \
