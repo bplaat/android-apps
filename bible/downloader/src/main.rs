@@ -226,7 +226,7 @@ fn main() -> Result<()> {
                     "{}/{}/{}.{}",
                     source_url, translation_upper, chapter.book_key, chapter.number
                 ))
-                .expect(format!("Can't fetch {}.{}", chapter.book_key, chapter.number).as_str());
+                .unwrap_or_else(|_| panic!("Can't fetch {}.{}", chapter.book_key, chapter.number));
 
                 let mut verses: Vec<Verse> = Vec::new();
                 for block in &chapter_data.blocks {
