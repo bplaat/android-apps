@@ -9,11 +9,11 @@ package nl.plaatsoft.bible.models;
 import java.util.ArrayList;
 
 public record Bible(
-    String path,
-    String name,
-    String abbreviation,
-    String language,
-    String copyright,
-    String releasedAt,
-    ArrayList<Testament> testaments
-) {}
+        String path,
+        String name,
+        String abbreviation,
+        String language,
+        String copyright,
+        String releasedAt,
+        ArrayList<Testament> testaments) {
+}

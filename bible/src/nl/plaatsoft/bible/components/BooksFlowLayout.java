@@ -7,12 +7,9 @@
 package nl.plaatsoft.bible.components;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 
 public class BooksFlowLayout extends ViewGroup {
-    private static int COLUMN_COUNT = 6;
-
     public BooksFlowLayout(Context context) {
         super(context);
     }
