@@ -17,7 +17,7 @@ public abstract class BaseActivity extends Activity {
     private OnBackInvokedCallback onBackCallback = null;
 
     @SuppressWarnings("deprecation")
-    protected void useWindowInsets(ViewGroup ...scrollViews) {
+    protected void useWindowInsets(ViewGroup... scrollViews) {
         getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
             if (scrollViews != null) {
                 for (var scrollView : scrollViews) {
@@ -27,32 +27,30 @@ public abstract class BaseActivity extends Activity {
                 }
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                var insets = windowInsets.getInsets(WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout() | WindowInsets.Type.ime());
+                var insets = windowInsets.getInsets(
+                        WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout() | WindowInsets.Type.ime());
                 view.setPadding(insets.left, insets.top, insets.right, scrollViews != null ? 0 : insets.bottom);
                 if (scrollViews != null) {
                     for (var scrollView : scrollViews)
                         scrollView.setPadding(
-                            scrollView.getPaddingLeft(),
-                            scrollView.getPaddingTop(),
-                            scrollView.getPaddingRight(),
-                            (int)scrollView.getTag() + insets.bottom
-                        );
+                                scrollView.getPaddingLeft(),
+                                scrollView.getPaddingTop(),
+                                scrollView.getPaddingRight(),
+                                (int) scrollView.getTag() + insets.bottom);
                 }
             } else {
                 view.setPadding(
-                    windowInsets.getSystemWindowInsetLeft(),
-                    windowInsets.getSystemWindowInsetTop(),
-                    windowInsets.getSystemWindowInsetRight(),
-                    scrollViews != null ? 0 : windowInsets.getSystemWindowInsetBottom()
-                );
+                        windowInsets.getSystemWindowInsetLeft(),
+                        windowInsets.getSystemWindowInsetTop(),
+                        windowInsets.getSystemWindowInsetRight(),
+                        scrollViews != null ? 0 : windowInsets.getSystemWindowInsetBottom());
                 if (scrollViews != null) {
                     for (var scrollView : scrollViews)
                         scrollView.setPadding(
-                            scrollView.getPaddingLeft(),
-                            scrollView.getPaddingTop(),
-                            scrollView.getPaddingRight(),
-                            (int)scrollView.getTag() + windowInsets.getSystemWindowInsetBottom()
-                        );
+                                scrollView.getPaddingLeft(),
+                                scrollView.getPaddingTop(),
+                                scrollView.getPaddingRight(),
+                                (int) scrollView.getTag() + windowInsets.getSystemWindowInsetBottom());
                 }
             }
             return windowInsets;
@@ -64,7 +62,8 @@ public abstract class BaseActivity extends Activity {
         return false;
     }
 
-    protected void onBack() {}
+    protected void onBack() {
+    }
 
     @Override
     @SuppressWarnings("deprecation")
@@ -81,7 +80,8 @@ public abstract class BaseActivity extends Activity {
             if (onBackCallback == null)
                 onBackCallback = () -> onBack();
             if (shouldBackOverride()) {
-                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, onBackCallback);
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                        onBackCallback);
             } else {
                 getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackCallback);
             }

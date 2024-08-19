@@ -16,7 +16,6 @@ import android.webkit.CookieManager;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
@@ -59,7 +58,8 @@ public class MainActivity extends BaseActivity {
             }
 
             private boolean shouldOverrideUrlLoading(WebView view, Uri uri) {
-                if (uri.getScheme().equals("https") && (uri.getHost().endsWith("tweakers.net") || uri.getHost().equals("myprivacy.dpgmedia.nl")))
+                if (uri.getScheme().equals("https")
+                        && (uri.getHost().endsWith("tweakers.net") || uri.getHost().equals("myprivacy.dpgmedia.nl")))
                     return false;
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                 return true;
@@ -88,7 +88,8 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onReceivedError(WebView view, WebResourceRequest webResourceRequest, WebResourceError webResourceError) {
+            public void onReceivedError(WebView view, WebResourceRequest webResourceRequest,
+                    WebResourceError webResourceError) {
                 if (webResourceRequest.isForMainFrame()) {
                     onReceivedError(view);
                 }
@@ -118,7 +119,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 var density = getResources().getDisplayMetrics().density;
-                view.loadUrl("javascript:(function(){document.body.style.paddingBottom='" + (int)(view.getPaddingBottom() / density) + "px'})();");
+                view.loadUrl("javascript:(function(){document.body.style.paddingBottom='"
+                        + (int) (view.getPaddingBottom() / density) + "px'})();");
 
                 CookieManager.getInstance().flush();
                 super.onPageFinished(view, url);

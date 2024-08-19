@@ -19,14 +19,13 @@ import java.util.Set;
 public class AdBlocker {
     private static AdBlocker instance;
 
-    private final Context context;
     private final Set<String> hostsBlacklist;
 
     private AdBlocker(Context context) {
-        this.context = context;
         hostsBlacklist = new HashSet<>();
 
-        try (var bufferedReader = new BufferedReader(new InputStreamReader(context.getAssets().open("blacklist-adservers.txt")))) {
+        try (var bufferedReader = new BufferedReader(
+                new InputStreamReader(context.getAssets().open("blacklist-adservers.txt")))) {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (line.length() > 0) {
@@ -55,7 +54,8 @@ public class AdBlocker {
         }
 
         var index = host.indexOf(".");
-        return index >= 0 && (hostsBlacklist.contains(host) || index + 1 < host.length() && isAdHost(host.substring(index + 1)));
+        return index >= 0
+                && (hostsBlacklist.contains(host) || index + 1 < host.length() && isAdHost(host.substring(index + 1)));
     }
 
     public WebResourceResponse createEmptyResource() {
