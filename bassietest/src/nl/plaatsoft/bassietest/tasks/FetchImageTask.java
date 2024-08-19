@@ -19,11 +19,6 @@ import android.util.Log;
 import android.util.LruCache;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
@@ -33,6 +28,7 @@ public class FetchImageTask {
     public static interface OnLoadListener {
         void onLoad(Bitmap image);
     }
+
     public static interface OnErrorListener {
         void onError(Exception exception);
     }
@@ -41,7 +37,8 @@ public class FetchImageTask {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
     private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    private static final LruCache<String, Bitmap> bitmapCache = new LruCache<String, Bitmap>((int)(Runtime.getRuntime().freeMemory() / 4)) {
+    private static final LruCache<String, Bitmap> bitmapCache = new LruCache<String, Bitmap>(
+            (int) (Runtime.getRuntime().freeMemory() / 4)) {
         @Override
         protected int sizeOf(String url, Bitmap bitmap) {
             return bitmap.getByteCount();
@@ -64,6 +61,7 @@ public class FetchImageTask {
     private FetchImageTask(Context context) {
         this.context = context;
     }
+
     public static FetchImageTask with(Context context) {
         return new FetchImageTask(context);
     }
@@ -109,6 +107,7 @@ public class FetchImageTask {
         this.onLoadListener = onLoadListener;
         return this;
     }
+
     public FetchImageTask then(OnLoadListener onLoadListener, OnErrorListener onErrorListener) {
         this.onLoadListener = onLoadListener;
         this.onErrorListener = onErrorListener;
@@ -123,12 +122,15 @@ public class FetchImageTask {
     public String getUrl() {
         return url;
     }
+
     public boolean isPending() {
         return isPending;
     }
+
     public boolean isLoaded() {
         return isLoaded;
     }
+
     public boolean isError() {
         return isError;
     }
@@ -176,16 +178,18 @@ public class FetchImageTask {
         isPending = false;
         isLoaded = true;
         if (imageView != null) {
-            var imageViewTask = (FetchImageTask)imageView.getTag();
+            var imageViewTask = (FetchImageTask) imageView.getTag();
             if (url.equals(imageViewTask.getUrl())) {
                 imageView.setImageBitmap(image);
                 if (isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT) {
                     if (isTransparent) {
-                        var backgroundColorAnimation = ValueAnimator.ofArgb(((ColorDrawable)imageView.getBackground()).getColor(), Color.TRANSPARENT);
-                        backgroundColorAnimation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
+                        var backgroundColorAnimation = ValueAnimator
+                                .ofArgb(((ColorDrawable) imageView.getBackground()).getColor(), Color.TRANSPARENT);
+                        backgroundColorAnimation
+                                .setDuration(context.getResources().getInteger(R.integer.animation_duration));
                         backgroundColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
                         backgroundColorAnimation.addUpdateListener(animator -> {
-                            imageView.setBackgroundColor((int)backgroundColorAnimation.getAnimatedValue());
+                            imageView.setBackgroundColor((int) backgroundColorAnimation.getAnimatedValue());
                         });
                         backgroundColorAnimation.start();
                     }
@@ -194,7 +198,7 @@ public class FetchImageTask {
                     alphaAnimation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
                     alphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
                     alphaAnimation.addUpdateListener(animator -> {
-                        imageView.setImageAlpha((int)alphaAnimation.getAnimatedValue());
+                        imageView.setImageAlpha((int) alphaAnimation.getAnimatedValue());
                     });
                     imageView.setImageAlpha(0);
                     alphaAnimation.start();

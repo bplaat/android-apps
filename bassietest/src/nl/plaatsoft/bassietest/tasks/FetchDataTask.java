@@ -24,6 +24,7 @@ public class FetchDataTask {
     public static interface OnLoadListener {
         void onLoad(byte[] data);
     }
+
     public static interface OnErrorListener {
         void onError(Exception exception);
     }
@@ -44,6 +45,7 @@ public class FetchDataTask {
     private FetchDataTask(Context context) {
         this.context = context;
     }
+
     public static FetchDataTask with(Context context) {
         return new FetchDataTask(context);
     }
@@ -79,6 +81,7 @@ public class FetchDataTask {
         this.onLoadListener = onLoadListener;
         return this;
     }
+
     public FetchDataTask then(OnLoadListener onLoadListener, OnErrorListener onErrorListener) {
         this.onLoadListener = onLoadListener;
         this.onErrorListener = onErrorListener;
@@ -88,11 +91,13 @@ public class FetchDataTask {
     public boolean isPending() {
         return isPending;
     }
+
     public boolean isLoaded() {
         return isLoaded;
     }
+
     public boolean isError() {
-        return isLoaded;
+        return isError;
     }
 
     public FetchDataTask fetch() {
@@ -121,7 +126,8 @@ public class FetchDataTask {
         return this;
     }
 
-    public static byte[] fetchData(Context context, String url, boolean isLoadedFomCache, boolean isSavedToCache) throws Exception {
+    public static byte[] fetchData(Context context, String url, boolean isLoadedFomCache, boolean isSavedToCache)
+            throws Exception {
         // Get MD5 hash of url
         var messageDigest = MessageDigest.getInstance("MD5");
         messageDigest.update(url.getBytes());

@@ -15,7 +15,6 @@ import android.os.Looper;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
@@ -62,11 +61,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 imageLoaded = true;
                 var density = getResources().getDisplayMetrics().density;
                 FetchImageTask.with(this)
-                    .load("https://picsum.photos/" + (int)(320 * density) + "/" + (int)(240 * density))
-                    .noCache()
-                    .fadeIn()
-                    .into(findViewById(R.id.main_data_random_image))
-                    .fetch();
+                        .load("https://picsum.photos/" + (int) (320 * density) + "/" + (int) (240 * density))
+                        .noCache()
+                        .fadeIn()
+                        .into(findViewById(R.id.main_data_random_image))
+                        .fetch();
             }
 
             // Fetch IP info
@@ -75,10 +74,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 FetchDataTask.with(this).load("https://ipinfo.io/json").then(data -> {
                     try {
                         var jsonData = new JSONObject(new String(data, "UTF-8"));
-                        var locationLabel = (TextView)findViewById(R.id.main_data_location_label);
+                        var locationLabel = (TextView) findViewById(R.id.main_data_location_label);
                         locationLabel.setText(jsonData.getString("city") + ", " + jsonData.getString("region"));
 
-                        var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
+                        var set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
                         set.setTarget(locationLabel);
                         set.start();
                     } catch (Exception exception) {
@@ -107,10 +106,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (
-                    oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
-                    oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
-                ) {
+                if (oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
+                        oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)) {
                     handler.post(() -> recreate());
                 }
             }
