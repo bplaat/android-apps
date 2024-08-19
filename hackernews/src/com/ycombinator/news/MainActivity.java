@@ -17,7 +17,6 @@ import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -73,7 +72,8 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onReceivedError(WebView view, WebResourceRequest webResourceRequest, WebResourceError webResourceError) {
+            public void onReceivedError(WebView view, WebResourceRequest webResourceRequest,
+                    WebResourceError webResourceError) {
                 if (webResourceRequest.isForMainFrame()) {
                     onReceivedError(view);
                 }
@@ -103,7 +103,8 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 var density = getResources().getDisplayMetrics().density;
-                view.loadUrl("javascript:(function(){document.body.style.paddingBottom='" + (int)(view.getPaddingBottom() / density) + "px'})();");
+                view.loadUrl("javascript:(function(){document.body.style.paddingBottom='"
+                        + (int) (view.getPaddingBottom() / density) + "px'})();");
 
                 CookieManager.getInstance().flush();
                 super.onPageFinished(view, url);
@@ -144,7 +145,8 @@ public class MainActivity extends BaseActivity {
 
     @SuppressWarnings("deprecation")
     private void webSettingsSetForceDark(WebSettings webSettings) {
-        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+        if ((getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 webSettings.setAlgorithmicDarkeningAllowed(true);
             } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
