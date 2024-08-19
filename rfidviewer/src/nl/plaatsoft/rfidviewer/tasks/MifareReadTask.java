@@ -14,12 +14,11 @@ import android.util.Log;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import nl.plaatsoft.rfidviewer.Consts;
-
 public class MifareReadTask {
     public static interface OnLoadListener {
         void onLoad(byte[] data);
     }
+
     public static interface OnErrorListener {
         void onError(Exception exception);
     }
@@ -38,6 +37,7 @@ public class MifareReadTask {
         this.context = context;
         this.mfc = mfc;
     }
+
     public static MifareReadTask with(Context context, MifareClassic mfc) {
         return new MifareReadTask(context, mfc);
     }

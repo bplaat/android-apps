@@ -13,7 +13,6 @@ import android.nfc.tech.NfcA;
 import android.nfc.tech.MifareClassic;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,7 +23,6 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
-import android.window.OnBackInvokedDispatcher;
 import java.util.Arrays;
 
 import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
@@ -79,7 +77,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Variables for NFC foreground intent dispatch
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter != null) {
-            pendingIntent = PendingIntent.getActivity(this, PENDING_INTENT_REQUEST_CODE, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
+            pendingIntent = PendingIntent.getActivity(this, PENDING_INTENT_REQUEST_CODE,
+                    new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
             intentFiltersArray = new IntentFilter[] { new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED) };
             techListsArray = new String[][] { new String[] { NfcA.class.getName(), MifareClassic.class.getName() } };
         }
@@ -120,10 +119,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (
-                    oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
-                    oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)
-                ) {
+                if (oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
+                        oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)) {
                     handler.post(() -> recreate());
                 }
             }
@@ -165,7 +162,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                             }
                             output.append(" ");
                             for (var j = 0; j < 8; j++) {
-                                output.append(data[i * 16 + j] >= 40 && data[i * 16 + j] <= 176 ? new String(new byte[] { data[i * 16 + j] }, "UTF-8") : ".");
+                                output.append(data[i * 16 + j] >= 40 && data[i * 16 + j] <= 176
+                                        ? new String(new byte[] { data[i * 16 + j] }, "UTF-8")
+                                        : ".");
                                 output.append(j < 8 - 1 ? " " : "\n");
                             }
 
@@ -175,7 +174,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                             }
                             output.append(" ");
                             for (var j = 0; j < 8; j++) {
-                                output.append(data[i * 16 + 8 + j] >= 40 && data[i * 16 + 8 + j] <= 176 ? new String(new byte[] { data[i * 16 + 8 + j] }, "UTF-8") : ".");
+                                output.append(data[i * 16 + 8 + j] >= 40 && data[i * 16 + 8 + j] <= 176
+                                        ? new String(new byte[] { data[i * 16 + 8 + j] }, "UTF-8")
+                                        : ".");
                                 output.append(j < 8 - 1 ? " " : "\n");
                             }
                         }
@@ -191,7 +192,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     openPage(errorPage);
                 }).read();
             } else {
-                // Not an Mifare Classic tag print techs list, set data output string and show data page
+                // Not an Mifare Classic tag print techs list, set data output string and show
+                // data page
                 output.append("Not Mifare Classic: " + String.join(",", tag.getTechList()));
                 dataOutputLabel.setText(output.toString());
                 openPage(dataPage);

@@ -16,15 +16,15 @@ import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.List;
 
-import nl.plaatsoft.rfidviewer.Consts;
-
 public class MifareWriteTask {
     public static interface OnSuccessListener {
         void onSuccess();
     }
+
     public static interface OnErrorListener {
         void onError(Exception exception);
     }
+
     public static class FailedWriteException extends Exception {
         private static final long serialVersionUID = 1;
 
@@ -32,7 +32,9 @@ public class MifareWriteTask {
             super(message);
         }
     }
-    private static record PendingWrite(int blockIndex, byte[] data) {};
+
+    private static record PendingWrite(int blockIndex, byte[] data) {
+    };
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
     private static final Executor executor = Executors.newFixedThreadPool(1);
@@ -49,6 +51,7 @@ public class MifareWriteTask {
         this.context = context;
         this.mfc = mfc;
     }
+
     public static MifareWriteTask with(Context context, MifareClassic mfc) {
         return new MifareWriteTask(context, mfc);
     }
@@ -118,12 +121,14 @@ public class MifareWriteTask {
         // Connect to the tag and write pending block writes
         mfc.connect();
         for (var pendingWrite : pendingWrites) {
-            if (mfc.authenticateSectorWithKeyA(mfc.blockToSector(pendingWrite.blockIndex()), MifareClassic.KEY_DEFAULT)) {
+            if (mfc.authenticateSectorWithKeyA(mfc.blockToSector(pendingWrite.blockIndex()),
+                    MifareClassic.KEY_DEFAULT)) {
                 mfc.writeBlock(pendingWrite.blockIndex(), pendingWrite.data());
                 var writtenBytes = mfc.readBlock(pendingWrite.blockIndex());
                 for (var i = 0; i < 16; i++) {
                     if (pendingWrite.data()[i] != writtenBytes[i]) {
-                        throw new FailedWriteException("Failed to write block " + pendingWrite.blockIndex() + ": read back data is not the same as written data!");
+                        throw new FailedWriteException("Failed to write block " + pendingWrite.blockIndex()
+                                + ": read back data is not the same as written data!");
                     }
                 }
             }

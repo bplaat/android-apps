@@ -14,19 +14,15 @@ import android.nfc.tech.NfcA;
 import android.nfc.tech.MifareClassic;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ScrollView;
 import java.util.Arrays;
 
 import nl.plaatsoft.rfidviewer.tasks.MifareWriteTask;
-import nl.plaatsoft.rfidviewer.Consts;
 import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
@@ -57,8 +53,8 @@ public class WriteActivity extends BaseActivity {
         // Select all page views
         formPage = findViewById(R.id.write_form_page);
         formBlockIdInput = findViewById(R.id.write_form_block_id_input);
-        var formDataAsciiInput = (EditText)findViewById(R.id.write_form_data_ascii_input);
-        var formDataHexInput = (EditText)findViewById(R.id.write_form_data_hex_input);
+        var formDataAsciiInput = (EditText) findViewById(R.id.write_form_data_ascii_input);
+        var formDataHexInput = (EditText) findViewById(R.id.write_form_data_hex_input);
         waitingPage = findViewById(R.id.write_waiting_page);
         writingPage = findViewById(R.id.write_writing_page);
         successPage = findViewById(R.id.write_success_page);
@@ -79,15 +75,15 @@ public class WriteActivity extends BaseActivity {
                 var dataAscii = formDataAsciiInput.getText().toString();
                 if (dataAscii.length() > 0) {
                     for (var i = 0; i < dataAscii.length(); i++) {
-                        pendingBlockData[i] = (byte)dataAscii.charAt(i);
+                        pendingBlockData[i] = (byte) dataAscii.charAt(i);
                     }
                 }
                 var dataHex = formDataHexInput.getText().toString();
                 if (dataHex.length() > 0) {
                     for (var i = 0; i < dataHex.length(); i += 2) {
                         if (i / 2 < 16) {
-                            pendingBlockData[i / 2] = (byte)((Character.digit(dataHex.charAt(i), 16) << 4) |
-                                Character.digit(dataHex.charAt(i + 1), 16));
+                            pendingBlockData[i / 2] = (byte) ((Character.digit(dataHex.charAt(i), 16) << 4) |
+                                    Character.digit(dataHex.charAt(i + 1), 16));
                         }
                     }
                 }
@@ -121,7 +117,8 @@ public class WriteActivity extends BaseActivity {
         // Variables for NFC foreground intent dispatch
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter != null) {
-            pendingIntent = PendingIntent.getActivity(this, PENDING_INTENT_REQUEST_CODE, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
+            pendingIntent = PendingIntent.getActivity(this, PENDING_INTENT_REQUEST_CODE,
+                    new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
             intentFiltersArray = new IntentFilter[] { new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED) };
             techListsArray = new String[][] { new String[] { NfcA.class.getName(), MifareClassic.class.getName() } };
         }
@@ -156,12 +153,13 @@ public class WriteActivity extends BaseActivity {
 
                 // Write Mifare Classic tag async
                 var mfc = MifareClassic.get(tag);
-                mifareWriteTask = MifareWriteTask.with(this, mfc).writeBlock(pendingBlockId, pendingBlockData).then(() -> {
-                    openPage(successPage);
-                }, exception -> {
-                    Log.e(getPackageName(), "Can't write Mifare Classic tag", exception);
-                    openPage(errorPage);
-                }).write();
+                mifareWriteTask = MifareWriteTask.with(this, mfc).writeBlock(pendingBlockId, pendingBlockData)
+                        .then(() -> {
+                            openPage(successPage);
+                        }, exception -> {
+                            Log.e(getPackageName(), "Can't write Mifare Classic tag", exception);
+                            openPage(errorPage);
+                        }).write();
             }
         }
     }
@@ -189,7 +187,7 @@ public class WriteActivity extends BaseActivity {
         if (page.equals(formPage)) {
             // Show keyboard with focus on block id input
             formBlockIdInput.requestFocus();
-            var imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            var imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.showSoftInput(formBlockIdInput, 0);
 
             formPage.setVisibility(View.VISIBLE);
@@ -197,7 +195,7 @@ public class WriteActivity extends BaseActivity {
             // Hide keyboard
             var focusView = getCurrentFocus();
             if (focusView != null) {
-                var imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                var imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(focusView.getWindowToken(), 0);
             }
 

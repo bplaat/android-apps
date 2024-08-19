@@ -10,7 +10,8 @@ import android.content.Intent;
 import android.os.Build;
 
 public class Utils {
-    private Utils() {}
+    private Utils() {
+    }
 
     @SuppressWarnings("deprecation")
     public static <T> T intentGetParcelableExtra(Intent intent, String name, Class<T> clazz) {
