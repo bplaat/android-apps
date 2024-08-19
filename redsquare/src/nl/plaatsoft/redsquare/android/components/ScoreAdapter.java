@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import nl.plaatsoft.redsquare.android.models.Score;
-import nl.plaatsoft.redsquare.android.Utils;
 import nl.plaatsoft.redsquare.android.R;
 
 public class ScoreAdapter extends ArrayAdapter<Score> {
@@ -24,7 +23,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
     }
 
     public ScoreAdapter(Context context) {
-       super(context, 0);
+        super(context, 0);
     }
 
     @Override
@@ -37,7 +36,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
             viewHolder.scoreScore = convertView.findViewById(R.id.score_score);
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder)convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         var score = getItem(position);

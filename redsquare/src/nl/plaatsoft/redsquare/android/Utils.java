@@ -8,12 +8,10 @@ package nl.plaatsoft.redsquare.android;
 
 import android.content.Context;
 import android.os.Build;
-import android.util.Log;
-import android.view.Window;
-import java.security.MessageDigest;
 
 public class Utils {
-    private Utils() {}
+    private Utils() {
+    }
 
     @SuppressWarnings("deprecation")
     public static int contextGetColor(Context context, int id) {

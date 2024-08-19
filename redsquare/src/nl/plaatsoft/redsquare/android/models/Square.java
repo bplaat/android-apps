@@ -51,8 +51,8 @@ abstract public class Square {
         this.height = height;
     }
 
-    public boolean collision (Square otherSquare) {
+    public boolean collision(Square otherSquare) {
         return otherSquare.getX() < x + width && otherSquare.getX() + otherSquare.getWidth() > x &&
-            otherSquare.getY() < y + height && otherSquare.getY() + otherSquare.getHeight() > y;
+                otherSquare.getY() < y + height && otherSquare.getY() + otherSquare.getHeight() > y;
     }
 }
