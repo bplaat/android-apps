@@ -9,17 +9,18 @@ package nl.plaatsoft.bible;
 import java.util.Map;
 
 public class Consts {
-    private Consts() {}
+    private Consts() {
+    }
 
     public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bassietest";
 
     public class Settings {
-        private Settings() {}
+        private Settings() {
+        }
 
         public static final Map<String, String> BIBLE_DEFAULT = Map.of(
-            "en", "bibles/niv.bible",
-            "nl", "bibles/nbv21.bible"
-        );
+                "en", "bibles/niv.bible",
+                "nl", "bibles/nbv21.bible");
         public static final String BIBLE_BOOK_DEFAULT = "GEN";
         public static final int BIBLE_CHAPTER_DEFAULT = 1;
 

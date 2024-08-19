@@ -7,7 +7,6 @@
 package nl.plaatsoft.bible.components;
 
 import android.content.Context;
-import android.view.View;
 import android.view.ViewGroup;
 
 public class ChaptersGridLayout extends ViewGroup {
@@ -26,7 +25,7 @@ public class ChaptersGridLayout extends ViewGroup {
             var child = getChildAt(i);
             child.measure(childMeasureSpec, childMeasureSpec);
         }
-        var rowCount = (int)Math.ceil((double)getChildCount() / COLUMN_COUNT);
+        var rowCount = (int) Math.ceil((double) getChildCount() / COLUMN_COUNT);
         var height = rowCount * childSize + getPaddingTop() + getPaddingBottom();
         setMeasuredDimension(resolveSize(width, widthMeasureSpec), resolveSize(height, heightMeasureSpec));
     }

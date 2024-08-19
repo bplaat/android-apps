@@ -12,7 +12,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,85 +33,86 @@ public class SettingsActivity extends BaseActivity {
 
         // Font button
         var fonts = new String[] {
-            getResources().getString(R.string.settings_font_serif),
-            getResources().getString(R.string.settings_font_sans_serif),
-            getResources().getString(R.string.settings_font_monospace),
+                getResources().getString(R.string.settings_font_serif),
+                getResources().getString(R.string.settings_font_sans_serif),
+                getResources().getString(R.string.settings_font_monospace),
         };
         font = settings.getInt("font", Consts.Settings.FONT_DEFAULT);
-        var fontLabel = (TextView)findViewById(R.id.settings_font_label);
+        var fontLabel = (TextView) findViewById(R.id.settings_font_label);
         fontLabel.setText(fonts[font]);
         findViewById(R.id.settings_font_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_font_button)
-                .setSingleChoiceItems(fonts, font, (dialog, which) -> {
-                    dialog.dismiss();
-                    if (font != which) {
-                        font = which;
-                        fontLabel.setText(fonts[font]);
-                        var settingsEditor = settings.edit();
-                        settingsEditor.putInt("font", which);
-                        settingsEditor.apply();
-                    }
-                })
-                .show();
+                    .setTitle(R.string.settings_font_button)
+                    .setSingleChoiceItems(fonts, font, (dialog, which) -> {
+                        dialog.dismiss();
+                        if (font != which) {
+                            font = which;
+                            fontLabel.setText(fonts[font]);
+                            var settingsEditor = settings.edit();
+                            settingsEditor.putInt("font", which);
+                            settingsEditor.apply();
+                        }
+                    })
+                    .show();
             var density = getResources().getDisplayMetrics().density;
-            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
+            alertDialog.getListView().setPadding(0, 0, 0, (int) (16 * density));
         });
 
         // Language button
         var languages = new String[] {
-            getResources().getString(R.string.settings_language_english),
-            getResources().getString(R.string.settings_language_dutch),
-            getResources().getString(R.string.settings_language_system)
+                getResources().getString(R.string.settings_language_english),
+                getResources().getString(R.string.settings_language_dutch),
+                getResources().getString(R.string.settings_language_system)
         };
         var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-        ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
+        ((TextView) findViewById(R.id.settings_language_label)).setText(languages[language]);
         findViewById(R.id.settings_language_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_language_button)
-                .setSingleChoiceItems(languages, language, (dialog, which) -> {
-                    dialog.dismiss();
-                    if (language != which) {
-                        var settingsEditor = settings.edit();
-                        settingsEditor.putInt("language", which);
-                        settingsEditor.apply();
-                        recreate();
-                    }
-                })
-                .show();
+                    .setTitle(R.string.settings_language_button)
+                    .setSingleChoiceItems(languages, language, (dialog, which) -> {
+                        dialog.dismiss();
+                        if (language != which) {
+                            var settingsEditor = settings.edit();
+                            settingsEditor.putInt("language", which);
+                            settingsEditor.apply();
+                            recreate();
+                        }
+                    })
+                    .show();
             var density = getResources().getDisplayMetrics().density;
-            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
+            alertDialog.getListView().setPadding(0, 0, 0, (int) (16 * density));
         });
 
         // Themes button
         var themes = new String[] {
-            getResources().getString(R.string.settings_theme_light),
-            getResources().getString(R.string.settings_theme_dark),
-            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-                ? getResources().getString(R.string.settings_theme_battery_saver)
-                : getResources().getString(R.string.settings_theme_system)
+                getResources().getString(R.string.settings_theme_light),
+                getResources().getString(R.string.settings_theme_dark),
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+                        ? getResources().getString(R.string.settings_theme_battery_saver)
+                        : getResources().getString(R.string.settings_theme_system)
         };
         var theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
-        ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
+        ((TextView) findViewById(R.id.settings_theme_label)).setText(themes[theme]);
         findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_theme_button)
-                .setSingleChoiceItems(themes, theme, (dialog, which) ->  {
-                    dialog.dismiss();
-                    if (theme != which) {
-                        var settingsEditor = settings.edit();
-                        settingsEditor.putInt("theme", which);
-                        settingsEditor.apply();
-                        recreate();
-                    }
-                }).show();
+                    .setTitle(R.string.settings_theme_button)
+                    .setSingleChoiceItems(themes, theme, (dialog, which) -> {
+                        dialog.dismiss();
+                        if (theme != which) {
+                            var settingsEditor = settings.edit();
+                            settingsEditor.putInt("theme", which);
+                            settingsEditor.apply();
+                            recreate();
+                        }
+                    }).show();
             var density = getResources().getDisplayMetrics().density;
-            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
+            alertDialog.getListView().setPadding(0, 0, 0, (int) (16 * density));
         });
 
         // Version button easter egg
         try {
-            ((TextView)findViewById(R.id.settings_version_label)).setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+            ((TextView) findViewById(R.id.settings_version_label))
+                    .setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (Exception exception) {
             Log.e(getPackageName(), "Can't get app version", exception);
         }
@@ -135,20 +135,21 @@ public class SettingsActivity extends BaseActivity {
             var intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.settings_share_message) + " " + Consts.STORE_PAGE_URL);
+            intent.putExtra(Intent.EXTRA_TEXT,
+                    getResources().getString(R.string.settings_share_message) + " " + Consts.STORE_PAGE_URL);
             startActivity(Intent.createChooser(intent, null));
         });
 
         // About button
         findViewById(R.id.settings_about_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_about_alert_title_label)
-                .setMessage(R.string.settings_about_alert_message_label)
-                .setNegativeButton(R.string.settings_about_alert_website_button, (dialog, which) ->  {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Consts.Settings.ABOUT_WEBSITE_URL)));
-                })
-                .setPositiveButton(R.string.settings_about_alert_ok_button, null)
-                .show();
+                    .setTitle(R.string.settings_about_alert_title_label)
+                    .setMessage(R.string.settings_about_alert_message_label)
+                    .setNegativeButton(R.string.settings_about_alert_website_button, (dialog, which) -> {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Consts.Settings.ABOUT_WEBSITE_URL)));
+                    })
+                    .setPositiveButton(R.string.settings_about_alert_ok_button, null)
+                    .show();
         });
 
         // Footer button
