@@ -18,22 +18,21 @@ public class BooksFlowLayout extends ViewGroup {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         var width = MeasureSpec.getSize(widthMeasureSpec);
         var x = 0;
-        var height = -1;
+        var rows = 1;
         var childHeight = 0;
         var childMeasureSpec = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         for (var i = 0; i < getChildCount(); i++) {
             var child = getChildAt(i);
             child.measure(childMeasureSpec, childMeasureSpec);
-            if (height == -1) {
+            if (i == 0)
                 childHeight = child.getMeasuredHeight();
-                height = childHeight + getPaddingTop() + getPaddingBottom();
+            if (x + child.getMeasuredWidth() >= (width - getPaddingLeft() - getPaddingRight())) {
+                x = 0;
+                rows++;
             }
             x += child.getMeasuredWidth();
-            if (x > (width - getPaddingLeft() - getPaddingRight())) {
-                x = 0;
-                height += childHeight;
-            }
         }
+        var height = rows * childHeight + getPaddingTop() + getPaddingBottom();
         setMeasuredDimension(resolveSize(width, widthMeasureSpec), resolveSize(height, heightMeasureSpec));
     }
 
@@ -41,11 +40,10 @@ public class BooksFlowLayout extends ViewGroup {
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         var x = getPaddingLeft();
         var y = getPaddingTop();
-        var width = right - left - getPaddingLeft() - getPaddingRight();
         var childHeight = getChildAt(0).getMeasuredHeight();
         for (var i = 0; i < getChildCount(); i++) {
             var child = getChildAt(i);
-            if (x + child.getMeasuredWidth() > width) {
+            if (x + child.getMeasuredWidth() >= (right - left - getPaddingRight())) {
                 x = getPaddingLeft();
                 y += childHeight;
             }
