@@ -20,4 +20,3 @@ App
     - verse highlight
     - random chapter -> random verse
 - swipeable chapterviewers
-- fix incomplete books bug
