@@ -80,6 +80,7 @@ public class ChapterView extends ScrollView {
         layoutParams.setMargins(0, (int) (8 * density), 0, (int) (8 * density));
         verseBlock.setLayoutParams(layoutParams);
         verseBlock.setText(spannable);
+        verseBlock.setTextIsSelectable(true);
         root.addView(verseBlock);
     }
 }
