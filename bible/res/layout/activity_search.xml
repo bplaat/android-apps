@@ -27,7 +27,7 @@
             style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_magnify"
+                <ImageView android:src="@drawable/ic_magnify_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/search_start_title_label"
@@ -38,9 +38,10 @@
             </LinearLayout>
         </ScrollView>
 
-        <!-- Verses Page -->
-        <ListView android:id="@+id/search_verses_page"
-            android:visibility="gone" />
+        <!-- Results Page -->
+        <ListView android:id="@+id/search_results_page"
+            android:visibility="gone"
+            style="@style/Fill" />
 
         <!-- Empty Page -->
         <ScrollView android:id="@+id/search_empty_page"
@@ -48,7 +49,7 @@
             style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_close"
+                <ImageView android:src="@drawable/ic_close_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/search_empty_title_label"

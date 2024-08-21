@@ -18,10 +18,10 @@
     <string name="search_input_hint">Search</string>
 
     <string name="search_start_title_label">Start searching...</string>
-    <string name="search_start_description_label">Type your search query and BassieMusic will try to find the right song...</string>
+    <string name="search_start_description_label">Type your search query and find your verse or chapter...</string>
 
     <string name="search_empty_title_label">No search results</string>
-    <string name="search_empty_description_label">BassieMusic can\'t find any music files with that search query</string>
+    <string name="search_empty_description_label">We can\'t find any chapter or verse with that search query</string>
     <string name="search_empty_hero_button">Clear search</string>
 
     <!-- Settings activity -->

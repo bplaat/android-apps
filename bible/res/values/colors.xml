@@ -6,6 +6,7 @@
     <color name="background_color">#fff</color>
     <color name="primary_text_color">#111</color>
     <color name="secondary_text_color">#777</color>
+    <color name="highlight_text_color">#ff0</color> <!-- use accent colot -->
     <color name="icon_color">#333</color>
     <color name="loading_background_color">#ddd</color>
 </resources>
