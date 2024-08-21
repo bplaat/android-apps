@@ -70,8 +70,8 @@ public class ChapterView extends ScrollView {
 
     private void addVerseBlock(Spannable spannable, boolean isSubtitle) {
         var verseBlock = new TextView(getContext());
-        verseBlock.setTypeface(isSubtitle ? Typeface.create(typeface, Typeface.BOLD) : typeface);
         verseBlock.setTextSize(18);
+        verseBlock.setTypeface(isSubtitle ? Typeface.create(typeface, Typeface.BOLD) : typeface);
         if (!isSubtitle)
             verseBlock.setLineSpacing(0, 1.2f);
         var layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,

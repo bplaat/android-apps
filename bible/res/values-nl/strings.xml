@@ -18,10 +18,10 @@
     <string name="search_input_hint">Zoeken</string>
 
     <string name="search_start_title_label">Begin met zoeken...</string>
-    <string name="search_start_description_label">Typ uw zoekopdracht en BassieMusic zal proberen het juiste nummer te vinden...</string>
+    <string name="search_start_description_label">Typ je zoekopdracht in en vind je vers of hoofdstuk...</string>
 
     <string name="search_empty_title_label">Geen resultaten gevonden</string>
-    <string name="search_empty_description_label">BassieMusic kan geen muziekbestanden vinden met die zoekopdracht</string>
+    <string name="search_empty_description_label">We kunnen geen hoofdstuk of vers vinden met die zoekopdracht</string>
     <string name="search_empty_hero_button">Zoekveld wissen</string>
 
     <!-- Settings activity -->

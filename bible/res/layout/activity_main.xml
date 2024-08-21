@@ -9,7 +9,8 @@
 
             <View style="@style/Flex" />
 
-            <ImageButton android:src="@drawable/ic_magnify"
+            <ImageButton android:id="@+id/main_search_button"
+                android:src="@drawable/ic_magnify"
                 style="@style/ActionBarIconButton" />
 
             <ImageButton android:id="@+id/main_options_menu_button"

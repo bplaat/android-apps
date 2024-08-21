@@ -61,7 +61,7 @@
     <style name="ActionBarChapterButton">
         <item name="android:layout_width">32dp</item>
         <item name="android:layout_height">32dp</item>
-        <item name="android:layout_marginLeft">-8dp</item>
+        <item name="android:layout_marginLeft">-16dp</item>
         <item name="android:fontFamily">sans-serif-medium</item>
         <item name="android:textSize">20sp</item>
         <item name="android:gravity">center</item>
@@ -186,5 +186,25 @@
         <item name="android:textColor">@color/secondary_text_color</item>
         <item name="android:gravity">center_horizontal</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <!-- Search Verse -->
+    <style name="SearchVerse">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:padding">16dp</item>
+    </style>
+
+    <style name="SearchVerseContents">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">8dp</item>
+    </style>
+
+    <style name="SearchVerseBookChapter">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
     </style>
 </resources>

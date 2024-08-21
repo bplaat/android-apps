@@ -6,7 +6,7 @@
 
 package nl.plaatsoft.bible;
 
-import java.util.Map;
+import android.content.Context;
 
 public class Consts {
     private Consts() {
@@ -18,9 +18,15 @@ public class Consts {
         private Settings() {
         }
 
-        public static final Map<String, String> BIBLE_DEFAULT = Map.of(
-                "en", "bibles/niv.bible",
-                "nl", "bibles/nbv21.bible");
+        public static String getBibleDefault(Context context) {
+            var languages = Utils.contextGetLanguages(context);
+            for (var language : languages) {
+                if (language == "nl")
+                    return "bibles/nbv21.bible";
+            }
+            return "bibles/niv.bible";
+        }
+
         public static final String BIBLE_BOOK_DEFAULT = "GEN";
         public static final int BIBLE_CHAPTER_DEFAULT = 1;
 

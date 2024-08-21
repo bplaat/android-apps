@@ -16,7 +16,6 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/) and [d
 
 ## TODO
 App
-- search chapter number / text
-    - verse highlight
-    - random chapter -> random verse
-- swipeable chapterviewers
+- verse highlight and scroll
+- random chapter -> random verse
+- swipeable chapterviews

@@ -35,6 +35,7 @@ import nl.plaatsoft.bible.Utils;
 import nl.plaatsoft.bible.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
+    private static final int SEARCH_REQUEST_CODE = 0;
     private static final int SETTINGS_REQUEST_CODE = 1;
 
     private TextView bibleButton;
@@ -209,6 +210,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     .show();
         });
 
+        // Search button
+        findViewById(R.id.main_search_button).setOnClickListener(view -> {
+            startActivityForResult(new Intent(this, SearchActivity.class), SEARCH_REQUEST_CODE);
+        });
+
         // Options menu button
         findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
             var optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
@@ -249,6 +255,18 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // When search activity is closed check open selected book / chapter verse
+        if (requestCode == SEARCH_REQUEST_CODE) {
+            // if (data.hasExtra("highlight_verse")) {
+            // var highlightVerse = data.getStringExtra("highlight_verse");
+            // }
+
+            // FIXME
+
+            openChapterFromSettings(true);
+            return;
+        }
+
         // When settings activity is closed check for restarts
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldFont != -1) {
@@ -265,18 +283,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void openBibleFromSettings() {
-        // Get default bible path
-        var defaultBiblePath = Consts.Settings.BIBLE_DEFAULT.get("en");
-        var languages = Utils.contextGetLanguages(this);
-        for (var language : languages) {
-            if (Consts.Settings.BIBLE_DEFAULT.containsKey(language)) {
-                defaultBiblePath = Consts.Settings.BIBLE_DEFAULT.get(language);
-                break;
-            }
-        }
-
-        // Open bible and chapter
-        openBible = bibleService.readBible(this, settings.getString("open_bible", defaultBiblePath), true);
+        openBible = bibleService.readBible(this,
+                settings.getString("open_bible", Consts.Settings.getBibleDefault(this)),
+                true);
         bibleButton.setText(openBible.abbreviation());
         openChapterFromSettings(true);
     }
@@ -305,11 +314,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         bookButton.setText(openBook.name());
 
         // Update chapter view
-        if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SERIF)
+        if (settings.getInt("font", Consts.Settings.FONT_DEFAULT) == Consts.Settings.FONT_SERIF)
             chapterPage.setTypeface(Typeface.create(Typeface.SERIF, Typeface.NORMAL));
-        if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_SANS_SERIF)
+        if (settings.getInt("font", Consts.Settings.FONT_DEFAULT) == Consts.Settings.FONT_SANS_SERIF)
             chapterPage.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
-        if (settings.getInt("font", Consts.Settings.FONT_SERIF) == Consts.Settings.FONT_MONOSPACE)
+        if (settings.getInt("font", Consts.Settings.FONT_DEFAULT) == Consts.Settings.FONT_MONOSPACE)
             chapterPage.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
         if (scrollToTop)
             chapterPage.scrollTo(0, 0);
