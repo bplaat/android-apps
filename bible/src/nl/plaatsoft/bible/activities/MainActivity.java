@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;
+import nl.plaatsoft.bible.models.Verse;
 import nl.plaatsoft.bible.services.BibleService;
 import nl.plaatsoft.bible.views.BiblesDialogBuilder;
 import nl.plaatsoft.bible.views.BooksDialogBuilder;
@@ -85,7 +86,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     editor.putString("open_book", book.key());
                     editor.putInt("open_chapter", 1);
                     editor.apply();
-                    openChapterFromSettings(true);
+                    openChapterFromSettings(true, -1);
                 }
             }).show();
         });
@@ -98,7 +99,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     var editor = settings.edit();
                     editor.putInt("open_chapter", chapter.number());
                     editor.apply();
-                    openChapterFromSettings(true);
+                    openChapterFromSettings(true, -1);
                 }
             }).show();
         });
@@ -136,7 +137,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 editor.putInt("open_chapter", openChapter.number() + 1);
             }
             editor.apply();
-            openChapterFromSettings(true);
+            openChapterFromSettings(true, -1);
         });
         chapterPage.setOnSwipeRightListener(() -> {
             var editor = settings.edit();
@@ -157,7 +158,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 editor.putInt("open_chapter", openChapter.number() - 1);
             }
             editor.apply();
-            openChapterFromSettings(true);
+            openChapterFromSettings(true, -1);
         });
 
         // Install bibles from assets and open last opened bible
@@ -170,15 +171,24 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
-        if (item.getItemId() == R.id.menu_options_random_chapter) {
+        if (item.getItemId() == R.id.menu_options_random_verse) {
             var randomTestament = openBible.testaments().get((int) (Math.random() * openBible.testaments().size()));
             var randomBook = randomTestament.books().get((int) (Math.random() * randomTestament.books().size()));
+            var randomChapter = bibleService.readChapter(this, openBible.path(), randomBook.key(),
+                    (int) (Math.random() * randomBook.chapters().size()) + 1);
+
+            var realVerses = new ArrayList<Verse>();
+            for (var verse : randomChapter.verses()) {
+                if (!verse.isSubtitle())
+                    realVerses.add(verse);
+            }
+            var randomVerse = realVerses.get((int) (Math.random() * realVerses.size()));
+
             var settingsEditor = settings.edit();
             settingsEditor.putString("open_book", randomBook.key());
-            settingsEditor.putInt("open_chapter",
-                    randomBook.chapters().get((int) (Math.random() * randomBook.chapters().size())).number());
+            settingsEditor.putInt("open_chapter", randomChapter.number());
             settingsEditor.apply();
-            openChapterFromSettings(true);
+            openChapterFromSettings(true, randomVerse.id());
             return true;
         }
 
@@ -196,13 +206,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // When search activity is closed check open selected book / chapter verse
         if (requestCode == SEARCH_REQUEST_CODE) {
-            // if (data.hasExtra("highlight_verse")) {
-            // var highlightVerse = data.getStringExtra("highlight_verse");
-            // }
-
-            // FIXME
-
-            openChapterFromSettings(true);
+            openChapterFromSettings(true, data.getIntExtra("highlight_verse", -1));
             return;
         }
 
@@ -210,7 +214,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldFont != -1) {
                 if (oldFont != settings.getInt("font", Consts.Settings.FONT_DEFAULT))
-                    openChapterFromSettings(false);
+                    openChapterFromSettings(false, -1);
             }
             if (oldLanguage != -1 && oldTheme != -1) {
                 if (oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
@@ -226,10 +230,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 settings.getString("open_bible", Consts.Settings.getBibleDefault(this)),
                 true);
         bibleButton.setText(openBible.abbreviation());
-        openChapterFromSettings(true);
+        openChapterFromSettings(true, -1);
     }
 
-    private void openChapterFromSettings(boolean scrollToTop) {
+    private void openChapterFromSettings(boolean scrollToTop, int highlightVerseId) {
         var bookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
         var openChapterNumber = settings.getInt("open_chapter", Consts.Settings.BIBLE_CHAPTER_DEFAULT);
         openChapter = bibleService.readChapter(this, openBible.path(), bookKey, openChapterNumber);
@@ -267,7 +271,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             chapterPage.setTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
         if (scrollToTop)
             chapterPage.scrollTo(0, 0);
-        chapterPage.openChapter(openChapter);
+        chapterPage.openChapter(openChapter, highlightVerseId);
     }
 
     private void openPage(View page) {

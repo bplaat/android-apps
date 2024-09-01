@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/menu_options_random_chapter"
-        android:title="@string/menu_options_random_chapter" />
+    <item android:id="@+id/menu_options_random_verse"
+        android:title="@string/menu_options_random_verse" />
 
     <item android:id="@+id/menu_options_settings"
         android:title="@string/menu_options_settings" />

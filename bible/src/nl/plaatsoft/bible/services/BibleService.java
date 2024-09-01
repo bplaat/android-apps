@@ -54,7 +54,7 @@ public class BibleService {
                 try (var gzipInputStream = new GZIPInputStream(context.getAssets().open("bibles/" + filename));
                         var fileOutputStream = new FileOutputStream(file)) {
                     var buffer = new byte[1024];
-                    int length;
+                    var length = 0;
                     while ((length = gzipInputStream.read(buffer)) > 0) {
                         fileOutputStream.write(buffer, 0, length);
                     }

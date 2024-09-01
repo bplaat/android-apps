@@ -8,9 +8,12 @@ package nl.plaatsoft.bible.views;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.SpannableStringBuilder;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
@@ -21,9 +24,9 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import nl.plaatsoft.bible.models.Chapter;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
-import nl.plaatsoft.bible.models.Chapter;
 
 public class ChapterView extends ScrollView implements View.OnTouchListener {
     public static interface OnSwipeLeftListener {
@@ -63,6 +66,7 @@ public class ChapterView extends ScrollView implements View.OnTouchListener {
         }
     }
 
+    private Handler handler = new Handler(Looper.getMainLooper());
     private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
     private final LinearLayout root;
     private final GestureDetector gestureDetector;
@@ -94,40 +98,48 @@ public class ChapterView extends ScrollView implements View.OnTouchListener {
         this.onSwipeRightListener = onSwipeRightListener;
     }
 
-    public void openChapter(Chapter chapter) {
-        root.removeAllViews();
-        var ssb = new SpannableStringBuilder();
-        for (var verse : chapter.verses()) {
-            if (verse.isSubtitle()) {
-                addVerseBlock(new SpannableString(verse.text()), true);
-                continue;
-            }
-
-            if (ssb.length() > 0)
-                ssb.append(" ");
-            var verseNumberSpannable = new SpannableString(verse.number());
-            verseNumberSpannable.setSpan(
-                    new ForegroundColorSpan(Utils.contextGetColor(getContext(), R.color.secondary_text_color)), 0,
-                    verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            verseNumberSpannable.setSpan(new RelativeSizeSpan(0.75f), 0, verse.number().length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            ssb.append(verseNumberSpannable);
-            ssb.append(" ");
-            ssb.append(verse.text());
-
-            if (verse.isLast()) {
-                addVerseBlock(ssb, false);
-                ssb = new SpannableStringBuilder();
-            }
-        }
-    }
-
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         return gestureDetector.onTouchEvent(event);
     }
 
-    private void addVerseBlock(Spannable spannable, boolean isSubtitle) {
+    public void openChapter(Chapter chapter, int highlightVerseId) {
+        root.removeAllViews();
+        var ssb = new SpannableStringBuilder();
+        var scrollToVerse = false;
+        for (var verse : chapter.verses()) {
+            if (verse.isSubtitle()) {
+                addVerseBlock(new SpannableString(verse.text()), true, scrollToVerse);
+                scrollToVerse = false;
+                continue;
+            }
+
+            if (ssb.length() > 0)
+                ssb.append(" ");
+
+            var verseSpannable = new SpannableString(verse.number() + " " + verse.text());
+            verseSpannable.setSpan(
+                    new ForegroundColorSpan(Utils.contextGetColor(getContext(), R.color.secondary_text_color)), 0,
+                    verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            verseSpannable.setSpan(new RelativeSizeSpan(0.75f), 0, verse.number().length(),
+                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            if (highlightVerseId != -1 && verse.id() == highlightVerseId) {
+                scrollToVerse = true;
+                verseSpannable.setSpan(
+                        new BackgroundColorSpan(Utils.contextGetColor(getContext(), R.color.highlight_text_color)),
+                        0, verseSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+            ssb.append(verseSpannable);
+
+            if (verse.isLast()) {
+                addVerseBlock(ssb, false, scrollToVerse);
+                scrollToVerse = false;
+                ssb = new SpannableStringBuilder();
+            }
+        }
+    }
+
+    private void addVerseBlock(Spannable spannable, boolean isSubtitle, boolean scrollToVerse) {
         var verseBlock = new TextView(getContext());
         verseBlock.setTextSize(18);
         verseBlock.setTypeface(isSubtitle ? Typeface.create(typeface, Typeface.BOLD) : typeface);
@@ -141,5 +153,8 @@ public class ChapterView extends ScrollView implements View.OnTouchListener {
         verseBlock.setText(spannable);
         verseBlock.setTextIsSelectable(true);
         root.addView(verseBlock);
+
+        if (scrollToVerse)
+            handler.post(() -> scrollTo(0, verseBlock.getTop()));
     }
 }
