@@ -14,6 +14,9 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,9 +25,49 @@ import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 import nl.plaatsoft.bible.models.Chapter;
 
-public class ChapterView extends ScrollView {
-    private LinearLayout root;
+public class ChapterView extends ScrollView implements View.OnTouchListener {
+    public static interface OnSwipeLeftListener {
+        void onSwipeLeft();
+    }
+
+    public static interface OnSwipeRightListener {
+        void onSwipeRight();
+    }
+
+    private static class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        private static final int SWIPE_THRESHOLD = 100;
+        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
+
+        private final ChapterView view;
+
+        public SwipeGestureDetector(ChapterView view) {
+            this.view = view;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            if (e1 == null || e2 == null)
+                return false;
+            float diffX = e2.getX() - e1.getX();
+            float diffY = e2.getY() - e1.getY();
+            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > SWIPE_THRESHOLD
+                    && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
+                if (diffX < 0) {
+                    view.onSwipeLeftListener.onSwipeLeft();
+                } else {
+                    view.onSwipeRightListener.onSwipeRight();
+                }
+                return true;
+            }
+            return false;
+        }
+    }
+
     private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
+    private final LinearLayout root;
+    private final GestureDetector gestureDetector;
+    private OnSwipeLeftListener onSwipeLeftListener;
+    private OnSwipeRightListener onSwipeRightListener;
 
     public ChapterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -34,10 +77,21 @@ public class ChapterView extends ScrollView {
         var density = getResources().getDisplayMetrics().density;
         root.setPadding((int) (16 * density), (int) (8 * density), (int) (16 * density), (int) (8 * density));
         addView(root);
+
+        setOnTouchListener(this);
+        gestureDetector = new GestureDetector(context, new SwipeGestureDetector(this));
     }
 
     public void setTypeface(Typeface typeface) {
         this.typeface = typeface;
+    }
+
+    public void setOnSwipeLeftListener(OnSwipeLeftListener onSwipeLeftListener) {
+        this.onSwipeLeftListener = onSwipeLeftListener;
+    }
+
+    public void setOnSwipeRightListener(OnSwipeRightListener onSwipeRightListener) {
+        this.onSwipeRightListener = onSwipeRightListener;
     }
 
     public void openChapter(Chapter chapter) {
@@ -66,6 +120,11 @@ public class ChapterView extends ScrollView {
                 ssb = new SpannableStringBuilder();
             }
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        return gestureDetector.onTouchEvent(event);
     }
 
     private void addVerseBlock(Spannable spannable, boolean isSubtitle) {
