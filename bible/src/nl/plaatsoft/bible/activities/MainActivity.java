@@ -116,10 +116,56 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             optionsMenu.show();
         });
 
+        // Chapter view
+        chapterPage.setOnSwipeLeftListener(() -> {
+            var editor = settings.edit();
+            if (openChapter.number() == openBook.chapters().size()) {
+                // Find next book
+                var allBooks = new ArrayList<Book>();
+                for (var testament : openBible.testaments())
+                    allBooks.addAll(testament.books());
+                for (var i = 0; i < allBooks.size(); i++) {
+                    if (allBooks.get(i).key().equals(openBook.key())) {
+                        var nextBook = allBooks.get(i == allBooks.size() - 1 ? 0 : i + 1);
+                        editor.putString("open_book", nextBook.key());
+                        editor.putInt("open_chapter", 1);
+                        break;
+                    }
+                }
+            } else {
+                editor.putInt("open_chapter", openChapter.number() + 1);
+            }
+            editor.apply();
+            openChapterFromSettings(true);
+        });
+        chapterPage.setOnSwipeRightListener(() -> {
+            var editor = settings.edit();
+            if (openChapter.number() == 1) {
+                // Find previous book
+                var allBooks = new ArrayList<Book>();
+                for (var testament : openBible.testaments())
+                    allBooks.addAll(testament.books());
+                for (var i = 0; i < allBooks.size(); i++) {
+                    if (allBooks.get(i).key().equals(openBook.key())) {
+                        var previousBook = allBooks.get(i == 0 ? allBooks.size() - 1 : i - 1);
+                        editor.putString("open_book", previousBook.key());
+                        editor.putInt("open_chapter", previousBook.chapters().size());
+                        break;
+                    }
+                }
+            } else {
+                editor.putInt("open_chapter", openChapter.number() - 1);
+            }
+            editor.apply();
+            openChapterFromSettings(true);
+        });
+
         // Install bibles from assets and open last opened bible
         bibleService.installBiblesFromAssets(this);
         bibles = bibleService.getInstalledBibles(this);
+
         openBibleFromSettings();
+
     }
 
     @Override
@@ -185,14 +231,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     private void openChapterFromSettings(boolean scrollToTop) {
         var bookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
-        openChapter = bibleService.readChapter(this, openBible.path(), bookKey,
-                settings.getInt("open_chapter", Consts.Settings.BIBLE_CHAPTER_DEFAULT));
-        if (openChapter == null) {
-            openPage(notAvailablePage);
-            return;
-        }
-        openPage(chapterPage);
-        chapterButton.setText(String.valueOf(openChapter.number()));
+        var openChapterNumber = settings.getInt("open_chapter", Consts.Settings.BIBLE_CHAPTER_DEFAULT);
+        openChapter = bibleService.readChapter(this, openBible.path(), bookKey, openChapterNumber);
+        chapterButton.setText(String.valueOf(openChapterNumber));
 
         // Get book
         openBook = null;
@@ -204,7 +245,18 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 }
             }
         }
-        bookButton.setText(openBook.name());
+        if (openBook != null) {
+            bookButton.setText(openBook.name());
+        } else {
+            bookButton.setText(bookKey + "?");
+        }
+
+        // Show not available page if chapter doesn't exist
+        if (openChapter == null) {
+            openPage(notAvailablePage);
+            return;
+        }
+        openPage(chapterPage);
 
         // Update chapter view
         if (settings.getInt("font", Consts.Settings.FONT_DEFAULT) == Consts.Settings.FONT_SERIF)
