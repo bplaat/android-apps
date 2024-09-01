@@ -9,29 +9,26 @@ package nl.plaatsoft.bible.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
-import android.util.TypedValue;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import nl.plaatsoft.bible.components.BooksFlowLayout;
-import nl.plaatsoft.bible.components.ChapterView;
-import nl.plaatsoft.bible.components.ChaptersGridLayout;
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;
 import nl.plaatsoft.bible.services.BibleService;
+import nl.plaatsoft.bible.views.BiblesDialogBuilder;
+import nl.plaatsoft.bible.views.BooksDialogBuilder;
+import nl.plaatsoft.bible.views.ChapterView;
+import nl.plaatsoft.bible.views.ChaptersDialogBuilder;
 import nl.plaatsoft.bible.Consts;
-import nl.plaatsoft.bible.Utils;
 import nl.plaatsoft.bible.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -43,17 +40,17 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private TextView chapterButton;
     private ChapterView chapterPage;
     private ScrollView notAvailablePage;
-    private AlertDialog dialog;
 
-    private Handler handler = new Handler(Looper.getMainLooper());
-    private int oldFont = -1;
-    private int oldLanguage = -1;
-    private int oldTheme = -1;
     private BibleService bibleService = BibleService.getInstance();
     private ArrayList<Bible> bibles;
     private Bible openBible;
     private Book openBook;
     private Chapter openChapter;
+    private AlertDialog dialog;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private int oldFont = -1;
+    private int oldLanguage = -1;
+    private int oldTheme = -1;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,148 +63,44 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         notAvailablePage = findViewById(R.id.main_not_available_page);
         useWindowInsets(chapterPage, notAvailablePage);
 
-        var languages = new HashMap<String, String>();
-        languages.put("en", getResources().getString(R.string.settings_language_english));
-        languages.put("nl", getResources().getString(R.string.settings_language_dutch));
-
         // Bible button
-        var outValue = new TypedValue();
-        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
-        var selectableItemBackground = outValue.resourceId;
-        getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless, outValue, true);
-        var selectableItemBackgroundBorderless = outValue.resourceId;
-
         bibleButton.setOnClickListener(view -> {
-            var density = getResources().getDisplayMetrics().density;
-            var alertView = new LinearLayout(this);
-            alertView.setOrientation(LinearLayout.VERTICAL);
-            alertView.setPadding(0, (int) (16 * density), 0, (int) (16 * density));
-
-            var previousLanguage = "";
-            for (var bible : bibles) {
-                if (!previousLanguage.equals(bible.language())) {
-                    previousLanguage = bible.language();
-                    var languageView = new TextView(this);
-                    languageView.setText(languages.get(bible.language()));
-                    languageView.setTextSize(16);
-                    languageView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-                    languageView.setTextColor(Utils.contextGetColor(this, R.color.secondary_text_color));
-                    languageView.setPadding((int) (24 * density), (int) (16 * density), (int) (24 * density),
-                            (int) (16 * density));
-                    alertView.addView(languageView);
+            dialog = new BiblesDialogBuilder(this, bibles, openBible, bible -> {
+                dialog.dismiss();
+                if (!bible.path().equals(openBible.path())) {
+                    var settingsEditor = settings.edit();
+                    settingsEditor.putString("open_bible", bible.path());
+                    settingsEditor.apply();
+                    openBibleFromSettings();
                 }
-
-                var bibleView = new TextView(this);
-                bibleView.setText(bible.name());
-                bibleView.setTextSize(16);
-                bibleView.setPadding((int) (24 * density), (int) (16 * density), (int) (24 * density),
-                        (int) (16 * density));
-                if (bible.path().equals(openBible.path()))
-                    bibleView.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
-                bibleView.setBackgroundResource(selectableItemBackground);
-                bibleView.setOnClickListener(view2 -> {
-                    dialog.dismiss();
-                    if (!bible.path().equals(openBible.path())) {
-                        var settingsEditor = settings.edit();
-                        settingsEditor.putString("open_bible", bible.path());
-                        settingsEditor.apply();
-                        openBibleFromSettings();
-                    }
-                });
-                alertView.addView(bibleView);
-            }
-
-            dialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.main_bible_alert_title_label)
-                    .setView(alertView)
-                    .show();
+            }).show();
         });
 
         // Book button
         bookButton.setOnClickListener(view -> {
-            var density = getResources().getDisplayMetrics().density;
-            var alertView = new ScrollView(this);
-            var rootList = new LinearLayout(this);
-            rootList.setOrientation(LinearLayout.VERTICAL);
-            rootList.setPadding(0, (int) (16 * density), 0, (int) (16 * density));
-            alertView.addView(rootList);
-
-            for (var testament : openBible.testaments()) {
-                var testamentView = new TextView(this);
-                testamentView.setText(testament.name());
-                testamentView.setTextSize(16);
-                testamentView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-                testamentView.setTextColor(Utils.contextGetColor(this, R.color.secondary_text_color));
-                testamentView.setPadding((int) (24 * density), (int) (16 * density), (int) (24 * density),
-                        (int) (16 * density));
-                rootList.addView(testamentView);
-
-                var booksFlowLayout = new BooksFlowLayout(this);
-                booksFlowLayout.setPadding((int) (16 * density), 0, (int) (16 * density), (int) (16 * density));
-                rootList.addView(booksFlowLayout);
-
-                for (var book : testament.books()) {
-                    var bookView = new TextView(this);
-                    bookView.setText(book.name());
-                    bookView.setTextSize(16);
-                    bookView.setPadding((int) (8 * density), (int) (8 * density), (int) (8 * density),
-                            (int) (8 * density));
-                    if (book.key().equals(openBook.key()))
-                        bookView.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
-                    bookView.setBackgroundResource(selectableItemBackground);
-                    bookView.setOnClickListener(view2 -> {
-                        dialog.dismiss();
-                        if (!book.key().equals(openBook.key())) {
-                            var settingsEditor = settings.edit();
-                            settingsEditor.putString("open_book", book.key());
-                            settingsEditor.putInt("open_chapter", 1);
-                            settingsEditor.apply();
-                            openChapterFromSettings(true);
-                        }
-                    });
-                    booksFlowLayout.addView(bookView);
+            dialog = new BooksDialogBuilder(this, openBible.testaments(), openBook, book -> {
+                dialog.dismiss();
+                if (!book.key().equals(openBook.key())) {
+                    var editor = settings.edit();
+                    editor.putString("open_book", book.key());
+                    editor.putInt("open_chapter", 1);
+                    editor.apply();
+                    openChapterFromSettings(true);
                 }
-            }
-
-            dialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.main_book_alert_title_label)
-                    .setView(alertView)
-                    .show();
+            }).show();
         });
 
         // Chapter button
         chapterButton.setOnClickListener(view -> {
-            var density = getResources().getDisplayMetrics().density;
-            var alertView = new ScrollView(this);
-            var chaptersGrid = new ChaptersGridLayout(this);
-            chaptersGrid.setPadding((int) (8 * density), (int) (16 * density), (int) (8 * density),
-                    (int) (16 * density));
-            alertView.addView(chaptersGrid);
-
-            for (var chapter : openBook.chapters()) {
-                var chapterView = new TextView(this);
-                chapterView.setText(String.valueOf(chapter.number()));
-                chapterView.setTextSize(20);
-                if (chapter.number() == openChapter.number())
-                    chapterView.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
-                chapterView.setGravity(Gravity.CENTER);
-                chapterView.setBackgroundResource(selectableItemBackgroundBorderless);
-                chapterView.setOnClickListener(view2 -> {
-                    dialog.dismiss();
-                    if (chapter.number() != openChapter.number()) {
-                        var settingsEditor = settings.edit();
-                        settingsEditor.putInt("open_chapter", chapter.number());
-                        settingsEditor.apply();
-                        openChapterFromSettings(true);
-                    }
-                });
-                chaptersGrid.addView(chapterView);
-            }
-
-            dialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.main_chapter_alert_title_label)
-                    .setView(alertView)
-                    .show();
+            dialog = new ChaptersDialogBuilder(this, openBook.chapters(), openChapter, chapter -> {
+                dialog.dismiss();
+                if (chapter.number() != openChapter.number()) {
+                    var editor = settings.edit();
+                    editor.putInt("open_chapter", chapter.number());
+                    editor.apply();
+                    openChapterFromSettings(true);
+                }
+            }).show();
         });
 
         // Search button

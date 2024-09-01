@@ -15,9 +15,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
-
-import nl.plaatsoft.bible.components.SearchVerseAdapter;
 import nl.plaatsoft.bible.services.BibleService;
+import nl.plaatsoft.bible.views.SearchVerseAdapter;
 import nl.plaatsoft.bible.Consts;
 import nl.plaatsoft.bible.R;
 
