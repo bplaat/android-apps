@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-package nl.plaatsoft.bible.components;
+package nl.plaatsoft.bible.views;
 
 import android.content.Context;
 import android.graphics.Typeface;

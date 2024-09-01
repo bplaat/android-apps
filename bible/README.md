@@ -1,5 +1,5 @@
-# Offline Bible Android App
-An offline Android Bible app containing multiple translations (Dutch & English). Very fast. No WebView. No ads or tracking. No internet required. As it should be.
+# Offline Android Bible App
+An offline Android Bible app containing multiple translations (Dutch & English). Very fast. No WebView. No ads or tracking. No internet connection required. As it should be.
 
 Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/) and [die-bibel.de](https://die-bibel.de/), thanks [Nederlands-Vlaams Bijbel Genootschap](https://www.bijbelgenootschap.nl/) for your good work spreading Gods word!
 
@@ -13,9 +13,3 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/) and [d
 ### English
 - [New International Version (NIV)](https://www.die-bibel.de/bibel/NIV/GEN.1)
 - [King James Version (KJV)](https://www.die-bibel.de/bibel/KJV/GEN.1)
-
-## TODO
-App
-- verse highlight and scroll
-- random chapter -> random verse
-- swipeable chapterviews

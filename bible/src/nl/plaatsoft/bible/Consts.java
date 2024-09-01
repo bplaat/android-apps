@@ -21,7 +21,7 @@ public class Consts {
         public static String getBibleDefault(Context context) {
             var languages = Utils.contextGetLanguages(context);
             for (var language : languages) {
-                if (language == "nl")
+                if (language.equals("nl"))
                     return "bibles/nbv21.bible";
             }
             return "bibles/niv.bible";

@@ -29,7 +29,7 @@
 
     <FrameLayout style="@style/Flex">
         <!-- Chapter page -->
-        <nl.plaatsoft.bible.components.ChapterView android:id="@+id/main_chapter_page"
+        <nl.plaatsoft.bible.views.ChapterView android:id="@+id/main_chapter_page"
             style="@style/Fill" />
 
         <!-- Not available page -->
