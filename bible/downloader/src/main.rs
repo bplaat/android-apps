@@ -158,6 +158,7 @@ fn main() -> Result<()> {
         );
         metadata.insert("copyright", translation_metadata.copyright);
         metadata.insert("released_at", translation_metadata.updated_at);
+        metadata.insert("scraped_at", chrono::Utc::now().to_rfc3339());
         for (key, value) in metadata {
             conn.execute(
                 "INSERT INTO metadata (key, value) VALUES (?, ?)",
@@ -272,11 +273,43 @@ fn main() -> Result<()> {
                                                     current_verse.text.push('\n');
                                                 }
                                                 let content = item.content.as_ref().unwrap();
-                                                if content.is_string() {
+                                                if content.is_array() {
+                                                    for item in content.as_array().unwrap() {
+                                                        let item = item.as_object().unwrap();
+                                                        let item_type = item
+                                                            .get("type")
+                                                            .unwrap()
+                                                            .as_str()
+                                                            .unwrap();
+                                                        if item_type == "verse-text" {
+                                                            let item_text = item
+                                                                .get("content")
+                                                                .unwrap()
+                                                                .as_str()
+                                                                .unwrap();
+                                                            if item_text != " " {
+                                                                current_verse
+                                                                    .text
+                                                                    .push_str(item_text);
+                                                            }
+                                                        } else if item_type == "study" {
+                                                        } else {
+                                                            panic!(
+                                                                "Unknown char block type: {}",
+                                                                item_type
+                                                            );
+                                                        }
+                                                    }
+                                                } else if content.is_string() {
                                                     let text = content.as_str().unwrap();
                                                     if text != " " {
                                                         current_verse.text.push_str(text);
                                                     }
+                                                } else {
+                                                    panic!(
+                                                        "Unknown block content type: {}",
+                                                        content
+                                                    );
                                                 }
                                             }
                                         }

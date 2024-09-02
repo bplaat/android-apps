@@ -43,21 +43,19 @@ public class BibleService {
             var biblesDir = new File(context.getFilesDir(), "bibles");
             if (!biblesDir.exists())
                 biblesDir.mkdirs();
-
             for (var filename : context.getAssets().list("bibles")) {
                 if (!filename.endsWith(".bible"))
                     continue;
-
-                var file = new File(context.getFilesDir(), "bibles/" + filename);
-                if (file.exists())
+                var file = new File(biblesDir, filename);
+                var assetsFile = context.getAssets().openFd("bibles/" + filename);
+                if (file.exists() && file.length() == assetsFile.getLength())
                     continue;
-                try (var gzipInputStream = new GZIPInputStream(context.getAssets().open("bibles/" + filename));
+                try (var gzipInputStream = new GZIPInputStream(assetsFile.createInputStream());
                         var fileOutputStream = new FileOutputStream(file)) {
                     var buffer = new byte[1024];
                     var length = 0;
-                    while ((length = gzipInputStream.read(buffer)) > 0) {
+                    while ((length = gzipInputStream.read(buffer)) > 0)
                         fileOutputStream.write(buffer, 0, length);
-                    }
                 } catch (Exception exception) {
                     Log.e(context.getPackageName(), "Can't copy and unzip .bible file", exception);
                 }
@@ -104,7 +102,10 @@ public class BibleService {
         var abbreviation = metadata.get("abbreviation");
         var language = metadata.get("language");
         var copyright = metadata.get("copyright");
-        var releasedAt = metadata.get("released_at").split("T")[0];
+        var releasedAt = metadata.get("released_at");
+        var scrapedAt = metadata.get("scraped_at");
+        if (scrapedAt == null)
+            scrapedAt = "?";
 
         // Read index
         ArrayList<Testament> testaments = null;
@@ -152,7 +153,7 @@ public class BibleService {
                 }
             }
         }
-        return new Bible(path, name, abbreviation, language, copyright, releasedAt, testaments);
+        return new Bible(path, name, abbreviation, language, copyright, releasedAt, scrapedAt, testaments);
     }
 
     public Chapter readChapter(Context context, String path, String bookKey, int chapterNumber) {

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 if [ "$1" = "downloader" ]; then
     cd downloader; cargo build --release; cd ..
     # Dutch bible translations

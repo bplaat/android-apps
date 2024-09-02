@@ -15,5 +15,6 @@ public record Bible(
         String language,
         String copyright,
         String releasedAt,
+        String scrapedAt,
         ArrayList<Testament> testaments) {
 }
