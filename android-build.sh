@@ -47,7 +47,11 @@ if [ ! -e ../.vscode/settings.json ]; then
     for dir in $(find .. -name "src" ! -path "*/target/*") $(find .. -name "src-gen"); do
         echo "\"${dir:1}\"," >> ../.vscode/settings.json
     done
-    echo "],\"java.project.referencedLibraries\":[\"$platform\"]}" >> ../.vscode/settings.json
+    echo "],\"java.project.referencedLibraries\":[\"$platform\"],\"rust-analyzer.linkedProjects\":[" >> ../.vscode/settings.json
+    for file in $(find .. -name "Cargo.toml"); do
+        echo "\"${file:1}\"," >> ../.vscode/settings.json
+    done
+    echo "]}" >> ../.vscode/settings.json
 fi
 
 echo "Compiling resources..."
