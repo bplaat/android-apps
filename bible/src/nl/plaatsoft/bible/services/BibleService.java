@@ -57,11 +57,11 @@ public class BibleService {
                     while ((length = gzipInputStream.read(buffer)) > 0)
                         fileOutputStream.write(buffer, 0, length);
                 } catch (Exception exception) {
-                    Log.e(context.getPackageName(), "Can't copy and unzip .bible file", exception);
+                    Log.e(context.getPackageName(), "Can't copy and unzip: " + file.getPath(), exception);
                 }
             }
         } catch (Exception exception) {
-            Log.e(context.getPackageName(), "Can't index assets bibles", exception);
+            Log.e(context.getPackageName(), "Can't index bible assets", exception);
         }
     }
 
@@ -69,10 +69,12 @@ public class BibleService {
         var bibles = new ArrayList<Bible>();
         var biblesDir = new File(context.getFilesDir(), "bibles");
         for (var file : biblesDir.listFiles()) {
+            if (!file.getName().endsWith(".bible"))
+                continue;
             try {
                 bibles.add(readBible(context, "bibles/" + file.getName(), false));
             } catch (Exception exception) {
-                Log.e(context.getPackageName(), "Can't read .bible file", exception);
+                Log.e(context.getPackageName(), "Can't read: " + file.getPath(), exception);
             }
         }
         Collections.sort(bibles, (a, b) -> a.name().compareTo(b.name()));
