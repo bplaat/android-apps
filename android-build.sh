@@ -11,13 +11,28 @@ target_sdk_version=35
 
 ################# BUILD SCRIPT #################
 
+set -e
+PATH=$PATH:$ANDROID_HOME/platform-tools:$(find "$ANDROID_HOME/build-tools" -name "$target_sdk_version*")
+platform=$ANDROID_HOME/platforms/android-$target_sdk_version/android.jar
+
 if [ -z "$name" ]; then
+    if [ "$1" = "vscode" ]; then
+        mkdir -p .vscode
+        echo "{\"editor.formatOnSave\":true,\"java.project.sourcePaths\":[" > .vscode/settings.json
+        for dir in $(find . -name "src" ! -path "*/target/*") $(find . -name "src-gen"); do
+            echo "\"$dir\"," >> .vscode/settings.json
+        done
+        echo "],\"java.project.referencedLibraries\":[\"$platform\"],\"rust-analyzer.linkedProjects\":[" >> .vscode/settings.json
+        for file in $(find . -name "Cargo.toml"); do
+            echo "\"$file\"," >> .vscode/settings.json
+        done
+        echo "]}" >> .vscode/settings.json
+        exit
+    fi
+
     echo "You haven't set all the required variables!"
     exit 1
 fi
-
-set -e
-PATH=$PATH:$ANDROID_HOME/platform-tools:$(find "$ANDROID_HOME/build-tools" -name "$target_sdk_version*")
 
 if [ "$1" = "clean" ]; then
     rm -rf target
@@ -37,21 +52,6 @@ if [ "$1" = "clear" ]; then
     adb shell pm clear "$package"
     adb shell am start -n "$package/$main_activity"
     exit
-fi
-
-# VSCode Java settings
-platform=$ANDROID_HOME/platforms/android-$target_sdk_version/android.jar
-if [ ! -e ../.vscode/settings.json ]; then
-    mkdir -p ../.vscode
-    echo "{\"editor.formatOnSave\":true,\"java.project.sourcePaths\":["> ../.vscode/settings.json
-    for dir in $(find .. -name "src" ! -path "*/target/*") $(find .. -name "src-gen"); do
-        echo "\"${dir:1}\"," >> ../.vscode/settings.json
-    done
-    echo "],\"java.project.referencedLibraries\":[\"$platform\"],\"rust-analyzer.linkedProjects\":[" >> ../.vscode/settings.json
-    for file in $(find .. -name "Cargo.toml"); do
-        echo "\"${file:1}\"," >> ../.vscode/settings.json
-    done
-    echo "]}" >> ../.vscode/settings.json
 fi
 
 echo "Compiling resources..."
