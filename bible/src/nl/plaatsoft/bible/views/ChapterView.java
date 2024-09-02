@@ -155,6 +155,6 @@ public class ChapterView extends ScrollView implements View.OnTouchListener {
         root.addView(verseBlock);
 
         if (scrollToVerse)
-            handler.post(() -> scrollTo(0, verseBlock.getTop()));
+            handler.post(() -> scrollTo(0, verseBlock.getTop() - (int) (16 * density)));
     }
 }

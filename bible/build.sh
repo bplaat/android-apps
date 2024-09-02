@@ -11,7 +11,7 @@ fi
 
 export name="bible"
 export package="nl.plaatsoft.bible"
-export version="1.0.0"
+export version="1.1.0-dev"
 export password="android"
 export main_activity=".activities.MainActivity"
 ../android-build.sh $@
