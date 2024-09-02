@@ -165,11 +165,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         });
 
         // Install bibles from assets and open last opened bible
-        bibleService.installBiblesFromAssets(this);
-        bibles = bibleService.getInstalledBibles(this);
-
-        openBibleFromSettings();
-
+        Runnable installAndOpen = () -> {
+            bibleService.installBiblesFromAssets(this);
+            bibles = bibleService.getInstalledBibles(this);
+            handler.post(() -> openBibleFromSettings());
+        };
+        installAndOpen.run();
     }
 
     @Override
