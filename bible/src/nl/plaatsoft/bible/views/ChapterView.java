@@ -17,9 +17,9 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
-import android.view.GestureDetector;
-import android.view.MotionEvent;
+import android.util.TypedValue;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -28,50 +28,20 @@ import nl.plaatsoft.bible.models.Chapter;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
-public class ChapterView extends ScrollView implements View.OnTouchListener {
-    public static interface OnSwipeLeftListener {
-        void onSwipeLeft();
+public class ChapterView extends ScrollView {
+    public static interface OnPreviousListener {
+        void onPrevious();
     }
 
-    public static interface OnSwipeRightListener {
-        void onSwipeRight();
-    }
-
-    private static class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
-        private static final int SWIPE_THRESHOLD = 100;
-        private static final int SWIPE_VELOCITY_THRESHOLD = 100;
-
-        private final ChapterView view;
-
-        public SwipeGestureDetector(ChapterView view) {
-            this.view = view;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
-            if (e1 == null || e2 == null)
-                return false;
-            float diffX = e2.getX() - e1.getX();
-            float diffY = e2.getY() - e1.getY();
-            if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > SWIPE_THRESHOLD
-                    && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-                if (diffX < 0) {
-                    view.onSwipeLeftListener.onSwipeLeft();
-                } else {
-                    view.onSwipeRightListener.onSwipeRight();
-                }
-                return true;
-            }
-            return false;
-        }
+    public static interface OnNextListener {
+        void onNext();
     }
 
     private Handler handler = new Handler(Looper.getMainLooper());
     private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
     private final LinearLayout root;
-    private final GestureDetector gestureDetector;
-    private OnSwipeLeftListener onSwipeLeftListener;
-    private OnSwipeRightListener onSwipeRightListener;
+    private OnPreviousListener onPreviousListener;
+    private OnNextListener onNextListener;
 
     public ChapterView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -81,30 +51,24 @@ public class ChapterView extends ScrollView implements View.OnTouchListener {
         var density = getResources().getDisplayMetrics().density;
         root.setPadding((int) (16 * density), (int) (8 * density), (int) (16 * density), (int) (8 * density));
         addView(root);
-
-        setOnTouchListener(this);
-        gestureDetector = new GestureDetector(context, new SwipeGestureDetector(this));
     }
 
     public void setTypeface(Typeface typeface) {
         this.typeface = typeface;
     }
 
-    public void setOnSwipeLeftListener(OnSwipeLeftListener onSwipeLeftListener) {
-        this.onSwipeLeftListener = onSwipeLeftListener;
+    public void setOnPreviousListener(OnPreviousListener onPreviousListener) {
+        this.onPreviousListener = onPreviousListener;
     }
 
-    public void setOnSwipeRightListener(OnSwipeRightListener onSwipeRightListener) {
-        this.onSwipeRightListener = onSwipeRightListener;
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return gestureDetector.onTouchEvent(event);
+    public void setOnNextListener(OnNextListener onNextListener) {
+        this.onNextListener = onNextListener;
     }
 
     public void openChapter(Chapter chapter, int highlightVerseId) {
         root.removeAllViews();
+
+        // Create verse text blocks
         var ssb = new SpannableStringBuilder();
         var scrollToVerse = false;
         for (var verse : chapter.verses()) {
@@ -137,9 +101,46 @@ public class ChapterView extends ScrollView implements View.OnTouchListener {
                 ssb = new SpannableStringBuilder();
             }
         }
+
+        // Create next and privous buttons
+        var selectableItemBackgroundBorderless = new TypedValue();
+        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,
+                selectableItemBackgroundBorderless, true);
+        var density = getResources().getDisplayMetrics().density;
+
+        var buttonsContainer = new LinearLayout(getContext());
+        var layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        layoutParams.setMargins(0, (int) (8 * density), 0, (int) (8 * density));
+        buttonsContainer.setLayoutParams(layoutParams);
+        root.addView(buttonsContainer);
+
+        var previousButton = new ImageButton(getContext());
+        previousButton.setImageResource(R.drawable.ic_arrow_left);
+        previousButton.setBackgroundResource(selectableItemBackgroundBorderless.resourceId);
+        previousButton.setOnClickListener(v -> {
+            if (onPreviousListener != null)
+                onPreviousListener.onPrevious();
+        });
+        buttonsContainer.addView(previousButton);
+
+        var flex = new View(getContext());
+        flex.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 1));
+        buttonsContainer.addView(flex);
+
+        var nextButton = new ImageButton(getContext());
+        nextButton.setImageResource(R.drawable.ic_arrow_right);
+        nextButton.setBackgroundResource(selectableItemBackgroundBorderless.resourceId);
+        nextButton.setOnClickListener(v -> {
+            if (onNextListener != null)
+                onNextListener.onNext();
+        });
+        buttonsContainer.addView(nextButton);
     }
 
     private void addVerseBlock(Spannable spannable, boolean isSubtitle, boolean scrollToVerse) {
+        var density = getResources().getDisplayMetrics().density;
+
         var verseBlock = new TextView(getContext());
         verseBlock.setTextSize(18);
         verseBlock.setTypeface(isSubtitle ? Typeface.create(typeface, Typeface.BOLD) : typeface);
@@ -147,7 +148,6 @@ public class ChapterView extends ScrollView implements View.OnTouchListener {
             verseBlock.setLineSpacing(0, 1.2f);
         var layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
-        var density = getResources().getDisplayMetrics().density;
         layoutParams.setMargins(0, (int) (8 * density), 0, (int) (8 * density));
         verseBlock.setLayoutParams(layoutParams);
         verseBlock.setText(spannable);

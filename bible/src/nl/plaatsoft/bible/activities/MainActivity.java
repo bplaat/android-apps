@@ -118,28 +118,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         });
 
         // Chapter view
-        chapterPage.setOnSwipeLeftListener(() -> {
-            var editor = settings.edit();
-            if (openChapter.number() == openBook.chapters().size()) {
-                // Find next book
-                var allBooks = new ArrayList<Book>();
-                for (var testament : openBible.testaments())
-                    allBooks.addAll(testament.books());
-                for (var i = 0; i < allBooks.size(); i++) {
-                    if (allBooks.get(i).key().equals(openBook.key())) {
-                        var nextBook = allBooks.get(i == allBooks.size() - 1 ? 0 : i + 1);
-                        editor.putString("open_book", nextBook.key());
-                        editor.putInt("open_chapter", 1);
-                        break;
-                    }
-                }
-            } else {
-                editor.putInt("open_chapter", openChapter.number() + 1);
-            }
-            editor.apply();
-            openChapterFromSettings(true, -1);
-        });
-        chapterPage.setOnSwipeRightListener(() -> {
+        chapterPage.setOnPreviousListener(() -> {
             var editor = settings.edit();
             if (openChapter.number() == 1) {
                 // Find previous book
@@ -156,6 +135,27 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 }
             } else {
                 editor.putInt("open_chapter", openChapter.number() - 1);
+            }
+            editor.apply();
+            openChapterFromSettings(true, -1);
+        });
+        chapterPage.setOnNextListener(() -> {
+            var editor = settings.edit();
+            if (openChapter.number() == openBook.chapters().size()) {
+                // Find next book
+                var allBooks = new ArrayList<Book>();
+                for (var testament : openBible.testaments())
+                    allBooks.addAll(testament.books());
+                for (var i = 0; i < allBooks.size(); i++) {
+                    if (allBooks.get(i).key().equals(openBook.key())) {
+                        var nextBook = allBooks.get(i == allBooks.size() - 1 ? 0 : i + 1);
+                        editor.putString("open_book", nextBook.key());
+                        editor.putInt("open_chapter", 1);
+                        break;
+                    }
+                }
+            } else {
+                editor.putInt("open_chapter", openChapter.number() + 1);
             }
             editor.apply();
             openChapterFromSettings(true, -1);
