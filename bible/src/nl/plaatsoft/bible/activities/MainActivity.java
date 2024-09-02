@@ -209,7 +209,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // When search activity is closed check open selected book / chapter verse
         if (requestCode == SEARCH_REQUEST_CODE) {
-            openChapterFromSettings(true, data.getIntExtra("highlight_verse", -1));
+            if (resultCode == RESULT_OK) {
+                openChapterFromSettings(true, data.getIntExtra("highlight_verse", -1));
+            }
             return;
         }
 
