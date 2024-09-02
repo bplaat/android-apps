@@ -25,7 +25,7 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
         void onResult(Book book);
     }
 
-    public BooksDialogBuilder(Context context, ArrayList<Testament> testaments, Book currentBook,
+    public BooksDialogBuilder(Context context, ArrayList<Testament> testaments, String currentBookKey,
             OnResultListener onResultListener) {
         super(context);
 
@@ -65,7 +65,7 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
                 bookButton.setTextSize(16);
                 bookButton.setPadding((int) (8 * density), (int) (8 * density), (int) (8 *
                         density), (int) (8 * density));
-                if (book.key().equals(currentBook.key()))
+                if (book.key().equals(currentBookKey))
                     bookButton.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
                 bookButton.setBackgroundResource(selectableItemBackground.resourceId);
                 bookButton.setOnClickListener(view -> onResultListener.onResult(book));

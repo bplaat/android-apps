@@ -23,7 +23,7 @@ public class BiblesDialogBuilder extends AlertDialog.Builder {
         void onResult(Bible bible);
     }
 
-    public BiblesDialogBuilder(Context context, ArrayList<Bible> bibles, Bible currentBible,
+    public BiblesDialogBuilder(Context context, ArrayList<Bible> bibles, String currentBiblePath,
             OnResultListener onResultListener) {
         super(context);
 
@@ -59,7 +59,7 @@ public class BiblesDialogBuilder extends AlertDialog.Builder {
             bibleButton.setTextSize(16);
             bibleButton.setPadding((int) (24 * density), (int) (16 * density), (int) (24 * density),
                     (int) (16 * density));
-            if (bible.path().equals(currentBible.path()))
+            if (bible.path().equals(currentBiblePath))
                 bibleButton.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
             bibleButton.setBackgroundResource(selectableItemBackground.resourceId);
             bibleButton.setOnClickListener(view -> onResultListener.onResult(bible));

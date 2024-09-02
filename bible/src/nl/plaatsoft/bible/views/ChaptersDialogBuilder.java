@@ -23,7 +23,7 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
         void onResult(Chapter chapter);
     }
 
-    public ChaptersDialogBuilder(Context context, ArrayList<Chapter> chapters, Chapter currentChapter,
+    public ChaptersDialogBuilder(Context context, ArrayList<Chapter> chapters, int currentChapterNumber,
             OnResultListener onResultListener) {
         super(context);
 
@@ -45,7 +45,7 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
             var chapterButton = new TextView(context);
             chapterButton.setText(String.valueOf(chapter.number()));
             chapterButton.setTextSize(20);
-            if (chapter.number() == currentChapter.number())
+            if (chapter.number() == currentChapterNumber)
                 chapterButton.setTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.BOLD));
             chapterButton.setGravity(Gravity.CENTER);
             chapterButton.setBackgroundResource(selectableItemBackgroundBorderless.resourceId);

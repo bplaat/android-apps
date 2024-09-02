@@ -45,6 +45,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private BibleService bibleService = BibleService.getInstance();
     private ArrayList<Bible> bibles;
     private Bible openBible;
+    private String openBookKey;
     private Book openBook;
     private Chapter openChapter;
     private AlertDialog dialog;
@@ -66,7 +67,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Bible button
         bibleButton.setOnClickListener(view -> {
-            dialog = new BiblesDialogBuilder(this, bibles, openBible, bible -> {
+            dialog = new BiblesDialogBuilder(this, bibles, openBible.path(), bible -> {
                 dialog.dismiss();
                 if (!bible.path().equals(openBible.path())) {
                     var settingsEditor = settings.edit();
@@ -79,9 +80,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Book button
         bookButton.setOnClickListener(view -> {
-            dialog = new BooksDialogBuilder(this, openBible.testaments(), openBook, book -> {
+            dialog = new BooksDialogBuilder(this, openBible.testaments(), openBookKey, book -> {
                 dialog.dismiss();
-                if (!book.key().equals(openBook.key())) {
+                if (!book.key().equals(openBookKey)) {
                     var editor = settings.edit();
                     editor.putString("open_book", book.key());
                     editor.putInt("open_chapter", 1);
@@ -93,7 +94,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Chapter button
         chapterButton.setOnClickListener(view -> {
-            dialog = new ChaptersDialogBuilder(this, openBook.chapters(), openChapter, chapter -> {
+            if (openChapter == null)
+                return;
+            dialog = new ChaptersDialogBuilder(this, openBook.chapters(), openChapter.number(), chapter -> {
                 dialog.dismiss();
                 if (chapter.number() != openChapter.number()) {
                     var editor = settings.edit();
@@ -234,16 +237,16 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void openChapterFromSettings(boolean scrollToTop, int highlightVerseId) {
-        var bookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
+        openBookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
         var openChapterNumber = settings.getInt("open_chapter", Consts.Settings.BIBLE_CHAPTER_DEFAULT);
-        openChapter = bibleService.readChapter(this, openBible.path(), bookKey, openChapterNumber);
+        openChapter = bibleService.readChapter(this, openBible.path(), openBookKey, openChapterNumber);
         chapterButton.setText(String.valueOf(openChapterNumber));
 
         // Get book
         openBook = null;
         for (var testament : openBible.testaments()) {
             for (var book : testament.books()) {
-                if (book.key().equals(bookKey)) {
+                if (book.key().equals(openBookKey)) {
                     openBook = book;
                     break;
                 }
@@ -252,7 +255,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         if (openBook != null) {
             bookButton.setText(openBook.name());
         } else {
-            bookButton.setText(bookKey + "?");
+            bookButton.setText(openBookKey + "?");
         }
 
         // Show not available page if chapter doesn't exist
