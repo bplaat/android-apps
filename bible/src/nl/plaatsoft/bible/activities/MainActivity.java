@@ -15,6 +15,7 @@ import android.os.Looper;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
@@ -36,7 +37,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private static final int SEARCH_REQUEST_CODE = 0;
     private static final int SETTINGS_REQUEST_CODE = 1;
 
-    private TextView bibleButton;
+    private View drawerOverlay;
+    private LinearLayout drawer;
+    // private TextView bibleButton;
     private TextView bookButton;
     private TextView chapterButton;
     private ChapterView chapterPage;
@@ -58,24 +61,43 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        bibleButton = findViewById(R.id.main_bible_button);
+        drawerOverlay = findViewById(R.id.main_drawer_overlay);
+        drawer = findViewById(R.id.main_drawer);
+        // bibleButton = findViewById(R.id.main_book_button);
         bookButton = findViewById(R.id.main_book_button);
         chapterButton = findViewById(R.id.main_chapter_button);
         chapterPage = findViewById(R.id.main_chapter_page);
         notAvailablePage = findViewById(R.id.main_not_available_page);
-        useWindowInsets(chapterPage, notAvailablePage);
+        useWindowInsets(drawer, chapterPage, notAvailablePage);
 
         // Bible button
-        bibleButton.setOnClickListener(view -> {
-            dialog = new BiblesDialogBuilder(this, bibles, openBible.path(), bible -> {
-                dialog.dismiss();
-                if (!bible.path().equals(openBible.path())) {
-                    var settingsEditor = settings.edit();
-                    settingsEditor.putString("open_bible", bible.path());
-                    settingsEditor.apply();
-                    openBibleFromSettings();
-                }
-            }).show();
+        // bibleButton.setOnClickListener(view -> {
+        // dialog = new BiblesDialogBuilder(this, bibles, openBible.path(), bible -> {
+        // dialog.dismiss();
+        // if (!bible.path().equals(openBible.path())) {
+        // var settingsEditor = settings.edit();
+        // settingsEditor.putString("open_bible", bible.path());
+        // settingsEditor.apply();
+        // openBibleFromSettings();
+        // }
+        // }).show();
+        // });
+
+        // Drawer
+        drawerOverlay.setOnClickListener(view -> {
+            drawerOverlay.setVisibility(View.GONE);
+            drawer.setVisibility(View.GONE);
+        });
+
+        drawer.getLayoutParams().width = getResources().getDisplayMetrics().widthPixels
+                - (int) (56 * getResources().getDisplayMetrics().density);
+        drawer.setOnClickListener(view -> {
+        });
+
+        // Menu button
+        findViewById(R.id.main_menu_button).setOnClickListener(view -> {
+            drawerOverlay.setVisibility(View.VISIBLE);
+            drawer.setVisibility(View.VISIBLE);
         });
 
         // Book button
@@ -235,7 +257,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         openBible = bibleService.readBible(this,
                 settings.getString("open_bible", Consts.Settings.getBibleDefault(this)),
                 true);
-        bibleButton.setText(openBible.abbreviation());
+        // bibleButton.setText(openBible.abbreviation());
         openChapterFromSettings(true, -1);
     }
 

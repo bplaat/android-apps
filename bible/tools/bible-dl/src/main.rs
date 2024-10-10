@@ -22,6 +22,8 @@ use crate::structs::{ChapterContents, Metadata};
 
 mod structs;
 
+const DOWNLOAD_THREAD_COUNT: usize = 32;
+
 fn fetch_bible_chapter(url: &str) -> Result<(ChapterContents, Metadata)> {
     let body: String = ureq::get(url).call()?.into_string()?;
     let marker = "<script id=\"IBEP-main-state\" type=\"application/json\">";
@@ -216,7 +218,7 @@ fn main() -> Result<()> {
         chapters.shuffle(&mut rand::thread_rng());
 
         // Queue download chapters tasks
-        let pool = ThreadPool::new(32);
+        let pool = ThreadPool::new(DOWNLOAD_THREAD_COUNT);
         let (tx, rx) = mpsc::channel();
         for chapter in chapters {
             let translation_upper = translation_upper.clone();

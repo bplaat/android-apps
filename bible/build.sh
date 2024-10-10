@@ -2,16 +2,12 @@
 set -e
 if [ "$1" = "tools" ]; then
     cd tools/bible-dl; cargo build --release; cd ../..
-    # Dutch bible translations
-    ./tools/bible-dl/target/release/bible-dl nbv21 -o assets/bibles/nbv21.bible
-    ./tools/bible-dl/target/release/bible-dl bgt -o assets/bibles/bgt.bible
-    ./tools/bible-dl/target/release/bible-dl nbv -o assets/bibles/nbv.bible
-    ./tools/bible-dl/target/release/bible-dl hsv -o assets/bibles/hsv.bible
-    # English bible translations
-    ./tools/bible-dl/target/release/bible-dl niv -o assets/bibles/niv.bible
-    ./tools/bible-dl/target/release/bible-dl kjv -o assets/bibles/kjv.bible
-    ./downloader/target/release/bible-dl niv -o assets/bibles/niv.bible
-    ./downloader/target/release/bible-dl kjv -o assets/bibles/kjv.bible
+    for translation in nbv21 bgt nbv hsv niv kjv; do
+        ./tools/bible-dl/target/release/bible-dl $translation -o assets/bibles/$translation.bible
+    done
+    ./tools/convert_ops.py -n Hemelhoog -a HH -g nl -c "Copyright © 2015 Uitgeverij Boekencentrum" \
+        -s tools/tmp/hh_songs.json -l tools/tmp/hh_lyrics.json -o assets/songbundles/hh.songbundle
+    ./tools/scrape_opwekking.py -n 870 -o assets/songbundles/opw.songbundle
     exit
 fi
 

@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/Fill">
 
-    <FrameLayout style="@style/ActionBar">
-        <LinearLayout style="@style/ActionBarFirstLayer">
-            <TextView android:id="@+id/main_bible_button"
+    <LinearLayout style="@style/Fill">
+        <LinearLayout style="@style/ActionBar">
+            <ImageButton android:id="@+id/main_menu_button"
+                android:src="@drawable/ic_menu"
+                style="@style/ActionBarIconButton" />
+
+            <TextView android:id="@+id/main_book_button"
                 style="@style/ActionBarTextButton" />
+
+            <TextView android:id="@+id/main_chapter_button"
+            style="@style/ActionBarChapterButton" />
 
             <View style="@style/Flex" />
 
@@ -18,35 +25,37 @@
                 style="@style/ActionBarIconButton" />
         </LinearLayout>
 
-        <LinearLayout style="@style/ActionBarSecondLayer">
-            <TextView android:id="@+id/main_book_button"
-                style="@style/ActionBarTextButton" />
+        <FrameLayout style="@style/Flex">
+            <!-- Chapter page -->
+            <nl.plaatsoft.bible.views.ChapterView android:id="@+id/main_chapter_page"
+                style="@style/Fill" />
 
-            <TextView android:id="@+id/main_chapter_button"
-                style="@style/ActionBarChapterButton" />
-        </LinearLayout>
-    </FrameLayout>
+            <!-- Not available page -->
+            <ScrollView android:id="@+id/main_not_available_page"
+                android:visibility="gone"
+                style="@style/Fill">
 
-    <FrameLayout style="@style/Flex">
-        <!-- Chapter page -->
-        <nl.plaatsoft.bible.views.ChapterView android:id="@+id/main_chapter_page"
-            style="@style/Fill" />
+                <LinearLayout style="@style/Hero">
+                    <ImageView android:src="@drawable/ic_bookshelf"
+                        style="@style/HeroIcon" />
 
-        <!-- Not available page -->
-        <ScrollView android:id="@+id/main_not_available_page"
-            android:visibility="gone"
-            style="@style/Fill">
+                    <TextView android:text="@string/main_not_available_title_label"
+                        style="@style/HeroTitle" />
 
-            <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_bookshelf"
-                    style="@style/HeroIcon" />
+                    <TextView android:text="@string/main_not_available_description_label"
+                        style="@style/HeroDescription" />
+                </LinearLayout>
+            </ScrollView>
+        </FrameLayout>
+    </LinearLayout>
 
-                <TextView android:text="@string/main_not_available_title_label"
-                    style="@style/HeroTitle" />
+    <!-- Drawer -->
+    <View android:id="@+id/main_drawer_overlay"
+        android:visibility="gone"
+        style="@style/DrawerOverlay" />
 
-                <TextView android:text="@string/main_not_available_description_label"
-                    style="@style/HeroDescription" />
-            </LinearLayout>
-        </ScrollView>
-    </FrameLayout>
-</LinearLayout>
+    <LinearLayout android:id="@+id/main_drawer"
+        android:visibility="gone"
+        style="@style/Drawer">
+    </LinearLayout>
+</FrameLayout>
