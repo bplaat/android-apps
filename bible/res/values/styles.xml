@@ -211,6 +211,30 @@
         <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
     </style>
 
+    <!-- Song View -->
+    <style name="SongView" parent="ChapterView"/>
+
+    <style name="SongViewTitle">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">24sp</item>
+        <item name="android:textIsSelectable">true</item>
+    </style>
+
+    <style name="SongViewText" parent="ChapterViewVerse"/>
+
+    <style name="SongViewCopyright">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:textIsSelectable">true</item>
+    </style>
+
+    <style name="SongViewButtons" parent="ChapterViewButtons"/>
+
+    <style name="SongViewButtonsButton" parent="ChapterViewButtonsButton"/>
+
     <!-- Search Item -->
     <style name="SearchItem">
         <item name="android:layout_width">match_parent</item>
@@ -280,15 +304,5 @@
 
     <style name="IndexDialogButtonActive" parent="IndexDialogButton">
         <item name="android:textStyle">bold</item>
-    </style>
-
-    <!-- Song View -->
-    <style name="SongText">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:padding">16dp</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:textIsSelectable">true</item>
-        <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 </resources>

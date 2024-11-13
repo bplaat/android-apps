@@ -31,7 +31,6 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/), [die-
 - Scrape Liedboek
 
 ### App
-- Add song title and copyright
-- Song bundle next previous buttons
 - Remember scroll position in chapter view
 - Remember scroll position in dialogs
+- Chapter view select multiple textviews

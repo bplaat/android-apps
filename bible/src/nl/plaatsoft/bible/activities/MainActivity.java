@@ -33,6 +33,7 @@ import nl.plaatsoft.bible.views.BooksDialogBuilder;
 import nl.plaatsoft.bible.views.ChapterView;
 import nl.plaatsoft.bible.views.ChaptersDialogBuilder;
 import nl.plaatsoft.bible.views.DrawerLayout;
+import nl.plaatsoft.bible.views.SongView;
 import nl.plaatsoft.bible.views.SongsDialogBuilder;
 import nl.plaatsoft.bible.Consts;
 import nl.plaatsoft.bible.R;
@@ -48,8 +49,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private TextView indexButton;
     private ChapterView chapterPage;
     private ScrollView chapterNotAvailablePage;
-    private ScrollView songPage;
-    private TextView songPageText;
+    private SongView songPage;
 
     private String app_version;
     private BibleService bibleService = BibleService.getInstance();
@@ -82,7 +82,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         chapterPage = findViewById(R.id.main_chapter_page);
         chapterNotAvailablePage = findViewById(R.id.main_chapter_not_available_page);
         songPage = findViewById(R.id.main_song_page);
-        songPageText = findViewById(R.id.main_song_page_text);
         useWindowInsets(chapterPage, chapterNotAvailablePage, songPage);
 
         // Menu button
@@ -199,6 +198,44 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             }
             editor.apply();
             openChapterFromSettings(-1);
+        });
+
+        // Song view
+        songPage.setOnPreviousListener(() -> {
+            var songs = openSongBundle.songs();
+
+            // Get index of openSong
+            var openSongIndex = -1;
+            for (int i = 0; i < songs.size(); i++) {
+                if (songs.get(i).number().equals(openSong.number())) {
+                    openSongIndex = i;
+                    break;
+                }
+            }
+
+            var editor = settings.edit();
+            editor.putString("open_song_number",
+                    songs.get(openSongIndex == 0 ? songs.size() - 1 : openSongIndex - 1).number());
+            editor.apply();
+            openSongFromSettings();
+        });
+        songPage.setOnNextListener(() -> {
+            var songs = openSongBundle.songs();
+
+            // Get index of openSong
+            var openSongIndex = -1;
+            for (int i = 0; i < songs.size(); i++) {
+                if (songs.get(i).number().equals(openSong.number())) {
+                    openSongIndex = i;
+                    break;
+                }
+            }
+
+            var editor = settings.edit();
+            editor.putString("open_song_number",
+                    songs.get(openSongIndex == songs.size() - 1 ? 0 : openSongIndex + 1).number());
+            editor.apply();
+            openSongFromSettings();
         });
 
         // Install bibles from assets and open last opened bible
@@ -359,7 +396,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         var openSongNumber = settings.getString("open_song_number", Consts.Settings.SONG_BUNDLE_NUMBER_DEFAULT);
         openSong = songBundleService.readSong(this, openSongBundle.path(), openSongNumber);
         indexButton.setText(openSongNumber);
-        songPageText.setText(openSong.text());
+        songPage.openSong(openSong);
         openPage(songPage);
     }
 
@@ -369,15 +406,16 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         songPage.setVisibility(page.equals(songPage) ? View.VISIBLE : View.GONE);
     }
 
-    private void updateFonts(boolean reopenChapter) {
+    private void updateFonts(boolean reopen) {
         // Update chapter view
         chapterPage.setTypeface(Consts.Settings.getFontTypeface(settings.getInt("font", Consts.Settings.FONT_DEFAULT)));
-        if (reopenChapter && openType == Consts.Settings.OPEN_TYPE_BIBLE)
+        if (reopen && openType == Consts.Settings.OPEN_TYPE_BIBLE)
             openChapterFromSettings(-1);
 
         // Update song view
-        songPageText
-                .setTypeface(Consts.Settings.getFontTypeface(settings.getInt("font", Consts.Settings.FONT_DEFAULT)));
+        songPage.setTypeface(Consts.Settings.getFontTypeface(settings.getInt("font", Consts.Settings.FONT_DEFAULT)));
+        if (reopen && openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE)
+            openSongFromSettings();
     }
 
     private void populateDrawer() {
