@@ -1,21 +1,21 @@
 #!/bin/bash
 set -e
-if [ "$1" = "downloader" ]; then
-    cd downloader; cargo build --release; cd ..
-    # Dutch bible translations
-    ./downloader/target/release/bible-dl nbv21 -o assets/bibles/nbv21.bible
-    ./downloader/target/release/bible-dl bgt -o assets/bibles/bgt.bible
-    ./downloader/target/release/bible-dl nbv -o assets/bibles/nbv.bible
-    ./downloader/target/release/bible-dl hsv -o assets/bibles/hsv.bible
-    # English bible translations
-    ./downloader/target/release/bible-dl niv -o assets/bibles/niv.bible
-    ./downloader/target/release/bible-dl kjv -o assets/bibles/kjv.bible
+if [ "$1" = "tools" ]; then
+    cd tools; cargo build; cd ..
+    for translation in nbv21 bgt nbv hsv niv kjv; do
+        ./tools/target/debug/bible-dl $translation -o assets/bibles/$translation.bible
+    done
+    ./tools/target/debug/convert-ops --name Hemelhoog --abbreviation hh \
+        --language nl --copyright "Copyright © 2015 Uitgeverij Boekencentrum" \
+        --songs tools/tmp/hh_songs.json --lyrics tools/tmp/hh_lyrics.json \
+        -o assets/songbundles/hh.songbundle
+    ./tools/target/debug/scrape-opwekking -o assets/songbundles/opw.songbundle
     exit
 fi
 
 export name="bible"
 export package="nl.plaatsoft.bible"
-export version="1.1.0"
+export version="1.2.0-dev"
 export password="android"
 export main_activity=".activities.MainActivity"
 ../android-build.sh $@

@@ -117,6 +117,8 @@
             <!-- Footer button -->
             <TextView android:id="@+id/settings_footer_button"
                 android:text="@string/settings_footer_button"
+                android:gravity="center_horizontal"
+                android:background="?android:attr/selectableItemBackground"
                 style="@style/ListItemFooter" />
         </LinearLayout>
     </ScrollView>

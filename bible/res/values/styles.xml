@@ -20,18 +20,9 @@
     <style name="ActionBar">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center_vertical</item>
         <item name="android:background">@color/primary_color</item>
         <item name="android:elevation">4dp</item>
-    </style>
-
-    <style name="ActionBarFirstLayer">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:orientation">horizontal</item>
-    </style>
-
-    <style name="ActionBarSecondLayer" parent="ActionBarFirstLayer">
-        <item name="android:gravity">center</item>
     </style>
 
     <style name="ActionBarTitle">
@@ -47,25 +38,10 @@
         <item name="android:ellipsize">end</item>
     </style>
 
-    <style name="ActionBarTextButton">
+    <style name="ActionBarTitleButton" parent="ActionBarTitle">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:paddingLeft">16dp</item>
-        <item name="android:paddingRight">16dp</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_weight">0</item>
         <item name="android:background">?android:attr/selectableItemBackground</item>
-    </style>
-
-    <style name="ActionBarChapterButton">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">32dp</item>
-        <item name="android:layout_marginLeft">-8dp</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">20sp</item>
-        <item name="android:gravity">center</item>
-        <item name="android:background">@drawable/app_bar_icon_button_ripple</item>
     </style>
 
     <style name="ActionBarInput">
@@ -81,6 +57,20 @@
         <item name="android:layout_width">56dp</item>
         <item name="android:layout_height">56dp</item>
         <item name="android:background">@drawable/app_bar_icon_button_ripple</item>
+    </style>
+
+    <style name="ActionBarIndexButton" parent="ActionBarIconButton">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_marginLeft">-8dp</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- Drawer -->
+    <style name="Drawer" parent="Fill">
+        <item name="android:background">@color/background_color</item>
+        <item name="android:elevation">4dp</item>
     </style>
 
     <!-- Hero -->
@@ -136,6 +126,12 @@
         <item name="android:paddingBottom">4dp</item>
     </style>
 
+    <style name="ListDivider">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/divider_color</item>
+    </style>
+
     <style name="ListGroup">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -146,7 +142,7 @@
 
     <style name="ListItem">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">56dp</item>
         <item name="android:padding">16dp</item>
     </style>
 
@@ -177,33 +173,122 @@
     <style name="ListItemButtonMeta">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginLeft">16dp</item>
+        <item name="android:paddingLeft">16dp</item>
         <item name="android:textColor">@color/secondary_text_color</item>
     </style>
 
     <style name="ListItemFooter" parent="ListItem">
         <item name="android:textColor">@color/secondary_text_color</item>
-        <item name="android:gravity">center_horizontal</item>
-        <item name="android:background">?android:attr/selectableItemBackground</item>
     </style>
 
-    <!-- Search Verse -->
-    <style name="SearchVerse">
+    <!-- Chapter View -->
+    <style name="ChapterView">
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="ChapterViewVerse">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
+    </style>
+
+    <style name="ChapterViewSubtitle" parent="ChapterViewVerse">
+        <item name="android:lineSpacingMultiplier">1</item>
+    </style>
+
+    <style name="ChapterViewButtons">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="ChapterViewButtonsButton">
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <!-- Search Item -->
+    <style name="SearchItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:orientation">vertical</item>
         <item name="android:padding">16dp</item>
     </style>
 
-    <style name="SearchVerseContents">
+    <style name="SearchItemLinePrimary">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_marginBottom">8dp</item>
     </style>
 
-    <style name="SearchVerseBookChapter">
+    <style name="SearchItemLineSecondary">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">8dp</item>
         <item name="android:textColor">@color/secondary_text_color</item>
+    </style>
+
+    <!-- Books Dialog -->
+    <style name="BooksDialog">
+        <item name="android:orientation">vertical</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <style name="BooksDialogRow">
+        <item name="android:paddingLeft">16dp</item>
+        <item name="android:paddingRight">16dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <style name="BooksDialogSubtitle">
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/secondary_text_color</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingLeft">24dp</item>
+        <item name="android:paddingRight">24dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <style name="BooksDialogButton">
+        <item name="android:textSize">16sp</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+    </style>
+
+    <style name="BooksDialogButtonActive" parent="BooksDialogButton">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Index Dialog -->
+    <style name="IndexDialog">
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingRight">8dp</item>
+        <item name="android:paddingBottom">16dp</item>
+    </style>
+
+    <style name="IndexDialogButton">
+        <item name="android:textSize">20sp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+    </style>
+
+    <style name="IndexDialogButtonActive" parent="IndexDialogButton">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <!-- Song View -->
+    <style name="SongText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">16dp</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textIsSelectable">true</item>
+        <item name="android:lineSpacingMultiplier">1.2</item>
     </style>
 </resources>

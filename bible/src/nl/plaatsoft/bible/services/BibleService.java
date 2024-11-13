@@ -48,8 +48,6 @@ public class BibleService {
                     continue;
                 var file = new File(biblesDir, filename);
                 var assetsFile = context.getAssets().openFd("bibles/" + filename);
-                if (file.exists() && file.length() == assetsFile.getLength())
-                    continue;
                 try (var gzipInputStream = new GZIPInputStream(assetsFile.createInputStream());
                         var fileOutputStream = new FileOutputStream(file)) {
                     var buffer = new byte[1024];
@@ -85,7 +83,7 @@ public class BibleService {
     public SQLiteDatabase openDatabase(String path) {
         if (databaseCache.containsKey(path))
             return databaseCache.get(path);
-        var database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);
+        var database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
         databaseCache.put(path, database);
         return database;
     }
@@ -106,7 +104,7 @@ public class BibleService {
         var copyright = metadata.get("copyright");
         var releasedAt = metadata.get("released_at");
         var scrapedAt = metadata.get("scraped_at");
-        if (scrapedAt == null)
+        if (scrapedAt == null) // Backwards compatibility
             scrapedAt = "?";
 
         // Read index

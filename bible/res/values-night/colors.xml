@@ -6,5 +6,7 @@
     <color name="secondary_text_color">#888</color>
     <color name="highlight_text_color">#440</color>
     <color name="icon_color">#fff</color>
-    <color name="loading_background_color">#333</color>
+    <color name="selected_background_color">#222</color>
+    <color name="divider_color">#333</color>
+    <color name="drawer_overlay_background_color">#66000000</color>
 </resources>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_options_random_song"
+        android:title="@string/menu_options_random_song" />
+
+    <item android:id="@+id/menu_options_settings"
+        android:title="@string/menu_options_settings" />
+</menu>
