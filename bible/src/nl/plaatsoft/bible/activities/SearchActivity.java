@@ -22,16 +22,18 @@ import nl.plaatsoft.bible.Consts;
 import nl.plaatsoft.bible.R;
 
 public class SearchActivity extends BaseActivity implements TextWatcher {
+    // Views
     private ScrollView startPage;
     private ListView resultsPage;
     private ScrollView emptyPage;
     private EditText searchInput;
 
+    // State
     private BibleService bibleService = BibleService.getInstance();
     private SongBundleService songBundleService = SongBundleService.getInstance();
-    private int openType;
-    private SearchVerseAdapter searchVerseAdapter;
-    private SongAdapter songAdapter;
+    private int openType; // Initialized in onCreate
+    private SearchVerseAdapter searchVerseAdapter = null;
+    private SongAdapter songAdapter = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

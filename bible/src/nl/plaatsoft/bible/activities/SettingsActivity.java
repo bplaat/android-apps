@@ -19,7 +19,7 @@ import nl.plaatsoft.bible.Consts;
 import nl.plaatsoft.bible.R;
 
 public class SettingsActivity extends BaseActivity {
-    private int font;
+    private int font; // Initialized in onCreate
     private int versionButtonClickCounter = 0;
 
     @Override

@@ -22,8 +22,8 @@ import java.util.Locale;
 import nl.plaatsoft.bible.Consts;
 
 public abstract class BaseActivity extends Activity {
-    protected SharedPreferences settings;
-    private OnBackInvokedCallback onBackCallback = () -> onBack();
+    protected SharedPreferences settings; // Initialized in attachBaseContext
+    private OnBackInvokedCallback onBackCallback = null;
 
     @Override
     public void attachBaseContext(Context context) {
@@ -128,6 +128,8 @@ public abstract class BaseActivity extends Activity {
 
     protected void updateBackListener() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (onBackCallback == null)
+                onBackCallback = () -> onBack();
             if (shouldBackOverride()) {
                 getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT,
                         onBackCallback);

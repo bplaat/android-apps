@@ -42,6 +42,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private static final int SEARCH_REQUEST_CODE = 0;
     private static final int SETTINGS_REQUEST_CODE = 1;
 
+    // Views
     private DrawerLayout drawer;
     private LinearLayout drawerBibles;
     private LinearLayout drawerSongBundles;
@@ -51,21 +52,20 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private ScrollView chapterNotAvailablePage;
     private SongView songPage;
 
-    private String app_version;
+    // State
     private BibleService bibleService = BibleService.getInstance();
     private SongBundleService songBundleService = SongBundleService.getInstance();
-    private ArrayList<Bible> bibles;
-    private ArrayList<SongBundle> songBundles;
-
-    private int openType;
-    private Bible openBible;
-    private Book openBook;
-    private Chapter openChapter;
-    private SongBundle openSongBundle;
-    private Song openSong;
-
-    private AlertDialog dialog;
     private Handler handler = new Handler(Looper.getMainLooper());
+    private String app_version; // Initialized in onCreate
+    private AlertDialog dialog = null;
+    private ArrayList<Bible> bibles; // Initialized in onCreate
+    private ArrayList<SongBundle> songBundles; // Initialized in onCreate
+    private int openType; // Initialized in onCreate
+    private Bible openBible = null;
+    private Book openBook = null;
+    private Chapter openChapter = null;
+    private SongBundle openSongBundle = null;
+    private Song openSong = null;
     private int oldFont = -1;
     private int oldLanguage = -1;
     private int oldTheme = -1;
@@ -94,9 +94,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Name button
         nameButton.setOnClickListener(view -> {
             if (openType == Consts.Settings.OPEN_TYPE_BIBLE) {
-                dialog = new BooksDialogBuilder(this, openBible.testaments(), openBook.key(), book -> {
+                var openBookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
+                dialog = new BooksDialogBuilder(this, openBible.testaments(), openBookKey, book -> {
                     dialog.dismiss();
-                    if (!book.key().equals(openBook.key())) {
+                    if (!book.key().equals(openBookKey)) {
                         var editor = settings.edit();
                         editor.putString("open_book", book.key());
                         editor.putInt("open_chapter", 1);
