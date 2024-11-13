@@ -7,13 +7,17 @@
 package nl.plaatsoft.bible.views;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 public class FixedGridLayout extends ViewGroup {
     private int columnCount;
 
-    public FixedGridLayout(Context context, int columnCount) {
-        super(context);
+    public FixedGridLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    public void setColumnCount(int columnCount) {
         this.columnCount = columnCount;
     }
 

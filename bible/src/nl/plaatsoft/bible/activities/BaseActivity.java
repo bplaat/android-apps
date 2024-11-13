@@ -14,12 +14,16 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.view.ViewGroup;
 import android.view.WindowInsets;
+import android.window.OnBackInvokedCallback;
+import android.window.OnBackInvokedDispatcher;
+
 import java.util.Locale;
 
 import nl.plaatsoft.bible.Consts;
 
 public abstract class BaseActivity extends Activity {
     protected SharedPreferences settings;
+    private OnBackInvokedCallback onBackCallback = () -> onBack();
 
     @Override
     public void attachBaseContext(Context context) {
@@ -102,5 +106,34 @@ public abstract class BaseActivity extends Activity {
             }
             return windowInsets;
         });
+    }
+
+    // Back button override
+    protected boolean shouldBackOverride() {
+        return false;
+    }
+
+    protected void onBack() {
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public void onBackPressed() {
+        if (shouldBackOverride()) {
+            onBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    protected void updateBackListener() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (shouldBackOverride()) {
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                        onBackCallback);
+            } else {
+                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackCallback);
+            }
+        }
     }
 }

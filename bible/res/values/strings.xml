@@ -4,24 +4,28 @@
 
     <!-- Menu options -->
     <string name="menu_options_random_verse">Random verse</string>
+    <string name="menu_options_random_song">Random song</string>
     <string name="menu_options_settings">Settings</string>
 
     <!-- Main activity -->
-    <string name="main_bible_alert_title_label">Bible</string>
+    <string name="main_drawer_bibles">Bible translations</string>
+    <string name="main_drawer_song_bundles">Song bundles</string>
+
     <string name="main_book_alert_title_label">Book</string>
     <string name="main_chapter_alert_title_label">Chapter</string>
+    <string name="main_song_alert_title_label">Song</string>
 
-    <string name="main_not_available_title_label">Chapter not available</string>
-    <string name="main_not_available_description_label">The select Bible book and chapter are not found in this bible translation</string>
+    <string name="main_chapter_not_available_title_label">Chapter not available</string>
+    <string name="main_chapter_not_available_description_label">The select Bible book and chapter are not found in this bible translation</string>
 
     <!-- Search activity -->
     <string name="search_input_hint">Search</string>
 
     <string name="search_start_title_label">Start searching...</string>
-    <string name="search_start_description_label">Type your search query and find your verse or chapter...</string>
+    <string name="search_start_description_label">Type your search query and find your chapter, verse or song...</string>
 
     <string name="search_empty_title_label">No search results</string>
-    <string name="search_empty_description_label">We can\'t find any chapter or verse with that search query</string>
+    <string name="search_empty_description_label">We can\'t find any chapter, verse or song with that search query</string>
     <string name="search_empty_hero_button">Clear search</string>
 
     <!-- Settings activity -->

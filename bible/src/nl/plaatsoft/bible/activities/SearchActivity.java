@@ -7,7 +7,6 @@
 package nl.plaatsoft.bible.activities;
 
 import android.app.Activity;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,17 +15,23 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import nl.plaatsoft.bible.services.BibleService;
+import nl.plaatsoft.bible.services.SongBundleService;
 import nl.plaatsoft.bible.views.SearchVerseAdapter;
+import nl.plaatsoft.bible.views.SongAdapter;
 import nl.plaatsoft.bible.Consts;
 import nl.plaatsoft.bible.R;
 
 public class SearchActivity extends BaseActivity implements TextWatcher {
-    private BibleService bibleService = BibleService.getInstance();
     private ScrollView startPage;
     private ListView resultsPage;
-    private SearchVerseAdapter searchVerseAdapter;
     private ScrollView emptyPage;
     private EditText searchInput;
+
+    private BibleService bibleService = BibleService.getInstance();
+    private SongBundleService songBundleService = SongBundleService.getInstance();
+    private int openType;
+    private SearchVerseAdapter searchVerseAdapter;
+    private SongAdapter songAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,45 +54,75 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
         searchInput.addTextChangedListener(this);
 
         // Results list
-        searchVerseAdapter = new SearchVerseAdapter(this);
-        if (settings.getInt("font", Consts.Settings.FONT_DEFAULT) == Consts.Settings.FONT_SERIF)
-            searchVerseAdapter.setVerseTypeface(Typeface.create(Typeface.SERIF, Typeface.NORMAL));
-        if (settings.getInt("font", Consts.Settings.FONT_DEFAULT) == Consts.Settings.FONT_SANS_SERIF)
-            searchVerseAdapter.setVerseTypeface(Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL));
-        if (settings.getInt("font", Consts.Settings.FONT_DEFAULT) == Consts.Settings.FONT_MONOSPACE)
-            searchVerseAdapter.setVerseTypeface(Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL));
+        openType = settings.getInt("open_type", Consts.Settings.OPEN_TYPE_DEFAULT);
 
-        resultsPage.setAdapter(searchVerseAdapter);
-        resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
-            var searchVerse = searchVerseAdapter.getItem(position);
-            var edit = settings.edit();
-            edit.putString("open_book", searchVerse.book().key());
-            edit.putInt("open_chapter", searchVerse.chapter().number());
-            edit.apply();
+        if (openType == Consts.Settings.OPEN_TYPE_BIBLE) {
+            searchVerseAdapter = new SearchVerseAdapter(this);
+            searchVerseAdapter
+                    .setVerseTypeface(
+                            Consts.Settings.getFontTypeface(settings.getInt("font", Consts.Settings.FONT_DEFAULT)));
+            resultsPage.setAdapter(searchVerseAdapter);
+            resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
+                var searchVerse = searchVerseAdapter.getItem(position);
+                var edit = settings.edit();
+                edit.putString("open_book", searchVerse.book().key());
+                edit.putInt("open_chapter", searchVerse.chapter().number());
+                edit.apply();
 
-            var intent = getIntent();
-            intent.putExtra("highlight_verse", searchVerse.verse().id());
-            setResult(Activity.RESULT_OK, intent);
-            finish();
-        });
+                var intent = getIntent();
+                intent.putExtra("highlight_verse", searchVerse.verse().id());
+                setResult(Activity.RESULT_OK, intent);
+                finish();
+            });
+        }
+
+        if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE) {
+            songAdapter = new SongAdapter(this);
+            resultsPage.setAdapter(songAdapter);
+            resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
+                var song = songAdapter.getItem(position);
+                var edit = settings.edit();
+                edit.putString("open_song_number", song.number());
+                edit.apply();
+
+                setResult(Activity.RESULT_OK, getIntent());
+                finish();
+            });
+        }
     }
 
     @Override
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
         var searchQuery = charSequence.toString().toLowerCase();
-        if (searchQuery.length() >= 3) {
-            searchVerseAdapter.setSearchQuery(searchQuery);
-            searchVerseAdapter.clear();
-            searchVerseAdapter.addAll(bibleService.searchVerses(this,
-                    settings.getString("open_bible", Consts.Settings.getBibleDefault(this)), searchQuery, 25));
+        if (searchQuery.length() < 3) {
+            openPage(startPage);
+            return;
+        }
 
-            if (searchVerseAdapter.getCount() > 0) {
+        if (openType == Consts.Settings.OPEN_TYPE_BIBLE) {
+            var verses = bibleService.searchVerses(this,
+                    settings.getString("open_bible", Consts.Settings.getBibleDefault(this)), searchQuery, 25);
+            if (verses.size() > 0) {
+                searchVerseAdapter.setSearchQuery(searchQuery);
+                searchVerseAdapter.clear();
+                searchVerseAdapter.addAll(verses);
                 openPage(resultsPage);
             } else {
                 openPage(emptyPage);
             }
-        } else {
-            openPage(startPage);
+        }
+
+        if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE) {
+            var songs = songBundleService.searchSongs(this,
+                    settings.getString("open_song_bundle", Consts.Settings.SONG_BUNDLE_DEFAULT), searchQuery, 25);
+            if (songs.size() > 0) {
+                songAdapter.setSearchQuery(searchQuery);
+                songAdapter.clear();
+                songAdapter.addAll(songs);
+                openPage(resultsPage);
+            } else {
+                openPage(emptyPage);
+            }
         }
     }
 

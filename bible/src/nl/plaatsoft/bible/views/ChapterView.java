@@ -17,7 +17,6 @@ import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
-import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -45,11 +44,7 @@ public class ChapterView extends ScrollView {
 
     public ChapterView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
-        root = new LinearLayout(context);
-        root.setOrientation(LinearLayout.VERTICAL);
-        var density = getResources().getDisplayMetrics().density;
-        root.setPadding((int) (16 * density), (int) (8 * density), (int) (16 * density), (int) (8 * density));
+        root = new LinearLayout(context, null, 0, R.style.ChapterView);
         addView(root);
     }
 
@@ -66,9 +61,10 @@ public class ChapterView extends ScrollView {
     }
 
     public void openChapter(Chapter chapter, int highlightVerseId) {
+        scrollTo(0, 0);
         root.removeAllViews();
 
-        // Create verse text blocks
+        // Add verse text blocks
         var ssb = new SpannableStringBuilder();
         var scrollToVerse = false;
         for (var verse : chapter.verses()) {
@@ -102,22 +98,16 @@ public class ChapterView extends ScrollView {
             }
         }
 
-        // Create next and privous buttons
-        var selectableItemBackgroundBorderless = new TypedValue();
-        getContext().getTheme().resolveAttribute(android.R.attr.selectableItemBackgroundBorderless,
-                selectableItemBackgroundBorderless, true);
-        var density = getResources().getDisplayMetrics().density;
+        // Add buttons container
+        addButtonsContainer();
+    }
 
-        var buttonsContainer = new LinearLayout(getContext());
-        var layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, (int) (8 * density), 0, (int) (8 * density));
-        buttonsContainer.setLayoutParams(layoutParams);
+    private void addButtonsContainer() {
+        var buttonsContainer = new LinearLayout(getContext(), null, 0, R.style.ChapterViewButtons);
         root.addView(buttonsContainer);
 
-        var previousButton = new ImageButton(getContext());
+        var previousButton = new ImageButton(getContext(), null, 0, R.style.ChapterViewButtonsButton);
         previousButton.setImageResource(R.drawable.ic_arrow_left);
-        previousButton.setBackgroundResource(selectableItemBackgroundBorderless.resourceId);
         previousButton.setOnClickListener(v -> {
             if (onPreviousListener != null)
                 onPreviousListener.onPrevious();
@@ -128,9 +118,8 @@ public class ChapterView extends ScrollView {
         flex.setLayoutParams(new LinearLayout.LayoutParams(0, 0, 1));
         buttonsContainer.addView(flex);
 
-        var nextButton = new ImageButton(getContext());
+        var nextButton = new ImageButton(getContext(), null, 0, R.style.ChapterViewButtonsButton);
         nextButton.setImageResource(R.drawable.ic_arrow_right);
-        nextButton.setBackgroundResource(selectableItemBackgroundBorderless.resourceId);
         nextButton.setOnClickListener(v -> {
             if (onNextListener != null)
                 onNextListener.onNext();
@@ -139,22 +128,13 @@ public class ChapterView extends ScrollView {
     }
 
     private void addVerseBlock(Spannable spannable, boolean isSubtitle, boolean scrollToVerse) {
-        var density = getResources().getDisplayMetrics().density;
-
-        var verseBlock = new TextView(getContext());
-        verseBlock.setTextSize(18);
-        verseBlock.setTypeface(isSubtitle ? Typeface.create(typeface, Typeface.BOLD) : typeface);
-        if (!isSubtitle)
-            verseBlock.setLineSpacing(0, 1.2f);
-        var layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        layoutParams.setMargins(0, (int) (8 * density), 0, (int) (8 * density));
-        verseBlock.setLayoutParams(layoutParams);
-        verseBlock.setText(spannable);
-        verseBlock.setTextIsSelectable(true);
-        root.addView(verseBlock);
+        var verseView = new TextView(getContext(), null, 0,
+                isSubtitle ? R.style.ChapterViewSubtitle : R.style.ChapterViewVerse);
+        verseView.setTypeface(isSubtitle ? Typeface.create(typeface, Typeface.BOLD) : typeface);
+        verseView.setText(spannable);
+        root.addView(verseView);
 
         if (scrollToVerse)
-            handler.post(() -> scrollTo(0, verseBlock.getTop() - (int) (16 * density)));
+            handler.post(() -> scrollTo(0, verseView.getTop() - (root.getPaddingTop() + verseView.getPaddingTop())));
     }
 }

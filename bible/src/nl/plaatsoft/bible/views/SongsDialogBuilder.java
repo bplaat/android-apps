@@ -12,19 +12,19 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
 
-import nl.plaatsoft.bible.models.Chapter;
+import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
 
-public class ChaptersDialogBuilder extends AlertDialog.Builder {
+public class SongsDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
-        void onResult(Chapter chapter);
+        void onResult(Song song);
     }
 
-    public ChaptersDialogBuilder(Context context, ArrayList<Chapter> chapters, int currentChapterNumber,
+    public SongsDialogBuilder(Context context, ArrayList<Song> songs, String currentSongNumber,
             OnResultListener onResultListener) {
         super(context);
 
-        setTitle(R.string.main_chapter_alert_title_label);
+        setTitle(R.string.main_song_alert_title_label);
         var root = new ScrollView(context);
         setView(root);
 
@@ -32,13 +32,13 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
         grid.setColumnCount(6);
         root.addView(grid);
 
-        for (var chapter : chapters) {
-            var chapterButton = new TextView(context, null, 0,
-                    chapter.number() == currentChapterNumber ? R.style.IndexDialogButtonActive
+        for (var song : songs) {
+            var songButton = new TextView(context, null, 0,
+                    song.number().equals(currentSongNumber) ? R.style.IndexDialogButtonActive
                             : R.style.IndexDialogButton);
-            chapterButton.setText(String.valueOf(chapter.number()));
-            chapterButton.setOnClickListener(view -> onResultListener.onResult(chapter));
-            grid.addView(chapterButton);
+            songButton.setText(String.valueOf(song.number()));
+            songButton.setOnClickListener(view -> onResultListener.onResult(song));
+            grid.addView(songButton);
         }
     }
 }

@@ -7,11 +7,12 @@
 package nl.plaatsoft.bible.views;
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 public class FlowLayout extends ViewGroup {
-    public FlowLayout(Context context) {
-        super(context);
+    public FlowLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override

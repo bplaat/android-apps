@@ -8,5 +8,7 @@
     <color name="secondary_text_color">#777</color>
     <color name="highlight_text_color">#ff0</color>
     <color name="icon_color">#333</color>
-    <color name="loading_background_color">#ddd</color>
+    <color name="selected_background_color">#eee</color>
+    <color name="divider_color">#ddd</color>
+    <color name="drawer_overlay_background_color">#aa000000</color>
 </resources>

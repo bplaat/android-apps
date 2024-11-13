@@ -4,24 +4,28 @@
 
     <!-- Menu options -->
     <string name="menu_options_random_verse">Willekeurig vers</string>
+    <string name="menu_options_random_song">Willekeurig lied</string>
     <string name="menu_options_settings">Instellingen</string>
 
     <!-- Main activity -->
-    <string name="main_bible_alert_title_label">Bijbel</string>
+    <string name="main_drawer_bibles">Bijbel vertalingen</string>
+    <string name="main_drawer_song_bundles">Liedbundles</string>
+
     <string name="main_book_alert_title_label">Boek</string>
     <string name="main_chapter_alert_title_label">Hoofdstuk</string>
+    <string name="main_song_alert_title_label">Lied</string>
 
-    <string name="main_not_available_title_label">Hoofdstuk niet beschikbaar</string>
-    <string name="main_not_available_description_label">Het geselecteerde bijbelboek en hoofdstuk zijn niet gevonden in deze bijbelvertaling</string>
+    <string name="main_chapter_not_available_title_label">Hoofdstuk niet beschikbaar</string>
+    <string name="main_chapter_not_available_description_label">Het geselecteerde bijbelboek en hoofdstuk zijn niet gevonden in deze bijbelvertaling</string>
 
     <!-- Search activity -->
     <string name="search_input_hint">Zoeken</string>
 
     <string name="search_start_title_label">Begin met zoeken...</string>
-    <string name="search_start_description_label">Typ je zoekopdracht in en vind je vers of hoofdstuk...</string>
+    <string name="search_start_description_label">Typ uw zoekopdracht in en vind uw hoofdstuk, vers of lied...</string>
 
     <string name="search_empty_title_label">Geen resultaten gevonden</string>
-    <string name="search_empty_description_label">We kunnen geen hoofdstuk of vers vinden met die zoekopdracht</string>
+    <string name="search_empty_description_label">We kunnen geen hoofdstuk, vers of lied vinden met die zoekopdracht</string>
     <string name="search_empty_hero_button">Zoekveld wissen</string>
 
     <!-- Settings activity -->

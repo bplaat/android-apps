@@ -77,7 +77,7 @@ public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
 
         viewHolder.contents.setTypeface(
                 searchVerse.verse().isSubtitle() ? Typeface.create(verseTypeface, Typeface.BOLD) : verseTypeface);
-        viewHolder.contents.setLineSpacing(0, 1.2f);
+        viewHolder.contents.setLineSpacing(0, searchVerse.verse().isSubtitle() ? 1.0f : 1.2f);
         viewHolder.contents.setText(span);
 
         viewHolder.bookChapter

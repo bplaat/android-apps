@@ -4,26 +4,25 @@
  * SPDX-License-Identifier: MIT
  */
 
-use std::collections::HashMap;
-use std::fs::File;
+use std::fs::{self, File};
 use std::io::{Read, Write};
+use std::path::Path;
 use std::sync::mpsc;
 use std::time::Duration;
 
-use anyhow::{anyhow, bail, Result};
+use anyhow::{bail, Result};
 use clap::Parser;
 use flate2::write::GzEncoder;
 use flate2::Compression;
 use rand::seq::SliceRandom;
+use serde::Deserialize;
 use serde_json::Value;
 use threadpool::ThreadPool;
 
-use crate::structs::{ChapterContents, Metadata};
+const DOWNLOAD_THREAD_COUNT: usize = 32;
 
-mod structs;
-
-fn fetch_bible_chapter(url: &str) -> Result<(ChapterContents, Metadata)> {
-    let body: String = ureq::get(url).call()?.into_string()?;
+fn fetch_bible_chapter(url: &str) -> Result<(structs::ChapterContents, structs::Metadata)> {
+    let body = ureq::get(url).call()?.into_string()?;
     let marker = "<script id=\"IBEP-main-state\" type=\"application/json\">";
     let data_str = &body[body.find(marker).unwrap() + marker.len()..];
     let data_value =
@@ -60,12 +59,15 @@ struct Verse {
     is_last: bool,
 }
 
-#[derive(Parser, Debug)]
-#[command(version, about, long_about = None)]
+#[derive(Parser)]
+#[command(
+    version,
+    about = "Tool to scrape bible translation from debijbel.nl like websites"
+)]
 struct Args {
     #[arg()]
     translation: String,
-    #[arg(short, long)]
+    #[arg(short, long, help = "Output file")]
     output: Option<String>,
 }
 
@@ -73,8 +75,13 @@ fn main() -> Result<()> {
     // Parse args
     let args = Args::parse();
 
-    // Create tables
+    // Delete database if exists
     let path = args.output.unwrap_or(format!("{}.bible", args.translation));
+    if Path::new(&path).exists() {
+        fs::remove_file(&path)?;
+    }
+
+    // Create tables
     let conn = rusqlite::Connection::open(&path)?;
     conn.execute(
         r"CREATE TABLE metadata (
@@ -132,7 +139,7 @@ fn main() -> Result<()> {
     let translation_upper = args.translation.to_uppercase();
     for source_url in source_urls {
         println!(
-            "Fetching {} metadata from {}...",
+            "Downloading {} metadata from {}...",
             translation_upper, source_url
         );
         let (_, translation_metadata) =
@@ -144,27 +151,28 @@ fn main() -> Result<()> {
             continue;
         }
 
-        // Write metadata
-        let mut metadata = HashMap::new();
-        metadata.insert("name", translation_metadata.name_local);
-        metadata.insert("abbreviation", translation_metadata.abbreviation_local);
-        metadata.insert(
-            "language",
-            match translation_metadata.language.id.as_str() {
-                "eng" => "en".to_string(),
-                "nld" => "nl".to_string(),
-                _ => todo!(),
-            },
-        );
-        metadata.insert("copyright", translation_metadata.copyright);
-        metadata.insert("released_at", translation_metadata.updated_at);
-        metadata.insert("scraped_at", chrono::Utc::now().to_rfc3339());
-        for (key, value) in metadata {
-            conn.execute(
-                "INSERT INTO metadata (key, value) VALUES (?, ?)",
-                (key, value),
-            )?;
-        }
+        // Insert metadata
+        conn.execute(
+            "INSERT INTO metadata (key, value) VALUES (?, ?), (?, ?), (?, ?), (?, ?), (?, ?)",
+            (
+                "name",
+                translation_metadata.name_local,
+                "abbreviation",
+                translation_metadata.abbreviation_local,
+                "language",
+                match translation_metadata.language.id.as_str() {
+                    "eng" => "en",
+                    "nld" => "nl",
+                    _ => todo!(),
+                },
+                "copyright",
+                translation_metadata.copyright,
+                "released_at",
+                translation_metadata.updated_at,
+                "scraped_at",
+                chrono::Utc::now().to_rfc3339(),
+            ),
+        )?;
 
         // Write testaments, books, and chapters
         let mut chapters = Vec::new();
@@ -216,7 +224,7 @@ fn main() -> Result<()> {
         chapters.shuffle(&mut rand::thread_rng());
 
         // Queue download chapters tasks
-        let pool = ThreadPool::new(32);
+        let pool = ThreadPool::new(DOWNLOAD_THREAD_COUNT);
         let (tx, rx) = mpsc::channel();
         for chapter in chapters {
             let translation_upper = translation_upper.clone();
@@ -362,10 +370,9 @@ fn main() -> Result<()> {
 
         // Vacuum database
         conn.execute("VACUUM", ())?;
-        conn.close().map_err(|_| anyhow!("Can't close database"))?;
+        drop(conn);
 
         // Gzip compress database
-        println!("Compressing {}...", path);
         let mut input_file = std::fs::File::open(&path)?;
         let mut buffer = Vec::new();
         input_file.read_to_end(&mut buffer)?;
@@ -377,4 +384,63 @@ fn main() -> Result<()> {
         return Ok(());
     }
     bail!("Can't find translation")
+}
+
+mod structs {
+    use super::*;
+
+    // Metadata json structs
+    #[derive(Deserialize)]
+    #[serde(rename_all = "camelCase")]
+    pub struct Metadata {
+        pub abbreviation: String,
+        pub abbreviation_local: String,
+        pub name_local: String,
+        pub copyright: String,
+        pub language: Language,
+        pub updated_at: String,
+        pub testaments: Vec<Testament>,
+    }
+
+    #[derive(Deserialize)]
+    pub struct Language {
+        pub id: String,
+    }
+
+    #[derive(Deserialize)]
+    pub struct Testament {
+        pub abbreviation: String,
+        pub books: Vec<Book>,
+    }
+
+    #[derive(Deserialize)]
+    pub struct Book {
+        pub id: String,
+        pub name: String,
+        pub chapters: Vec<Chapter>,
+    }
+
+    #[derive(Deserialize)]
+    pub struct Chapter {
+        pub number: String,
+    }
+
+    // Chapter contents json structs
+    #[derive(Deserialize)]
+    pub struct ChapterContents {
+        #[serde(rename = "content")]
+        pub blocks: Vec<Block>,
+    }
+
+    #[derive(Deserialize)]
+    pub struct Block {
+        pub r#type: String,
+        pub content: Option<Vec<BlockContent>>,
+    }
+
+    #[derive(Deserialize)]
+    pub struct BlockContent {
+        pub r#type: String,
+        pub content: Option<Value>,
+    }
 }
