@@ -15,10 +15,12 @@ import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import nl.plaatsoft.bible.Consts;
 import nl.plaatsoft.bible.R;
 
 public class SettingsActivity extends BaseActivity {
+    private static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bible";
+    private static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
+
     private int font; // Initialized in onCreate
     private int versionButtonClickCounter = 0;
 
@@ -37,7 +39,7 @@ public class SettingsActivity extends BaseActivity {
                 getResources().getString(R.string.settings_font_sans_serif),
                 getResources().getString(R.string.settings_font_monospace),
         };
-        font = settings.getInt("font", Consts.Settings.FONT_DEFAULT);
+        font = settings.getFont();
         var fontLabel = (TextView) findViewById(R.id.settings_font_label);
         fontLabel.setText(fonts[font]);
         findViewById(R.id.settings_font_button).setOnClickListener(view -> {
@@ -47,10 +49,8 @@ public class SettingsActivity extends BaseActivity {
                         dialog.dismiss();
                         if (font != which) {
                             font = which;
+                            settings.setFont(font);
                             fontLabel.setText(fonts[font]);
-                            var settingsEditor = settings.edit();
-                            settingsEditor.putInt("font", which);
-                            settingsEditor.apply();
                         }
                     })
                     .show();
@@ -64,7 +64,7 @@ public class SettingsActivity extends BaseActivity {
                 getResources().getString(R.string.settings_language_dutch),
                 getResources().getString(R.string.settings_language_system)
         };
-        var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+        var language = settings.getLanguage();
         ((TextView) findViewById(R.id.settings_language_label)).setText(languages[language]);
         findViewById(R.id.settings_language_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
@@ -72,9 +72,7 @@ public class SettingsActivity extends BaseActivity {
                     .setSingleChoiceItems(languages, language, (dialog, which) -> {
                         dialog.dismiss();
                         if (language != which) {
-                            var settingsEditor = settings.edit();
-                            settingsEditor.putInt("language", which);
-                            settingsEditor.apply();
+                            settings.setLanguage(which);
                             recreate();
                         }
                     })
@@ -91,7 +89,7 @@ public class SettingsActivity extends BaseActivity {
                         ? getResources().getString(R.string.settings_theme_battery_saver)
                         : getResources().getString(R.string.settings_theme_system)
         };
-        var theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+        var theme = settings.getTheme();
         ((TextView) findViewById(R.id.settings_theme_label)).setText(themes[theme]);
         findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
@@ -99,9 +97,7 @@ public class SettingsActivity extends BaseActivity {
                     .setSingleChoiceItems(themes, theme, (dialog, which) -> {
                         dialog.dismiss();
                         if (theme != which) {
-                            var settingsEditor = settings.edit();
-                            settingsEditor.putInt("theme", which);
-                            settingsEditor.apply();
+                            settings.setTheme(which);
                             recreate();
                         }
                     }).show();
@@ -127,7 +123,7 @@ public class SettingsActivity extends BaseActivity {
 
         // Rate button
         findViewById(R.id.settings_rate_button).setOnClickListener(view -> {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Consts.STORE_PAGE_URL)));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(STORE_PAGE_URL)));
         });
 
         // Share button
@@ -136,7 +132,7 @@ public class SettingsActivity extends BaseActivity {
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT,
-                    getResources().getString(R.string.settings_share_message) + " " + Consts.STORE_PAGE_URL);
+                    getResources().getString(R.string.settings_share_message) + " " + STORE_PAGE_URL);
             startActivity(Intent.createChooser(intent, null));
         });
 
@@ -146,7 +142,7 @@ public class SettingsActivity extends BaseActivity {
                     .setTitle(R.string.settings_about_alert_title_label)
                     .setMessage(R.string.settings_about_alert_message_label)
                     .setNegativeButton(R.string.settings_about_alert_website_button, (dialog, which) -> {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Consts.Settings.ABOUT_WEBSITE_URL)));
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_WEBSITE_URL)));
                     })
                     .setPositiveButton(R.string.settings_about_alert_ok_button, null)
                     .show();
@@ -154,7 +150,7 @@ public class SettingsActivity extends BaseActivity {
 
         // Footer button
         findViewById(R.id.settings_footer_button).setOnClickListener(view -> {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Consts.Settings.ABOUT_WEBSITE_URL)));
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_WEBSITE_URL)));
         });
     }
 }

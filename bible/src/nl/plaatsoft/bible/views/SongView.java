@@ -56,7 +56,7 @@ public class SongView extends ScrollView {
 
         var title = new TextView(getContext(), null, 0, R.style.SongViewTitle);
         title.setTypeface(typeface, Typeface.BOLD);
-        title.setText(song.title());
+        title.setText(song.number() + ". " + song.title());
         root.addView(title);
 
         var text = new TextView(getContext(), null, 0, R.style.SongViewText);

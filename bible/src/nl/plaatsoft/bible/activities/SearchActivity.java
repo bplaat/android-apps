@@ -14,12 +14,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
+
 import nl.plaatsoft.bible.services.BibleService;
 import nl.plaatsoft.bible.services.SongBundleService;
 import nl.plaatsoft.bible.views.SearchVerseAdapter;
 import nl.plaatsoft.bible.views.SongAdapter;
-import nl.plaatsoft.bible.Consts;
 import nl.plaatsoft.bible.R;
+import nl.plaatsoft.bible.Settings;
 
 public class SearchActivity extends BaseActivity implements TextWatcher {
     // Views
@@ -31,7 +32,6 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
     // State
     private BibleService bibleService = BibleService.getInstance();
     private SongBundleService songBundleService = SongBundleService.getInstance();
-    private int openType; // Initialized in onCreate
     private SearchVerseAdapter searchVerseAdapter = null;
     private SongAdapter songAdapter = null;
 
@@ -56,36 +56,31 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
         searchInput.addTextChangedListener(this);
 
         // Results list
-        openType = settings.getInt("open_type", Consts.Settings.OPEN_TYPE_DEFAULT);
+        var openType = settings.getOpenType();
 
-        if (openType == Consts.Settings.OPEN_TYPE_BIBLE) {
+        if (openType == Settings.OPEN_TYPE_BIBLE) {
             searchVerseAdapter = new SearchVerseAdapter(this);
             searchVerseAdapter
-                    .setVerseTypeface(
-                            Consts.Settings.getFontTypeface(settings.getInt("font", Consts.Settings.FONT_DEFAULT)));
+                    .setVerseTypeface(settings.getFontTypeface());
             resultsPage.setAdapter(searchVerseAdapter);
             resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
                 var searchVerse = searchVerseAdapter.getItem(position);
-                var edit = settings.edit();
-                edit.putString("open_book", searchVerse.book().key());
-                edit.putInt("open_chapter", searchVerse.chapter().number());
-                edit.apply();
+                settings.setOpenBook(searchVerse.book().key());
+                settings.setOpenChapter(searchVerse.chapter().number());
 
                 var intent = getIntent();
-                intent.putExtra("highlight_verse", searchVerse.verse().id());
+                intent.putExtra(Settings.HIGHLIGHT_VERSE, searchVerse.verse().id());
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             });
         }
 
-        if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE) {
+        if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
             songAdapter = new SongAdapter(this);
             resultsPage.setAdapter(songAdapter);
             resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
                 var song = songAdapter.getItem(position);
-                var edit = settings.edit();
-                edit.putString("open_song_number", song.number());
-                edit.apply();
+                settings.setOpenSongNumber(song.number());
 
                 setResult(Activity.RESULT_OK, getIntent());
                 finish();
@@ -101,9 +96,8 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
             return;
         }
 
-        if (openType == Consts.Settings.OPEN_TYPE_BIBLE) {
-            var verses = bibleService.searchVerses(this,
-                    settings.getString("open_bible", Consts.Settings.getBibleDefault(this)), searchQuery, 25);
+        if (searchVerseAdapter != null) {
+            var verses = bibleService.searchVerses(this, settings.getOpenBible(), searchQuery, 25);
             if (verses.size() > 0) {
                 searchVerseAdapter.setSearchQuery(searchQuery);
                 searchVerseAdapter.clear();
@@ -114,9 +108,8 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
             }
         }
 
-        if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE) {
-            var songs = songBundleService.searchSongs(this,
-                    settings.getString("open_song_bundle", Consts.Settings.SONG_BUNDLE_DEFAULT), searchQuery, 25);
+        if (songAdapter != null) {
+            var songs = songBundleService.searchSongs(this, settings.getOpenSongBundle(), searchQuery, 25);
             if (songs.size() > 0) {
                 songAdapter.setSearchQuery(searchQuery);
                 songAdapter.clear();

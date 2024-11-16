@@ -35,7 +35,7 @@ import nl.plaatsoft.bible.views.ChaptersDialogBuilder;
 import nl.plaatsoft.bible.views.DrawerLayout;
 import nl.plaatsoft.bible.views.SongView;
 import nl.plaatsoft.bible.views.SongsDialogBuilder;
-import nl.plaatsoft.bible.Consts;
+import nl.plaatsoft.bible.Settings;
 import nl.plaatsoft.bible.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -93,15 +93,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Name button
         nameButton.setOnClickListener(view -> {
-            if (openType == Consts.Settings.OPEN_TYPE_BIBLE) {
-                var openBookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
+            if (openType == Settings.OPEN_TYPE_BIBLE) {
+                var openBookKey = settings.getOpenBook();
                 dialog = new BooksDialogBuilder(this, openBible.testaments(), openBookKey, book -> {
                     dialog.dismiss();
                     if (!book.key().equals(openBookKey)) {
-                        var editor = settings.edit();
-                        editor.putString("open_book", book.key());
-                        editor.putInt("open_chapter", 1);
-                        editor.apply();
+                        settings.setOpenBook(book.key());
+                        settings.setOpenChapter(1);
                         openChapterFromSettings(-1);
                     }
                 }).show();
@@ -110,27 +108,23 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Index button
         indexButton.setOnClickListener(view -> {
-            if (openType == Consts.Settings.OPEN_TYPE_BIBLE) {
+            if (openType == Settings.OPEN_TYPE_BIBLE) {
                 if (openChapter == null)
                     return;
                 dialog = new ChaptersDialogBuilder(this, openBook.chapters(), openChapter.number(), chapter -> {
                     dialog.dismiss();
                     if (chapter.number() != openChapter.number()) {
-                        var editor = settings.edit();
-                        editor.putInt("open_chapter", chapter.number());
-                        editor.apply();
+                        settings.setOpenChapter(chapter.number());
                         openChapterFromSettings(-1);
                     }
                 }).show();
             }
 
-            if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE) {
+            if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
                 dialog = new SongsDialogBuilder(this, openSongBundle.songs(), openSong.number(), song -> {
                     dialog.dismiss();
                     if (!song.number().equals(openSong.number())) {
-                        var editor = settings.edit();
-                        editor.putString("open_song_number", song.number());
-                        editor.apply();
+                        settings.setOpenSongNumber(song.number());
                         openSongFromSettings();
                     }
                 }).show();
@@ -145,9 +139,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Options menu button
         findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
             var optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
-            if (openType == Consts.Settings.OPEN_TYPE_BIBLE)
+            if (openType == Settings.OPEN_TYPE_BIBLE)
                 optionsMenu.getMenuInflater().inflate(R.menu.options_bible, optionsMenu.getMenu());
-            if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE)
+            if (openType == Settings.OPEN_TYPE_SONG_BUNDLE)
                 optionsMenu.getMenuInflater().inflate(R.menu.options_song_bundle, optionsMenu.getMenu());
             optionsMenu.setOnMenuItemClickListener(this);
             optionsMenu.show();
@@ -159,7 +153,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Chapter view
         updateFonts(false);
         chapterPage.setOnPreviousListener(() -> {
-            var editor = settings.edit();
             if (openChapter.number() == 1) {
                 // Find previous book
                 var allBooks = new ArrayList<Book>();
@@ -168,19 +161,17 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 for (var i = 0; i < allBooks.size(); i++) {
                     if (allBooks.get(i).key().equals(openBook.key())) {
                         var previousBook = allBooks.get(i == 0 ? allBooks.size() - 1 : i - 1);
-                        editor.putString("open_book", previousBook.key());
-                        editor.putInt("open_chapter", previousBook.chapters().size());
+                        settings.setOpenBook(previousBook.key());
+                        settings.setOpenChapter(previousBook.chapters().size());
                         break;
                     }
                 }
             } else {
-                editor.putInt("open_chapter", openChapter.number() - 1);
+                settings.setOpenChapter(openChapter.number() - 1);
             }
-            editor.apply();
             openChapterFromSettings(-1);
         });
         chapterPage.setOnNextListener(() -> {
-            var editor = settings.edit();
             if (openChapter.number() == openBook.chapters().size()) {
                 // Find next book
                 var allBooks = new ArrayList<Book>();
@@ -189,15 +180,14 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 for (var i = 0; i < allBooks.size(); i++) {
                     if (allBooks.get(i).key().equals(openBook.key())) {
                         var nextBook = allBooks.get(i == allBooks.size() - 1 ? 0 : i + 1);
-                        editor.putString("open_book", nextBook.key());
-                        editor.putInt("open_chapter", 1);
+                        settings.setOpenBook(nextBook.key());
+                        settings.setOpenChapter(1);
                         break;
                     }
                 }
             } else {
-                editor.putInt("open_chapter", openChapter.number() + 1);
+                settings.setOpenChapter(openChapter.number() + 1);
             }
-            editor.apply();
             openChapterFromSettings(-1);
         });
 
@@ -214,10 +204,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 }
             }
 
-            var editor = settings.edit();
-            editor.putString("open_song_number",
-                    songs.get(openSongIndex == 0 ? songs.size() - 1 : openSongIndex - 1).number());
-            editor.apply();
+            settings.setOpenSongNumber(songs.get(openSongIndex == 0 ? songs.size() - 1 : openSongIndex - 1).number());
             openSongFromSettings();
         });
         songPage.setOnNextListener(() -> {
@@ -232,10 +219,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 }
             }
 
-            var editor = settings.edit();
-            editor.putString("open_song_number",
-                    songs.get(openSongIndex == songs.size() - 1 ? 0 : openSongIndex + 1).number());
-            editor.apply();
+            settings.setOpenSongNumber(songs.get(openSongIndex == songs.size() - 1 ? 0 : openSongIndex + 1).number());
             openSongFromSettings();
         });
 
@@ -246,11 +230,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             Log.e(getPackageName(), "Can't get app version", exception);
         }
         Runnable installAssetsAndOpen = () -> {
-            if (!settings.getString("installed_assets_version", "").equals(app_version)) {
-                var editor = settings.edit();
-                editor.putString("installed_assets_version", app_version);
-                editor.apply();
-
+            if (!settings.getInstalledAssetsVersion().equals(app_version)) {
+                settings.setInstalledAssetsVersion(app_version);
                 bibleService.installBiblesFromAssets(this);
                 songBundleService.installSongBundlesFromAssets(this);
             }
@@ -277,27 +258,23 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             }
             var randomVerse = realVerses.get((int) (Math.random() * realVerses.size()));
 
-            var settingsEditor = settings.edit();
-            settingsEditor.putString("open_book", randomBook.key());
-            settingsEditor.putInt("open_chapter", randomChapter.number());
-            settingsEditor.apply();
+            settings.setOpenBook(randomBook.key());
+            settings.setOpenChapter(randomChapter.number());
             openChapterFromSettings(randomVerse.id());
             return true;
         }
 
         if (item.getItemId() == R.id.menu_options_random_song) {
             var randomSong = openSongBundle.songs().get((int) (Math.random() * openSongBundle.songs().size()));
-            var settingsEditor = settings.edit();
-            settingsEditor.putString("open_song_number", randomSong.number());
-            settingsEditor.apply();
+            settings.setOpenSongNumber(randomSong.number());
             openSongFromSettings();
             return true;
         }
 
         if (item.getItemId() == R.id.menu_options_settings) {
-            oldFont = settings.getInt("font", Consts.Settings.FONT_DEFAULT);
-            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+            oldFont = settings.getFont();
+            oldLanguage = settings.getLanguage();
+            oldTheme = settings.getTheme();
             startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
             return true;
         }
@@ -309,9 +286,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When search activity is closed check open selected book / chapter verse
         if (requestCode == SEARCH_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                if (openType == Consts.Settings.OPEN_TYPE_BIBLE)
-                    openChapterFromSettings(data.getIntExtra("highlight_verse", -1));
-                if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE)
+                if (openType == Settings.OPEN_TYPE_BIBLE)
+                    openChapterFromSettings(data.getIntExtra(Settings.HIGHLIGHT_VERSE, -1));
+                if (openType == Settings.OPEN_TYPE_SONG_BUNDLE)
                     openSongFromSettings();
             }
             return;
@@ -320,12 +297,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When settings activity is closed check for restarts
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldFont != -1) {
-                if (oldFont != settings.getInt("font", Consts.Settings.FONT_DEFAULT))
+                if (oldFont != settings.getFont())
                     updateFonts(true);
             }
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
-                        oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)) {
+                if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme()) {
                     handler.post(() -> recreate());
                 }
             }
@@ -345,19 +321,16 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void openFromSettings() {
-        openType = settings.getInt("open_type", Consts.Settings.OPEN_TYPE_DEFAULT);
+        openType = settings.getOpenType();
 
-        if (openType == Consts.Settings.OPEN_TYPE_BIBLE) {
-            openBible = bibleService.readBible(this,
-                    settings.getString("open_bible", Consts.Settings.getBibleDefault(this)),
-                    true);
+        if (openType == Settings.OPEN_TYPE_BIBLE) {
+            openBible = bibleService.readBible(this, settings.getOpenBible(), true);
             nameButton.setClickable(true);
             openChapterFromSettings(-1);
         }
 
-        if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE) {
-            openSongBundle = songBundleService.readSongBundle(this,
-                    settings.getString("open_song_bundle", Consts.Settings.SONG_BUNDLE_DEFAULT));
+        if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
+            openSongBundle = songBundleService.readSongBundle(this, settings.getOpenSongBundle());
             nameButton.setClickable(false);
             nameButton.setText(openSongBundle.name());
             openSongFromSettings();
@@ -365,8 +338,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void openChapterFromSettings(int highlightVerseId) {
-        var openBookKey = settings.getString("open_book", Consts.Settings.BIBLE_BOOK_DEFAULT);
-        var openChapterNumber = settings.getInt("open_chapter", Consts.Settings.BIBLE_CHAPTER_DEFAULT);
+        var openBookKey = settings.getOpenBook();
+        var openChapterNumber = settings.getOpenChapter();
         openChapter = bibleService.readChapter(this, openBible.path(), openBookKey, openChapterNumber);
         indexButton.setText(String.valueOf(openChapterNumber));
 
@@ -394,7 +367,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void openSongFromSettings() {
-        var openSongNumber = settings.getString("open_song_number", Consts.Settings.SONG_BUNDLE_NUMBER_DEFAULT);
+        var openSongNumber = settings.getOpenSongNumber();
         openSong = songBundleService.readSong(this, openSongBundle.path(), openSongNumber);
         indexButton.setText(openSongNumber);
         songPage.openSong(openSong);
@@ -409,13 +382,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     private void updateFonts(boolean reopen) {
         // Update chapter view
-        chapterPage.setTypeface(Consts.Settings.getFontTypeface(settings.getInt("font", Consts.Settings.FONT_DEFAULT)));
-        if (reopen && openType == Consts.Settings.OPEN_TYPE_BIBLE)
+        chapterPage.setTypeface(settings.getFontTypeface());
+        if (reopen && openType == Settings.OPEN_TYPE_BIBLE)
             openChapterFromSettings(-1);
 
         // Update song view
-        songPage.setTypeface(Consts.Settings.getFontTypeface(settings.getInt("font", Consts.Settings.FONT_DEFAULT)));
-        if (reopen && openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE)
+        songPage.setTypeface(settings.getFontTypeface());
+        if (reopen && openType == Settings.OPEN_TYPE_SONG_BUNDLE)
             openSongFromSettings();
     }
 
@@ -429,13 +402,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             listItemButton
                     .setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             (int) (56 * density)));
-            if (openType == Consts.Settings.OPEN_TYPE_BIBLE && bible.path().equals(openBible.path()))
+            if (openType == Settings.OPEN_TYPE_BIBLE && bible.path().equals(openBible.path()))
                 listItemButton.setBackgroundResource(R.drawable.list_item_button_selected);
             listItemButton.setOnClickListener(view -> {
-                var settingsEditor = settings.edit();
-                settingsEditor.putInt("open_type", Consts.Settings.OPEN_TYPE_BIBLE);
-                settingsEditor.putString("open_bible", bible.path());
-                settingsEditor.apply();
+                settings.setOpenType(Settings.OPEN_TYPE_BIBLE);
+                settings.setOpenBible(bible.path());
                 openFromSettings();
                 drawer.close();
             });
@@ -447,12 +418,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             listItemButtonLabel.setText(bible.name());
             listItemButton.addView(listItemButtonLabel);
 
-            var listeItemButtonMeta = new TextView(this, null, 0, R.style.ListItemButtonMeta);
+            var listItemButtonMeta = new TextView(this, null, 0, R.style.ListItemButtonMeta);
             if (bible.language().equals("en"))
-                listeItemButtonMeta.setText(R.string.settings_language_english);
+                listItemButtonMeta.setText(R.string.settings_language_english);
             if (bible.language().equals("nl"))
-                listeItemButtonMeta.setText(R.string.settings_language_dutch);
-            listItemButton.addView(listeItemButtonMeta);
+                listItemButtonMeta.setText(R.string.settings_language_dutch);
+            listItemButton.addView(listItemButtonMeta);
         }
 
         // Add song bundle list buttons
@@ -462,17 +433,14 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             listItemButton
                     .setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             (int) (56 * density)));
-            if (openType == Consts.Settings.OPEN_TYPE_SONG_BUNDLE && songBundle.path().equals(openSongBundle.path()))
+            if (openType == Settings.OPEN_TYPE_SONG_BUNDLE && songBundle.path().equals(openSongBundle.path()))
                 listItemButton.setBackgroundResource(R.drawable.list_item_button_selected);
             listItemButton.setOnClickListener(view -> {
-                var settingsEditor = settings.edit();
-                settingsEditor.putInt("open_type", Consts.Settings.OPEN_TYPE_SONG_BUNDLE);
-                settingsEditor.putString("open_song_bundle", songBundle.path());
-                if (!songBundle.path()
-                        .equals(settings.getString("open_song_bundle", Consts.Settings.SONG_BUNDLE_DEFAULT))) {
-                    settingsEditor.putString("open_song_number", Consts.Settings.SONG_BUNDLE_NUMBER_DEFAULT);
+                settings.setOpenType(Settings.OPEN_TYPE_SONG_BUNDLE);
+                settings.setOpenSongBundle(songBundle.path());
+                if (!songBundle.path().equals(settings.getOpenSongBundle())) {
+                    settings.setOpenSongNumber(Settings.OPEN_SONG_NUMBER_DEFAULT);
                 }
-                settingsEditor.apply();
                 openFromSettings();
                 drawer.close();
             });
@@ -484,12 +452,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             listItemButtonLabel.setText(songBundle.name());
             listItemButton.addView(listItemButtonLabel);
 
-            var listeItemButtonMeta = new TextView(this, null, 0, R.style.ListItemButtonMeta);
+            var listItemButtonMeta = new TextView(this, null, 0, R.style.ListItemButtonMeta);
             if (songBundle.language().equals("en"))
-                listeItemButtonMeta.setText(R.string.settings_language_english);
+                listItemButtonMeta.setText(R.string.settings_language_english);
             if (songBundle.language().equals("nl"))
-                listeItemButtonMeta.setText(R.string.settings_language_dutch);
-            listItemButton.addView(listeItemButtonMeta);
+                listItemButtonMeta.setText(R.string.settings_language_dutch);
+            listItemButton.addView(listItemButtonMeta);
         }
     }
 }

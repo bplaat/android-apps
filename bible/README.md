@@ -33,4 +33,3 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/), [die-
 ### App
 - Remember scroll position in chapter view
 - Remember scroll position in dialogs
-- Chapter view select multiple textviews
