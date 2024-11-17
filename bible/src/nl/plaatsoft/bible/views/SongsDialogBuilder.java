@@ -8,6 +8,8 @@ package nl.plaatsoft.bible.views;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class SongsDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Song song);
     }
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public SongsDialogBuilder(Context context, ArrayList<Song> songs, String currentSongNumber,
             OnResultListener onResultListener) {
@@ -41,6 +45,9 @@ public class SongsDialogBuilder extends AlertDialog.Builder {
             songButton.setText(String.valueOf(song.number()));
             songButton.setOnClickListener(view -> onResultListener.onResult(song));
             grid.addView(songButton);
+
+            if (song.number().equals(currentSongNumber))
+                handler.post(() -> root.scrollTo(0, songButton.getTop()));
         }
     }
 }

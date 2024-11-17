@@ -8,6 +8,8 @@ package nl.plaatsoft.bible.views;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
@@ -21,6 +23,8 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Chapter chapter);
     }
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public ChaptersDialogBuilder(Context context, ArrayList<Chapter> chapters, int currentChapterNumber,
             OnResultListener onResultListener) {
@@ -41,6 +45,9 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
             chapterButton.setText(String.valueOf(chapter.number()));
             chapterButton.setOnClickListener(view -> onResultListener.onResult(chapter));
             grid.addView(chapterButton);
+
+            if (chapter.number() == currentChapterNumber)
+                handler.post(() -> root.scrollTo(0, chapterButton.getTop()));
         }
     }
 }

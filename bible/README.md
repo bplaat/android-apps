@@ -28,7 +28,8 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/), [die-
 - Fix scrape opwekking
 - Fix NBV Klaagliederen 2
 - Fix NIV Nahum 2
+- fix psalm 1
 - Scrape Liedboek
 
 ### App
-- Remember scroll position in dialogs
+Done

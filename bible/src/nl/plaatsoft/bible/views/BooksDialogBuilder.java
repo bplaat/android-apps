@@ -8,6 +8,8 @@ package nl.plaatsoft.bible.views;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -23,6 +25,8 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Book book);
     }
+
+    private Handler handler = new Handler(Looper.getMainLooper());
 
     public BooksDialogBuilder(Context context, ArrayList<Testament> testaments, String currentBookKey,
             OnResultListener onResultListener) {
@@ -50,6 +54,9 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
                 bookButton.setText(book.name());
                 bookButton.setOnClickListener(view -> onResultListener.onResult(book));
                 booksFlowLayout.addView(bookButton);
+
+                if (book.key().equals(currentBookKey))
+                    handler.post(() -> root.scrollTo(0, bookButton.getTop()));
             }
         }
     }
