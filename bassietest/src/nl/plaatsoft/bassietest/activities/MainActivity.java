@@ -23,7 +23,6 @@ import org.json.JSONObject;
 import nl.plaatsoft.bassietest.components.RatingAlert;
 import nl.plaatsoft.bassietest.tasks.FetchDataTask;
 import nl.plaatsoft.bassietest.tasks.FetchImageTask;
-import nl.plaatsoft.bassietest.Consts;
 import nl.plaatsoft.bassietest.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -87,14 +86,14 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             }
         });
 
-        RatingAlert.updateAndShow(this, Consts.STORE_PAGE_URL);
+        RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.menu_options_settings) {
-            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+            oldLanguage = settings.getLanguage();
+            oldTheme = settings.getTheme();
             startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
             return true;
         }
@@ -106,8 +105,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
-                        oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)) {
+                if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme()) {
                     handler.post(() -> recreate());
                 }
             }

@@ -9,7 +9,6 @@ package nl.plaatsoft.bassietest.activities;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.PowerManager;
 import android.view.ViewGroup;
@@ -18,39 +17,38 @@ import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 import java.util.Locale;
 
-import nl.plaatsoft.bassietest.Consts;
+import nl.plaatsoft.bassietest.Settings;
 
 public abstract class BaseActivity extends Activity {
-    protected SharedPreferences settings;
+    protected Settings settings;
     private OnBackInvokedCallback onBackCallback = null;
 
     @Override
     public void attachBaseContext(Context context) {
-        settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-        var theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+        settings = new Settings(context);
+        var language = settings.getLanguage();
+        var theme = settings.getTheme();
 
         // Update configuration when different from system defaults
-        if (language != Consts.Settings.LANGUAGE_SYSTEM ||
-                theme != Consts.Settings.THEME_SYSTEM ||
-                (theme == Consts.Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)) {
+        if (language != Settings.LANGUAGE_SYSTEM || theme != Settings.THEME_SYSTEM ||
+                (theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)) {
             var configuration = new Configuration(context.getResources().getConfiguration());
 
-            if (language == Consts.Settings.LANGUAGE_ENGLISH)
+            if (language == Settings.LANGUAGE_ENGLISH)
                 configuration.setLocale(new Locale("en"));
-            if (language == Consts.Settings.LANGUAGE_DUTCH)
+            if (language == Settings.LANGUAGE_DUTCH)
                 configuration.setLocale(new Locale("nl"));
 
-            if (theme == Consts.Settings.THEME_LIGHT) {
+            if (theme == Settings.THEME_LIGHT) {
                 configuration.uiMode |= Configuration.UI_MODE_NIGHT_NO;
                 configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_YES;
             }
-            if (theme == Consts.Settings.THEME_DARK) {
+            if (theme == Settings.THEME_DARK) {
                 configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
                 configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
             }
             // Set dark mode on when in battery saver mode
-            if (theme == Consts.Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                 if (((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode()) {
                     configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
                     configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
