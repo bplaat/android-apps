@@ -135,8 +135,8 @@ public class SongBundleService {
         var database = openDatabase(context.getFilesDir() + "/" + path);
         var songs = new ArrayList<Song>();
         try (var cursor = database.rawQuery(
-                "SELECT id, number, title FROM songs WHERE title LIKE ? OR text LIKE ? LIMIT ?",
-                new String[] { "%" + query + "%", "%" + query + "%", String.valueOf(maxResults) })) {
+                "SELECT id, number, title FROM songs WHERE number LIKE ? OR title LIKE ? OR text LIKE ? LIMIT ?",
+                new String[] { "%" + query + "%", "%" + query + "%", "%" + query + "%", String.valueOf(maxResults) })) {
             while (cursor.moveToNext())
                 songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getString(cursor.getColumnIndex("number")),
