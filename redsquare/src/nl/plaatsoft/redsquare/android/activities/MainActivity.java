@@ -25,7 +25,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import java.net.URLEncoder;
-import org.json.JSONArray;
 import org.json.JSONObject;
 
 import nl.plaatsoft.redsquare.android.components.GamePage;
@@ -33,10 +32,11 @@ import nl.plaatsoft.redsquare.android.components.ScoreAdapter;
 import nl.plaatsoft.redsquare.android.models.Score;
 import nl.plaatsoft.redsquare.android.tasks.FetchDataTask;
 import nl.plaatsoft.redsquare.android.Config;
-import nl.plaatsoft.redsquare.android.Consts;
 import nl.plaatsoft.redsquare.android.R;
 
 public class MainActivity extends BaseActivity {
+    public static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
+
     private final Handler handler = new Handler(Looper.getMainLooper());
     private GamePage gamePage;
     private RelativeLayout menuPage;
@@ -89,20 +89,16 @@ public class MainActivity extends BaseActivity {
             try {
                 FetchDataTask.with(this)
                         .load(Config.API_URL + "?key=" + Config.API_KEY + "&name="
-                                + URLEncoder.encode(settings.getString("name", Consts.Settings.NAME_DEFAULT), "UTF-8")
+                                + URLEncoder.encode(settings.getName(), "UTF-8")
                                 + "&score=" + score)
                         .fetch();
 
-                var scoresJSON = new JSONArray(settings.getString("scores", Consts.Settings.SCORE_DEFAULT));
-
+                var scoresJSON = settings.getScores();
                 var newScoreJSON = new JSONObject();
-                newScoreJSON.put("name", settings.getString("name", Consts.Settings.NAME_DEFAULT));
+                newScoreJSON.put("name", settings.getName());
                 newScoreJSON.put("score", score);
                 scoresJSON.put(newScoreJSON);
-
-                var settingsEditor = settings.edit();
-                settingsEditor.putString("scores", scoresJSON.toString());
-                settingsEditor.apply();
+                settings.setScores(scoresJSON);
             } catch (Exception exception) {
                 Log.e(getPackageName(), "Can't parse local highscores", exception);
             }
@@ -127,7 +123,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.menu_local_highscore_button).setOnClickListener(view -> {
             try {
                 localHighscoreAdapter.clear();
-                var scoresJSON = new JSONArray(settings.getString("scores", Consts.Settings.SCORE_DEFAULT));
+                var scoresJSON = settings.getScores();
                 for (var i = 0; i < scoresJSON.length(); i++) {
                     var scoreJSON = scoresJSON.getJSONObject(i);
                     localHighscoreAdapter.add(new Score(
@@ -215,13 +211,11 @@ public class MainActivity extends BaseActivity {
 
         // Name input
         var settingsNameInput = (EditText) findViewById(R.id.settings_name_input);
-        settingsNameInput.setText(settings.getString("name", Consts.Settings.NAME_DEFAULT));
+        settingsNameInput.setText(settings.getName());
         settingsNameInput.setSelection(settingsNameInput.getText().length());
         settingsNameInput.setOnEditorActionListener((view, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                var settingsEditor = settings.edit();
-                settingsEditor.putString("name", settingsNameInput.getText().toString());
-                settingsEditor.apply();
+                settings.setName(settingsNameInput.getText().toString());
                 hideSystemUI();
             }
             return false;
@@ -233,15 +227,13 @@ public class MainActivity extends BaseActivity {
                 getResources().getString(R.string.settings_language_dutch),
                 getResources().getString(R.string.settings_language_system)
         };
-        var language = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
+        var language = settings.getLanguage();
         ((TextView) findViewById(R.id.settings_language_label)).setText(languages[language]);
         findViewById(R.id.settings_language_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.settings_language_alert_title_label)
                     .setSingleChoiceItems(languages, language, (dialog, which) -> {
-                        var settingsEditor = settings.edit();
-                        settingsEditor.putInt("language", which);
-                        settingsEditor.apply();
+                        settings.setLanguage(which);
                         dialog.dismiss();
                         recreate();
                     })
@@ -257,15 +249,13 @@ public class MainActivity extends BaseActivity {
                         ? getResources().getString(R.string.settings_theme_battery_saver)
                         : getResources().getString(R.string.settings_theme_system)
         };
-        var theme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+        var theme = settings.getTheme();
         ((TextView) findViewById(R.id.settings_theme_label)).setText(themes[theme]);
         findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.settings_theme_alert_title_label)
                     .setSingleChoiceItems(themes, theme, (dialog, which) -> {
-                        var settingsEditor = settings.edit();
-                        settingsEditor.putInt("theme", which);
-                        settingsEditor.apply();
+                        settings.setTheme(which);
                         dialog.dismiss();
                         recreate();
                     })
