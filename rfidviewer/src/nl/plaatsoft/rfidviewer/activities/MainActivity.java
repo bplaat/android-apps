@@ -26,7 +26,6 @@ import android.widget.ScrollView;
 import java.util.Arrays;
 
 import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
-import nl.plaatsoft.rfidviewer.Consts;
 import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
@@ -106,8 +105,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.menu_options_settings) {
-            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+            oldLanguage = settings.getLanguage();
+            oldTheme = settings.getTheme();
             startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
             return true;
         }
@@ -119,8 +118,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
-                        oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)) {
+                if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme()) {
                     handler.post(() -> recreate());
                 }
             }
