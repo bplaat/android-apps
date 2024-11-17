@@ -53,10 +53,11 @@ public class SongView extends ScrollView {
         this.onNextListener = onNextListener;
     }
 
-    public void openSong(Song song) {
+    public void openSong(Song song, int scrollY) {
         scrollTo(0, 0);
         root.removeAllViews();
 
+        // Add song content
         var title = new TextView(getContext(), null, 0, R.style.SongViewTitle);
         title.setTypeface(typeface, Typeface.BOLD);
         title.setText(song.number() + ". " + song.title());
@@ -72,7 +73,12 @@ public class SongView extends ScrollView {
         copyright.setText(song.copyright());
         root.addView(copyright);
 
+        // Add buttons container
         addButtonsContainer();
+
+        // Restore scroll position
+        if (scrollY > 0)
+            post(() -> scrollTo(0, scrollY));
     }
 
     private void addButtonsContainer() {

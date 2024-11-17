@@ -63,7 +63,7 @@ public class ChapterView extends ScrollView {
         this.onNextListener = onNextListener;
     }
 
-    public void openChapter(Chapter chapter, int highlightVerseId) {
+    public void openChapter(Chapter chapter, int scrollY, int highlightVerseId) {
         scrollTo(0, 0);
         root.removeAllViews();
 
@@ -103,6 +103,10 @@ public class ChapterView extends ScrollView {
 
         // Add buttons container
         addButtonsContainer();
+
+        // Restore scroll position
+        if (scrollY > 0 && highlightVerseId == -1)
+            handler.post(() -> scrollTo(0, scrollY));
     }
 
     private void addButtonsContainer() {

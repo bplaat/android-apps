@@ -114,6 +114,7 @@ public class Settings {
 
     public void setOpenBook(String openBook) {
         prefs.edit().putString("open_book", openBook).apply();
+        setOpenChapter(1);
     }
 
     // Open chapter
@@ -123,6 +124,16 @@ public class Settings {
 
     public void setOpenChapter(int openChapterNumber) {
         prefs.edit().putInt("open_chapter", openChapterNumber).apply();
+        setOpenChapterScroll(0);
+    }
+
+    // Open chapter scroll
+    public int getOpenChapterScroll() {
+        return prefs.getInt("open_chapter_scroll", 0);
+    }
+
+    public void setOpenChapterScroll(int openChapterScroll) {
+        prefs.edit().putInt("open_chapter_scroll", openChapterScroll).apply();
     }
 
     // Open song bundle
@@ -132,17 +143,26 @@ public class Settings {
 
     public void setOpenSongBundle(String openSongBundle) {
         prefs.edit().putString("open_song_bundle", openSongBundle).apply();
+        setOpenSongNumber("1");
     }
 
     // Open song number
-    public static final String OPEN_SONG_NUMBER_DEFAULT = "1";
-
     public String getOpenSongNumber() {
-        return prefs.getString("open_song_number", OPEN_SONG_NUMBER_DEFAULT);
+        return prefs.getString("open_song_number", "1");
     }
 
     public void setOpenSongNumber(String openSongBundleNumber) {
         prefs.edit().putString("open_song_number", openSongBundleNumber).apply();
+        setOpenSongScroll(0);
+    }
+
+    // Open song scroll
+    public int getOpenSongScroll() {
+        return prefs.getInt("open_song_scroll", 0);
+    }
+
+    public void setOpenSongScroll(int openSongScroll) {
+        prefs.edit().putInt("open_song_scroll", openSongScroll).apply();
     }
 
     // Highlight verse

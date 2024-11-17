@@ -103,7 +103,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     dialog.dismiss();
                     if (!book.key().equals(openBookKey)) {
                         settings.setOpenBook(book.key());
-                        settings.setOpenChapter(1);
                         openChapterFromSettings(-1);
                     }
                 }).show();
@@ -316,6 +315,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
+    public void onPause() {
+        saveScroll();
+        super.onPause();
+    }
+
+    @Override
     protected boolean shouldBackOverride() {
         return drawer.isOpen();
     }
@@ -369,7 +374,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         }
 
         // Update chapter view
-        chapterPage.openChapter(openChapter, highlightVerseId);
+        chapterPage.openChapter(openChapter, settings.getOpenChapterScroll(), highlightVerseId);
         openPage(chapterPage);
     }
 
@@ -377,7 +382,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         var openSongNumber = settings.getOpenSongNumber();
         openSong = songBundleService.readSong(this, openSongBundle.path(), openSongNumber);
         indexButton.setText(openSongNumber);
-        songPage.openSong(openSong);
+        songPage.openSong(openSong, settings.getOpenSongScroll());
         openPage(songPage);
     }
 
@@ -385,6 +390,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         chapterPage.setVisibility(page.equals(chapterPage) ? View.VISIBLE : View.GONE);
         chapterNotAvailablePage.setVisibility(page.equals(chapterNotAvailablePage) ? View.VISIBLE : View.GONE);
         songPage.setVisibility(page.equals(songPage) ? View.VISIBLE : View.GONE);
+    }
+
+    private void saveScroll() {
+        if (openType == Settings.OPEN_TYPE_BIBLE)
+            settings.setOpenChapterScroll(chapterPage.getScrollY());
+        if (openType == Settings.OPEN_TYPE_SONG_BUNDLE)
+            settings.setOpenSongScroll(songPage.getScrollY());
     }
 
     private void updateFonts(boolean reopen) {
@@ -412,8 +424,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             if (openType == Settings.OPEN_TYPE_BIBLE && bible.path().equals(openBible.path()))
                 listItemButton.setBackgroundResource(R.drawable.list_item_button_selected);
             listItemButton.setOnClickListener(view -> {
+                saveScroll();
                 settings.setOpenType(Settings.OPEN_TYPE_BIBLE);
-                settings.setOpenBible(bible.path());
+                if (!bible.path().equals(settings.getOpenBible()))
+                    settings.setOpenBible(bible.path());
                 openFromSettings();
                 drawer.close();
             });
@@ -443,11 +457,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             if (openType == Settings.OPEN_TYPE_SONG_BUNDLE && songBundle.path().equals(openSongBundle.path()))
                 listItemButton.setBackgroundResource(R.drawable.list_item_button_selected);
             listItemButton.setOnClickListener(view -> {
+                saveScroll();
                 settings.setOpenType(Settings.OPEN_TYPE_SONG_BUNDLE);
-                settings.setOpenSongBundle(songBundle.path());
-                if (!songBundle.path().equals(settings.getOpenSongBundle())) {
-                    settings.setOpenSongNumber(Settings.OPEN_SONG_NUMBER_DEFAULT);
-                }
+                if (!songBundle.path().equals(settings.getOpenSongBundle()))
+                    settings.setOpenSongBundle(songBundle.path());
                 openFromSettings();
                 drawer.close();
             });
