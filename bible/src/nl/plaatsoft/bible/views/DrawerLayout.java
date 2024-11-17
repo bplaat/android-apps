@@ -13,9 +13,13 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
+
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
+@ParametersAreNonnullByDefault
 public class DrawerLayout extends ViewGroup implements View.OnClickListener {
     public static interface OnCloseListener {
         void onClose();
@@ -25,14 +29,14 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
 
     private boolean isOpen = false;
     private boolean isFirstLayout = true;
-    private OnCloseListener onCloseListener = null;
+    private @Nullable OnCloseListener onCloseListener = null;
 
     public DrawerLayout(Context context) {
         super(context);
         init();
     }
 
-    public DrawerLayout(Context context, AttributeSet attrs) {
+    public DrawerLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init();
     }
@@ -64,7 +68,7 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(@Nullable View v) {
         close();
     }
 

@@ -14,9 +14,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.R;
 
+@ParametersAreNonnullByDefault
 public class SettingsActivity extends BaseActivity {
     private static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bible";
     private static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
@@ -25,7 +28,7 @@ public class SettingsActivity extends BaseActivity {
     private int versionButtonClickCounter = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         useWindowInsets(findViewById(R.id.settings_scroll));

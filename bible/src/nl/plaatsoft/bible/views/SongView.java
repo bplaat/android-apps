@@ -14,10 +14,13 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
 
+@ParametersAreNonnullByDefault
 public class SongView extends ScrollView {
     public static interface OnPreviousListener {
         void onPrevious();
@@ -27,12 +30,12 @@ public class SongView extends ScrollView {
         void onNext();
     }
 
-    private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
     private final LinearLayout root;
-    private OnPreviousListener onPreviousListener;
-    private OnNextListener onNextListener;
+    private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
+    private @Nullable OnPreviousListener onPreviousListener = null;
+    private @Nullable OnNextListener onNextListener = null;
 
-    public SongView(Context context, AttributeSet attrs) {
+    public SongView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         root = new LinearLayout(context, null, 0, R.style.SongView);
         addView(root);

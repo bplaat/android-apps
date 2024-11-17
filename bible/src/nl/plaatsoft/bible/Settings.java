@@ -9,7 +9,9 @@ package nl.plaatsoft.bible;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class Settings {
     private final Context context;
     private final SharedPreferences prefs;
@@ -25,7 +27,7 @@ public class Settings {
     public static final int LANGUAGE_SYSTEM = 2;
 
     public int getLanguage() {
-        return prefs.getInt("language", Settings.LANGUAGE_SYSTEM);
+        return prefs.getInt("language", LANGUAGE_SYSTEM);
     }
 
     public void setLanguage(int language) {
@@ -38,7 +40,7 @@ public class Settings {
     public static final int THEME_SYSTEM = 2;
 
     public int getTheme() {
-        return prefs.getInt("theme", Settings.THEME_SYSTEM);
+        return prefs.getInt("theme", THEME_SYSTEM);
     }
 
     public void setTheme(int theme) {
@@ -51,13 +53,13 @@ public class Settings {
     public static final int FONT_MONOSPACE = 2;
 
     public int getFont() {
-        return prefs.getInt("font", Settings.FONT_SERIF);
+        return prefs.getInt("font", FONT_SERIF);
     }
 
     public Typeface getFontTypeface() {
-        if (getFont() == Settings.FONT_SANS_SERIF)
+        if (getFont() == FONT_SANS_SERIF)
             return Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
-        if (getFont() == Settings.FONT_MONOSPACE)
+        if (getFont() == FONT_MONOSPACE)
             return Typeface.create(Typeface.MONOSPACE, Typeface.NORMAL);
         return Typeface.create(Typeface.SERIF, Typeface.NORMAL);
     }
@@ -80,7 +82,7 @@ public class Settings {
     public static final int OPEN_TYPE_SONG_BUNDLE = 1;
 
     public int getOpenType() {
-        return prefs.getInt("open_type", Settings.OPEN_TYPE_BIBLE);
+        return prefs.getInt("open_type", OPEN_TYPE_BIBLE);
     }
 
     public void setOpenType(int openType) {

@@ -9,11 +9,14 @@ package nl.plaatsoft.bible.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class FixedGridLayout extends ViewGroup {
-    private int columnCount;
+    private int columnCount = 1;
 
-    public FixedGridLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public FixedGridLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

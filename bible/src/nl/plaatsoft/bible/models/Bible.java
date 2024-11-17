@@ -7,14 +7,16 @@
 package nl.plaatsoft.bible.models;
 
 import java.util.ArrayList;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public record Bible(
-        String path,
-        String name,
-        String abbreviation,
-        String language,
-        String copyright,
-        String releasedAt,
-        String scrapedAt,
-        ArrayList<Testament> testaments) {
+        @Nonnull String path,
+        @Nonnull String name,
+        @Nonnull String abbreviation,
+        @Nonnull String language,
+        @Nonnull String copyright,
+        @Nonnull String releasedAt,
+        @Nonnull String scrapedAt,
+        @Nullable ArrayList<Testament> testaments) {
 }

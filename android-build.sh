@@ -22,7 +22,12 @@ if [ -z "$name" ]; then
         for dir in $(find . -name "src" ! -path "*/target/*") $(find . -name "src-gen"); do
             echo "\"$dir\"," >> .vscode/settings.json
         done
-        echo "],\"java.project.referencedLibraries\":[\"$platform\"],\"rust-analyzer.linkedProjects\":[" >> .vscode/settings.json
+        echo "],\"java.project.referencedLibraries\":[\"$platform\"]," >> .vscode/settings.json
+        echo "\"java.compile.nullAnalysis.mode\":\"automatic\"," >> .vscode/settings.json
+        echo "\"java.compile.nullAnalysis.nullable\":[\"javax.annotation.Nullable\"]," >> .vscode/settings.json
+        echo "\"java.compile.nullAnalysis.nonnull\":[\"javax.annotation.Nonnull\"]," >> .vscode/settings.json
+        echo "\"java.compile.nullAnalysis.nonnullbydefault\":[\"javax.annotation.ParametersAreNonnullByDefault\"]," >> .vscode/settings.json
+        echo "\"rust-analyzer.linkedProjects\":[" >> .vscode/settings.json
         for file in $(find . -name "Cargo.toml"); do
             echo "\"$file\"," >> .vscode/settings.json
         done
@@ -75,7 +80,7 @@ find src target/src-gen -name "*.java" > target/sources.txt
 javac -Xlint -cp "$platform" -d target/src @target/sources.txt
 
 echo "Compiling dex..."
-find target/src -name "*.class" > target/classes.txt
+find target/src -name "*.class" ! -path "*/javax/annotation/*" > target/classes.txt
 if [ -e "$ANDROID_HOME/build-tools/d8.bat" ]; then
     d8.bat --release --lib "$platform" --min-api "$min_sdk_version" --output target/ @target/classes.txt
 else

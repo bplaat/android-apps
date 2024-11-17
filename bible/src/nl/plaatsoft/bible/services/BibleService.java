@@ -14,7 +14,10 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.zip.GZIPInputStream;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Chapter;
 import nl.plaatsoft.bible.models.SearchVerse;
@@ -23,10 +26,11 @@ import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Testament;
 import nl.plaatsoft.bible.models.Verse;
 
+@ParametersAreNonnullByDefault
 public class BibleService {
-    private static BibleService instance;
+    private static @Nullable BibleService instance = null;
 
-    private final HashMap<String, SQLiteDatabase> databaseCache = new HashMap<String, SQLiteDatabase>();
+    private final HashMap<String, SQLiteDatabase> databaseCache = new HashMap<>();
 
     private BibleService() {
     }
@@ -34,6 +38,7 @@ public class BibleService {
     public static BibleService getInstance() {
         if (instance == null)
             instance = new BibleService();
+        Objects.requireNonNull(instance);
         return instance;
     }
 
@@ -156,7 +161,7 @@ public class BibleService {
         return new Bible(path, name, abbreviation, language, copyright, releasedAt, scrapedAt, testaments);
     }
 
-    public Chapter readChapter(Context context, String path, String bookKey, int chapterNumber) {
+    public @Nullable Chapter readChapter(Context context, String path, String bookKey, int chapterNumber) {
         var database = openDatabase(context.getFilesDir() + "/" + path);
         try (var chapterCursor = database.rawQuery(
                 "SELECT id, number FROM chapters WHERE book_id = (SELECT id FROM books WHERE key = ?) AND number = ?",

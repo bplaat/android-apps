@@ -8,7 +8,9 @@ package nl.plaatsoft.bible;
 
 import android.content.Context;
 import android.os.Build;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class Utils {
     private Utils() {
     }

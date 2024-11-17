@@ -22,11 +22,14 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Chapter;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
+@ParametersAreNonnullByDefault
 public class ChapterView extends ScrollView {
     public static interface OnPreviousListener {
         void onPrevious();
@@ -37,12 +40,12 @@ public class ChapterView extends ScrollView {
     }
 
     private Handler handler = new Handler(Looper.getMainLooper());
-    private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
     private final LinearLayout root;
-    private OnPreviousListener onPreviousListener;
-    private OnNextListener onNextListener;
+    private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
+    private @Nullable OnPreviousListener onPreviousListener = null;
+    private @Nullable OnNextListener onNextListener = null;
 
-    public ChapterView(Context context, AttributeSet attrs) {
+    public ChapterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         root = new LinearLayout(context, null, 0, R.style.ChapterView);
         addView(root);

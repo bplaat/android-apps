@@ -18,19 +18,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import java.util.Objects;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.SearchVerse;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
+@ParametersAreNonnullByDefault
 public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
-    private static class ViewHolder {
-        public TextView contents;
-        public TextView bookChapter;
+    private static record ViewHolder(TextView contents, TextView bookChapter) {
     }
 
-    private String searchQuery;
-    private Typeface verseTypeface;
+    private String searchQuery = "";
+    private Typeface verseTypeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
 
     public SearchVerseAdapter(Context context) {
         super(context, 0);
@@ -45,13 +47,13 @@ public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_search_verse, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.contents = convertView.findViewById(R.id.search_verse_contents);
-            viewHolder.bookChapter = convertView.findViewById(R.id.search_verse_book_chapter);
+            Objects.requireNonNull(convertView);
+            viewHolder = new ViewHolder(convertView.findViewById(R.id.search_verse_contents),
+                    convertView.findViewById(R.id.search_verse_book_chapter));
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

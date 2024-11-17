@@ -15,17 +15,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import java.util.Objects;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
+@ParametersAreNonnullByDefault
 public class SongAdapter extends ArrayAdapter<Song> {
-    private static class ViewHolder {
-        public TextView name;
+    private static record ViewHolder(TextView name) {
     }
 
-    private String searchQuery;
+    private String searchQuery = "";
 
     public SongAdapter(Context context) {
         super(context, 0);
@@ -36,12 +39,12 @@ public class SongAdapter extends ArrayAdapter<Song> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_song, parent, false);
-            viewHolder = new ViewHolder();
-            viewHolder.name = convertView.findViewById(R.id.song_name);
+            Objects.requireNonNull(convertView);
+            viewHolder = new ViewHolder(convertView.findViewById(R.id.song_name));
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();

@@ -11,10 +11,12 @@ import android.content.Context;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
 
+@ParametersAreNonnullByDefault
 public class SongsDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Song song);

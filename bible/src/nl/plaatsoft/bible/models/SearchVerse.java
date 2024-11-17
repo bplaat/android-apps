@@ -6,6 +6,9 @@
 
 package nl.plaatsoft.bible.models;
 
+import javax.annotation.ParametersAreNonnullByDefault;
+
+@ParametersAreNonnullByDefault
 public record SearchVerse(
         Verse verse,
         Book book,

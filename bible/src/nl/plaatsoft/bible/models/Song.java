@@ -6,5 +6,9 @@
 
 package nl.plaatsoft.bible.models;
 
-public record Song(int id, String number, String title, String text, String copyright) {
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+public record Song(int id, @Nonnull String number, @Nonnull String title, @Nullable String text,
+        @Nullable String copyright) {
 }

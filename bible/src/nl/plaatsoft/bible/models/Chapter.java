@@ -7,6 +7,7 @@
 package nl.plaatsoft.bible.models;
 
 import java.util.ArrayList;
+import javax.annotation.Nullable;
 
-public record Chapter(int id, int number, ArrayList<Verse> verses) {
+public record Chapter(int id, int number, @Nullable ArrayList<Verse> verses) {
 }

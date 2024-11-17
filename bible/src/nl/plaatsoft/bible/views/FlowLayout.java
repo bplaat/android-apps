@@ -9,9 +9,12 @@ package nl.plaatsoft.bible.views;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
+@ParametersAreNonnullByDefault
 public class FlowLayout extends ViewGroup {
-    public FlowLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public FlowLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

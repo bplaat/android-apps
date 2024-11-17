@@ -14,15 +14,19 @@ import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.zip.GZIPInputStream;
+import javax.annotation.Nullable;
+import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.models.SongBundle;
 
+@ParametersAreNonnullByDefault
 public class SongBundleService {
-    private static SongBundleService instance;
+    private static @Nullable SongBundleService instance = null;
 
-    private final HashMap<String, SQLiteDatabase> databaseCache = new HashMap<String, SQLiteDatabase>();
+    private final HashMap<String, SQLiteDatabase> databaseCache = new HashMap<>();
 
     private SongBundleService() {
     }
@@ -30,6 +34,7 @@ public class SongBundleService {
     public static SongBundleService getInstance() {
         if (instance == null)
             instance = new SongBundleService();
+        Objects.requireNonNull(instance);
         return instance;
     }
 
@@ -112,7 +117,7 @@ public class SongBundleService {
                 metadata.get("language"), metadata.get("copyright"), metadata.get("scraped_at"), songs);
     }
 
-    public Song readSong(Context context, String path, String songNumber) {
+    public @Nullable Song readSong(Context context, String path, String songNumber) {
         var database = openDatabase(context.getFilesDir() + "/" + path);
         try (var cursor = database.rawQuery("SELECT id, number, title, text, copyright FROM songs WHERE number = ?",
                 new String[] { songNumber })) {

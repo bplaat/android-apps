@@ -20,6 +20,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
 import java.util.ArrayList;
+import java.util.Objects;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
@@ -42,7 +45,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private static final int SEARCH_REQUEST_CODE = 0;
     private static final int SETTINGS_REQUEST_CODE = 1;
 
-    // Views
+    // Views initialized in onCreate
     private DrawerLayout drawer;
     private LinearLayout drawerBibles;
     private LinearLayout drawerSongBundles;
@@ -53,15 +56,15 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private SongView songPage;
 
     // State
-    private BibleService bibleService = BibleService.getInstance();
-    private SongBundleService songBundleService = SongBundleService.getInstance();
-    private Handler handler = new Handler(Looper.getMainLooper());
+    private @Nonnull BibleService bibleService = BibleService.getInstance();
+    private @Nonnull SongBundleService songBundleService = SongBundleService.getInstance();
+    private @Nonnull Handler handler = new Handler(Looper.getMainLooper());
     private String app_version; // Initialized in onCreate
-    private AlertDialog dialog = null;
     private ArrayList<Bible> bibles; // Initialized in onCreate
     private ArrayList<SongBundle> songBundles; // Initialized in onCreate
     private int openType; // Initialized in onCreate
-    private Bible openBible = null;
+    private @Nullable AlertDialog dialog = null;
+    private Bible openBible = null; // FIXME: Null analysis has issues, complete in future
     private Book openBook = null;
     private Chapter openChapter = null;
     private SongBundle openSongBundle = null;
@@ -71,7 +74,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private int oldTheme = -1;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         drawer = findViewById(R.id.main_drawer);
@@ -96,6 +99,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             if (openType == Settings.OPEN_TYPE_BIBLE) {
                 var openBookKey = settings.getOpenBook();
                 dialog = new BooksDialogBuilder(this, openBible.testaments(), openBookKey, book -> {
+                    Objects.requireNonNull(dialog);
                     dialog.dismiss();
                     if (!book.key().equals(openBookKey)) {
                         settings.setOpenBook(book.key());
@@ -112,6 +116,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 if (openChapter == null)
                     return;
                 dialog = new ChaptersDialogBuilder(this, openBook.chapters(), openChapter.number(), chapter -> {
+                    Objects.requireNonNull(dialog);
                     dialog.dismiss();
                     if (chapter.number() != openChapter.number()) {
                         settings.setOpenChapter(chapter.number());
@@ -122,6 +127,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
             if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
                 dialog = new SongsDialogBuilder(this, openSongBundle.songs(), openSong.number(), song -> {
+                    Objects.requireNonNull(dialog);
                     dialog.dismiss();
                     if (!song.number().equals(openSong.number())) {
                         settings.setOpenSongNumber(song.number());
@@ -250,6 +256,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             var randomBook = randomTestament.books().get((int) (Math.random() * randomTestament.books().size()));
             var randomChapter = bibleService.readChapter(this, openBible.path(), randomBook.key(),
                     (int) (Math.random() * randomBook.chapters().size()) + 1);
+            Objects.requireNonNull(randomChapter);
 
             var realVerses = new ArrayList<Verse>();
             for (var verse : randomChapter.verses()) {
@@ -374,7 +381,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         openPage(songPage);
     }
 
-    private void openPage(View page) {
+    private void openPage(@Nonnull View page) {
         chapterPage.setVisibility(page.equals(chapterPage) ? View.VISIBLE : View.GONE);
         chapterNotAvailablePage.setVisibility(page.equals(chapterNotAvailablePage) ? View.VISIBLE : View.GONE);
         songPage.setVisibility(page.equals(songPage) ? View.VISIBLE : View.GONE);
