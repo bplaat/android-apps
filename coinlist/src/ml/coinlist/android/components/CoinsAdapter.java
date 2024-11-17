@@ -30,6 +30,7 @@ import ml.coinlist.android.models.Coin;
 import ml.coinlist.android.Formatters;
 import ml.coinlist.android.Utils;
 import ml.coinlist.android.R;
+import ml.coinlist.android.Settings;
 
 public class CoinsAdapter extends ArrayAdapter<Coin> {
     private static class ViewHolder {
@@ -44,8 +45,11 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         public ImageButton coinStarButton;
     }
 
-    public CoinsAdapter(Context context) {
+    private final Settings settings;
+
+    public CoinsAdapter(Context context, Settings settings) {
         super(context, 0);
+        this.settings = settings;
     }
 
     @Override
@@ -78,7 +82,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
                 .fetch();
 
         viewHolder.coinName.setText(coin.getName());
-        viewHolder.coinPrice.setText(Formatters.money(getContext(), coin.getPrice()));
+        viewHolder.coinPrice.setText(Formatters.money(settings, coin.getPrice()));
         if (((ColorDrawable) viewHolder.coinFirstLine.getBackground()).getColor() != Color.TRANSPARENT) {
             var set = (AnimatorSet) AnimatorInflater.loadAnimator(getContext(), R.animator.fade_in);
             set.setTarget(viewHolder.coinFirstLine);
@@ -97,15 +101,15 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
 
         if (coin.getExtraIndex() == 0) {
             viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_market_cap) + " " +
-                    Formatters.money(getContext(), coin.getMarketCap()));
+                    Formatters.money(settings, coin.getMarketCap()));
         }
         if (coin.getExtraIndex() == 1) {
             viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_volume) + " " +
-                    Formatters.money(getContext(), coin.getVolume()));
+                    Formatters.money(settings, coin.getVolume()));
         }
         if (coin.getExtraIndex() == 2) {
             viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_supply) + " " +
-                    Formatters.number(getContext(), coin.getSupply()));
+                    Formatters.number(settings, coin.getSupply()));
         }
 
         if (((ColorDrawable) viewHolder.coinSecondLine.getBackground()).getColor() != Color.TRANSPARENT) {

@@ -29,7 +29,6 @@ import org.json.JSONObject;
 import ml.coinlist.android.components.CoinsAdapter;
 import ml.coinlist.android.tasks.FetchDataTask;
 import ml.coinlist.android.models.Coin;
-import ml.coinlist.android.Consts;
 import ml.coinlist.android.Formatters;
 import ml.coinlist.android.Utils;
 import ml.coinlist.android.R;
@@ -56,14 +55,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Starred button
         var starredButton = (ImageButton) findViewById(R.id.main_starred_button);
-        starredOnly = settings.getBoolean("starred_only", Consts.Settings.STARRED_ONLY_DEFAULT);
+        starredOnly = settings.getStarredOnly();
         starredButton.setImageResource(starredOnly ? R.drawable.ic_star : R.drawable.ic_star_outline);
         starredButton.setOnClickListener(view -> {
             starredOnly = !starredOnly;
+            settings.setStarredOnly(starredOnly);
             starredButton.setImageResource(starredOnly ? R.drawable.ic_star : R.drawable.ic_star_outline);
-            var settingsEditor = settings.edit();
-            settingsEditor.putBoolean("starred_only", starredOnly);
-            settingsEditor.apply();
             loadCoins(true);
         });
 
@@ -86,7 +83,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         coinsList.addHeaderView(globalInfo);
         coinsList.addFooterView(new View(this));
 
-        coinsAdapter = new CoinsAdapter(this);
+        coinsAdapter = new CoinsAdapter(this, settings);
         coinsList.setAdapter(coinsAdapter);
         for (var i = 0; i < 100; i++)
             coinsAdapter.add(Coin.createEmpty());
@@ -106,15 +103,15 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             var coinExtra = (TextView) view.findViewById(R.id.coin_extra);
             if (coin.getExtraIndex() == 0) {
                 coinExtra.setText(getResources().getString(R.string.main_extra_market_cap) + " " +
-                        Formatters.money(this, coin.getMarketCap()));
+                        Formatters.money(settings, coin.getMarketCap()));
             }
             if (coin.getExtraIndex() == 1) {
                 coinExtra.setText(getResources().getString(R.string.main_extra_volume) + " " +
-                        Formatters.money(this, coin.getVolume()));
+                        Formatters.money(settings, coin.getVolume()));
             }
             if (coin.getExtraIndex() == 2) {
                 coinExtra.setText(getResources().getString(R.string.main_extra_supply) + " " +
-                        Formatters.number(this, coin.getSupply()));
+                        Formatters.number(settings, coin.getSupply()));
             }
         });
     }
@@ -122,15 +119,15 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     @Override
     public void onResume() {
         super.onResume();
-        loadGlobalInfo(!(System.currentTimeMillis() - settings.getLong("global_load_time", 0) >= REFRESH_TIMEOUT));
-        loadCoins(!(System.currentTimeMillis() - settings.getLong("coins_load_time", 0) >= REFRESH_TIMEOUT));
+        loadGlobalInfo(!(System.currentTimeMillis() - settings.getGlobalLoadTime() >= REFRESH_TIMEOUT));
+        loadCoins(!(System.currentTimeMillis() - settings.getCoinsLoadTime() >= REFRESH_TIMEOUT));
     }
 
     @Override
     public boolean onMenuItemClick(MenuItem item) {
         if (item.getItemId() == R.id.menu_options_settings) {
-            oldLanguage = settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT);
-            oldTheme = settings.getInt("theme", Consts.Settings.THEME_DEFAULT);
+            oldLanguage = settings.getLanguage();
+            oldTheme = settings.getTheme();
             startActivityForResult(new Intent(this, SettingsActivity.class), SETTINGS_REQUEST_CODE);
             return true;
         }
@@ -142,14 +139,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldCurrency != -1) {
-                if (oldCurrency != settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)) {
+                if (oldCurrency != settings.getCurrency()) {
                     loadGlobalInfo(true);
                     loadCoins(true);
                 }
             }
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (oldLanguage != settings.getInt("language", Consts.Settings.LANGUAGE_DEFAULT) ||
-                        oldTheme != settings.getInt("theme", Consts.Settings.THEME_DEFAULT)) {
+                if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme()) {
                     handler.post(() -> recreate());
                 }
             }
@@ -160,18 +156,15 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         FetchDataTask.with(this).load("https://api.coingecko.com/api/v3/global").loadFromCache(loadFromCache)
                 .saveToCache(true).then(data -> {
                     try {
-                        var settingsEditor = settings.edit();
-                        settingsEditor.putLong("global_load_time", System.currentTimeMillis());
-                        settingsEditor.apply();
+                        settings.setGlobalLoadTime(System.currentTimeMillis());
 
                         var jsonData = new JSONObject(new String(data, "UTF-8")).getJSONObject("data");
 
                         ((TextView) globalInfo.findViewById(R.id.global_info_market_cap_text))
                                 .setText(getResources().getString(R.string.main_global_market_cap) + ": " +
-                                        Formatters.money(this,
-                                                jsonData.getJSONObject("total_market_cap").getDouble(
-                                                        Consts.Settings.CURRENCY_NAMES[settings.getInt("currency",
-                                                                Consts.Settings.CURRENCY_DEFAULT)])));
+                                        Formatters.money(settings,
+                                                jsonData.getJSONObject("total_market_cap")
+                                                        .getDouble(settings.getCurrencyName())));
                         var marketCapChange = jsonData.getDouble("market_cap_change_percentage_24h_usd");
                         var marketCapChangeLabel = (TextView) globalInfo
                                 .findViewById(R.id.global_info_market_cap_change);
@@ -193,10 +186,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
                         var volumeLabel = (TextView) globalInfo.findViewById(R.id.global_info_volume);
                         volumeLabel.setText(getResources().getString(R.string.main_global_volume) + ": " +
-                                Formatters.money(this,
-                                        jsonData.getJSONObject("total_volume")
-                                                .getDouble(Consts.Settings.CURRENCY_NAMES[settings.getInt("currency",
-                                                        Consts.Settings.CURRENCY_DEFAULT)])));
+                                Formatters.money(settings,
+                                        jsonData.getJSONObject("total_volume").getDouble(settings.getCurrencyName())));
                         if (((ColorDrawable) volumeLabel.getBackground()).getColor() != Color.TRANSPARENT) {
                             var set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
                             set.setTarget(volumeLabel);
@@ -222,16 +213,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void loadCoins(boolean loadFromCache) {
-        var url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency="
-                + Consts.Settings.CURRENCY_NAMES[settings.getInt("currency", Consts.Settings.CURRENCY_DEFAULT)];
+        var url = "https://api.coingecko.com/api/v3/coins/markets?vs_currency=" + settings.getCurrencyName();
         FetchDataTask.with(this).load(url).loadFromCache(loadFromCache).saveToCache(true).then(data -> {
             try {
-                var settingsEditor = settings.edit();
-                settingsEditor.putLong("coins_load_time", System.currentTimeMillis());
-                settingsEditor.apply();
+                settings.setCoinsLoadTime(System.currentTimeMillis());
 
                 coinsAdapter.clear();
-                var jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
+                var jsonStarredCoins = settings.getStarredCoins();
                 var jsonCoins = new JSONArray(new String(data, "UTF-8"));
                 for (var i = 0; i < jsonCoins.length(); i++) {
                     var jsonCoin = jsonCoins.getJSONObject(i);
