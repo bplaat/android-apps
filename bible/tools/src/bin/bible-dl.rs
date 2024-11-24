@@ -245,34 +245,41 @@ fn main() -> Result<()> {
                     match block.r#type.as_str() {
                         "paragraph" => {
                             if let Some(content) = &block.content {
-                                for (i, item) in content.iter().enumerate() {
-                                    match item.r#type.as_str() {
+                                for (index, subblock) in content.iter().enumerate() {
+                                    match subblock.r#type.as_str() {
                                         "text" => {
+                                            let subblock_content = subblock
+                                                .content
+                                                .as_ref()
+                                                .unwrap()
+                                                .as_str()
+                                                .unwrap();
+                                            if index != 0 {
+                                                if let Some(current_verse) = verses.last_mut() {
+                                                    if current_verse.is_subtitle {
+                                                        current_verse.text.push_str(subblock_content);
+                                                        continue;
+                                                    }
+                                                }
+                                            }
                                             verses.push(Verse {
                                                 chapter_id: chapter.id,
                                                 number: None,
-                                                text: item
-                                                    .content
-                                                    .as_ref()
-                                                    .unwrap()
-                                                    .as_str()
-                                                    .unwrap()
-                                                    .to_string(),
+                                                text: subblock_content.to_string(),
                                                 is_subtitle: true,
                                                 is_last: true,
                                             });
                                         }
                                         "verse-number" => {
+                                            let subblock_content = subblock
+                                                .content
+                                                .as_ref()
+                                                .unwrap()
+                                                .as_str()
+                                                .unwrap();
                                             verses.push(Verse {
                                                 chapter_id: chapter.id,
-                                                number: Some(
-                                                    item.content
-                                                        .as_ref()
-                                                        .unwrap()
-                                                        .as_str()
-                                                        .unwrap()
-                                                        .to_string(),
-                                                ),
+                                                number: Some(subblock_content.to_string()),
                                                 text: "".to_string(),
                                                 is_subtitle: false,
                                                 is_last: false,
@@ -280,53 +287,62 @@ fn main() -> Result<()> {
                                         }
                                         "verse-text" | "char" => {
                                             if let Some(current_verse) = verses.last_mut() {
-                                                if i == 0 {
+                                                if index == 0 {
                                                     current_verse.text.push('\n');
                                                 }
-                                                let content = item.content.as_ref().unwrap();
-                                                if content.is_array() {
-                                                    for item in content.as_array().unwrap() {
-                                                        let item = item.as_object().unwrap();
-                                                        let item_type = item
+
+                                                let subblock_content =
+                                                    subblock.content.as_ref().unwrap();
+                                                if subblock_content.is_array() {
+                                                    for subblock in
+                                                        subblock_content.as_array().unwrap()
+                                                    {
+                                                        let subblock =
+                                                            subblock.as_object().unwrap();
+                                                        let subblock_type = subblock
                                                             .get("type")
                                                             .unwrap()
                                                             .as_str()
                                                             .unwrap();
-                                                        if item_type == "verse-text" {
-                                                            let item_text = item
+                                                        if subblock_type == "verse-text" {
+                                                            let text = subblock
                                                                 .get("content")
                                                                 .unwrap()
                                                                 .as_str()
                                                                 .unwrap();
-                                                            if item_text != " " {
-                                                                current_verse
-                                                                    .text
-                                                                    .push_str(item_text);
+                                                            if text != " " {
+                                                                current_verse.text.push_str(text);
                                                             }
-                                                        } else if item_type == "study" {
+                                                        } else if subblock_type == "study" {
                                                         } else {
                                                             panic!(
-                                                                "Unknown char block type: {}",
-                                                                item_type
+                                                                "Unknown subblock content subblock type: {}",
+                                                                subblock_type
                                                             );
                                                         }
                                                     }
-                                                } else if content.is_string() {
-                                                    let text = content.as_str().unwrap();
+                                                } else if subblock_content.is_string() {
+                                                    let text = subblock_content.as_str().unwrap();
                                                     if text != " " {
                                                         current_verse.text.push_str(text);
                                                     }
                                                 } else {
                                                     panic!(
-                                                        "Unknown block content type: {}",
-                                                        content
+                                                        "Unknown subblock content json value: {}",
+                                                        subblock_content
                                                     );
                                                 }
                                             }
                                         }
+                                        "ref" => {
+                                            if let Some(current_verse) = verses.last_mut() {
+                                                current_verse
+                                                    .text
+                                                    .push_str(subblock.text.as_ref().unwrap());
+                                            }
+                                        }
                                         "study" => {}
-                                        "ref" => {}
-                                        r#type => panic!("Unknown content type: {}", r#type),
+                                        r#type => panic!("Unknown subblock type: {}", r#type),
                                     }
                                 }
                                 verses.last_mut().unwrap().is_last = true;
@@ -438,12 +454,13 @@ mod structs {
     #[derive(Deserialize)]
     pub struct Block {
         pub r#type: String,
-        pub content: Option<Vec<BlockContent>>,
+        pub content: Option<Vec<SubBlock>>,
     }
 
     #[derive(Deserialize)]
-    pub struct BlockContent {
+    pub struct SubBlock {
         pub r#type: String,
         pub content: Option<Value>,
+        pub text: Option<String>,
     }
 }
