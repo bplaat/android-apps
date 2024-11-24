@@ -10,7 +10,7 @@ use std::path::Path;
 use std::sync::mpsc;
 use std::time::Duration;
 
-use anyhow::{bail, Result};
+use anyhow::{anyhow, bail, Result};
 use clap::Parser;
 use flate2::write::GzEncoder;
 use flate2::Compression;
@@ -42,7 +42,10 @@ fn fetch_bible_chapter(url: &str) -> Result<(structs::ChapterContents, structs::
             )?);
         }
     }
-    Ok((chapter_contents.unwrap(), metadata.unwrap()))
+    Ok((
+        chapter_contents.ok_or_else(|| anyhow!("No chapter contents"))?,
+        metadata.ok_or_else(|| anyhow!("No metadata"))?,
+    ))
 }
 
 struct Chapter {
@@ -153,7 +156,7 @@ fn main() -> Result<()> {
 
         // Insert metadata
         conn.execute(
-            "INSERT INTO metadata (key, value) VALUES (?, ?), (?, ?), (?, ?), (?, ?), (?, ?)",
+            "INSERT INTO metadata (key, value) VALUES (?, ?), (?, ?), (?, ?), (?, ?), (?, ?), (?, ?)",
             (
                 "name",
                 translation_metadata.name_local,
