@@ -113,7 +113,12 @@ fn main() -> Result<()> {
     let mut song_numbers: Vec<i32> = (1..=args.max_number).collect();
     song_numbers.shuffle(&mut rand::thread_rng());
     for number in song_numbers {
+        // Opwekking 666 is doesn't exist
         if number == 666 {
+            continue;
+        }
+        // 500 internal server error
+        if number == 163 || number == 229 || number == 230 || number == 739 {
             continue;
         }
         let tx = tx.clone();
@@ -124,7 +129,7 @@ fn main() -> Result<()> {
             tx.send((number, title, text)).unwrap();
 
             // Slow down fetching because of rate limiting
-            thread::sleep(Duration::from_millis(1000));
+            thread::sleep(Duration::from_millis(2000));
         });
     }
 
