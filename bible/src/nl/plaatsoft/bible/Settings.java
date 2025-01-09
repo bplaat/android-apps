@@ -96,6 +96,8 @@ public class Settings {
         for (var language : languages) {
             if (language.equals("nl"))
                 return "bibles/nbv21.bible";
+            if (language.equals("de"))
+                return "bibles/lu17.bible";
         }
         return "bibles/niv.bible";
     }
