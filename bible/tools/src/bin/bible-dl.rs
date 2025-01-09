@@ -166,6 +166,7 @@ fn main() -> Result<()> {
                 match translation_metadata.language.id.as_str() {
                     "eng" => "en",
                     "nld" => "nl",
+                    "deu" => "de",
                     _ => todo!(),
                 },
                 "copyright",
@@ -191,6 +192,12 @@ fn main() -> Result<()> {
                     "OT" => "Old Testament",
                     "NT" => "New Testament",
                     "DC" => "Deuterocanonical books",
+                    _ => todo!(),
+                },
+                "deu" => match testament.abbreviation.as_str() {
+                    "OT" => "Altes Testament",
+                    "NT" => "New Testament",
+                    "DC" => "Deuterokanonische Bücher",
                     _ => todo!(),
                 },
                 _ => todo!(),

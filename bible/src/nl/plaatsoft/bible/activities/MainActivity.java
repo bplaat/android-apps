@@ -444,6 +444,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 listItemButtonMeta.setText(R.string.settings_language_english);
             if (bible.language().equals("nl"))
                 listItemButtonMeta.setText(R.string.settings_language_dutch);
+            if (bible.language().equals("de"))
+                listItemButtonMeta.setText(R.string.settings_language_german);
             listItemButton.addView(listItemButtonMeta);
         }
 
@@ -477,6 +479,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 listItemButtonMeta.setText(R.string.settings_language_english);
             if (songBundle.language().equals("nl"))
                 listItemButtonMeta.setText(R.string.settings_language_dutch);
+            if (songBundle.language().equals("de"))
+                listItemButtonMeta.setText(R.string.settings_language_german);
             listItemButton.addView(listItemButtonMeta);
         }
     }

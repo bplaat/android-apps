@@ -1,6 +1,6 @@
 # Offline Android Bible App
 
-An offline Android Bible app containing multiple bible translations (Dutch & English) and lyrics of multiple Christian song bundles (Dutch). It's very fast, uses no WebView, has no ads or tracking, requires no internet connection. As it should be.
+An offline Android Bible app containing multiple bible translations (Dutch, English & German) and lyrics of multiple Christian song bundles (Dutch). It's very fast, uses no WebView, has no ads or tracking, requires no internet connection. As it should be.
 
 Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/), [die-bibel.de](https://die-bibel.de/) and various other places. Special thanks to the [Nederlands-Vlaams Bijbel Genootschap](https://www.bijbelgenootschap.nl/) for your good work spreading Gods word!
 
@@ -17,6 +17,11 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/), [die-
 
 -   [New International Version (NIV)](https://www.die-bibel.de/bibel/NIV/GEN.1)
 -   [King James Version (KJV)](https://www.die-bibel.de/bibel/KJV/GEN.1)
+
+### German
+
+-   [Lutherbibel 2017 (LU17)](https://www.die-bibel.de/bibel/LU17/GEN.1)
+-   [Einheitsübersetzung (EUE)](https://www.die-bibel.de/bibel/EUE/GEN.1)
 
 ## Christian Song Bundles
 

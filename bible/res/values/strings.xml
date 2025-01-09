@@ -41,6 +41,7 @@
     <string name="settings_language_button">Language</string>
     <string name="settings_language_english">English</string>
     <string name="settings_language_dutch">Nederlands</string>
+    <string name="settings_language_german">Deutsch</string>
     <string name="settings_language_system">Use system default</string>
 
     <string name="settings_theme_button">Theme</string>

@@ -14,9 +14,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
+import java.util.Arrays;
 import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 
+import nl.plaatsoft.bible.Settings;
 import nl.plaatsoft.bible.R;
 
 @ParametersAreNonnullByDefault
@@ -62,20 +64,26 @@ public class SettingsActivity extends BaseActivity {
         });
 
         // Language button
-        var languages = new String[] {
+        var languages = Arrays.asList(
+                Settings.LANGUAGE_ENGLISH,
+                Settings.LANGUAGE_DUTCH,
+                Settings.LANGUAGE_GERMAN,
+                Settings.LANGUAGE_SYSTEM);
+        var labels = new String[] {
                 getResources().getString(R.string.settings_language_english),
                 getResources().getString(R.string.settings_language_dutch),
+                getResources().getString(R.string.settings_language_german),
                 getResources().getString(R.string.settings_language_system)
         };
         var language = settings.getLanguage();
-        ((TextView) findViewById(R.id.settings_language_label)).setText(languages[language]);
+        ((TextView) findViewById(R.id.settings_language_label)).setText(labels[languages.indexOf(language)]);
         findViewById(R.id.settings_language_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
                     .setTitle(R.string.settings_language_button)
-                    .setSingleChoiceItems(languages, language, (dialog, which) -> {
+                    .setSingleChoiceItems(labels, languages.indexOf(language), (dialog, which) -> {
                         dialog.dismiss();
-                        if (language != which) {
-                            settings.setLanguage(which);
+                        if (language != languages.get(which)) {
+                            settings.setLanguage(languages.get(which));
                             recreate();
                         }
                     })

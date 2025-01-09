@@ -12,6 +12,7 @@ import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
@@ -81,7 +82,9 @@ public class BibleService {
             }
         }
         Collections.sort(bibles, (a, b) -> a.name().compareTo(b.name()));
-        Collections.sort(bibles, (a, b) -> a.language().compareTo(b.language()));
+        var bibleLanguageOrder = Arrays.asList("en", "nl", "de");
+        Collections.sort(bibles, (a, b) -> Integer.compare(bibleLanguageOrder.indexOf(a.language()),
+                bibleLanguageOrder.indexOf(b.language())));
         return bibles;
     }
 

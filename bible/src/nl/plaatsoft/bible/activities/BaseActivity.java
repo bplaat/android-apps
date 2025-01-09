@@ -42,6 +42,8 @@ public abstract class BaseActivity extends Activity {
                 configuration.setLocale(new Locale("en"));
             if (language == Settings.LANGUAGE_DUTCH)
                 configuration.setLocale(new Locale("nl"));
+            if (language == Settings.LANGUAGE_GERMAN)
+                configuration.setLocale(new Locale("de"));
 
             if (theme == Settings.THEME_LIGHT) {
                 configuration.uiMode |= Configuration.UI_MODE_NIGHT_NO;

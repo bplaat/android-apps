@@ -25,6 +25,7 @@ public class Settings {
     public static final int LANGUAGE_ENGLISH = 0;
     public static final int LANGUAGE_DUTCH = 1;
     public static final int LANGUAGE_SYSTEM = 2;
+    public static final int LANGUAGE_GERMAN = 3;
 
     public int getLanguage() {
         return prefs.getInt("language", LANGUAGE_SYSTEM);

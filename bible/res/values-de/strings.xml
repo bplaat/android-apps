@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bibel</string>
+
+    <!-- Menu options -->
+    <string name="menu_options_random_verse">Zufälliger Vers</string>
+    <string name="menu_options_random_song">Zufälliges Lied</string>
+    <string name="menu_options_settings">Einstellungen</string>
+
+    <!-- Main activity -->
+    <string name="main_drawer_bibles">Bibelübersetzungen</string>
+    <string name="main_drawer_song_bundles">Liedbündel</string>
+
+    <string name="main_book_alert_title_label">Buch</string>
+    <string name="main_chapter_alert_title_label">Kapitel</string>
+    <string name="main_song_alert_title_label">Lied</string>
+
+    <string name="main_chapter_not_available_title_label">Kapitel nicht verfügbar</string>
+    <string name="main_chapter_not_available_description_label">Das ausgewählte Bibelbuch und Kapitel wurden in dieser Bibelübersetzung nicht gefunden</string>
+
+    <!-- Search activity -->
+    <string name="search_input_hint">Suchen</string>
+
+    <string name="search_start_title_label">Beginnen Sie mit der Suche...</string>
+    <string name="search_start_description_label">Geben Sie Ihre Suchanfrage ein und finden Sie Ihr Kapitel, Ihren Vers oder Ihr Lied...</string>
+
+    <string name="search_empty_title_label">Keine Ergebnisse gefunden</string>
+    <string name="search_empty_description_label">Wir können kein Kapitel, keinen Vers oder kein Lied mit dieser Suchanfrage finden</string>
+    <string name="search_empty_hero_button">Suchfeld löschen</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title_label">Einstellungen</string>
+
+    <string name="settings_display_label">Anzeige</string>
+
+    <string name="settings_font_button">Schriftart</string>
+
+    <string name="settings_language_button">Sprache</string>
+    <string name="settings_language_system">Systemstandard verwenden</string>
+
+    <string name="settings_theme_button">Thema</string>
+    <string name="settings_theme_light">Licht</string>
+    <string name="settings_theme_dark">Dunkel</string>
+    <string name="settings_theme_battery_saver">Durch Batteriesparmodus eingestellt</string>
+    <string name="settings_theme_system">Systemstandard verwenden</string>
+
+    <string name="settings_information_label">Information</string>
+    <string name="settings_version_button">App-Version</string>
+    <string name="settings_version_message">Wow, du bist ein großartiger Hacker!</string>
+    <string name="settings_rate_button">Diese App bewerten</string>
+    <string name="settings_share_button">Diese App teilen</string>
+    <string name="settings_share_message">Schau dir diese coole App an:</string>
+    <string name="settings_about_button">Über diese App</string>
+    <string name="settings_footer_button">Diese App wurde von Bastiaan van der Plaat erstellt</string>
+
+    <string name="settings_about_alert_title_label">Über diese App</string>
+    <string name="settings_about_alert_message_label">Diese App wurde von Bastiaan van der Plaat erstellt</string>
+    <string name="settings_about_alert_website_button">Webseite</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+</resources>
