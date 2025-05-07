@@ -3,11 +3,11 @@
 # The default gradle Android build toolchain is so slow and produces bloated apks,
 # so I use this nice build script to get the job done!
 # - Install OpenJDK JDK 17 or 21
-# - Install Android SDK with packages: platform-tools platforms;android-35 build-tools;35.0.0
+# - Install Android SDK with packages: platform-tools platforms;android-36 build-tools;36.0.0
 # - Set $ANDROID_HOME, $name, $package, $version, $password, $main_activity
 
 min_sdk_version=21
-target_sdk_version=35
+target_sdk_version=36
 
 ################# BUILD SCRIPT #################
 
