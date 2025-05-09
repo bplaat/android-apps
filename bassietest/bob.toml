@@ -1,0 +1,8 @@
+[package]
+name = "bassietest"
+identifier = "nl.plaatsoft.bassietest"
+version = "1.0.0"
+
+[package.metadata.android]
+main_activity = ".activities.MainActivity"
+key_alias = ""

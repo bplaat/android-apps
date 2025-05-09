@@ -1,0 +1,8 @@
+[package]
+name = "rfidviewer"
+identifier = "nl.plaatsoft.rfidviewer"
+version = "1.0.0"
+
+[package.metadata.android]
+main_activity = ".activities.MainActivity"
+key_alias = ""

@@ -1,0 +1,7 @@
+[package]
+name = "tweakers"
+identifier = "net.tweakers.android"
+version = "1.0.0"
+
+[package.metadata.android]
+key_alias = ""

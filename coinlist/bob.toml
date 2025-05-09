@@ -1,0 +1,8 @@
+[package]
+name = "coinlist"
+identifier = "ml.coinlist.android"
+version = "1.0.0"
+
+[package.metadata.android]
+main_activity = ".activities.MainActivity"
+key_alias = ""

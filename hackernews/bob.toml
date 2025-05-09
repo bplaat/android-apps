@@ -1,0 +1,7 @@
+[package]
+name = "hackernews"
+identifier = "com.ycombinator.news"
+version = "1.0.0"
+
+[package.metadata.android]
+key_alias = ""
