@@ -1,17 +1,15 @@
 /*
- * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ * Copyright (c) 2020-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
 
-package nl.plaatsoft.bassietest.components;
+package nl.plaatsoft.android.ratingalert;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-
-import nl.plaatsoft.bassietest.R;
 
 public class RatingAlert {
     private static final int LAUNCHES_UNTIL_PROMPT = 5;
@@ -38,9 +36,10 @@ public class RatingAlert {
         // Wait at least some time before opening
         if (launchCount >= LAUNCHES_UNTIL_PROMPT &&
                 System.currentTimeMillis() - firstLaunchTime >= TIME_UNTIL_PROMPT) {
+            var appName = context.getPackageManager().getApplicationLabel(context.getApplicationInfo());
             new AlertDialog.Builder(context)
-                    .setTitle(R.string.rating_alert_title_label)
-                    .setMessage(R.string.rating_alert_message_label)
+                    .setTitle(context.getString(R.string.rating_alert_title_label).replace("$0", appName))
+                    .setMessage(context.getString(R.string.rating_alert_message_label).replace("$0", appName))
                     .setNeutralButton(R.string.rating_alert_later_button, (dialog, which) -> {
                         // Reset the rating counters
                         var settingsEditor = settings.edit();
