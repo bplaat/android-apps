@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main activity -->
+    <string name="main_access_title_label">Geen toegang</string>
+    <string name="main_access_description_label">BassieMusic heeft toegang tot uw muziekbestanden op uw apparaat nodig, zonder deze toegang kan de app uw muziek niet laden</string>
+    <string name="main_access_hero_button">Vraag opnieuw</string>
+
+    <string name="main_empty_title_label">Geen muziek</string>
+    <string name="main_empty_description_label">BassieMusic kan geen muziekbestanden op uw apparaat vinden, misschien moet u wat muziek van uw computer naar uw apparaat overbrengen</string>
+    <string name="main_empty_hero_button">Herlaad muziek</string>
+
+    <!-- Search activity -->
+    <string name="search_input_hint">Zoeken</string>
+
+    <string name="search_start_title_label">Begin met zoeken...</string>
+    <string name="search_start_description_label">Typ uw zoekopdracht en BassieMusic zal proberen het juiste nummer te vinden...</string>
+
+    <string name="search_empty_title_label">Geen resultaten gevonden</string>
+    <string name="search_empty_description_label">BassieMusic kan geen muziekbestanden vinden met die zoekopdracht</string>
+    <string name="search_empty_hero_button">Zoekveld wissen</string>
+
+    <!-- Settings activity -->
+    <string name="settings_title_label">Instellingen</string>
+
+    <string name="settings_behaviour_label">Gedrag</string>
+    <string name="settings_remember_music_button">Onthoud het laatste nummer</string>
+    <string name="settings_fast_scroll_button">Schakel snel scrollen in</string>
+
+    <string name="settings_display_label">Weergave</string>
+
+    <string name="settings_language_button">Taal</string>
+    <string name="settings_language_alert_title_label">Taal</string>
+    <string name="settings_language_alert_cancel_button">Annuleren</string>
+
+    <string name="settings_theme_button">Thema</string>
+    <string name="settings_theme_alert_title_label">Thema</string>
+    <string name="settings_theme_alert_cancel_button">Annuleren</string>
+
+    <string name="settings_information_label">Informatie</string>
+    <string name="settings_version_button">App versie</string>
+    <string name="settings_version_message">Who, jij bent een geweldige hacker!</string>
+    <string name="settings_rate_button">Beoordeel deze app</string>
+    <string name="settings_share_button">Deel deze app</string>
+    <string name="settings_share_message">Bekijk deze coole Android music app:</string>
+    <string name="settings_about_button">Over deze app</string>
+    <string name="settings_footer_button">Deze applicatie is gemaakt door Bastiaan van der Plaat\nMet albumhoezen van de mooie en open Deezer API</string>
+
+    <string name="settings_about_alert_title_label">Over deze app</string>
+    <string name="settings_about_alert_message_label">Deze applicatie is gemaakt door Bastiaan van der Plaat\n\nMet albumhoezen van de mooie en open Deezer API</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+
+    <string-array name="settings_languages">
+        <item>English</item>
+        <item>Nederlands</item>
+        <item>Gebruik systeemstandaard</item>
+    </string-array>
+
+    <string-array name="settings_themes">
+        <item>Licht</item>
+        <item>Donker</item>
+        <item>Ingesteld door batterijbesparing</item>
+    </string-array>
+
+    <!-- Rating alert -->
+    <string name="rating_alert_title_label">Beoordeel BassieMusic?</string>
+    <string name="rating_alert_message_label">Als je de BassieMusic-app leuk vindt, neem dan even de tijd om deze te beoordelen. Bedankt voor je steun!</string>
+    <string name="rating_alert_rate_button">Beoordeel</string>
+    <string name="rating_alert_later_button">Later</string>
+    <string name="rating_alert_never_button">Nooit</string>
+</resources>

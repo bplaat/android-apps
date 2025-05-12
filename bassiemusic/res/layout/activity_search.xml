@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Root">
+
+    <LinearLayout style="@style/ActionBar">
+        <ImageButton android:id="@+id/search_back_button"
+            android:src="@drawable/ic_arrow_left"
+            style="@style/ActionBarIconButton" />
+
+        <EditText android:id="@+id/search_input"
+            android:inputType="text"
+            android:imeOptions="actionSearch"
+            android:hint="@string/search_input_hint"
+            style="@style/ActionBarInput">
+
+            <requestFocus />
+        </EditText>
+
+        <ImageButton android:id="@+id/search_clear_button"
+            android:src="@drawable/ic_close"
+            style="@style/ActionBarIconButton" />
+    </LinearLayout>
+
+    <FrameLayout style="@style/Container">
+        <!-- Start page -->
+        <ScrollView android:id="@+id/search_start_page"
+            style="@style/Scroll">
+
+            <LinearLayout style="@style/Hero">
+                <ImageView android:src="@drawable/ic_magnify"
+                    style="@style/HeroIcon" />
+
+                <TextView android:text="@string/search_start_title_label"
+                    style="@style/HeroTitle" />
+
+                <TextView android:text="@string/search_start_description_label"
+                    style="@style/HeroDescription" />
+            </LinearLayout>
+        </ScrollView>
+
+        <!-- Music Page -->
+        <ListView android:id="@+id/search_music_page"
+            android:visibility="gone"
+            style="@style/MusicList" />
+
+        <!-- Empty Page -->
+        <ScrollView android:id="@+id/search_empty_page"
+            android:visibility="gone"
+            style="@style/Scroll">
+
+            <LinearLayout style="@style/Hero">
+                <ImageView android:src="@drawable/ic_playlist_music"
+                    style="@style/HeroIcon" />
+
+                <TextView android:text="@string/search_empty_title_label"
+                    style="@style/HeroTitle" />
+
+                <TextView android:text="@string/search_empty_description_label"
+                    style="@style/HeroDescription" />
+
+                <Button android:id="@+id/search_empty_hero_button"
+                    android:text="@string/search_empty_hero_button"
+                    style="@style/HeroButton" />
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
+</LinearLayout>

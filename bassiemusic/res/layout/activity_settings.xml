@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Root">
+
+    <LinearLayout style="@style/ActionBar">
+        <ImageButton android:id="@+id/settings_back_button"
+            android:src="@drawable/ic_arrow_left"
+            style="@style/ActionBarIconButton" />
+
+        <TextView android:text="@string/settings_title_label"
+            style="@style/ActionBarTitle" />
+    </LinearLayout>
+
+    <ScrollView android:id="@+id/settings_scroll"
+        style="@style/ScrollContainer">
+
+        <LinearLayout style="@style/List">
+            <TextView android:text="@string/settings_behaviour_label"
+                style="@style/ListItemSubtitle"/>
+
+            <LinearLayout style="@style/ListGroup">
+                <!-- Remember music button -->
+                <LinearLayout android:id="@+id/settings_remember_music_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_bookmark_music"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_remember_music_button"
+                        style="@style/ListItemButtonLabel" />
+
+                    <Switch android:id="@+id/settings_remember_music_switch"
+                        style="@style/ListItemButtonSwitch" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:text="@string/settings_display_label"
+                style="@style/ListItemSubtitle"/>
+
+            <LinearLayout style="@style/ListGroup">
+                <!-- Language button -->
+                <LinearLayout android:id="@+id/settings_language_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_language"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_language_button"
+                        style="@style/ListItemButtonLabel" />
+
+                    <TextView android:id="@+id/settings_language_label"
+                        style="@style/ListItemButtonMeta" />
+                </LinearLayout>
+
+                <!-- Theme button -->
+                <LinearLayout android:id="@+id/settings_theme_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_invert_colors"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_theme_button"
+                        style="@style/ListItemButtonLabel" />
+
+                    <TextView android:id="@+id/settings_theme_label"
+                        style="@style/ListItemButtonMeta" />
+                </LinearLayout>
+
+                <!-- Fast scroll button -->
+                <LinearLayout android:id="@+id/settings_fast_scroll_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_gesture_swipe_vertical"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_fast_scroll_button"
+                        style="@style/ListItemButtonLabel" />
+
+                    <Switch android:id="@+id/settings_fast_scroll_switch"
+                        style="@style/ListItemButtonSwitch" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView android:text="@string/settings_information_label"
+                style="@style/ListItemSubtitle" />
+
+            <LinearLayout style="@style/ListGroup">
+                <!-- Version button -->
+                <LinearLayout android:id="@+id/settings_version_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_information"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_version_button"
+                        style="@style/ListItemButtonLabel" />
+
+                    <TextView android:id="@+id/settings_version_label"
+                        style="@style/ListItemButtonMeta" />
+                </LinearLayout>
+
+                <!-- Rate button -->
+                <LinearLayout android:id="@+id/settings_rate_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_grade"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_rate_button"
+                        style="@style/ListItemButtonLabel" />
+                </LinearLayout>
+
+                <!-- Share button -->
+                <LinearLayout android:id="@+id/settings_share_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_share"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_share_button"
+                        style="@style/ListItemButtonLabel" />
+                </LinearLayout>
+
+                <!-- About button -->
+                <LinearLayout android:id="@+id/settings_about_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_supervisor_account"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_about_button"
+                        style="@style/ListItemButtonLabel" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- Footer button -->
+            <TextView android:id="@+id/settings_footer_button"
+                android:text="@string/settings_footer_button"
+                style="@style/ListItemFooter" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

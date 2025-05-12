@@ -1,0 +1,37 @@
+package nl.plaatsoft.bassiemusic;
+
+public class Config {
+    private Config() {}
+
+    public static final String LOG_TAG = "BassieMusic";
+
+    public static final String APP_OVERRIDE_STORE_PAGE_URL = null;
+
+    public static final int ANIMATION_IMAGE_LOADING_TIMEOUT = 50;
+
+    public static final int MUSIC_PLAYER_PREVIOUS_RESET_TIMEOUT = 25000;
+    public static final int MUSIC_PLAYER_SEEK_SKIP_TIME = 10000;
+    public static final int MUSIC_PLAYER_SYNC_TIMEOUT = 200;
+
+    public static final boolean SETTINGS_REMEMBER_MUSIC_DEFAULT = true;
+
+    public static final boolean SETTINGS_FAST_SCROLL_DEFAULT = true;
+
+    public static final int SETTINGS_LANGUAGE_ENGLISH = 0;
+    public static final int SETTINGS_LANGUAGE_DUTCH = 1;
+    public static final int SETTINGS_LANGUAGE_SYSTEM = 2;
+    public static final int SETTINGS_LANGUAGE_DEFAULT = Config.SETTINGS_LANGUAGE_SYSTEM;
+
+    public static final int SETTINGS_THEME_LIGHT = 0;
+    public static final int SETTINGS_THEME_DARK = 1;
+    public static final int SETTINGS_THEME_SYSTEM = 2;
+    public static final int SETTINGS_THEME_DEFAULT = Config.SETTINGS_THEME_SYSTEM;
+
+    public static final String SETTINGS_ABOUT_WEBSITE_URL = "https://bplaat.nl/";
+
+    public static final int RATING_ALERT_LAUNCHES_UNTIL_PROMPT = 5;
+    public static final int RATING_ALERT_TIME_UNTIL_PROMPT = 2 * 24 * 60 * 60 * 1000;
+
+    public static final String DEEZER_API_URL = "https://api.deezer.com";
+    public static final String DEEZER_API_SEARCH_ALBUM = DEEZER_API_URL + "/search/album";
+}

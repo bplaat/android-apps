@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="nl.plaatsoft.bassiemusic"
+    android:versionCode="002011000"
+    android:versionName="2.11.0-dev">
+
+    <uses-sdk android:minSdkVersion="21" android:targetSdkVersion="34" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <application android:allowBackup="true"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:theme="@style/Theme.App">
+
+        <activity android:name=".activities.MainActivity"
+            android:launchMode="singleTask"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity android:name=".activities.SearchActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
+            android:windowSoftInputMode="stateVisible|adjustResize"
+            android:exported="true" />
+
+        <activity android:name=".activities.SettingsActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
+            android:exported="true" />
+    </application>
+</manifest>

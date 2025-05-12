@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/Root">
+
+    <!-- Music page -->
+    <LinearLayout android:id="@+id/main_music_page"
+        style="@style/Root">
+
+        <LinearLayout style="@style/ActionBar">
+            <TextView android:text="@string/app_name"
+                style="@style/ActionBarTitle" />
+
+            <ImageButton android:id="@+id/main_music_shuffle_button"
+                android:src="@drawable/ic_shuffle"
+                style="@style/ActionBarIconButton" />
+
+            <ImageButton android:id="@+id/main_music_refresh_button"
+                android:src="@drawable/ic_refresh"
+                style="@style/ActionBarIconButton" />
+
+            <ImageButton android:id="@+id/main_music_search_button"
+                android:src="@drawable/ic_magnify"
+                style="@style/ActionBarIconButton" />
+
+            <ImageButton android:id="@+id/main_music_settings_button"
+                android:src="@drawable/ic_settings"
+                style="@style/ActionBarIconButton" />
+        </LinearLayout>
+
+        <ListView android:id="@+id/main_music_list"
+            style="@style/MusicListContainer" />
+
+        <nl.plaatsoft.bassiemusic.components.MusicPlayer
+            android:id="@+id/main_music_music_player"
+            style="@style/MusicPlayer" />
+    </LinearLayout>
+
+    <!-- Empty page -->
+    <LinearLayout android:id="@+id/main_empty_page"
+        android:visibility="gone"
+        style="@style/Root">
+
+        <LinearLayout style="@style/ActionBar">
+            <TextView android:text="@string/app_name"
+                style="@style/ActionBarTitle" />
+
+            <ImageButton android:id="@+id/main_empty_refresh_button"
+                android:src="@drawable/ic_refresh"
+                style="@style/ActionBarIconButton" />
+
+            <ImageButton android:id="@+id/main_empty_settings_button"
+                android:src="@drawable/ic_settings"
+                style="@style/ActionBarIconButton" />
+        </LinearLayout>
+
+        <ScrollView android:id="@+id/main_empty_scroll"
+            style="@style/Scroll">
+
+            <LinearLayout style="@style/Hero">
+                <ImageView android:src="@drawable/ic_playlist_music"
+                    style="@style/HeroIcon" />
+
+                <TextView android:text="@string/main_empty_title_label"
+                    style="@style/HeroTitle" />
+
+                <TextView android:text="@string/main_empty_description_label"
+                    style="@style/HeroDescription" />
+
+                <Button android:id="@+id/main_empty_hero_button"
+                    android:text="@string/main_empty_hero_button"
+                    style="@style/HeroButton" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+    <!-- Access page -->
+    <LinearLayout android:id="@+id/main_access_page"
+        android:visibility="gone"
+        style="@style/Root">
+
+        <LinearLayout style="@style/ActionBar">
+            <TextView android:text="@string/app_name"
+                style="@style/ActionBarTitle" />
+
+            <ImageButton android:id="@+id/main_access_refresh_button"
+                android:src="@drawable/ic_refresh"
+                style="@style/ActionBarIconButton" />
+
+            <ImageButton android:id="@+id/main_access_settings_button"
+                android:src="@drawable/ic_settings"
+                style="@style/ActionBarIconButton" />
+        </LinearLayout>
+
+        <ScrollView android:id="@+id/main_access_scroll"
+            style="@style/Scroll">
+
+            <LinearLayout style="@style/Hero">
+                <ImageView android:src="@drawable/ic_folder"
+                    style="@style/HeroIcon" />
+
+                <TextView android:text="@string/main_access_title_label"
+                    style="@style/HeroTitle" />
+
+                <TextView android:text="@string/main_access_description_label"
+                    style="@style/HeroDescription" />
+
+                <Button android:id="@+id/main_access_hero_button"
+                    android:text="@string/main_access_hero_button"
+                    style="@style/HeroButton" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+</FrameLayout>
