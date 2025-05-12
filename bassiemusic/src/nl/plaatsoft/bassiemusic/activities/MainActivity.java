@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic.activities;
 
 import android.animation.AnimatorSet;
@@ -67,19 +73,19 @@ public class MainActivity extends BaseActivity {
         handler = new Handler(Looper.getMainLooper());
 
         // Pages
-        musicPage = (LinearLayout)findViewById(R.id.main_music_page);
-
-        emptyPage = (LinearLayout)findViewById(R.id.main_empty_page);
-
-        accessPage = (LinearLayout)findViewById(R.id.main_access_page);
+        musicPage = (LinearLayout) findViewById(R.id.main_music_page);
+        emptyPage = (LinearLayout) findViewById(R.id.main_empty_page);
+        accessPage = (LinearLayout) findViewById(R.id.main_access_page);
+        useWindowInsets(
+                findViewById(R.id.main_music_music_player),
+                findViewById(R.id.main_empty_scroll),
+                findViewById(R.id.main_access_scroll));
 
         // Music page
         musicHistory = new ArrayList<Long>();
-        if (
-            savedInstanceState != null &&
-            savedInstanceState.getLongArray("music_history") != null &&
-            savedInstanceState.getInt("music_history_current", -1) != -1
-        ) {
+        if (savedInstanceState != null &&
+                savedInstanceState.getLongArray("music_history") != null &&
+                savedInstanceState.getInt("music_history_current", -1) != -1) {
             long[] musicHistoryArray = savedInstanceState.getLongArray("music_history");
             for (int i = 0; i < musicHistoryArray.length; i++) {
                 musicHistory.add(musicHistoryArray[i]);
@@ -89,7 +95,7 @@ public class MainActivity extends BaseActivity {
             musicHistoryCurrent = 0;
         }
 
-        musicPlayer = (MusicPlayer)findViewById(R.id.main_music_music_player);
+        musicPlayer = (MusicPlayer) findViewById(R.id.main_music_music_player);
 
         musicPlayer.setOnInfoClickListener(() -> {
             scrollToMusicByPosition(selectedPosition);
@@ -106,7 +112,7 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 } else if (isShuffling) {
-                    playMusicByPosition((int)(Math.random() * musicAdapter.getCount()));
+                    playMusicByPosition((int) (Math.random() * musicAdapter.getCount()));
                 }
             } else {
                 playMusicByPosition(selectedPosition == 0 ? musicAdapter.getCount() - 1 : selectedPosition - 1);
@@ -124,14 +130,14 @@ public class MainActivity extends BaseActivity {
                         }
                     }
                 } else if (isShuffling) {
-                    playMusicByPosition((int)(Math.random() * musicAdapter.getCount()));
+                    playMusicByPosition((int) (Math.random() * musicAdapter.getCount()));
                 }
             } else {
                 playMusicByPosition(selectedPosition == musicAdapter.getCount() - 1 ? 0 : selectedPosition + 1);
             }
         });
 
-        musicList = (ListView)findViewById(R.id.main_music_list);
+        musicList = (ListView) findViewById(R.id.main_music_list);
         musicList.setFastScrollEnabled(settings.getBoolean("fast_scroll", Config.SETTINGS_FAST_SCROLL_DEFAULT));
 
         musicAdapter = new MusicAdapter(this);
@@ -141,13 +147,13 @@ public class MainActivity extends BaseActivity {
             playMusicByPosition(position);
         });
 
-        ImageButton musicShuffleButton = (ImageButton)findViewById(R.id.main_music_shuffle_button);
+        ImageButton musicShuffleButton = (ImageButton) findViewById(R.id.main_music_shuffle_button);
         isShuffling = settings.getBoolean("shuffling", false);
         if (isShuffling) {
             musicShuffleButton.setImageResource(R.drawable.ic_shuffle_disabled);
         }
         musicShuffleButton.setOnClickListener((View view) -> {
-            playMusicByPosition((int)(Math.random() * musicAdapter.getCount()));
+            playMusicByPosition((int) (Math.random() * musicAdapter.getCount()));
         });
         musicShuffleButton.setOnLongClickListener((View view) -> {
             isShuffling = !isShuffling;
@@ -160,7 +166,7 @@ public class MainActivity extends BaseActivity {
             return true;
         });
 
-        ((ImageButton)findViewById(R.id.main_music_refresh_button)).setOnClickListener((View view) -> {
+        ((ImageButton) findViewById(R.id.main_music_refresh_button)).setOnClickListener((View view) -> {
             boolean isPlaying = musicPlayer.isPlaying();
             if (isPlaying) {
                 musicPlayer.pause();
@@ -169,11 +175,11 @@ public class MainActivity extends BaseActivity {
             loadMusic(isPlaying);
         });
 
-        ((ImageButton)findViewById(R.id.main_music_search_button)).setOnClickListener((View view) -> {
+        ((ImageButton) findViewById(R.id.main_music_search_button)).setOnClickListener((View view) -> {
             startActivityForResult(new Intent(this, SearchActivity.class), MainActivity.SEARCH_ACTIVITY_REQUEST_CODE);
         });
 
-        ((ImageButton)findViewById(R.id.main_music_settings_button)).setOnClickListener((View view) -> {
+        ((ImageButton) findViewById(R.id.main_music_settings_button)).setOnClickListener((View view) -> {
             openSettingsActivity();
         });
 
@@ -183,21 +189,23 @@ public class MainActivity extends BaseActivity {
             emptyPage.setVisibility(View.GONE);
             loadMusic(false);
         };
-        ((ImageButton)findViewById(R.id.main_empty_refresh_button)).setOnClickListener(refreshEmptyOnClick);
-        ((Button)findViewById(R.id.main_empty_hero_button)).setOnClickListener(refreshEmptyOnClick);
-        ((ImageButton)findViewById(R.id.main_empty_settings_button)).setOnClickListener((View view) -> {
+        ((ImageButton) findViewById(R.id.main_empty_refresh_button)).setOnClickListener(refreshEmptyOnClick);
+        ((Button) findViewById(R.id.main_empty_hero_button)).setOnClickListener(refreshEmptyOnClick);
+        ((ImageButton) findViewById(R.id.main_empty_settings_button)).setOnClickListener((View view) -> {
             openSettingsActivity();
         });
 
         // Access page
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU ? Manifest.permission.READ_MEDIA_AUDIO : Manifest.permission.READ_EXTERNAL_STORAGE;
+            String permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+                    ? Manifest.permission.READ_MEDIA_AUDIO
+                    : Manifest.permission.READ_EXTERNAL_STORAGE;
             View.OnClickListener accessOnClick = (View view) -> {
                 requestPermissions(new String[] { permission }, MainActivity.STORAGE_PERMISSION_REQUEST_CODE);
             };
-            ((ImageButton)findViewById(R.id.main_access_refresh_button)).setOnClickListener(accessOnClick);
-            ((Button)findViewById(R.id.main_access_hero_button)).setOnClickListener(accessOnClick);
-            ((ImageButton)findViewById(R.id.main_access_settings_button)).setOnClickListener((View view) -> {
+            ((ImageButton) findViewById(R.id.main_access_refresh_button)).setOnClickListener(accessOnClick);
+            ((Button) findViewById(R.id.main_access_hero_button)).setOnClickListener(accessOnClick);
+            ((ImageButton) findViewById(R.id.main_access_settings_button)).setOnClickListener((View view) -> {
                 openSettingsActivity();
             });
 
@@ -252,7 +260,8 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        if (requestCode == MainActivity.STORAGE_PERMISSION_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == MainActivity.STORAGE_PERMISSION_REQUEST_CODE
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             musicPage.setVisibility(View.VISIBLE);
             accessPage.setVisibility(View.GONE);
             loadMusic(false);
@@ -278,10 +287,8 @@ public class MainActivity extends BaseActivity {
 
         if (requestCode == MainActivity.SETTINGS_ACTIVITY_REQUEST_CODE) {
             // Check if language or theme settings have changed
-            if (
-                oldLanguage != settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT) ||
-                oldTheme != settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT)
-            ) {
+            if (oldLanguage != settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT) ||
+                    oldTheme != settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT)) {
                 handler.post(() -> {
                     recreate();
                 });
@@ -332,14 +339,15 @@ public class MainActivity extends BaseActivity {
                 for (Music musicItem : music) {
                     if (musicItem.getId() == musicId) {
                         isMusicFound = true;
-                        playMusicByPosition(musicAdapter.getPosition(musicItem), settings.getInt("playing_music_position", 0), isAutoPlayed, false);
+                        playMusicByPosition(musicAdapter.getPosition(musicItem),
+                                settings.getInt("playing_music_position", 0), isAutoPlayed, false);
                         break;
                     }
                 }
             }
 
             if (!isMusicFound) {
-                playMusicByPosition((int)(Math.random() * musicAdapter.getCount()), 0, isAutoPlayed, false);
+                playMusicByPosition((int) (Math.random() * musicAdapter.getCount()), 0, isAutoPlayed, false);
             }
         }
     }
@@ -353,7 +361,8 @@ public class MainActivity extends BaseActivity {
         setSelectedPosition(position);
 
         Music music = musicAdapter.getItem(position);
-        if (musicHistoryCurrent == musicHistory.size() - 1 && musicHistory.get(musicHistory.size() - 1) == music.getId()) {
+        if (musicHistoryCurrent == musicHistory.size() - 1
+                && musicHistory.get(musicHistory.size() - 1) == music.getId()) {
             inHistory = true;
         }
         if (!inHistory) {
@@ -374,23 +383,25 @@ public class MainActivity extends BaseActivity {
             }
 
             if (position > musicList.getLastVisiblePosition()) {
-                musicList.setSelection(position - (musicList.getLastVisiblePosition() - musicList.getFirstVisiblePosition() - 1));
+                musicList.setSelection(
+                        position - (musicList.getLastVisiblePosition() - musicList.getFirstVisiblePosition() - 1));
             }
         });
     }
 
     private void updateSelectedView() {
-        LinearLayout selectedView = (LinearLayout)musicList.getChildAt(selectedPosition - musicList.getFirstVisiblePosition());
+        LinearLayout selectedView = (LinearLayout) musicList
+                .getChildAt(selectedPosition - musicList.getFirstVisiblePosition());
         if (selectedView != null) {
-            AnimatorSet animation = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.selected_music_in);
+            AnimatorSet animation = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.selected_music_in);
             animation.setTarget(selectedView);
             animation.start();
 
-            TextView musicTitle = (TextView)selectedView.findViewById(R.id.music_title);
+            TextView musicTitle = (TextView) selectedView.findViewById(R.id.music_title);
             musicTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             musicTitle.setSelected(true);
 
-            TextView musicArtists = (TextView)selectedView.findViewById(R.id.music_artists);
+            TextView musicArtists = (TextView) selectedView.findViewById(R.id.music_artists);
             musicArtists.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             musicArtists.setSelected(true);
         } else {
@@ -404,17 +415,19 @@ public class MainActivity extends BaseActivity {
     private void setSelectedPosition(int selectedPosition) {
         if (this.selectedPosition != selectedPosition) {
             if (this.selectedPosition != -1) {
-                LinearLayout oldSelectedView = (LinearLayout)musicList.getChildAt(this.selectedPosition - musicList.getFirstVisiblePosition());
+                LinearLayout oldSelectedView = (LinearLayout) musicList
+                        .getChildAt(this.selectedPosition - musicList.getFirstVisiblePosition());
                 if (oldSelectedView != null) {
-                    AnimatorSet animation = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.selected_music_out);
+                    AnimatorSet animation = (AnimatorSet) AnimatorInflater.loadAnimator(this,
+                            R.animator.selected_music_out);
                     animation.setTarget(oldSelectedView);
                     animation.start();
 
-                    TextView musicTitle = (TextView)oldSelectedView.findViewById(R.id.music_title);
+                    TextView musicTitle = (TextView) oldSelectedView.findViewById(R.id.music_title);
                     musicTitle.setEllipsize(null);
                     musicTitle.setSelected(false);
 
-                    TextView musicArtists = (TextView)oldSelectedView.findViewById(R.id.music_artists);
+                    TextView musicArtists = (TextView) oldSelectedView.findViewById(R.id.music_artists);
                     musicArtists.setEllipsize(null);
                     musicArtists.setSelected(false);
                 }

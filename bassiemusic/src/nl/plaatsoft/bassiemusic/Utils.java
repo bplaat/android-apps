@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic;
 
 import android.content.Context;
@@ -8,7 +14,8 @@ import java.security.MessageDigest;
 import nl.plaatsoft.bassiemusic.Config;
 
 public class Utils {
-    private Utils() {}
+    private Utils() {
+    }
 
     public static String md5(String data) {
         try {
@@ -20,8 +27,7 @@ public class Utils {
                 hashBuilder.append(String.format("%02x", bytes[i]));
             }
             return hashBuilder.toString();
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             Log.e(Config.LOG_TAG, "An exception catched!", exception);
             return null;
         }
@@ -41,9 +47,11 @@ public class Utils {
         } else {
             String appPackageName = context.getPackageName();
             try {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                context.startActivity(
+                        new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
             } catch (Exception exception) {
-                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                context.startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
             }
         }
     }

@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic.activities;
 
 import android.app.Activity;
@@ -27,17 +33,16 @@ public class SearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        ((ImageButton)findViewById(R.id.search_back_button)).setOnClickListener((View view) -> {
+        ((ImageButton) findViewById(R.id.search_back_button)).setOnClickListener((View view) -> {
             finish();
         });
 
         List<Music> music = Music.loadMusic(this);
 
-        ScrollView startPage = (ScrollView)findViewById(R.id.search_start_page);
-
-        ListView searchList = (ListView)findViewById(R.id.search_music_page);
-
-        ScrollView emptyPage = (ScrollView)findViewById(R.id.search_empty_page);
+        ScrollView startPage = (ScrollView) findViewById(R.id.search_start_page);
+        ListView searchList = (ListView) findViewById(R.id.search_music_page);
+        ScrollView emptyPage = (ScrollView) findViewById(R.id.search_empty_page);
+        useWindowInsets(startPage, searchList, emptyPage);
 
         MusicAdapter searchAdapter = new MusicAdapter(this);
         searchList.setAdapter(searchAdapter);
@@ -49,7 +54,7 @@ public class SearchActivity extends BaseActivity {
             finish();
         });
 
-        EditText searchInput = (EditText)findViewById(R.id.search_input);
+        EditText searchInput = (EditText) findViewById(R.id.search_input);
 
         searchInput.setOnEditorActionListener((TextView view, int actionId, KeyEvent event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
@@ -66,11 +71,9 @@ public class SearchActivity extends BaseActivity {
 
                 if (searchQuery.length() >= 1) {
                     for (Music musicItem : music) {
-                        if (
-                            String.join(", ", musicItem.getArtists()).toLowerCase().contains(searchQuery) ||
-                            musicItem.getAlbum().toLowerCase().contains(searchQuery) ||
-                            musicItem.getTitle().toLowerCase().contains(searchQuery)
-                        ) {
+                        if (String.join(", ", musicItem.getArtists()).toLowerCase().contains(searchQuery) ||
+                                musicItem.getAlbum().toLowerCase().contains(searchQuery) ||
+                                musicItem.getTitle().toLowerCase().contains(searchQuery)) {
                             searchAdapter.add(musicItem);
                         }
                     }
@@ -93,16 +96,17 @@ public class SearchActivity extends BaseActivity {
                 searchList.setSelectionAfterHeaderView();
             }
 
-            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {}
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+            }
 
-            public void afterTextChanged(Editable editable) {}
+            public void afterTextChanged(Editable editable) {
+            }
         });
-
 
         View.OnClickListener clearSearchInput = (View view) -> {
             searchInput.setText("");
         };
-        ((ImageButton)findViewById(R.id.search_clear_button)).setOnClickListener(clearSearchInput);
-        ((Button)findViewById(R.id.search_empty_hero_button)).setOnClickListener(clearSearchInput);
+        ((ImageButton) findViewById(R.id.search_clear_button)).setOnClickListener(clearSearchInput);
+        ((Button) findViewById(R.id.search_empty_hero_button)).setOnClickListener(clearSearchInput);
     }
 }

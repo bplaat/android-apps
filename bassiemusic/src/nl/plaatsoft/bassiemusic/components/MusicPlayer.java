@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic.components;
 
 import android.content.BroadcastReceiver;
@@ -83,7 +89,7 @@ public class MusicPlayer extends LinearLayout {
             }
         };
 
-        PowerManager powerManager = (PowerManager)getContext().getSystemService(Context.POWER_SERVICE);
+        PowerManager powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BassieMusic::WakeLock");
 
         handler = new Handler(Looper.getMainLooper());
@@ -92,11 +98,11 @@ public class MusicPlayer extends LinearLayout {
             handler.postDelayed(syncUserInterfaceInterval, Config.MUSIC_PLAYER_SYNC_TIMEOUT);
         };
 
-        ((LinearLayout)findViewById(R.id.music_player_info_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.music_player_info_button)).setOnClickListener((View view) -> {
             onInfoClickListener.onInfoClick();
         });
 
-        ImageButton previousButton = (ImageButton)findViewById(R.id.music_player_previous_button);
+        ImageButton previousButton = (ImageButton) findViewById(R.id.music_player_previous_button);
         previousButton.setOnClickListener((View view) -> {
             if (getCurrentPosition() > Config.MUSIC_PLAYER_PREVIOUS_RESET_TIMEOUT) {
                 seekTo(0);
@@ -109,11 +115,11 @@ public class MusicPlayer extends LinearLayout {
             return true;
         });
 
-        ((ImageButton)findViewById(R.id.music_player_seek_back_button)).setOnClickListener((View view) -> {
+        ((ImageButton) findViewById(R.id.music_player_seek_back_button)).setOnClickListener((View view) -> {
             seekTo(Math.max(getCurrentPosition() - Config.MUSIC_PLAYER_SEEK_SKIP_TIME, 0));
         });
 
-        playButton = (ImageButton)findViewById(R.id.music_player_play_button);
+        playButton = (ImageButton) findViewById(R.id.music_player_play_button);
         playButton.setOnClickListener((View view) -> {
             if (isPlaying()) {
                 pause();
@@ -122,11 +128,11 @@ public class MusicPlayer extends LinearLayout {
             }
         });
 
-        ((ImageButton)findViewById(R.id.music_player_seek_forward_button)).setOnClickListener((View view) -> {
+        ((ImageButton) findViewById(R.id.music_player_seek_forward_button)).setOnClickListener((View view) -> {
             seekTo(Math.min(getCurrentPosition() + Config.MUSIC_PLAYER_SEEK_SKIP_TIME, mediaPlayer.getDuration()));
         });
 
-        ImageButton nextButton = (ImageButton)findViewById(R.id.music_player_next_button);
+        ImageButton nextButton = (ImageButton) findViewById(R.id.music_player_next_button);
         nextButton.setOnClickListener((View view) -> {
             onNextListener.onNext(false);
         });
@@ -135,9 +141,9 @@ public class MusicPlayer extends LinearLayout {
             return true;
         });
 
-        timeCurrentLabel = (TextSwitcher)findViewById(R.id.music_player_time_current_label);
-        timeUntilLabel = (TextSwitcher)findViewById(R.id.music_player_time_until_label);
-        seekBar = (SeekBar)findViewById(R.id.music_player_seekbar);
+        timeCurrentLabel = (TextSwitcher) findViewById(R.id.music_player_time_current_label);
+        timeUntilLabel = (TextSwitcher) findViewById(R.id.music_player_time_until_label);
+        seekBar = (SeekBar) findViewById(R.id.music_player_seekbar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
                 handler.removeCallbacks(syncUserInterfaceInterval);
@@ -157,28 +163,28 @@ public class MusicPlayer extends LinearLayout {
 
         mediaPlayer = new MediaPlayer();
 
-        ImageView infoCoverImage = (ImageView)findViewById(R.id.music_player_info_cover_image);
-        TextSwitcher infoTitleLabel = (TextSwitcher)findViewById(R.id.music_player_info_title_label);
-        TextSwitcher infoArtistsLabel = (TextSwitcher)findViewById(R.id.music_player_info_artists_label);
-        TextSwitcher infoDurationLabel = (TextSwitcher)findViewById(R.id.music_player_info_duration_label);
+        ImageView infoCoverImage = (ImageView) findViewById(R.id.music_player_info_cover_image);
+        TextSwitcher infoTitleLabel = (TextSwitcher) findViewById(R.id.music_player_info_title_label);
+        TextSwitcher infoArtistsLabel = (TextSwitcher) findViewById(R.id.music_player_info_artists_label);
+        TextSwitcher infoDurationLabel = (TextSwitcher) findViewById(R.id.music_player_info_duration_label);
         mediaPlayer.setOnPreparedListener((MediaPlayer mediaPlayer) -> {
             // Update info texts
             FetchCoverTask.with(getContext()).fromMusic(playingMusic).fadeIn().into(infoCoverImage).fetch();
 
             String newTitleLabel = playingMusic.getTitle();
-            if (!((TextView)infoTitleLabel.getCurrentView()).getText().equals(newTitleLabel)) {
+            if (!((TextView) infoTitleLabel.getCurrentView()).getText().equals(newTitleLabel)) {
                 infoTitleLabel.setText(newTitleLabel);
             }
             infoTitleLabel.setSelected(true);
 
             String newArtistsLabel = String.join(", ", playingMusic.getArtists());
-            if (!((TextView)infoArtistsLabel.getCurrentView()).getText().equals(newArtistsLabel)) {
+            if (!((TextView) infoArtistsLabel.getCurrentView()).getText().equals(newArtistsLabel)) {
                 infoArtistsLabel.setText(newArtistsLabel);
             }
             infoArtistsLabel.setSelected(true);
 
             String newDurationLabel = Music.formatDuration(playingMusic.getDuration());
-            if (!((TextView)infoDurationLabel.getCurrentView()).getText().equals(newDurationLabel)) {
+            if (!((TextView) infoDurationLabel.getCurrentView()).getText().equals(newDurationLabel)) {
                 infoDurationLabel.setText(newDurationLabel);
             }
 
@@ -272,9 +278,9 @@ public class MusicPlayer extends LinearLayout {
         mediaPlayer.reset();
 
         mediaPlayer.setAudioAttributes(new AudioAttributes.Builder()
-            .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-            .setUsage(AudioAttributes.USAGE_MEDIA)
-            .build());
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .build());
 
         try {
             mediaPlayer.setDataSource(getContext(), playingMusic.getContentUri());

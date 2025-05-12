@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic.tasks;
 
 import android.animation.ValueAnimator;
@@ -46,7 +52,8 @@ public class FetchImageTask implements Task {
     private static final Handler handler = new Handler(Looper.getMainLooper());
     private static final List<FetchImageTask> tasks = new ArrayList<FetchImageTask>();
     private static final List<Uri> failedImagesCache = new ArrayList<Uri>();
-    private static final LruCache<Uri, Bitmap> bitmapCache = new LruCache<Uri, Bitmap>((int)(Runtime.getRuntime().freeMemory() / 2)) {
+    private static final LruCache<Uri, Bitmap> bitmapCache = new LruCache<Uri, Bitmap>(
+            (int) (Runtime.getRuntime().freeMemory() / 2)) {
         @Override
         protected int sizeOf(Uri uri, Bitmap bitmap) {
             return bitmap.getByteCount();
@@ -153,7 +160,7 @@ public class FetchImageTask implements Task {
     public FetchImageTask fetch() {
         if (imageView != null) {
             if (imageView.getTag() instanceof Task) {
-                Task previousTask = (Task)imageView.getTag();
+                Task previousTask = (Task) imageView.getTag();
                 if (previousTask != null) {
                     if (previousTask.getUri().equals(uri)) {
                         cancel();
@@ -284,7 +291,8 @@ public class FetchImageTask implements Task {
                     imageView.setBackgroundColor(Color.TRANSPARENT);
                 }
 
-                boolean isWaitingLong = (System.currentTimeMillis() - startTime) > Config.ANIMATION_IMAGE_LOADING_TIMEOUT;
+                boolean isWaitingLong = (System.currentTimeMillis()
+                        - startTime) > Config.ANIMATION_IMAGE_LOADING_TIMEOUT;
                 if (isFadedIn && isWaitingLong) {
                     imageView.setImageAlpha(0);
                 }
@@ -296,7 +304,7 @@ public class FetchImageTask implements Task {
                     animation.setDuration(context.getResources().getInteger(R.integer.animation_duration));
                     animation.setInterpolator(new AccelerateDecelerateInterpolator());
                     animation.addUpdateListener(animator -> {
-                        imageView.setImageAlpha((int)animator.getAnimatedValue());
+                        imageView.setImageAlpha((int) animator.getAnimatedValue());
                     });
                     animation.start();
                 }

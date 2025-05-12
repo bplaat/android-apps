@@ -1,0 +1,10 @@
+[package]
+name = "bassiemusic"
+identifier = "nl.plaatsoft.bassiemusic"
+version = "2.11.0"
+
+[package.metadata.android]
+main_activity = ".activities.MainActivity"
+key_alias = ""
+keystore_password = "bassiemusic"
+key_password = "bassiemusic"

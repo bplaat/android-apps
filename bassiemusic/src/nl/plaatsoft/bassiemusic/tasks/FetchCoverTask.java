@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic.tasks;
 
 import android.content.Context;
@@ -100,26 +106,34 @@ public class FetchCoverTask {
 
     public FetchCoverTask fetch() {
         FetchImageTask imageCoverTask = FetchImageTask.with(context).load(music.getCoverUri());
-        if (isFadedIn) imageCoverTask.fadeIn();
+        if (isFadedIn)
+            imageCoverTask.fadeIn();
         imageCoverTask.into(imageView).then(image -> {
             onLoad(image);
         }, exception -> {
-            // When an album cover dont exists fetch and cache it from the nice and open Deezer API
+            // When an album cover dont exists fetch and cache it from the nice and open
+            // Deezer API
             // I know this code is a callback / exception nightmare, I'm working on it
             try {
                 FetchDataTask fetchDataTask = FetchDataTask.with(context).load(Config.DEEZER_API_SEARCH_ALBUM + "?q=" +
-                    URLEncoder.encode(music.getArtists().get(0) + " - " + music.getAlbum(), "UTF-8") + "&limit=1");
-                if (isLoadedFomCache) fetchDataTask.fromCache();
-                if (isSavedToCache) fetchDataTask.toCache();
+                        URLEncoder.encode(music.getArtists().get(0) + " - " + music.getAlbum(), "UTF-8") + "&limit=1");
+                if (isLoadedFomCache)
+                    fetchDataTask.fromCache();
+                if (isSavedToCache)
+                    fetchDataTask.toCache();
                 fetchDataTask.then(data -> {
                     try {
                         JSONArray albumsJson = new JSONObject(data).getJSONArray("data");
                         if (albumsJson.length() > 0) {
                             JSONObject albumJson = albumsJson.getJSONObject(0);
-                            FetchImageTask fetchImageTask = FetchImageTask.with(context).load(albumJson.getString("cover_medium"));
-                            if (isFadedIn) fetchImageTask.fadeIn();
-                            if (!isLoadedFomCache) fetchImageTask.notFromCache();
-                            if (!isSavedToCache) fetchImageTask.notToCache();
+                            FetchImageTask fetchImageTask = FetchImageTask.with(context)
+                                    .load(albumJson.getString("cover_medium"));
+                            if (isFadedIn)
+                                fetchImageTask.fadeIn();
+                            if (!isLoadedFomCache)
+                                fetchImageTask.notFromCache();
+                            if (!isSavedToCache)
+                                fetchImageTask.notToCache();
                             fetchImageTask.into(imageView).then(image -> {
                                 onLoad(image);
                             }, exception2 -> {

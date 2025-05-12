@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic.components;
 
 import android.content.Context;
@@ -50,15 +56,15 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_music, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.musicPosition = (TextView)convertView.findViewById(R.id.music_position);
-            viewHolder.musicCover = (ImageView)convertView.findViewById(R.id.music_cover);
-            viewHolder.musicTitle = (TextView)convertView.findViewById(R.id.music_title);
-            viewHolder.musicArtists = (TextView)convertView.findViewById(R.id.music_artists);
-            viewHolder.musicAlbum = (TextView)convertView.findViewById(R.id.music_album);
-            viewHolder.musicDuration = (TextView)convertView.findViewById(R.id.music_duration);
+            viewHolder.musicPosition = (TextView) convertView.findViewById(R.id.music_position);
+            viewHolder.musicCover = (ImageView) convertView.findViewById(R.id.music_cover);
+            viewHolder.musicTitle = (TextView) convertView.findViewById(R.id.music_title);
+            viewHolder.musicArtists = (TextView) convertView.findViewById(R.id.music_artists);
+            viewHolder.musicAlbum = (TextView) convertView.findViewById(R.id.music_album);
+            viewHolder.musicDuration = (TextView) convertView.findViewById(R.id.music_duration);
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder)convertView.getTag();
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
         if (position == selectedPosition) {

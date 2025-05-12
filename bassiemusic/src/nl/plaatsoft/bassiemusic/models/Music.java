@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic.models;
 
 import android.content.Context;
@@ -64,12 +70,12 @@ public class Music {
         List<Music> musicList = new ArrayList<Music>();
 
         Cursor musicCursor = context.getContentResolver().query(
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-            new String[] { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.CD_TRACK_NUMBER, MediaStore.Audio.Media.DURATION,
-                MediaStore.Audio.Media.ALBUM_ID },
-            null, null, null
-        );
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
+                        MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.CD_TRACK_NUMBER,
+                        MediaStore.Audio.Media.DURATION,
+                        MediaStore.Audio.Media.ALBUM_ID },
+                null, null, null);
         if (musicCursor != null) {
             while (musicCursor.moveToNext()) {
                 Music music = new Music();
@@ -78,10 +84,12 @@ public class Music {
                 String artist = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)).trim();
                 music.album = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)).trim();
                 music.title = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)).trim();
-                String trackNumber = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.CD_TRACK_NUMBER));
+                String trackNumber = musicCursor
+                        .getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.CD_TRACK_NUMBER));
                 music.duration = musicCursor.getLong(musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
                 long albumId = musicCursor.getLong(musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                music.CoverUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumId);
+                music.CoverUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"),
+                        albumId);
 
                 music.artists = new ArrayList<String>();
                 music.position = 1;
@@ -111,7 +119,8 @@ public class Music {
                             try {
                                 music.position = Integer.parseInt(titleParts[2].trim());
                                 position = 3;
-                            } catch (Exception exception2) {}
+                            } catch (Exception exception2) {
+                            }
                         }
 
                         StringBuilder titleBuilder = new StringBuilder();
@@ -140,7 +149,8 @@ public class Music {
 
         Collections.sort(musicList, (Music a, Music b) -> a.getPosition() - b.getPosition());
         Collections.sort(musicList, (Music a, Music b) -> a.getAlbum().compareToIgnoreCase(b.getAlbum()));
-        Collections.sort(musicList, (Music a, Music b) -> a.getArtists().get(0).compareToIgnoreCase(b.getArtists().get(0)));
+        Collections.sort(musicList,
+                (Music a, Music b) -> a.getArtists().get(0).compareToIgnoreCase(b.getArtists().get(0)));
 
         return musicList;
     }

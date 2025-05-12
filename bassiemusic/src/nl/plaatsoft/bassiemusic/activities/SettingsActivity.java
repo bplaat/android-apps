@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.bassiemusic.activities;
 
 import android.app.AlertDialog;
@@ -35,15 +41,16 @@ public class SettingsActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+        useWindowInsets(findViewById(R.id.settings_scroll));
 
-        ((ImageButton)findViewById(R.id.settings_back_button)).setOnClickListener((View view) -> {
+        ((ImageButton) findViewById(R.id.settings_back_button)).setOnClickListener((View view) -> {
             finish();
         });
 
         Resources resources = getResources();
 
         // Init remember music button
-        Switch rememberMusicSwitch = (Switch)findViewById(R.id.settings_remember_music_switch);
+        Switch rememberMusicSwitch = (Switch) findViewById(R.id.settings_remember_music_switch);
         rememberMusicSwitch.setChecked(settings.getBoolean("remember_music", Config.SETTINGS_REMEMBER_MUSIC_DEFAULT));
         rememberMusicSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             SharedPreferences.Editor settingsEditor = settings.edit();
@@ -55,54 +62,54 @@ public class SettingsActivity extends BaseActivity {
             settingsEditor.apply();
         });
 
-        ((LinearLayout)findViewById(R.id.settings_remember_music_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_remember_music_button)).setOnClickListener((View view) -> {
             rememberMusicSwitch.toggle();
         });
 
         // Init language switcher button
         String[] languages = resources.getStringArray(R.array.settings_languages);
         int language = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);
-        ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
+        ((TextView) findViewById(R.id.settings_language_label)).setText(languages[language]);
 
-        ((LinearLayout)findViewById(R.id.settings_language_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_language_button)).setOnClickListener((View view) -> {
             new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_language_alert_title_label)
-                .setSingleChoiceItems(languages, language, (DialogInterface dialog, int which) -> {
-                    dialog.dismiss();
-                    if (language != which) {
-                        SharedPreferences.Editor settingsEditor = settings.edit();
-                        settingsEditor.putInt("language", which);
-                        settingsEditor.apply();
-                        recreate();
-                    }
-                })
-                .setNegativeButton(R.string.settings_language_alert_cancel_button, null)
-                .show();
+                    .setTitle(R.string.settings_language_alert_title_label)
+                    .setSingleChoiceItems(languages, language, (DialogInterface dialog, int which) -> {
+                        dialog.dismiss();
+                        if (language != which) {
+                            SharedPreferences.Editor settingsEditor = settings.edit();
+                            settingsEditor.putInt("language", which);
+                            settingsEditor.apply();
+                            recreate();
+                        }
+                    })
+                    .setNegativeButton(R.string.settings_language_alert_cancel_button, null)
+                    .show();
         });
 
         // Init themes switcher button
         String[] themes = resources.getStringArray(R.array.settings_themes);
         int theme = settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT);
-        ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
+        ((TextView) findViewById(R.id.settings_theme_label)).setText(themes[theme]);
 
-        ((LinearLayout)findViewById(R.id.settings_theme_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_theme_button)).setOnClickListener((View view) -> {
             new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_theme_alert_title_label)
-                .setSingleChoiceItems(themes, theme, (DialogInterface dialog, int which) ->  {
-                    dialog.dismiss();
-                    if (theme != which) {
-                        SharedPreferences.Editor settingsEditor = settings.edit();
-                        settingsEditor.putInt("theme", which);
-                        settingsEditor.apply();
-                        recreate();
-                    }
-                })
-                .setNegativeButton(R.string.settings_theme_alert_cancel_button, null)
-                .show();
+                    .setTitle(R.string.settings_theme_alert_title_label)
+                    .setSingleChoiceItems(themes, theme, (DialogInterface dialog, int which) -> {
+                        dialog.dismiss();
+                        if (theme != which) {
+                            SharedPreferences.Editor settingsEditor = settings.edit();
+                            settingsEditor.putInt("theme", which);
+                            settingsEditor.apply();
+                            recreate();
+                        }
+                    })
+                    .setNegativeButton(R.string.settings_theme_alert_cancel_button, null)
+                    .show();
         });
 
         // Init fast scroll button
-        Switch fastScrollSwitch = (Switch)findViewById(R.id.settings_fast_scroll_switch);
+        Switch fastScrollSwitch = (Switch) findViewById(R.id.settings_fast_scroll_switch);
         fastScrollSwitch.setChecked(settings.getBoolean("fast_scroll", Config.SETTINGS_FAST_SCROLL_DEFAULT));
         fastScrollSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
             SharedPreferences.Editor settingsEditor = settings.edit();
@@ -110,19 +117,19 @@ public class SettingsActivity extends BaseActivity {
             settingsEditor.apply();
         });
 
-        ((LinearLayout)findViewById(R.id.settings_fast_scroll_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_fast_scroll_button)).setOnClickListener((View view) -> {
             fastScrollSwitch.toggle();
         });
 
         // Init version button easter egg
         try {
-            ((TextView)findViewById(R.id.settings_version_label)).setText("v" + getVersionName(getPackageManager()));
+            ((TextView) findViewById(R.id.settings_version_label)).setText("v" + getVersionName(getPackageManager()));
         } catch (Exception exception) {
             Log.e(Config.LOG_TAG, "An exception catched!", exception);
         }
 
         int versionButtonClickCounterHolder[] = { 0 };
-        ((LinearLayout)findViewById(R.id.settings_version_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_version_button)).setOnClickListener((View view) -> {
             versionButtonClickCounterHolder[0]++;
             if (versionButtonClickCounterHolder[0] == 8) {
                 versionButtonClickCounterHolder[0] = 0;
@@ -132,33 +139,36 @@ public class SettingsActivity extends BaseActivity {
         });
 
         // Init rate button
-        ((LinearLayout)findViewById(R.id.settings_rate_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_rate_button)).setOnClickListener((View view) -> {
             Utils.openStorePage(this);
         });
 
         // Init share button
-        ((LinearLayout)findViewById(R.id.settings_share_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_share_button)).setOnClickListener((View view) -> {
             Intent intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT, resources.getString(R.string.settings_share_message) + " " + Utils.getStorePageUrl(this));
+            intent.putExtra(Intent.EXTRA_TEXT,
+                    resources.getString(R.string.settings_share_message) + " " + Utils.getStorePageUrl(this));
             startActivity(Intent.createChooser(intent, null));
         });
 
         // Init about button
-        ((LinearLayout)findViewById(R.id.settings_about_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_about_button)).setOnClickListener((View view) -> {
             new AlertDialog.Builder(this)
-                .setTitle(R.string.settings_about_alert_title_label)
-                .setMessage(R.string.settings_about_alert_message_label)
-                .setNegativeButton(R.string.settings_about_alert_website_button, (DialogInterface dialog, int which) ->  {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
-                })
-                .setPositiveButton(R.string.settings_about_alert_ok_button, null)
-                .show();
+                    .setTitle(R.string.settings_about_alert_title_label)
+                    .setMessage(R.string.settings_about_alert_message_label)
+                    .setNegativeButton(R.string.settings_about_alert_website_button,
+                            (DialogInterface dialog, int which) -> {
+                                startActivity(
+                                        new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
+                            })
+                    .setPositiveButton(R.string.settings_about_alert_ok_button, null)
+                    .show();
         });
 
         // Init footer button
-        ((TextView)findViewById(R.id.settings_footer_button)).setOnClickListener((View view) -> {
+        ((TextView) findViewById(R.id.settings_footer_button)).setOnClickListener((View view) -> {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
         });
     }
