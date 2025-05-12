@@ -72,10 +72,9 @@
     </style>
 
     <style name="ActionBarIconButton">
-        <item name="android:layout_width">32dp</item>
-        <item name="android:layout_height">32dp</item>
-        <item name="android:layout_margin">12dp</item>
-        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:layout_width">56dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:background">@drawable/app_bar_icon_button_ripple</item>
     </style>
 
     <!-- Hero -->

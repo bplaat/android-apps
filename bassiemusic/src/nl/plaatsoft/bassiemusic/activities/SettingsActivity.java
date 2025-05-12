@@ -7,35 +7,25 @@
 package nl.plaatsoft.bassiemusic.activities;
 
 import android.app.AlertDialog;
-import android.content.pm.PackageManager;
-import android.content.res.Resources;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import nl.plaatsoft.bassiemusic.Config;
-import nl.plaatsoft.bassiemusic.Utils;
+
 import nl.plaatsoft.bassiemusic.R;
 
 public class SettingsActivity extends BaseActivity {
-    @SuppressWarnings("deprecation")
-    static private String getVersionName(PackageManager pm) throws PackageManager.NameNotFoundException {
-        String packageName = "nl.plaatsoft.bassiemusic";
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return pm.getPackageInfo(packageName, PackageManager.PackageInfoFlags.of(0)).versionName;
-        }
-        return pm.getPackageInfo(packageName, 0).versionName;
-    }
+    public static final String STORE_PAGE_URL = "https://play.google.com/store/apps/details?id=nl.plaatsoft.bassiemusic";
+    private static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
+
+    private int versionButtonClickCounter = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -43,133 +33,126 @@ public class SettingsActivity extends BaseActivity {
         setContentView(R.layout.activity_settings);
         useWindowInsets(findViewById(R.id.settings_scroll));
 
-        ((ImageButton) findViewById(R.id.settings_back_button)).setOnClickListener((View view) -> {
+        // Back button
+        ((ImageButton) findViewById(R.id.settings_back_button)).setOnClickListener(v -> {
             finish();
         });
 
-        Resources resources = getResources();
-
-        // Init remember music button
+        // Remember music button
         Switch rememberMusicSwitch = (Switch) findViewById(R.id.settings_remember_music_switch);
-        rememberMusicSwitch.setChecked(settings.getBoolean("remember_music", Config.SETTINGS_REMEMBER_MUSIC_DEFAULT));
-        rememberMusicSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
-            SharedPreferences.Editor settingsEditor = settings.edit();
-            settingsEditor.putBoolean("remember_music", isChecked);
-            if (!isChecked) {
-                settingsEditor.remove("playing_music_id");
-                settingsEditor.remove("playing_music_position");
-            }
-            settingsEditor.apply();
-        });
+        rememberMusicSwitch.setChecked(settings.isRememberMusic());
+        rememberMusicSwitch.setOnCheckedChangeListener(
+                (CompoundButton buttonView, boolean isChecked) -> settings.setRememberMusic(isChecked));
 
-        ((LinearLayout) findViewById(R.id.settings_remember_music_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_remember_music_button)).setOnClickListener(v -> {
             rememberMusicSwitch.toggle();
         });
 
-        // Init language switcher button
-        String[] languages = resources.getStringArray(R.array.settings_languages);
-        int language = settings.getInt("language", Config.SETTINGS_LANGUAGE_DEFAULT);
+        // Language button
+        var languages = new String[] {
+                getResources().getString(R.string.settings_language_english),
+                getResources().getString(R.string.settings_language_dutch),
+                getResources().getString(R.string.settings_language_system)
+        };
+        var language = settings.getLanguage();
         ((TextView) findViewById(R.id.settings_language_label)).setText(languages[language]);
-
-        ((LinearLayout) findViewById(R.id.settings_language_button)).setOnClickListener((View view) -> {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.settings_language_alert_title_label)
-                    .setSingleChoiceItems(languages, language, (DialogInterface dialog, int which) -> {
+        findViewById(R.id.settings_language_button).setOnClickListener(view -> {
+            var alertDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.settings_language_button)
+                    .setSingleChoiceItems(languages, language, (dialog, which) -> {
                         dialog.dismiss();
                         if (language != which) {
-                            SharedPreferences.Editor settingsEditor = settings.edit();
-                            settingsEditor.putInt("language", which);
-                            settingsEditor.apply();
+                            settings.setLanguage(which);
                             recreate();
                         }
                     })
-                    .setNegativeButton(R.string.settings_language_alert_cancel_button, null)
                     .show();
+            var density = getResources().getDisplayMetrics().density;
+            alertDialog.getListView().setPadding(0, 0, 0, (int) (16 * density));
         });
 
-        // Init themes switcher button
-        String[] themes = resources.getStringArray(R.array.settings_themes);
-        int theme = settings.getInt("theme", Config.SETTINGS_THEME_DEFAULT);
+        // Themes button
+        var themes = new String[] {
+                getResources().getString(R.string.settings_theme_light),
+                getResources().getString(R.string.settings_theme_dark),
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+                        ? getResources().getString(R.string.settings_theme_battery_saver)
+                        : getResources().getString(R.string.settings_theme_system)
+        };
+        var theme = settings.getTheme();
         ((TextView) findViewById(R.id.settings_theme_label)).setText(themes[theme]);
-
-        ((LinearLayout) findViewById(R.id.settings_theme_button)).setOnClickListener((View view) -> {
-            new AlertDialog.Builder(this)
-                    .setTitle(R.string.settings_theme_alert_title_label)
-                    .setSingleChoiceItems(themes, theme, (DialogInterface dialog, int which) -> {
+        findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
+            var alertDialog = new AlertDialog.Builder(this)
+                    .setTitle(R.string.settings_theme_button)
+                    .setSingleChoiceItems(themes, theme, (dialog, which) -> {
                         dialog.dismiss();
                         if (theme != which) {
-                            SharedPreferences.Editor settingsEditor = settings.edit();
-                            settingsEditor.putInt("theme", which);
-                            settingsEditor.apply();
+                            settings.setTheme(which);
                             recreate();
                         }
                     })
-                    .setNegativeButton(R.string.settings_theme_alert_cancel_button, null)
                     .show();
+            var density = getResources().getDisplayMetrics().density;
+            alertDialog.getListView().setPadding(0, 0, 0, (int) (16 * density));
         });
 
-        // Init fast scroll button
+        // Fast scroll button
         Switch fastScrollSwitch = (Switch) findViewById(R.id.settings_fast_scroll_switch);
-        fastScrollSwitch.setChecked(settings.getBoolean("fast_scroll", Config.SETTINGS_FAST_SCROLL_DEFAULT));
+        fastScrollSwitch.setChecked(settings.isFastScroll());
         fastScrollSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
-            SharedPreferences.Editor settingsEditor = settings.edit();
-            settingsEditor.putBoolean("fast_scroll", isChecked);
-            settingsEditor.apply();
+            settings.setFastScroll(isChecked);
         });
 
-        ((LinearLayout) findViewById(R.id.settings_fast_scroll_button)).setOnClickListener((View view) -> {
+        ((LinearLayout) findViewById(R.id.settings_fast_scroll_button)).setOnClickListener(v -> {
             fastScrollSwitch.toggle();
         });
 
-        // Init version button easter egg
+        // Version button easter egg
         try {
-            ((TextView) findViewById(R.id.settings_version_label)).setText("v" + getVersionName(getPackageManager()));
+            ((TextView) findViewById(R.id.settings_version_label))
+                    .setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (Exception exception) {
-            Log.e(Config.LOG_TAG, "An exception catched!", exception);
+            Log.e(getPackageName(), "Can't get app version", exception);
         }
-
-        int versionButtonClickCounterHolder[] = { 0 };
-        ((LinearLayout) findViewById(R.id.settings_version_button)).setOnClickListener((View view) -> {
-            versionButtonClickCounterHolder[0]++;
-            if (versionButtonClickCounterHolder[0] == 8) {
-                versionButtonClickCounterHolder[0] = 0;
+        findViewById(R.id.settings_version_button).setOnClickListener(view -> {
+            versionButtonClickCounter++;
+            if (versionButtonClickCounter == 8) {
+                versionButtonClickCounter = 0;
                 Toast.makeText(this, R.string.settings_version_message, Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/dQw4w9WgXcQ?t=43")));
             }
         });
 
-        // Init rate button
-        ((LinearLayout) findViewById(R.id.settings_rate_button)).setOnClickListener((View view) -> {
-            Utils.openStorePage(this);
+        // Rate button
+        findViewById(R.id.settings_rate_button).setOnClickListener(view -> {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(STORE_PAGE_URL)));
         });
 
-        // Init share button
-        ((LinearLayout) findViewById(R.id.settings_share_button)).setOnClickListener((View view) -> {
-            Intent intent = new Intent();
+        // Share button
+        findViewById(R.id.settings_share_button).setOnClickListener(view -> {
+            var intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT,
-                    resources.getString(R.string.settings_share_message) + " " + Utils.getStorePageUrl(this));
+                    getResources().getString(R.string.settings_share_message) + " " + STORE_PAGE_URL);
             startActivity(Intent.createChooser(intent, null));
         });
 
-        // Init about button
-        ((LinearLayout) findViewById(R.id.settings_about_button)).setOnClickListener((View view) -> {
+        // About button
+        findViewById(R.id.settings_about_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.settings_about_alert_title_label)
                     .setMessage(R.string.settings_about_alert_message_label)
-                    .setNegativeButton(R.string.settings_about_alert_website_button,
-                            (DialogInterface dialog, int which) -> {
-                                startActivity(
-                                        new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
-                            })
+                    .setNegativeButton(R.string.settings_about_alert_website_button, (dialog, which) -> {
+                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_WEBSITE_URL)));
+                    })
                     .setPositiveButton(R.string.settings_about_alert_ok_button, null)
                     .show();
         });
 
-        // Init footer button
-        ((TextView) findViewById(R.id.settings_footer_button)).setOnClickListener((View view) -> {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(Config.SETTINGS_ABOUT_WEBSITE_URL)));
+        // Footer button
+        findViewById(R.id.settings_footer_button).setOnClickListener(view -> {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_WEBSITE_URL)));
         });
     }
 }

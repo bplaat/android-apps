@@ -14,16 +14,12 @@
                 android:src="@drawable/ic_shuffle"
                 style="@style/ActionBarIconButton" />
 
-            <ImageButton android:id="@+id/main_music_refresh_button"
-                android:src="@drawable/ic_refresh"
-                style="@style/ActionBarIconButton" />
-
             <ImageButton android:id="@+id/main_music_search_button"
                 android:src="@drawable/ic_magnify"
                 style="@style/ActionBarIconButton" />
 
-            <ImageButton android:id="@+id/main_music_settings_button"
-                android:src="@drawable/ic_settings"
+            <ImageButton android:id="@+id/main_music_options_menu_button"
+                android:src="@drawable/ic_dots_vertical"
                 style="@style/ActionBarIconButton" />
         </LinearLayout>
 
@@ -48,8 +44,8 @@
                 android:src="@drawable/ic_refresh"
                 style="@style/ActionBarIconButton" />
 
-            <ImageButton android:id="@+id/main_empty_settings_button"
-                android:src="@drawable/ic_settings"
+            <ImageButton android:id="@+id/main_empty_options_menu_button"
+                android:src="@drawable/ic_dots_vertical"
                 style="@style/ActionBarIconButton" />
         </LinearLayout>
 
@@ -86,8 +82,8 @@
                 android:src="@drawable/ic_refresh"
                 style="@style/ActionBarIconButton" />
 
-            <ImageButton android:id="@+id/main_access_settings_button"
-                android:src="@drawable/ic_settings"
+            <ImageButton android:id="@+id/main_access_options_menu_button"
+                android:src="@drawable/ic_dots_vertical"
                 style="@style/ActionBarIconButton" />
         </LinearLayout>
 

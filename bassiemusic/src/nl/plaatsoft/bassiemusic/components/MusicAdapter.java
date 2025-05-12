@@ -9,7 +9,6 @@ package nl.plaatsoft.bassiemusic.components;
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,9 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
+
 import nl.plaatsoft.bassiemusic.models.Music;
 import nl.plaatsoft.bassiemusic.tasks.FetchCoverTask;
-import nl.plaatsoft.bassiemusic.Utils;
 import nl.plaatsoft.bassiemusic.R;
 
 public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer {
@@ -56,12 +55,12 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_music, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.musicPosition = (TextView) convertView.findViewById(R.id.music_position);
-            viewHolder.musicCover = (ImageView) convertView.findViewById(R.id.music_cover);
-            viewHolder.musicTitle = (TextView) convertView.findViewById(R.id.music_title);
-            viewHolder.musicArtists = (TextView) convertView.findViewById(R.id.music_artists);
-            viewHolder.musicAlbum = (TextView) convertView.findViewById(R.id.music_album);
-            viewHolder.musicDuration = (TextView) convertView.findViewById(R.id.music_duration);
+            viewHolder.musicPosition = convertView.findViewById(R.id.music_position);
+            viewHolder.musicCover = convertView.findViewById(R.id.music_cover);
+            viewHolder.musicTitle = convertView.findViewById(R.id.music_title);
+            viewHolder.musicArtists = convertView.findViewById(R.id.music_artists);
+            viewHolder.musicAlbum = convertView.findViewById(R.id.music_album);
+            viewHolder.musicDuration = convertView.findViewById(R.id.music_duration);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
@@ -73,7 +72,7 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
             convertView.setBackgroundColor(Color.TRANSPARENT);
         }
 
-        Music music = getItem(position);
+        var music = getItem(position);
 
         viewHolder.musicPosition.setText(String.valueOf(music.getPosition()));
 
@@ -89,7 +88,7 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
             viewHolder.musicTitle.setSelected(false);
         }
 
-        DisplayMetrics displayMetrics = getContext().getResources().getDisplayMetrics();
+        var displayMetrics = getContext().getResources().getDisplayMetrics();
         if (displayMetrics.widthPixels / displayMetrics.density < 600) {
             viewHolder.musicArtists.setText(String.join(", ", music.getArtists()) + " - " + music.getAlbum());
         } else {
@@ -120,11 +119,11 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
             sections = new ArrayList<Section>();
 
             for (int position = 0; position < getCount(); position++) {
-                Music music = getItem(position);
-                char firstCharacter = Character.toUpperCase(music.getArtists().get(0).charAt(0));
+                var music = getItem(position);
+                var firstCharacter = Character.toUpperCase(music.getArtists().get(0).charAt(0));
 
-                boolean isCharacterFound = false;
-                for (Section section : sections) {
+                var isCharacterFound = false;
+                for (var section : sections) {
                     if (section.character == firstCharacter) {
                         isCharacterFound = true;
                         break;
@@ -132,7 +131,7 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
                 }
 
                 if (!isCharacterFound) {
-                    Section section = new Section();
+                    var section = new Section();
                     section.character = firstCharacter;
                     section.position = position;
                     sections.add(section);
@@ -140,8 +139,8 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
             }
         }
 
-        String[] sectionsArray = new String[sections.size()];
-        for (int i = 0; i < sections.size(); i++) {
+        var sectionsArray = new String[sections.size()];
+        for (var i = 0; i < sections.size(); i++) {
             sectionsArray[i] = String.valueOf(sections.get(i).character);
         }
         return sectionsArray;
@@ -154,9 +153,9 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
 
     @Override
     public int getSectionForPosition(int position) {
-        Music music = getItem(position);
-        char firstCharacter = Character.toUpperCase(music.getArtists().get(0).charAt(0));
-        for (int i = 0; i < sections.size(); i++) {
+        var music = getItem(position);
+        var firstCharacter = Character.toUpperCase(music.getArtists().get(0).charAt(0));
+        for (var i = 0; i < sections.size(); i++) {
             if (sections.get(i).character == firstCharacter) {
                 return i;
             }

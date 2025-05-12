@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Menu options -->
+    <string name="menu_options_reload_music">Herlaad muziek</string>
+    <string name="menu_options_settings">Instellingen</string>
+
     <!-- Main activity -->
     <string name="main_access_title_label">Geen toegang</string>
     <string name="main_access_description_label">BassieMusic heeft toegang tot uw muziekbestanden op uw apparaat nodig, zonder deze toegang kan de app uw muziek niet laden</string>
@@ -29,12 +33,13 @@
     <string name="settings_display_label">Weergave</string>
 
     <string name="settings_language_button">Taal</string>
-    <string name="settings_language_alert_title_label">Taal</string>
-    <string name="settings_language_alert_cancel_button">Annuleren</string>
+    <string name="settings_language_system">Gebruik systeemstandaard</string>
 
     <string name="settings_theme_button">Thema</string>
-    <string name="settings_theme_alert_title_label">Thema</string>
-    <string name="settings_theme_alert_cancel_button">Annuleren</string>
+    <string name="settings_theme_light">Licht</string>
+    <string name="settings_theme_dark">Donker</string>
+    <string name="settings_theme_battery_saver">Ingesteld door batterijbesparing</string>
+    <string name="settings_theme_system">Gebruik systeemstandaard</string>
 
     <string name="settings_information_label">Informatie</string>
     <string name="settings_version_button">App versie</string>
@@ -49,18 +54,6 @@
     <string name="settings_about_alert_message_label">Deze applicatie is gemaakt door Bastiaan van der Plaat\n\nMet albumhoezen van de mooie en open Deezer API</string>
     <string name="settings_about_alert_website_button">Website</string>
     <string name="settings_about_alert_ok_button">OK</string>
-
-    <string-array name="settings_languages">
-        <item>English</item>
-        <item>Nederlands</item>
-        <item>Gebruik systeemstandaard</item>
-    </string-array>
-
-    <string-array name="settings_themes">
-        <item>Licht</item>
-        <item>Donker</item>
-        <item>Ingesteld door batterijbesparing</item>
-    </string-array>
 
     <!-- Rating alert -->
     <string name="rating_alert_title_label">Beoordeel BassieMusic?</string>

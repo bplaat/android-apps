@@ -53,7 +53,7 @@ public class RatingAlert {
                         settingsEditor.putBoolean("rating_alert_hidden", true);
                         settingsEditor.commit();
                     })
-                    .setPositiveButton(R.string.rating_alert_rating_button, (dialog, which) -> {
+                    .setPositiveButton(R.string.rating_alert_rate_button, (dialog, which) -> {
                         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storePageUrl)));
                         var settingsEditor = settings.edit();
                         settingsEditor.putBoolean("rating_alert_hidden", true);

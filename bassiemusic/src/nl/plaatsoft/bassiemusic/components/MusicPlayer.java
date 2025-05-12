@@ -19,19 +19,22 @@ import android.os.Looper;
 import android.os.PowerManager;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
 import android.widget.SeekBar;
+
 import nl.plaatsoft.bassiemusic.models.Music;
 import nl.plaatsoft.bassiemusic.tasks.FetchCoverTask;
-import nl.plaatsoft.bassiemusic.Config;
 import nl.plaatsoft.bassiemusic.R;
 
 public class MusicPlayer extends LinearLayout {
+    private static final int PREVIOUS_RESET_TIMEOUT = 25000;
+    private static final int SEEK_SKIP_TIME = 10000;
+    private static final int SYNC_TIMEOUT = 200;
+
     public static interface OnInfoClickListener {
         public void onInfoClick();
     }
@@ -89,38 +92,38 @@ public class MusicPlayer extends LinearLayout {
             }
         };
 
-        PowerManager powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+        var powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BassieMusic::WakeLock");
 
         handler = new Handler(Looper.getMainLooper());
         syncUserInterfaceInterval = () -> {
             syncUserInterface();
-            handler.postDelayed(syncUserInterfaceInterval, Config.MUSIC_PLAYER_SYNC_TIMEOUT);
+            handler.postDelayed(syncUserInterfaceInterval, SYNC_TIMEOUT);
         };
 
-        ((LinearLayout) findViewById(R.id.music_player_info_button)).setOnClickListener((View view) -> {
+        findViewById(R.id.music_player_info_button).setOnClickListener(v -> {
             onInfoClickListener.onInfoClick();
         });
 
-        ImageButton previousButton = (ImageButton) findViewById(R.id.music_player_previous_button);
-        previousButton.setOnClickListener((View view) -> {
-            if (getCurrentPosition() > Config.MUSIC_PLAYER_PREVIOUS_RESET_TIMEOUT) {
+        var previousButton = findViewById(R.id.music_player_previous_button);
+        previousButton.setOnClickListener(v -> {
+            if (getCurrentPosition() > PREVIOUS_RESET_TIMEOUT) {
                 seekTo(0);
             } else {
                 onPreviousListener.onPrevious(false);
             }
         });
-        previousButton.setOnLongClickListener((View view) -> {
+        previousButton.setOnLongClickListener(v -> {
             onPreviousListener.onPrevious(true);
             return true;
         });
 
-        ((ImageButton) findViewById(R.id.music_player_seek_back_button)).setOnClickListener((View view) -> {
-            seekTo(Math.max(getCurrentPosition() - Config.MUSIC_PLAYER_SEEK_SKIP_TIME, 0));
+        findViewById(R.id.music_player_seek_back_button).setOnClickListener(v -> {
+            seekTo(Math.max(getCurrentPosition() - SEEK_SKIP_TIME, 0));
         });
 
-        playButton = (ImageButton) findViewById(R.id.music_player_play_button);
-        playButton.setOnClickListener((View view) -> {
+        playButton = findViewById(R.id.music_player_play_button);
+        playButton.setOnClickListener(v -> {
             if (isPlaying()) {
                 pause();
             } else {
@@ -128,22 +131,22 @@ public class MusicPlayer extends LinearLayout {
             }
         });
 
-        ((ImageButton) findViewById(R.id.music_player_seek_forward_button)).setOnClickListener((View view) -> {
-            seekTo(Math.min(getCurrentPosition() + Config.MUSIC_PLAYER_SEEK_SKIP_TIME, mediaPlayer.getDuration()));
+        findViewById(R.id.music_player_seek_forward_button).setOnClickListener(v -> {
+            seekTo(Math.min(getCurrentPosition() + SEEK_SKIP_TIME, mediaPlayer.getDuration()));
         });
 
-        ImageButton nextButton = (ImageButton) findViewById(R.id.music_player_next_button);
-        nextButton.setOnClickListener((View view) -> {
+        var nextButton = findViewById(R.id.music_player_next_button);
+        nextButton.setOnClickListener(v -> {
             onNextListener.onNext(false);
         });
-        nextButton.setOnLongClickListener((View view) -> {
+        nextButton.setOnLongClickListener(v -> {
             onNextListener.onNext(true);
             return true;
         });
 
-        timeCurrentLabel = (TextSwitcher) findViewById(R.id.music_player_time_current_label);
-        timeUntilLabel = (TextSwitcher) findViewById(R.id.music_player_time_until_label);
-        seekBar = (SeekBar) findViewById(R.id.music_player_seekbar);
+        timeCurrentLabel = findViewById(R.id.music_player_time_current_label);
+        timeUntilLabel = findViewById(R.id.music_player_time_until_label);
+        seekBar = findViewById(R.id.music_player_seekbar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             public void onStartTrackingTouch(SeekBar seekBar) {
                 handler.removeCallbacks(syncUserInterfaceInterval);
@@ -163,27 +166,27 @@ public class MusicPlayer extends LinearLayout {
 
         mediaPlayer = new MediaPlayer();
 
-        ImageView infoCoverImage = (ImageView) findViewById(R.id.music_player_info_cover_image);
-        TextSwitcher infoTitleLabel = (TextSwitcher) findViewById(R.id.music_player_info_title_label);
-        TextSwitcher infoArtistsLabel = (TextSwitcher) findViewById(R.id.music_player_info_artists_label);
-        TextSwitcher infoDurationLabel = (TextSwitcher) findViewById(R.id.music_player_info_duration_label);
+        var infoCoverImage = (ImageView) findViewById(R.id.music_player_info_cover_image);
+        var infoTitleLabel = (TextSwitcher) findViewById(R.id.music_player_info_title_label);
+        var infoArtistsLabel = (TextSwitcher) findViewById(R.id.music_player_info_artists_label);
+        var infoDurationLabel = (TextSwitcher) findViewById(R.id.music_player_info_duration_label);
         mediaPlayer.setOnPreparedListener((MediaPlayer mediaPlayer) -> {
             // Update info texts
             FetchCoverTask.with(getContext()).fromMusic(playingMusic).fadeIn().into(infoCoverImage).fetch();
 
-            String newTitleLabel = playingMusic.getTitle();
+            var newTitleLabel = playingMusic.getTitle();
             if (!((TextView) infoTitleLabel.getCurrentView()).getText().equals(newTitleLabel)) {
                 infoTitleLabel.setText(newTitleLabel);
             }
             infoTitleLabel.setSelected(true);
 
-            String newArtistsLabel = String.join(", ", playingMusic.getArtists());
+            var newArtistsLabel = String.join(", ", playingMusic.getArtists());
             if (!((TextView) infoArtistsLabel.getCurrentView()).getText().equals(newArtistsLabel)) {
                 infoArtistsLabel.setText(newArtistsLabel);
             }
             infoArtistsLabel.setSelected(true);
 
-            String newDurationLabel = Music.formatDuration(playingMusic.getDuration());
+            var newDurationLabel = Music.formatDuration(playingMusic.getDuration());
             if (!((TextView) infoDurationLabel.getCurrentView()).getText().equals(newDurationLabel)) {
                 infoDurationLabel.setText(newDurationLabel);
             }
@@ -286,7 +289,7 @@ public class MusicPlayer extends LinearLayout {
             mediaPlayer.setDataSource(getContext(), playingMusic.getContentUri());
             mediaPlayer.prepareAsync();
         } catch (Exception exception) {
-            Log.e(Config.LOG_TAG, "An exception catched!", exception);
+            Log.e(getContext().getPackageName(), "An exception catched!", exception);
         }
     }
 

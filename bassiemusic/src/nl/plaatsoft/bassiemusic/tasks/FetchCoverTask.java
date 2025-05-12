@@ -8,20 +8,18 @@ package nl.plaatsoft.bassiemusic.tasks;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Looper;
-import android.os.Handler;
 import android.util.Log;
 import android.widget.ImageView;
 import java.net.URLEncoder;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+
 import nl.plaatsoft.bassiemusic.models.Music;
-import nl.plaatsoft.bassiemusic.Config;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class FetchCoverTask {
+    private static final String DEEZER_API_URL = "https://api.deezer.com";
+    private static final String DEEZER_API_SEARCH_ALBUM = DEEZER_API_URL + "/search/album";
+
     public static interface OnLoadListener {
         public abstract void onLoad(Bitmap image);
     }
@@ -37,9 +35,6 @@ public class FetchCoverTask {
             super(message);
         }
     }
-
-    private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    private static final Handler handler = new Handler(Looper.getMainLooper());
 
     private Context context;
     private Music music;
@@ -115,7 +110,7 @@ public class FetchCoverTask {
             // Deezer API
             // I know this code is a callback / exception nightmare, I'm working on it
             try {
-                FetchDataTask fetchDataTask = FetchDataTask.with(context).load(Config.DEEZER_API_SEARCH_ALBUM + "?q=" +
+                FetchDataTask fetchDataTask = FetchDataTask.with(context).load(DEEZER_API_SEARCH_ALBUM + "?q=" +
                         URLEncoder.encode(music.getArtists().get(0) + " - " + music.getAlbum(), "UTF-8") + "&limit=1");
                 if (isLoadedFomCache)
                     fetchDataTask.fromCache();
@@ -167,7 +162,7 @@ public class FetchCoverTask {
         if (onErrorListener != null) {
             onErrorListener.onError(exception);
         } else {
-            Log.e(Config.LOG_TAG, "An exception catched!", exception);
+            Log.e(context.getPackageName(), "An exception catched!", exception);
         }
     }
 }

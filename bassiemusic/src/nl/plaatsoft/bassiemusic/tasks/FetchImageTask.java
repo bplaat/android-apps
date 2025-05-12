@@ -27,11 +27,13 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.List;
-import nl.plaatsoft.bassiemusic.Config;
+
 import nl.plaatsoft.bassiemusic.Utils;
 import nl.plaatsoft.bassiemusic.R;
 
 public class FetchImageTask implements Task {
+    private static final int ANIMATION_IMAGE_LOADING_TIMEOUT = 50;
+
     public static interface OnLoadListener {
         public abstract void onLoad(Bitmap image);
     }
@@ -245,7 +247,7 @@ public class FetchImageTask implements Task {
             image = BitmapFactory.decodeStream(context.getContentResolver().openInputStream(uri), null, options);
         } else {
             // Check if the file exists in the cache
-            File file = new File(context.getCacheDir(), Utils.md5(uri.toString()));
+            File file = new File(context.getCacheDir(), Utils.md5(context, uri.toString()));
             if (isLoadedFomCache && file.exists()) {
                 image = BitmapFactory.decodeFile(file.getPath(), options);
             } else {
@@ -292,7 +294,7 @@ public class FetchImageTask implements Task {
                 }
 
                 boolean isWaitingLong = (System.currentTimeMillis()
-                        - startTime) > Config.ANIMATION_IMAGE_LOADING_TIMEOUT;
+                        - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT;
                 if (isFadedIn && isWaitingLong) {
                     imageView.setImageAlpha(0);
                 }
@@ -337,7 +339,7 @@ public class FetchImageTask implements Task {
             if (onErrorListener != null) {
                 onErrorListener.onError(exception);
             } else {
-                Log.e(Config.LOG_TAG, "An exception catched!", exception);
+                Log.e(context.getPackageName(), "An exception catched!", exception);
             }
 
             if (isFetching) {

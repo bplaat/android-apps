@@ -8,8 +8,8 @@ package nl.plaatsoft.bassiemusic.models;
 
 import android.content.Context;
 import android.content.ContentUris;
-import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.MediaStore;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ public class Music {
     }
 
     public static String formatDuration(long ms) {
-        long s = ms / 1000;
+        var s = ms / 1000;
         if (s >= 3600) {
             return String.format("%d:%02d:%02d", s / 3600, (s % 3600) / 60, s % 60);
         } else {
@@ -67,50 +67,65 @@ public class Music {
     }
 
     public static List<Music> loadMusic(Context context) {
-        List<Music> musicList = new ArrayList<Music>();
+        var musicList = new ArrayList<Music>();
 
-        Cursor musicCursor = context.getContentResolver().query(
+        var columns = new ArrayList<>(List.of(
+                MediaStore.Audio.Media._ID,
+                MediaStore.Audio.Media.ARTIST,
+                MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.TITLE,
+                MediaStore.Audio.Media.DURATION,
+                MediaStore.Audio.Media.ALBUM_ID));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
+            columns.add(MediaStore.Audio.Media.CD_TRACK_NUMBER);
+
+        var musicCursor = context.getContentResolver().query(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                new String[] { MediaStore.Audio.Media._ID, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
-                        MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.CD_TRACK_NUMBER,
-                        MediaStore.Audio.Media.DURATION,
-                        MediaStore.Audio.Media.ALBUM_ID },
+                columns.toArray(new String[columns.size()]),
                 null, null, null);
+
         if (musicCursor != null) {
             while (musicCursor.moveToNext()) {
-                Music music = new Music();
+                var music = new Music();
                 music.id = musicCursor.getLong(musicCursor.getColumnIndex(MediaStore.Audio.Media._ID));
                 music.contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, music.id);
-                String artist = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)).trim();
+                var artist = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
+                        .trim();
                 music.album = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)).trim();
                 music.title = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)).trim();
-                String trackNumber = musicCursor
-                        .getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.CD_TRACK_NUMBER));
+
+                var trackNumber = "1";
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    trackNumber = musicCursor
+                            .getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.CD_TRACK_NUMBER));
+                }
+
                 music.duration = musicCursor.getLong(musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                long albumId = musicCursor.getLong(musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                long albumId = musicCursor.getLong(musicCursor.getColumnIndex(
+                        MediaStore.Audio.Media.ALBUM_ID));
                 music.CoverUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"),
                         albumId);
 
                 music.artists = new ArrayList<String>();
                 music.position = 1;
                 if (artist != null && !artist.equals("<unknown>")) {
-                    String[] artistParts = artist.split(",");
-                    for (String artistPart : artistParts) {
+                    var artistParts = artist.split(",");
+                    for (var artistPart : artistParts) {
                         music.artists.add(artistPart.trim());
                     }
 
                     if (trackNumber != null) {
-                        String[] trackNumberParts = trackNumber.split("/");
+                        var trackNumberParts = trackNumber.split("/");
                         if (trackNumberParts.length >= 1) {
                             music.position = Integer.parseInt(trackNumberParts[0]);
                         }
                     }
                 } else {
-                    String[] titleParts = music.title.split("-");
+                    var titleParts = music.title.split("-");
                     if (titleParts.length >= 2) {
                         music.artists.add(titleParts[0].trim());
 
-                        int position = 2;
+                        var position = 2;
                         try {
                             music.position = Integer.parseInt(titleParts[1].trim());
                             music.album = titleParts[0].trim();
@@ -123,7 +138,7 @@ public class Music {
                             }
                         }
 
-                        StringBuilder titleBuilder = new StringBuilder();
+                        var titleBuilder = new StringBuilder();
                         for (; position < titleParts.length; position++) {
                             titleBuilder.append(titleParts[position].trim());
                             if (position != titleParts.length - 1) {
@@ -147,10 +162,12 @@ public class Music {
             musicCursor.close();
         }
 
-        Collections.sort(musicList, (Music a, Music b) -> a.getPosition() - b.getPosition());
-        Collections.sort(musicList, (Music a, Music b) -> a.getAlbum().compareToIgnoreCase(b.getAlbum()));
         Collections.sort(musicList,
-                (Music a, Music b) -> a.getArtists().get(0).compareToIgnoreCase(b.getArtists().get(0)));
+                (a, b) -> a.getPosition() - b.getPosition());
+        Collections.sort(musicList,
+                (a, b) -> a.getAlbum().compareToIgnoreCase(b.getAlbum()));
+        Collections.sort(musicList,
+                (a, b) -> a.getArtists().get(0).compareToIgnoreCase(b.getArtists().get(0)));
 
         return musicList;
     }

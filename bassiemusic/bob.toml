@@ -1,7 +1,7 @@
 [package]
 name = "bassiemusic"
 identifier = "nl.plaatsoft.bassiemusic"
-version = "2.11.0"
+version = "3.0.0"
 
 [package.metadata.android]
 main_activity = ".activities.MainActivity"

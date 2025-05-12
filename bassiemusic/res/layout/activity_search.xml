@@ -27,7 +27,7 @@
             style="@style/Scroll">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_magnify"
+                <ImageView android:src="@drawable/ic_magnify_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/search_start_title_label"

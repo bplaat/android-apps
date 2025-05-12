@@ -21,7 +21,7 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.ArrayList;
 import java.util.List;
-import nl.plaatsoft.bassiemusic.Config;
+
 import nl.plaatsoft.bassiemusic.Utils;
 
 public class FetchDataTask implements Task {
@@ -149,7 +149,7 @@ public class FetchDataTask implements Task {
 
     private String fetchData() throws Exception {
         // Check if the uri is already cached
-        File file = new File(context.getCacheDir(), Utils.md5(uri.toString()));
+        File file = new File(context.getCacheDir(), Utils.md5(context, uri.toString()));
         if (isLoadedFomCache && file.exists()) {
             // Then read the cached file
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -208,7 +208,7 @@ public class FetchDataTask implements Task {
             if (onErrorListener != null) {
                 onErrorListener.onError(exception);
             } else {
-                Log.e(Config.LOG_TAG, "An exception catched!", exception);
+                Log.e(context.getPackageName(), "An exception catched!", exception);
             }
 
             if (isFetching) {
