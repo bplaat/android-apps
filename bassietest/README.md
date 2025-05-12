@@ -1,2 +1,3 @@
 # BassieTest Android App
-A example test app for the Bassie Android build script and some shared Java classes
+
+A example test app for the bob build tool and sandbox for some ideas
