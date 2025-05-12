@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-platform=$ANDROID_HOME/platforms/android-$target_sdk_version/android.jar
+platform=$ANDROID_HOME/platforms/android-36/android.jar
 mkdir -p .vscode
 echo "{\"editor.formatOnSave\":true,\"java.project.sourcePaths\":[" > .vscode/settings.json
 for dir in $(find . -name "src" ! -path "*/target/*") $(find . -name "src-gen"); do
