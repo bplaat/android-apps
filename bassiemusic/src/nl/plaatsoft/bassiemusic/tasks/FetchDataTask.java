@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.ArrayList;
@@ -163,7 +163,8 @@ public class FetchDataTask implements Task {
         }
 
         // Or fetch the data from the internet
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(new URL(uri.toString()).openStream()));
+        BufferedReader bufferedReader = new BufferedReader(
+                new InputStreamReader(new URI(uri.toString()).toURL().openStream()));
         StringBuilder stringBuilder = new StringBuilder();
         String line;
         while ((line = bufferedReader.readLine()) != null) {

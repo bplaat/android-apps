@@ -22,7 +22,7 @@ import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.net.URL;
+import java.net.URI;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.ArrayList;
@@ -252,7 +252,8 @@ public class FetchImageTask implements Task {
                 image = BitmapFactory.decodeFile(file.getPath(), options);
             } else {
                 // Or fetch the image from the internet in to a byte array buffer
-                BufferedInputStream bufferedInputStream = new BufferedInputStream(new URL(uri.toString()).openStream());
+                BufferedInputStream bufferedInputStream = new BufferedInputStream(
+                        new URI(uri.toString()).toURL().openStream());
                 ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
                 byte[] buffer = new byte[1024];
                 int number_read = 0;

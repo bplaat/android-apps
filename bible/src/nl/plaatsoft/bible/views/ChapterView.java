@@ -45,6 +45,7 @@ public class ChapterView extends ScrollView {
     private @Nullable OnPreviousListener onPreviousListener = null;
     private @Nullable OnNextListener onNextListener = null;
 
+    @SuppressWarnings("this-escape")
     public ChapterView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         root = new LinearLayout(context, null, 0, R.style.ChapterView);

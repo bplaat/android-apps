@@ -45,6 +45,7 @@ public class GamePage extends View {
     private final String levelLabelString;
     private OnEventListener onEventListener;
 
+    @SuppressWarnings("this-escape")
     public GamePage(Context context, AttributeSet attrs) {
         super(context, attrs);
 

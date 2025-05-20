@@ -28,6 +28,7 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
+    @SuppressWarnings("this-escape")
     public BooksDialogBuilder(Context context, ArrayList<Testament> testaments, String currentBookKey,
             OnResultListener onResultListener) {
         super(context);

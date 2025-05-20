@@ -26,6 +26,7 @@ public class SongsDialogBuilder extends AlertDialog.Builder {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
+    @SuppressWarnings("this-escape")
     public SongsDialogBuilder(Context context, ArrayList<Song> songs, String currentSongNumber,
             OnResultListener onResultListener) {
         super(context);

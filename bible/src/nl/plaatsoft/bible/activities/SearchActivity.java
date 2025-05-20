@@ -94,7 +94,7 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
     }
 
     @Override
-    @SuppressWarnings("null") // FIXME: Null analysis is incorrect, so supress
+    @SuppressWarnings("null") // FIXME: Null analysis is incorrect, so we suppress it
     public void onTextChanged(@Nonnull CharSequence charSequence, int start, int before, int count) {
         var searchQuery = charSequence.toString().toLowerCase();
         if (searchQuery.length() < 3) {

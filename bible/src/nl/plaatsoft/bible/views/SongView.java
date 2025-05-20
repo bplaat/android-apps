@@ -35,6 +35,7 @@ public class SongView extends ScrollView {
     private @Nullable OnPreviousListener onPreviousListener = null;
     private @Nullable OnNextListener onNextListener = null;
 
+    @SuppressWarnings("this-escape")
     public SongView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         root = new LinearLayout(context, null, 0, R.style.SongView);

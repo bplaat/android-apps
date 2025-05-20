@@ -26,6 +26,7 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
 
     private Handler handler = new Handler(Looper.getMainLooper());
 
+    @SuppressWarnings("this-escape")
     public ChaptersDialogBuilder(Context context, ArrayList<Chapter> chapters, int currentChapterNumber,
             OnResultListener onResultListener) {
         super(context);

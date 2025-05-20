@@ -32,16 +32,12 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
     private @Nullable OnCloseListener onCloseListener = null;
 
     public DrawerLayout(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
+    @SuppressWarnings("this-escape")
     public DrawerLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        init();
-    }
-
-    private void init() {
         setVisibility(View.GONE);
         setOnClickListener(this);
     }

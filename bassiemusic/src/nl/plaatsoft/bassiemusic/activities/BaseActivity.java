@@ -32,9 +32,9 @@ public abstract class BaseActivity extends Activity {
             var configuration = new Configuration(context.getResources().getConfiguration());
 
             if (language == Settings.LANGUAGE_ENGLISH)
-                configuration.setLocale(new Locale("en"));
+                configuration.setLocale(Locale.forLanguageTag("en"));
             if (language == Settings.LANGUAGE_DUTCH)
-                configuration.setLocale(new Locale("nl"));
+                configuration.setLocale(Locale.forLanguageTag("nl"));
 
             if (theme == Settings.THEME_LIGHT) {
                 configuration.uiMode |= Configuration.UI_MODE_NIGHT_NO;

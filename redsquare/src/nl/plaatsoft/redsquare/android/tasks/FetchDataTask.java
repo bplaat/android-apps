@@ -15,7 +15,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.net.URL;
+import java.net.URI;
 import java.security.MessageDigest;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -153,7 +153,7 @@ public class FetchDataTask {
         }
 
         // Load url from network
-        var bufferedInputStream = new BufferedInputStream(new URL(url).openStream());
+        var bufferedInputStream = new BufferedInputStream(new URI(url).toURL().openStream());
         var byteArrayOutputStream = new ByteArrayOutputStream();
         try (bufferedInputStream; byteArrayOutputStream) {
             var buffer = new byte[1024];

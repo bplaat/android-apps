@@ -70,17 +70,14 @@ public class MusicPlayer extends LinearLayout {
     private boolean requestAutoPlayed;
 
     public MusicPlayer(Context context) {
-        super(context);
-        initView();
+        this(context, null);
     }
 
+    @SuppressWarnings("this-escape")
     public MusicPlayer(Context context, AttributeSet attrs) {
         super(context, attrs);
-        initView();
-    }
 
-    private void initView() {
-        inflate(getContext(), R.layout.view_music_player, this);
+        inflate(context, R.layout.view_music_player, this);
 
         becomingNoisyFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
 
@@ -92,7 +89,7 @@ public class MusicPlayer extends LinearLayout {
             }
         };
 
-        var powerManager = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+        var powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BassieMusic::WakeLock");
 
         handler = new Handler(Looper.getMainLooper());
