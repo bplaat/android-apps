@@ -37,7 +37,7 @@ public class Settings {
     public static final int THEME_SYSTEM = 2;
 
     public int getTheme() {
-        return prefs.getInt("theme", THEME_SYSTEM);
+        return prefs.getInt("theme", THEME_DARK);
     }
 
     public void setTheme(int theme) {
