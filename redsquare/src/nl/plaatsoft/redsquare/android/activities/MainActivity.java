@@ -24,22 +24,26 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URLEncoder;
+import java.util.HashMap;
 import org.json.JSONObject;
 
 import nl.plaatsoft.redsquare.android.components.GamePage;
 import nl.plaatsoft.redsquare.android.components.ScoreAdapter;
 import nl.plaatsoft.redsquare.android.models.Score;
 import nl.plaatsoft.redsquare.android.tasks.FetchDataTask;
-import nl.plaatsoft.redsquare.android.Config;
 import nl.plaatsoft.redsquare.android.R;
 
 public class MainActivity extends BaseActivity {
     public static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private GamePage gamePage;
+    private HashMap<String, String> secrets;
     private RelativeLayout menuPage;
+    private GamePage gamePage;
     private LinearLayout settingsPage;
 
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +54,13 @@ public class MainActivity extends BaseActivity {
             getWindow().setAttributes(attributes);
         }
         setContentView(R.layout.activity_main);
+
+        // Try to read secrets.ini
+        try {
+            secrets = readIniFromAssets("secrets.ini");
+        } catch (IOException exception) {
+            secrets = new HashMap<>();
+        }
 
         menuPage = findViewById(R.id.menu_page);
         gamePage = findViewById(R.id.game_page);
@@ -88,7 +99,8 @@ public class MainActivity extends BaseActivity {
         gamePage.setOnEventListener((score, seconds, level) -> {
             try {
                 FetchDataTask.with(this)
-                        .load(Config.API_URL + "?key=" + Config.API_KEY + "&name="
+                        .load(secrets.getOrDefault("api_url", "") + "?key=" + secrets.getOrDefault("api_key", "")
+                                + "&name="
                                 + URLEncoder.encode(settings.getName(), "UTF-8")
                                 + "&score=" + score)
                         .fetch();
@@ -159,7 +171,9 @@ public class MainActivity extends BaseActivity {
             globalHighscoreListLoading.setVisibility(View.VISIBLE);
             globalHighscoreListError.setVisibility(View.GONE);
 
-            FetchDataTask.with(this).load(Config.API_URL + "?key=" + Config.API_KEY + "&page=1&limit=50").then(data -> {
+            var url = secrets.getOrDefault("api_url", "") + "?key=" + secrets.getOrDefault("api_key", "")
+                    + "&page=1&limit=50";
+            FetchDataTask.with(this).load(url).then(data -> {
                 try {
                     var dataJSON = new JSONObject(new String(data, "UTF-8"));
                     var scoresJSON = dataJSON.getJSONArray("scores");
@@ -322,5 +336,21 @@ public class MainActivity extends BaseActivity {
                             View.SYSTEM_UI_FLAG_FULLSCREEN |
                             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
+    }
+
+    private HashMap<String, String> readIniFromAssets(String path) throws IOException {
+        var secrets = new HashMap<String, String>();
+        var inputStream = getAssets().open(path);
+        var reader = new BufferedReader(new InputStreamReader(inputStream));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            line = line.trim();
+            if (line.isEmpty() || line.startsWith("#") || !line.contains("="))
+                continue;
+            var parts = line.split("=", 2);
+            secrets.put(parts[0].trim(), parts[1].trim());
+        }
+        reader.close();
+        return secrets;
     }
 }

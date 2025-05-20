@@ -11,10 +11,10 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
 import java.net.URLEncoder;
-
-import nl.plaatsoft.bassiemusic.models.Music;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import nl.plaatsoft.bassiemusic.models.Music;
 
 public class FetchCoverTask {
     private static final String DEEZER_API_URL = "https://api.deezer.com";

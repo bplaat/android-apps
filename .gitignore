@@ -1,5 +1,4 @@
 .vscode/
 target/
-Config.java
 *.jks
 .DS_Store
