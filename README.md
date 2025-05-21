@@ -13,6 +13,17 @@ A collection of various Android apps that I created for myself and others
 -   [RFID Viewer](rfidviewer/) A Mifare Classic / RFID card viewer / writer app
 -   [Tweakers](tweakers/) A simple [Tweakers](https://tweakers.net/) webview app because installed PWA's suck sadly
 
+## Getting Started
+
+-   Install Java JDK 21
+-   Install Android SDK with `platform-tools`, `build-tools:36` and `platforms:android-36` and set `$ANDROID_HOME` env var
+-   Install a [Rust toolchain](https://rustup.rs/)
+-   Install [bob](https://github.com/bplaat/crates/tree/master/bin/bob)
+    ```sh
+    cargo install --git https://github.com/bplaat/crates bob
+    ```
+-   Run `./meta.sh check`
+
 ## License
 
 Copyright © 2018-2025 [Bastiaan van der Plaat](https://github.com/bplaat)
