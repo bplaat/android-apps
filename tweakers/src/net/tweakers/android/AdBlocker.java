@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ * Copyright (c) 2020-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -15,15 +15,14 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nullable;
 
 public class AdBlocker {
-    private static AdBlocker instance;
+    private static @Nullable AdBlocker instance;
 
-    private final Set<String> hostsBlacklist;
+    private final Set<String> hostsBlacklist = new HashSet<>();
 
     private AdBlocker(Context context) {
-        hostsBlacklist = new HashSet<>();
-
         try (var bufferedReader = new BufferedReader(
                 new InputStreamReader(context.getAssets().open("blacklist-adservers.txt")))) {
             String line;
@@ -37,6 +36,7 @@ public class AdBlocker {
         }
     }
 
+    @SuppressWarnings("null") // NOTE: Null analysis is incorrect
     public static AdBlocker getInstance(Context context) {
         if (instance == null) {
             instance = new AdBlocker(context);

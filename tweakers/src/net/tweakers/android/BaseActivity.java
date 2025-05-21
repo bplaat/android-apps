@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -12,9 +12,10 @@ import android.view.ViewGroup;
 import android.view.WindowInsets;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
+import javax.annotation.Nullable;
 
 public abstract class BaseActivity extends Activity {
-    private OnBackInvokedCallback onBackCallback = null;
+    private @Nullable OnBackInvokedCallback onBackCallback;
 
     @SuppressWarnings("deprecation")
     protected void useWindowInsets(ViewGroup... scrollViews) {
