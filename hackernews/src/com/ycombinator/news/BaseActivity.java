@@ -6,6 +6,8 @@
 
 package com.ycombinator.news;
 
+import javax.annotation.Nullable;
+
 import android.app.Activity;
 import android.os.Build;
 import android.view.ViewGroup;
@@ -14,7 +16,7 @@ import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 
 public abstract class BaseActivity extends Activity {
-    private OnBackInvokedCallback onBackCallback = null;
+    private @Nullable OnBackInvokedCallback onBackCallback;
 
     @SuppressWarnings("deprecation")
     protected void useWindowInsets(ViewGroup... scrollViews) {

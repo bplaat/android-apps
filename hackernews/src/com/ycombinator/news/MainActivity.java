@@ -7,6 +7,9 @@
 package com.ycombinator.news;
 
 import android.content.res.Configuration;
+
+import javax.annotation.Nullable;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -23,11 +26,11 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 public class MainActivity extends BaseActivity {
-    private WebView webviewPage;
-    private LinearLayout disconnectedPage;
+    private @SuppressWarnings("null") WebView webviewPage;
+    private @SuppressWarnings("null") LinearLayout disconnectedPage;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         webviewPage = findViewById(R.id.main_webview_page);
@@ -49,12 +52,14 @@ public class MainActivity extends BaseActivity {
         webviewPage.setWebViewClient(new WebViewClient() {
             @Override
             @SuppressWarnings("deprecation")
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            public boolean shouldOverrideUrlLoading(@SuppressWarnings("null") WebView view,
+                    @SuppressWarnings("null") String url) {
                 return shouldOverrideUrlLoading(view, Uri.parse(url));
             }
 
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
+            public boolean shouldOverrideUrlLoading(@SuppressWarnings("null") WebView view,
+                    @SuppressWarnings("null") WebResourceRequest request) {
                 return shouldOverrideUrlLoading(view, request.getUrl());
             }
 
@@ -67,13 +72,15 @@ public class MainActivity extends BaseActivity {
 
             @Override
             @SuppressWarnings("deprecation")
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+            public void onReceivedError(@SuppressWarnings("null") WebView view, int errorCode,
+                    @SuppressWarnings("null") String description, @SuppressWarnings("null") String failingUrl) {
                 onReceivedError(view);
             }
 
             @Override
-            public void onReceivedError(WebView view, WebResourceRequest webResourceRequest,
-                    WebResourceError webResourceError) {
+            public void onReceivedError(@SuppressWarnings("null") WebView view,
+                    @SuppressWarnings("null") WebResourceRequest webResourceRequest,
+                    @SuppressWarnings("null") WebResourceError webResourceError) {
                 if (webResourceRequest.isForMainFrame()) {
                     onReceivedError(view);
                 }
@@ -90,7 +97,8 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+            public void onPageStarted(@SuppressWarnings("null") WebView view, @SuppressWarnings("null") String url,
+                    @SuppressWarnings("null") Bitmap favicon) {
                 if (disconnectedPage.getVisibility() == View.VISIBLE) {
                     disconnectedPage.setVisibility(View.GONE);
                     webviewPage.setVisibility(View.VISIBLE);
@@ -101,7 +109,7 @@ public class MainActivity extends BaseActivity {
             }
 
             @Override
-            public void onPageFinished(WebView view, String url) {
+            public void onPageFinished(@SuppressWarnings("null") WebView view, @SuppressWarnings("null") String url) {
                 var density = getResources().getDisplayMetrics().density;
                 view.loadUrl("javascript:(function(){document.body.style.paddingBottom='"
                         + (int) (view.getPaddingBottom() / density) + "px'})();");
@@ -120,7 +128,7 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
+    public void onNewIntent(@SuppressWarnings("null") Intent intent) {
         super.onNewIntent(intent);
         if (intent.getAction() == Intent.ACTION_VIEW)
             webviewPage.loadUrl(intent.getDataString());
