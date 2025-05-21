@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import java.util.Objects;
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import nl.plaatsoft.bible.services.BibleService;
@@ -26,17 +25,17 @@ import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Settings;
 
 public class SearchActivity extends BaseActivity implements TextWatcher {
-    // Views initialized in onCreate
-    private ScrollView startPage;
-    private ListView resultsPage;
-    private ScrollView emptyPage;
-    private EditText searchInput;
+    // Views
+    private @SuppressWarnings("null") ScrollView startPage;
+    private @SuppressWarnings("null") ListView resultsPage;
+    private @SuppressWarnings("null") ScrollView emptyPage;
+    private @SuppressWarnings("null") EditText searchInput;
 
     // State
-    private @Nonnull BibleService bibleService = BibleService.getInstance();
-    private @Nonnull SongBundleService songBundleService = SongBundleService.getInstance();
-    private @Nullable SearchVerseAdapter searchVerseAdapter = null;
-    private @Nullable SongAdapter songAdapter = null;
+    private BibleService bibleService = BibleService.getInstance();
+    private SongBundleService songBundleService = SongBundleService.getInstance();
+    private @Nullable SearchVerseAdapter searchVerseAdapter;
+    private @Nullable SongAdapter songAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,8 +66,7 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
                     .setVerseTypeface(settings.getFontTypeface());
             resultsPage.setAdapter(searchVerseAdapter);
             resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
-                Objects.requireNonNull(searchVerseAdapter);
-                var searchVerse = searchVerseAdapter.getItem(position);
+                var searchVerse = Objects.requireNonNull(searchVerseAdapter).getItem(position);
                 settings.setOpenBook(searchVerse.book().key());
                 settings.setOpenChapter(searchVerse.chapter().number());
 
@@ -83,8 +81,7 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
             songAdapter = new SongAdapter(this);
             resultsPage.setAdapter(songAdapter);
             resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
-                Objects.requireNonNull(songAdapter);
-                var song = songAdapter.getItem(position);
+                var song = Objects.requireNonNull(songAdapter).getItem(position);
                 settings.setOpenSongNumber(song.number());
 
                 setResult(Activity.RESULT_OK, getIntent());
@@ -94,8 +91,7 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
     }
 
     @Override
-    @SuppressWarnings("null") // FIXME: Null analysis is incorrect, so we suppress it
-    public void onTextChanged(@Nonnull CharSequence charSequence, int start, int before, int count) {
+    public void onTextChanged(@SuppressWarnings("null") CharSequence charSequence, int start, int before, int count) {
         var searchQuery = charSequence.toString().toLowerCase();
         if (searchQuery.length() < 3) {
             openPage(startPage);
@@ -105,6 +101,7 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
         if (searchVerseAdapter != null) {
             var verses = bibleService.searchVerses(this, settings.getOpenBible(), searchQuery, 25);
             if (verses.size() > 0) {
+                var searchVerseAdapter = Objects.requireNonNull(this.searchVerseAdapter);
                 searchVerseAdapter.setSearchQuery(searchQuery);
                 searchVerseAdapter.clear();
                 searchVerseAdapter.addAll(verses);
@@ -117,6 +114,7 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
         if (songAdapter != null) {
             var songs = songBundleService.searchSongs(this, settings.getOpenSongBundle(), searchQuery, 25);
             if (songs.size() > 0) {
+                var songAdapter = Objects.requireNonNull(this.songAdapter);
                 songAdapter.setSearchQuery(searchQuery);
                 songAdapter.clear();
                 songAdapter.addAll(songs);
@@ -128,14 +126,15 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+    public void beforeTextChanged(@SuppressWarnings("null") CharSequence charSequence, int start, int count,
+            int after) {
     }
 
     @Override
-    public void afterTextChanged(Editable editable) {
+    public void afterTextChanged(@SuppressWarnings("null") Editable editable) {
     }
 
-    private void openPage(@Nonnull View page) {
+    private void openPage(View page) {
         startPage.setVisibility(page.equals(startPage) ? View.VISIBLE : View.GONE);
         resultsPage.setVisibility(page.equals(resultsPage) ? View.VISIBLE : View.GONE);
         emptyPage.setVisibility(page.equals(emptyPage) ? View.VISIBLE : View.GONE);

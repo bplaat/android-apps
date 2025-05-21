@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -10,9 +10,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
 public class FlowLayout extends ViewGroup {
     public FlowLayout(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);

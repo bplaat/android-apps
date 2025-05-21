@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -17,13 +17,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.util.Objects;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
-@ParametersAreNonnullByDefault
 public class SongAdapter extends ArrayAdapter<Song> {
     private static record ViewHolder(TextView name) {
     }
@@ -42,8 +40,8 @@ public class SongAdapter extends ArrayAdapter<Song> {
     public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_song, parent, false);
-            Objects.requireNonNull(convertView);
+            convertView = Objects
+                    .requireNonNull(LayoutInflater.from(getContext()).inflate(R.layout.item_song, parent, false));
             viewHolder = new ViewHolder(convertView.findViewById(R.id.song_name));
             convertView.setTag(viewHolder);
         } else {

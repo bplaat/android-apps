@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -9,9 +9,7 @@ package nl.plaatsoft.bible;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
-import javax.annotation.ParametersAreNonnullByDefault;
 
-@ParametersAreNonnullByDefault
 public class Settings {
     private final Context context;
     private final SharedPreferences prefs;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -14,12 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
-@ParametersAreNonnullByDefault
 public class DrawerLayout extends ViewGroup implements View.OnClickListener {
     public static interface OnCloseListener {
         void onClose();
@@ -29,7 +27,7 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
 
     private boolean isOpen = false;
     private boolean isFirstLayout = true;
-    private @Nullable OnCloseListener onCloseListener = null;
+    private @Nullable OnCloseListener onCloseListener;
 
     public DrawerLayout(Context context) {
         this(context, null);

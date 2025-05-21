@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -15,12 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
 
-@ParametersAreNonnullByDefault
 public class SongView extends ScrollView {
     public static interface OnPreviousListener {
         void onPrevious();
@@ -32,8 +30,8 @@ public class SongView extends ScrollView {
 
     private final LinearLayout root;
     private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
-    private @Nullable OnPreviousListener onPreviousListener = null;
-    private @Nullable OnNextListener onNextListener = null;
+    private @Nullable OnPreviousListener onPreviousListener;
+    private @Nullable OnNextListener onNextListener;
 
     @SuppressWarnings("this-escape")
     public SongView(Context context, @Nullable AttributeSet attrs) {

@@ -14,6 +14,7 @@ import java.io.ByteArrayInputStream;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import javax.annotation.Nullable;
 
@@ -36,12 +37,11 @@ public class AdBlocker {
         }
     }
 
-    @SuppressWarnings("null") // NOTE: Null analysis is incorrect
     public static AdBlocker getInstance(Context context) {
         if (instance == null) {
             instance = new AdBlocker(context);
         }
-        return instance;
+        return Objects.requireNonNull(instance);
     }
 
     public boolean isAd(Uri uri) {

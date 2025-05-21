@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -17,14 +17,12 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.models.SongBundle;
 
-@ParametersAreNonnullByDefault
 public class SongBundleService {
-    private static @Nullable SongBundleService instance = null;
+    private static @Nullable SongBundleService instance;
 
     private final HashMap<String, SQLiteDatabase> databaseCache = new HashMap<>();
 
@@ -34,8 +32,7 @@ public class SongBundleService {
     public static SongBundleService getInstance() {
         if (instance == null)
             instance = new SongBundleService();
-        Objects.requireNonNull(instance);
-        return instance;
+        return Objects.requireNonNull(instance);
     }
 
     public void installSongBundlesFromAssets(Context context) {
@@ -106,8 +103,8 @@ public class SongBundleService {
                 songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getString(cursor.getColumnIndex("number")),
                         cursor.getString(cursor.getColumnIndex("title")),
-                        null,
-                        null));
+                        "",
+                        ""));
         }
         Collections.sort(songs, (a, b) -> a.number().compareTo(b.number()));
         Collections.sort(songs, (a, b) -> Integer.parseInt(a.number().replaceAll("^\\d+", "$0"))
@@ -141,8 +138,8 @@ public class SongBundleService {
                 songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getString(cursor.getColumnIndex("number")),
                         cursor.getString(cursor.getColumnIndex("title")),
-                        null,
-                        null));
+                        "",
+                        ""));
         }
         return songs;
     }

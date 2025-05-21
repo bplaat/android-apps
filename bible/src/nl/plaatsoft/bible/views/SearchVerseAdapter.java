@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -20,13 +20,11 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.util.Objects;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.SearchVerse;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
-@ParametersAreNonnullByDefault
 public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
     private static record ViewHolder(TextView contents, TextView bookChapter) {
     }
@@ -50,8 +48,8 @@ public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
     public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_search_verse, parent, false);
-            Objects.requireNonNull(convertView);
+            convertView = Objects.requireNonNull(
+                    LayoutInflater.from(getContext()).inflate(R.layout.item_search_verse, parent, false));
             viewHolder = new ViewHolder(convertView.findViewById(R.id.search_verse_contents),
                     convertView.findViewById(R.id.search_verse_book_chapter));
             convertView.setTag(viewHolder);

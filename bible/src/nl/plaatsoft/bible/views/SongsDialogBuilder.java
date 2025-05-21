@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -13,12 +13,10 @@ import android.os.Looper;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
 
-@ParametersAreNonnullByDefault
 public class SongsDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Song song);

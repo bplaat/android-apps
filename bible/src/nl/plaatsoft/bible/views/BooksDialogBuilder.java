@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -14,13 +14,11 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 import java.util.ArrayList;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Testament;
 import nl.plaatsoft.bible.R;
 
-@ParametersAreNonnullByDefault
 public class BooksDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Book book);

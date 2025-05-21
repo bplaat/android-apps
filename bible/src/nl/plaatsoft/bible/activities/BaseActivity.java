@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -17,17 +17,16 @@ import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 import java.util.Locale;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import nl.plaatsoft.bible.Settings;
 
 public abstract class BaseActivity extends Activity {
-    protected Settings settings; // Initialized in attachBaseContext
-    private @Nullable OnBackInvokedCallback onBackCallback = null;
+    protected @SuppressWarnings("null") Settings settings;
+    private @Nullable OnBackInvokedCallback onBackCallback;
 
     @Override
-    public void attachBaseContext(Context context) {
+    public void attachBaseContext(@SuppressWarnings("null") Context context) {
         settings = new Settings(context);
         var language = settings.getLanguage();
         var theme = settings.getTheme();
@@ -71,7 +70,7 @@ public abstract class BaseActivity extends Activity {
     }
 
     @SuppressWarnings("deprecation")
-    protected void useWindowInsets(@Nonnull ViewGroup... scrollViews) {
+    protected void useWindowInsets(ViewGroup... scrollViews) {
         getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
             if (scrollViews != null) {
                 for (var scrollView : scrollViews) {

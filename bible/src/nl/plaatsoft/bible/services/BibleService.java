@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.models.Chapter;
 import nl.plaatsoft.bible.models.SearchVerse;
@@ -27,9 +26,8 @@ import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Testament;
 import nl.plaatsoft.bible.models.Verse;
 
-@ParametersAreNonnullByDefault
 public class BibleService {
-    private static @Nullable BibleService instance = null;
+    private static @Nullable BibleService instance;
 
     private final HashMap<String, SQLiteDatabase> databaseCache = new HashMap<>();
 
@@ -39,8 +37,7 @@ public class BibleService {
     public static BibleService getInstance() {
         if (instance == null)
             instance = new BibleService();
-        Objects.requireNonNull(instance);
-        return instance;
+        return Objects.requireNonNull(instance);
     }
 
     public void installBiblesFromAssets(Context context) {
@@ -116,11 +113,10 @@ public class BibleService {
             scrapedAt = "?";
 
         // Read index
-        ArrayList<Testament> testaments = null;
+        var testaments = new ArrayList<Testament>();
         if (readIndex) {
             // Read testaments
             try (var testamentsCursor = database.rawQuery("SELECT id, key, name FROM testaments", null)) {
-                testaments = new ArrayList<Testament>();
                 while (testamentsCursor.moveToNext()) {
                     var testamentId = testamentsCursor.getInt(testamentsCursor.getColumnIndex("id"));
 
@@ -141,7 +137,7 @@ public class BibleService {
                                     chapters.add(new Chapter(
                                             chaptersCursor.getInt(chaptersCursor.getColumnIndex("id")),
                                             chaptersCursor.getInt(chaptersCursor.getColumnIndex("number")),
-                                            null));
+                                            new ArrayList<>()));
                                 }
                             }
 
@@ -161,7 +157,8 @@ public class BibleService {
                 }
             }
         }
-        return new Bible(path, name, abbreviation, language, copyright, releasedAt, scrapedAt, testaments);
+        return new Bible(path, name, abbreviation, language, copyright, releasedAt, scrapedAt,
+                testaments);
     }
 
     public @Nullable Chapter readChapter(Context context, String path, String bookKey, int chapterNumber) {
@@ -218,11 +215,11 @@ public class BibleService {
                                 cursor.getInt(cursor.getColumnIndex("book_id")),
                                 cursor.getString(cursor.getColumnIndex("book_key")),
                                 cursor.getString(cursor.getColumnIndex("book_name")),
-                                null),
+                                new ArrayList<>()),
                         new Chapter(
                                 cursor.getInt(cursor.getColumnIndex("chapter_id")),
                                 cursor.getInt(cursor.getColumnIndex("chapter_number")),
-                                null)));
+                                new ArrayList<>())));
             }
         }
         return results;

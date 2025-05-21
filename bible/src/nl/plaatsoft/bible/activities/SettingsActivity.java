@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -16,17 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 import java.util.Arrays;
 import javax.annotation.Nullable;
-import javax.annotation.ParametersAreNonnullByDefault;
 
 import nl.plaatsoft.bible.Settings;
 import nl.plaatsoft.bible.R;
 
-@ParametersAreNonnullByDefault
 public class SettingsActivity extends BaseActivity {
     private static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bible";
     private static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 
-    private int font; // Initialized in onCreate
+    private int font;
     private int versionButtonClickCounter = 0;
 
     @Override
