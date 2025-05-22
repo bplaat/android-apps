@@ -17,8 +17,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.net.URI;
 import java.security.MessageDigest;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import javax.annotation.Nullable;
 
 public class FetchDataTask {
     public static interface OnLoadListener {
@@ -33,11 +36,11 @@ public class FetchDataTask {
     private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     private final Context context;
-    private String url;
+    private @Nullable String url;
     private boolean isLoadedFomCache = false;
     private boolean isSavedToCache = false;
-    private OnLoadListener onLoadListener = null;
-    private OnErrorListener onErrorListener = null;
+    private @Nullable OnLoadListener onLoadListener;
+    private @Nullable OnErrorListener onErrorListener;
     private boolean isPending = false;
     private boolean isLoaded = false;
     private boolean isError = false;
@@ -104,7 +107,7 @@ public class FetchDataTask {
         executor.execute(() -> {
             try {
                 isPending = true;
-                var data = fetchData(context, url, isLoadedFomCache, isSavedToCache);
+                var data = fetchData(context, Objects.requireNonNull(url), isLoadedFomCache, isSavedToCache);
                 handler.post(() -> {
                     isPending = false;
                     isLoaded = true;

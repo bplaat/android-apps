@@ -19,8 +19,12 @@ import android.util.Log;
 import android.util.LruCache;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
+
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.bassietest.R;
 
@@ -40,20 +44,20 @@ public class FetchImageTask {
     private static final LruCache<String, Bitmap> bitmapCache = new LruCache<String, Bitmap>(
             (int) (Runtime.getRuntime().freeMemory() / 4)) {
         @Override
-        protected int sizeOf(String url, Bitmap bitmap) {
+        protected int sizeOf(@SuppressWarnings("null") String url, @SuppressWarnings("null") Bitmap bitmap) {
             return bitmap.getByteCount();
         }
     };
 
     private final Context context;
-    private String url;
+    private @Nullable String url;
     private boolean isTransparent = false;
     private boolean isFadedIn = false;
     private boolean isLoadedFomCache = true;
     private boolean isSavedToCache = true;
-    private OnLoadListener onLoadListener = null;
-    private OnErrorListener onErrorListener = null;
-    private ImageView imageView;
+    private @Nullable OnLoadListener onLoadListener;
+    private @Nullable OnErrorListener onErrorListener;
+    private @Nullable ImageView imageView;
     private boolean isPending = false;
     private boolean isLoaded = false;
     private boolean isError = false;
@@ -120,7 +124,7 @@ public class FetchImageTask {
     }
 
     public String getUrl() {
-        return url;
+        return Objects.requireNonNull(url);
     }
 
     public boolean isPending() {
@@ -137,6 +141,7 @@ public class FetchImageTask {
 
     public FetchImageTask fetch() {
         if (imageView != null) {
+            var imageView = this.imageView;
             imageView.setTag(this);
             imageView.setImageBitmap(null);
         }
@@ -152,7 +157,8 @@ public class FetchImageTask {
 
         executor.execute(() -> {
             try {
-                var data = FetchDataTask.fetchData(context, url, isLoadedFomCache, isSavedToCache);
+                var data = FetchDataTask.fetchData(context, Objects.requireNonNull(url), isLoadedFomCache,
+                        isSavedToCache);
                 var options = new BitmapFactory.Options();
                 options.inPreferredConfig = isTransparent ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
                 var image = BitmapFactory.decodeByteArray(data, 0, data.length, options);
@@ -179,7 +185,8 @@ public class FetchImageTask {
         isLoaded = true;
         if (imageView != null) {
             var imageViewTask = (FetchImageTask) imageView.getTag();
-            if (url.equals(imageViewTask.getUrl())) {
+            if (Objects.requireNonNull(url).equals(imageViewTask.getUrl())) {
+                var imageView = Objects.requireNonNull(this.imageView);
                 imageView.setImageBitmap(image);
                 if (isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT) {
                     if (isTransparent) {

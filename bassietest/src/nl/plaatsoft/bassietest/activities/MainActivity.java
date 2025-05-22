@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ * Copyright (c) 2020-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+import javax.annotation.Nullable;
 import org.json.JSONObject;
 
 import nl.plaatsoft.bassietest.components.RatingAlert;
@@ -29,14 +30,14 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private static final int SETTINGS_REQUEST_CODE = 1;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private ViewSwitcher pageSwitcher;
+    private @SuppressWarnings("null") ViewSwitcher pageSwitcher;
     private int oldLanguage = -1;
     private int oldTheme = -1;
     private boolean imageLoaded = false;
     private boolean infoLoaded = false;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         pageSwitcher = findViewById(R.id.main_page_switcher);
@@ -90,7 +91,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
+    public boolean onMenuItemClick(@SuppressWarnings("null") MenuItem item) {
         if (item.getItemId() == R.id.menu_options_settings) {
             oldLanguage = settings.getLanguage();
             oldTheme = settings.getTheme();
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @SuppressWarnings("null") Intent data) {
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {

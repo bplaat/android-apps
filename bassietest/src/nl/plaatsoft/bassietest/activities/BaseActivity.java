@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ * Copyright (c) 2020-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -16,15 +16,16 @@ import android.view.WindowInsets;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 import java.util.Locale;
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.bassietest.Settings;
 
 public abstract class BaseActivity extends Activity {
-    protected Settings settings;
-    private OnBackInvokedCallback onBackCallback = null;
+    protected @SuppressWarnings("null") Settings settings;
+    private @Nullable OnBackInvokedCallback onBackCallback;
 
     @Override
-    public void attachBaseContext(Context context) {
+    public void attachBaseContext(@SuppressWarnings("null") Context context) {
         settings = new Settings(context);
         var language = settings.getLanguage();
         var theme = settings.getTheme();
