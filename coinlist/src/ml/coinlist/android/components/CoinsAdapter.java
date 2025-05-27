@@ -23,7 +23,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import org.json.JSONArray;
 import org.json.JSONException;
 
 import ml.coinlist.android.tasks.FetchImageTask;
@@ -126,9 +125,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
                     .setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
 
             try {
-                var settings = getContext().getSharedPreferences("settings", Context.MODE_PRIVATE);
-                var jsonStarredCoins = new JSONArray(settings.getString("starred_coins", "[]"));
-                var settingsEditor = settings.edit();
+                var jsonStarredCoins = settings.getStarredCoins();
                 if (coin.getStarred()) {
                     jsonStarredCoins.put(coin.getId());
                 } else {
@@ -139,8 +136,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
                         }
                     }
                 }
-                settingsEditor.putString("starred_coins", jsonStarredCoins.toString());
-                settingsEditor.apply();
+                settings.setStarredCoins(jsonStarredCoins);
             } catch (JSONException exception) {
                 Log.e(getContext().getPackageName(), "Can't update coin list item view", exception);
             }

@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.models.SongBundle;
+import nl.plaatsoft.bible.models.SongWithText;
 
 public class SongBundleService {
     private static @Nullable SongBundleService instance;
@@ -80,7 +81,7 @@ public class SongBundleService {
         return songBundles;
     }
 
-    public SQLiteDatabase openDatabase(String path) {
+    public SQLiteDatabase getDatabase(String path) {
         if (databaseCache.containsKey(path))
             return databaseCache.get(path);
         var database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
@@ -89,7 +90,7 @@ public class SongBundleService {
     }
 
     public SongBundle readSongBundle(Context context, String path) {
-        var database = openDatabase(context.getFilesDir() + "/" + path);
+        var database = getDatabase(context.getFilesDir() + "/" + path);
         var metadata = new HashMap<String, String>();
         try (var cursor = database.rawQuery("SELECT key, value FROM metadata", null)) {
             while (cursor.moveToNext())
@@ -102,9 +103,7 @@ public class SongBundleService {
             while (cursor.moveToNext())
                 songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getString(cursor.getColumnIndex("number")),
-                        cursor.getString(cursor.getColumnIndex("title")),
-                        "",
-                        ""));
+                        cursor.getString(cursor.getColumnIndex("title"))));
         }
         Collections.sort(songs, (a, b) -> a.number().compareTo(b.number()));
         Collections.sort(songs, (a, b) -> Integer.parseInt(a.number().replaceAll("^\\d+", "$0"))
@@ -114,13 +113,13 @@ public class SongBundleService {
                 metadata.get("language"), metadata.get("copyright"), metadata.get("scraped_at"), songs);
     }
 
-    public @Nullable Song readSong(Context context, String path, String songNumber) {
-        var database = openDatabase(context.getFilesDir() + "/" + path);
+    public @Nullable SongWithText readSong(Context context, String path, String songNumber) {
+        var database = getDatabase(context.getFilesDir() + "/" + path);
         try (var cursor = database.rawQuery("SELECT id, number, title, text, copyright FROM songs WHERE number = ?",
                 new String[] { songNumber })) {
             if (!cursor.moveToNext())
                 return null;
-            return new Song(cursor.getInt(cursor.getColumnIndex("id")),
+            return new SongWithText(cursor.getInt(cursor.getColumnIndex("id")),
                     cursor.getString(cursor.getColumnIndex("number")),
                     cursor.getString(cursor.getColumnIndex("title")),
                     cursor.getString(cursor.getColumnIndex("text")),
@@ -129,7 +128,7 @@ public class SongBundleService {
     }
 
     public ArrayList<Song> searchSongs(Context context, String path, String query, int maxResults) {
-        var database = openDatabase(context.getFilesDir() + "/" + path);
+        var database = getDatabase(context.getFilesDir() + "/" + path);
         var songs = new ArrayList<Song>();
         try (var cursor = database.rawQuery(
                 "SELECT id, number, title FROM songs WHERE number LIKE ? OR title LIKE ? OR text LIKE ? LIMIT ?",
@@ -137,9 +136,7 @@ public class SongBundleService {
             while (cursor.moveToNext())
                 songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
                         cursor.getString(cursor.getColumnIndex("number")),
-                        cursor.getString(cursor.getColumnIndex("title")),
-                        "",
-                        ""));
+                        cursor.getString(cursor.getColumnIndex("title"))));
         }
         return songs;
     }

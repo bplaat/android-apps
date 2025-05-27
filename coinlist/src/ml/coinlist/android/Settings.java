@@ -62,8 +62,8 @@ public class Settings {
         }
     }
 
-    public void setStarredCoins(String starredCoins) {
-        prefs.edit().putString("starred_coins", starredCoins).apply();
+    public void setStarredCoins(JSONArray starredCoins) {
+        prefs.edit().putString("starred_coins", starredCoins.toString()).apply();
     }
 
     // Currency

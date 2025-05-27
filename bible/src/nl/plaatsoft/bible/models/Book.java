@@ -6,7 +6,9 @@
 
 package nl.plaatsoft.bible.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public record Book(int id, String key, String name, ArrayList<Chapter> chapters) {
+public record Book(int id, String key, String name, ArrayList<Chapter> chapters) implements Serializable {
+    private static final long serialVersionUID = 1;
 }

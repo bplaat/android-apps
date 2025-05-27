@@ -30,6 +30,8 @@ public class Settings {
     }
 
     public void setLanguage(int language) {
+        if (getLanguage() == language)
+            return;
         prefs.edit().putInt("language", language).apply();
     }
 
@@ -43,6 +45,8 @@ public class Settings {
     }
 
     public void setTheme(int theme) {
+        if (getTheme() == theme)
+            return;
         prefs.edit().putInt("theme", theme).apply();
     }
 
@@ -64,6 +68,8 @@ public class Settings {
     }
 
     public void setFont(int font) {
+        if (getFont() == font)
+            return;
         prefs.edit().putInt("font", font).apply();
     }
 
@@ -73,6 +79,8 @@ public class Settings {
     }
 
     public void setInstalledAssetsVersion(String installedAssetsVersion) {
+        if (getInstalledAssetsVersion().equals(installedAssetsVersion))
+            return;
         prefs.edit().putString("installed_assets_version", installedAssetsVersion).apply();
     }
 
@@ -85,6 +93,8 @@ public class Settings {
     }
 
     public void setOpenType(int openType) {
+        if (getOpenType() == openType)
+            return;
         prefs.edit().putInt("open_type", openType).apply();
     }
 
@@ -105,6 +115,8 @@ public class Settings {
     }
 
     public void setOpenBible(String openBible) {
+        if (getOpenBible().equals(openBible))
+            return;
         prefs.edit().putString("open_bible", openBible).apply();
     }
 
@@ -114,8 +126,9 @@ public class Settings {
     }
 
     public void setOpenBook(String openBook) {
+        if (getOpenBook().equals(openBook))
+            return;
         prefs.edit().putString("open_book", openBook).apply();
-        setOpenChapter(1);
     }
 
     // Open chapter
@@ -124,8 +137,9 @@ public class Settings {
     }
 
     public void setOpenChapter(int openChapterNumber) {
+        if (getOpenChapter() == openChapterNumber)
+            return;
         prefs.edit().putInt("open_chapter", openChapterNumber).apply();
-        setOpenChapterScroll(0);
     }
 
     // Open chapter scroll
@@ -134,6 +148,8 @@ public class Settings {
     }
 
     public void setOpenChapterScroll(int openChapterScroll) {
+        if (getOpenChapterScroll() == openChapterScroll)
+            return;
         prefs.edit().putInt("open_chapter_scroll", openChapterScroll).apply();
     }
 
@@ -143,8 +159,9 @@ public class Settings {
     }
 
     public void setOpenSongBundle(String openSongBundle) {
+        if (getOpenSongBundle().equals(openSongBundle))
+            return;
         prefs.edit().putString("open_song_bundle", openSongBundle).apply();
-        setOpenSongNumber("1");
     }
 
     // Open song number
@@ -153,8 +170,9 @@ public class Settings {
     }
 
     public void setOpenSongNumber(String openSongBundleNumber) {
+        if (getOpenSongNumber().equals(openSongBundleNumber))
+            return;
         prefs.edit().putString("open_song_number", openSongBundleNumber).apply();
-        setOpenSongScroll(0);
     }
 
     // Open song scroll
@@ -163,9 +181,8 @@ public class Settings {
     }
 
     public void setOpenSongScroll(int openSongScroll) {
+        if (getOpenSongScroll() == openSongScroll)
+            return;
         prefs.edit().putInt("open_song_scroll", openSongScroll).apply();
     }
-
-    // Highlight verse
-    public static final String HIGHLIGHT_VERSE = "highlight_verse";
 }

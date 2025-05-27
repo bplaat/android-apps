@@ -6,6 +6,7 @@
 
 package nl.plaatsoft.bible.models;
 
-public record Song(int id, String number, String title, String text,
-        String copyright) {
+import java.io.Serializable;
+
+public record Song(int id, String number, String title) implements Serializable {
 }

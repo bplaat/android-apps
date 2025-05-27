@@ -25,6 +25,11 @@ import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Settings;
 
 public class SearchActivity extends BaseActivity implements TextWatcher {
+    public static final String BOOK = "book_key";
+    public static final String CHAPTER = "chapter_number";
+    public static final String HIGHLIGHT_VERSE = "highlight_verse";
+    public static final String SONG = "song_number";
+
     // Views
     private @SuppressWarnings("null") ScrollView startPage;
     private @SuppressWarnings("null") ListView resultsPage;
@@ -59,7 +64,6 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
 
         // Results list
         var openType = settings.getOpenType();
-
         if (openType == Settings.OPEN_TYPE_BIBLE) {
             searchVerseAdapter = new SearchVerseAdapter(this);
             searchVerseAdapter
@@ -67,24 +71,22 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
             resultsPage.setAdapter(searchVerseAdapter);
             resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
                 var searchVerse = Objects.requireNonNull(searchVerseAdapter).getItem(position);
-                settings.setOpenBook(searchVerse.book().key());
-                settings.setOpenChapter(searchVerse.chapter().number());
-
                 var intent = getIntent();
-                intent.putExtra(Settings.HIGHLIGHT_VERSE, searchVerse.verse().id());
+                intent.putExtra(BOOK, searchVerse.book());
+                intent.putExtra(CHAPTER, searchVerse.chapter());
+                intent.putExtra(HIGHLIGHT_VERSE, searchVerse.verse().id());
                 setResult(Activity.RESULT_OK, intent);
                 finish();
             });
         }
-
         if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
             songAdapter = new SongAdapter(this);
             resultsPage.setAdapter(songAdapter);
             resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
                 var song = Objects.requireNonNull(songAdapter).getItem(position);
-                settings.setOpenSongNumber(song.number());
-
-                setResult(Activity.RESULT_OK, getIntent());
+                var intent = getIntent();
+                intent.putExtra(SONG, song);
+                setResult(Activity.RESULT_OK, intent);
                 finish();
             });
         }

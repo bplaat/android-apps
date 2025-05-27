@@ -24,7 +24,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import javax.annotation.Nullable;
 
-import nl.plaatsoft.bible.models.Chapter;
+import nl.plaatsoft.bible.models.ChapterWithVerses;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Utils;
 
@@ -62,7 +62,7 @@ public class ChapterView extends ScrollView {
         this.onNextListener = onNextListener;
     }
 
-    public void openChapter(Chapter chapter, int scrollY, int highlightVerseId) {
+    public void openChapter(ChapterWithVerses chapter, int scrollY, int highlightVerseId) {
         scrollTo(0, 0);
         root.removeAllViews();
 

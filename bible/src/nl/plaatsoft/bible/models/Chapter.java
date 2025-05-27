@@ -6,7 +6,8 @@
 
 package nl.plaatsoft.bible.models;
 
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public record Chapter(int id, int number, ArrayList<Verse> verses) {
+public record Chapter(int id, int number) implements Serializable {
+    private static final long serialVersionUID = 1;
 }

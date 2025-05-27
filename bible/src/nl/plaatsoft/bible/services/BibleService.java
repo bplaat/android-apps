@@ -20,6 +20,7 @@ import java.util.zip.GZIPInputStream;
 import javax.annotation.Nullable;
 
 import nl.plaatsoft.bible.models.Chapter;
+import nl.plaatsoft.bible.models.ChapterWithVerses;
 import nl.plaatsoft.bible.models.SearchVerse;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Bible;
@@ -85,7 +86,7 @@ public class BibleService {
         return bibles;
     }
 
-    public SQLiteDatabase openDatabase(String path) {
+    public SQLiteDatabase getDatabase(String path) {
         if (databaseCache.containsKey(path))
             return databaseCache.get(path);
         var database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
@@ -94,7 +95,7 @@ public class BibleService {
     }
 
     public Bible readBible(Context context, String path, boolean readIndex) {
-        var database = openDatabase(context.getFilesDir() + "/" + path);
+        var database = getDatabase(context.getFilesDir() + "/" + path);
 
         // Read metadata
         var metadata = new HashMap<String, String>();
@@ -136,8 +137,7 @@ public class BibleService {
                                 while (chaptersCursor.moveToNext()) {
                                     chapters.add(new Chapter(
                                             chaptersCursor.getInt(chaptersCursor.getColumnIndex("id")),
-                                            chaptersCursor.getInt(chaptersCursor.getColumnIndex("number")),
-                                            new ArrayList<>()));
+                                            chaptersCursor.getInt(chaptersCursor.getColumnIndex("number"))));
                                 }
                             }
 
@@ -161,8 +161,8 @@ public class BibleService {
                 testaments);
     }
 
-    public @Nullable Chapter readChapter(Context context, String path, String bookKey, int chapterNumber) {
-        var database = openDatabase(context.getFilesDir() + "/" + path);
+    public @Nullable ChapterWithVerses readChapter(Context context, String path, String bookKey, int chapterNumber) {
+        var database = getDatabase(context.getFilesDir() + "/" + path);
         try (var chapterCursor = database.rawQuery(
                 "SELECT id, number FROM chapters WHERE book_id = (SELECT id FROM books WHERE key = ?) AND number = ?",
                 new String[] { bookKey, String.valueOf(chapterNumber) })) {
@@ -186,12 +186,13 @@ public class BibleService {
                 }
             }
 
-            return new Chapter(chapterId, chapterCursor.getInt(chapterCursor.getColumnIndex("number")), verses);
+            return new ChapterWithVerses(chapterId, chapterCursor.getInt(chapterCursor.getColumnIndex("number")),
+                    verses);
         }
     }
 
     public ArrayList<SearchVerse> searchVerses(Context context, String path, String query, int maxResults) {
-        var database = openDatabase(context.getFilesDir() + "/" + path);
+        var database = getDatabase(context.getFilesDir() + "/" + path);
         var results = new ArrayList<SearchVerse>();
         try (var cursor = database.rawQuery(
                 "SELECT books.id AS book_id, books.key AS book_key, books.name AS book_name, " +
@@ -218,8 +219,7 @@ public class BibleService {
                                 new ArrayList<>()),
                         new Chapter(
                                 cursor.getInt(cursor.getColumnIndex("chapter_id")),
-                                cursor.getInt(cursor.getColumnIndex("chapter_number")),
-                                new ArrayList<>())));
+                                cursor.getInt(cursor.getColumnIndex("chapter_number")))));
             }
         }
         return results;

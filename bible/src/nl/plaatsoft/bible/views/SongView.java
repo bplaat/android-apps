@@ -16,7 +16,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import javax.annotation.Nullable;
 
-import nl.plaatsoft.bible.models.Song;
+import nl.plaatsoft.bible.models.SongWithText;
 import nl.plaatsoft.bible.R;
 
 public class SongView extends ScrollView {
@@ -52,7 +52,7 @@ public class SongView extends ScrollView {
         this.onNextListener = onNextListener;
     }
 
-    public void openSong(Song song, int scrollY) {
+    public void openSong(SongWithText song, int scrollY) {
         scrollTo(0, 0);
         root.removeAllViews();
 
