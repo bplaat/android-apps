@@ -11,6 +11,8 @@ import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -111,7 +113,8 @@ public class FetchCoverTask {
             // I know this code is a callback / exception nightmare, I'm working on it
             try {
                 FetchDataTask fetchDataTask = FetchDataTask.with(context).load(DEEZER_API_SEARCH_ALBUM + "?q=" +
-                        URLEncoder.encode(music.getArtists().get(0) + " - " + music.getAlbum(), "UTF-8") + "&limit=1");
+                        URLEncoder.encode(music.getArtists().get(0) + " - " + music.getAlbum(), StandardCharsets.UTF_8)
+                        + "&limit=1");
                 if (isLoadedFomCache)
                     fetchDataTask.fromCache();
                 if (isSavedToCache)

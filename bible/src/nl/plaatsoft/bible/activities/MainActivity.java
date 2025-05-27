@@ -8,6 +8,7 @@ package nl.plaatsoft.bible.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -58,7 +59,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private BibleService bibleService = BibleService.getInstance();
     private SongBundleService songBundleService = SongBundleService.getInstance();
     private Handler handler = new Handler(Looper.getMainLooper());
-    private @SuppressWarnings("null") String app_version;
+    private @SuppressWarnings("null") String appVersionName;
     private @SuppressWarnings("null") ArrayList<Bible> bibles;
     private @SuppressWarnings("null") ArrayList<SongBundle> songBundles;
     private int openType = -1;
@@ -231,13 +232,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Install bibles from assets and open last opened bible
         try {
-            app_version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
-        } catch (Exception exception) {
+            appVersionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+        } catch (NameNotFoundException exception) {
             Log.e(getPackageName(), "Can't get app version", exception);
         }
         Runnable installAssetsAndOpen = () -> {
-            if (!settings.getInstalledAssetsVersion().equals(app_version)) {
-                settings.setInstalledAssetsVersion(app_version);
+            if (!settings.getInstalledAssetsVersion().equals(appVersionName)) {
+                settings.setInstalledAssetsVersion(appVersionName);
                 bibleService.installBiblesFromAssets(this);
                 songBundleService.installSongBundlesFromAssets(this);
             }

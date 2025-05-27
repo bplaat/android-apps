@@ -23,7 +23,11 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import java.nio.charset.StandardCharsets;
+
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import ml.coinlist.android.components.CoinsAdapter;
@@ -158,7 +162,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     try {
                         settings.setGlobalLoadTime(System.currentTimeMillis());
 
-                        var jsonData = new JSONObject(new String(data, "UTF-8")).getJSONObject("data");
+                        var jsonData = new JSONObject(new String(data, StandardCharsets.UTF_8)).getJSONObject("data");
 
                         ((TextView) globalInfo.findViewById(R.id.global_info_market_cap_text))
                                 .setText(getResources().getString(R.string.main_global_market_cap) + ": " +
@@ -206,7 +210,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                             set.setTarget(dominanceLabel);
                             set.start();
                         }
-                    } catch (Exception exception) {
+                    } catch (JSONException exception) {
                         Log.e(getPackageName(), "Can't parse global data", exception);
                     }
                 }).fetch();
@@ -220,7 +224,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
                 coinsAdapter.clear();
                 var jsonStarredCoins = settings.getStarredCoins();
-                var jsonCoins = new JSONArray(new String(data, "UTF-8"));
+                var jsonCoins = new JSONArray(new String(data, StandardCharsets.UTF_8));
                 for (var i = 0; i < jsonCoins.length(); i++) {
                     var jsonCoin = jsonCoins.getJSONObject(i);
 
@@ -247,7 +251,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                             jsonCoin.getDouble("circulating_supply"),
                             isStarred));
                 }
-            } catch (Exception exception) {
+            } catch (JSONException exception) {
                 Log.e(getPackageName(), "Can't parse coins data", exception);
             }
         }).fetch();

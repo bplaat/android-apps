@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ * Copyright (c) 2020-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -8,6 +8,7 @@ package nl.plaatsoft.redsquare.android.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,24 +25,25 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.URLEncoder;
-import java.util.HashMap;
+import java.nio.charset.StandardCharsets;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import nl.plaatsoft.redsquare.android.components.GamePage;
 import nl.plaatsoft.redsquare.android.components.ScoreAdapter;
 import nl.plaatsoft.redsquare.android.models.Score;
 import nl.plaatsoft.redsquare.android.tasks.FetchDataTask;
+import nl.plaatsoft.redsquare.android.Consts;
 import nl.plaatsoft.redsquare.android.R;
 
 public class MainActivity extends BaseActivity {
     public static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private HashMap<String, String> secrets;
+    private String versionName;
     private RelativeLayout menuPage;
     private GamePage gamePage;
     private LinearLayout settingsPage;
@@ -55,13 +57,6 @@ public class MainActivity extends BaseActivity {
         }
         setContentView(R.layout.activity_main);
 
-        // Try to read secrets.ini
-        try {
-            secrets = readIniFromAssets("secrets.ini");
-        } catch (IOException exception) {
-            secrets = new HashMap<>();
-        }
-
         menuPage = findViewById(R.id.menu_page);
         gamePage = findViewById(R.id.game_page);
         var gameoverPage = (LinearLayout) findViewById(R.id.gameover_page);
@@ -72,9 +67,9 @@ public class MainActivity extends BaseActivity {
 
         // Menu page
         try {
-            ((TextView) findViewById(R.id.menu_version_label))
-                    .setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
-        } catch (Exception exception) {
+            versionName = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+            ((TextView) findViewById(R.id.menu_version_label)).setText("v" + versionName);
+        } catch (NameNotFoundException exception) {
             Log.e(getPackageName(), "Can't get app version", exception);
         }
         findViewById(R.id.menu_about_label).setOnClickListener(view -> {
@@ -97,23 +92,52 @@ public class MainActivity extends BaseActivity {
         var levelLabelString = getResources().getString(R.string.gameover_level_label);
 
         gamePage.setOnEventListener((score, seconds, level) -> {
-            try {
-                FetchDataTask.with(this)
-                        .load(secrets.getOrDefault("api_url", "") + "?key=" + secrets.getOrDefault("api_key", "")
-                                + "&name="
-                                + URLEncoder.encode(settings.getName(), "UTF-8")
-                                + "&score=" + score)
-                        .fetch();
+            // Get product id
+            FetchDataTask.with(this)
+                    .load(Consts.SCORE_SERVICE_URL + "?action=getProduct&product=Android-RedSquare&os=Android&version="
+                            + URLEncoder.encode(versionName, StandardCharsets.UTF_8))
+                    .then(productData -> {
+                        try {
+                            var productDataJSON = new JSONObject(new String(productData, StandardCharsets.UTF_8));
+                            var productId = productDataJSON.getInt("pid");
 
-                var scoresJSON = settings.getScores();
-                var newScoreJSON = new JSONObject();
-                newScoreJSON.put("name", settings.getName());
-                newScoreJSON.put("score", score);
-                scoresJSON.put(newScoreJSON);
-                settings.setScores(scoresJSON);
-            } catch (Exception exception) {
-                Log.e(getPackageName(), "Can't parse local highscores", exception);
-            }
+                            // Get user id
+                            FetchDataTask.with(this)
+                                    .load(Consts.SCORE_SERVICE_URL + "?action=getUser"
+                                            + "&username="
+                                            + URLEncoder.encode(settings.getName(), StandardCharsets.UTF_8)
+                                            + "&nickname="
+                                            + URLEncoder.encode(settings.getName(), StandardCharsets.UTF_8)
+                                            + "&ip=&country=&city=")
+                                    .then(userData -> {
+                                        try {
+                                            var userDataJSON = new JSONObject(
+                                                    new String(userData, StandardCharsets.UTF_8));
+                                            var userId = userDataJSON.getInt("uid");
+
+                                            // Set score
+                                            FetchDataTask.with(this)
+                                                    .load("https://service.plaatsoft.nl/?action=setScore"
+                                                            + "&pid=" + productId
+                                                            + "&uid=" + userId
+                                                            + "&dt=" + seconds
+                                                            + "&score=" + score
+                                                            + "&level=" + level)
+                                                    .fetch();
+                                        } catch (JSONException exception) {
+                                            Log.e(getPackageName(), "Can't parse user id", exception);
+                                        }
+                                    })
+                                    .fetch();
+                        } catch (JSONException exception) {
+                            Log.e(getPackageName(), "Can't parse product id", exception);
+                        }
+                    })
+                    .fetch();
+
+            var scoresJSON = settings.getScores();
+            scoresJSON.put(new Score(0, settings.getName(), seconds, score, level).toJSON());
+            settings.setScores(scoresJSON);
 
             gameoverScoreLabel.setText(String.format(scoreLabelString, score));
             gameoverTimeLabel.setText(String.format(timeLabelString, seconds / 60, seconds % 60));
@@ -137,15 +161,12 @@ public class MainActivity extends BaseActivity {
                 localHighscoreAdapter.clear();
                 var scoresJSON = settings.getScores();
                 for (var i = 0; i < scoresJSON.length(); i++) {
-                    var scoreJSON = scoresJSON.getJSONObject(i);
-                    localHighscoreAdapter.add(new Score(
-                            scoreJSON.getString("name"),
-                            scoreJSON.getInt("score")));
+                    localHighscoreAdapter.add(Score.fromJSON(scoresJSON.getJSONObject(i)));
                 }
 
                 localHighscoreAdapter.sort((a, b) -> b.score() - a.score());
                 localHighscoreAdapter.notifyDataSetChanged();
-            } catch (Exception exception) {
+            } catch (JSONException exception) {
                 Log.e(getPackageName(), "Can't parse local highscores", exception);
             }
 
@@ -171,31 +192,43 @@ public class MainActivity extends BaseActivity {
             globalHighscoreListLoading.setVisibility(View.VISIBLE);
             globalHighscoreListError.setVisibility(View.GONE);
 
-            var url = secrets.getOrDefault("api_url", "") + "?key=" + secrets.getOrDefault("api_key", "")
-                    + "&page=1&limit=50";
-            FetchDataTask.with(this).load(url).then(data -> {
-                try {
-                    var dataJSON = new JSONObject(new String(data, "UTF-8"));
-                    var scoresJSON = dataJSON.getJSONArray("scores");
-                    for (var i = 0; i < scoresJSON.length(); i++) {
-                        var scoreJSON = scoresJSON.getJSONObject(i);
-                        globalHighscoreAdapter.add(new Score(
-                                scoreJSON.getString("name"),
-                                scoreJSON.getInt("score")));
-                    }
+            // Get product id
+            FetchDataTask.with(this)
+                    .load(Consts.SCORE_SERVICE_URL + "?action=getProduct&product=Android-RedSquare&os=Android&version="
+                            + URLEncoder.encode(versionName, StandardCharsets.UTF_8))
+                    .then(productData -> {
+                        try {
+                            var productDataJSON = new JSONObject(new String(productData, StandardCharsets.UTF_8));
+                            var productId = productDataJSON.getInt("pid");
 
-                    globalHighscoreList.setVisibility(View.VISIBLE);
-                    globalHighscoreListLoading.setVisibility(View.GONE);
-                    globalHighscoreListError.setVisibility(View.GONE);
-                } catch (Exception exception) {
-                    Log.e(getPackageName(), "Can't parse global highscores", exception);
-                }
-            }, exception -> {
-                Log.e(getPackageName(), "Can't fetch global highscores", exception);
-                globalHighscoreList.setVisibility(View.GONE);
-                globalHighscoreListLoading.setVisibility(View.GONE);
-                globalHighscoreListError.setVisibility(View.VISIBLE);
-            }).fetch();
+                            // Get global highscores
+                            FetchDataTask.with(this)
+                                    .load(Consts.SCORE_SERVICE_URL + "?action=getGlobalScore&pid=" + productId)
+                                    .then(scoresData -> {
+                                        try {
+                                            var scoresJSON = new JSONArray(
+                                                    new String(scoresData, StandardCharsets.UTF_8));
+                                            for (var i = 0; i < scoresJSON.length(); i++) {
+                                                globalHighscoreAdapter
+                                                        .add(Score.fromPlaatServiceJSON(scoresJSON.getJSONObject(i)));
+                                            }
+
+                                            globalHighscoreList.setVisibility(View.VISIBLE);
+                                            globalHighscoreListLoading.setVisibility(View.GONE);
+                                            globalHighscoreListError.setVisibility(View.GONE);
+                                        } catch (JSONException exception) {
+                                            Log.e(getPackageName(), "Can't parse global highscores", exception);
+                                        }
+                                    }, exception -> {
+                                        Log.e(getPackageName(), "Can't fetch global highscores", exception);
+                                        globalHighscoreList.setVisibility(View.GONE);
+                                        globalHighscoreListLoading.setVisibility(View.GONE);
+                                        globalHighscoreListError.setVisibility(View.VISIBLE);
+                                    }).fetch();
+                        } catch (JSONException exception) {
+                            Log.e(getPackageName(), "Can't parse product id", exception);
+                        }
+                    }).fetch();
 
             menuPage.setVisibility(View.GONE);
             globalHighscorePage.setVisibility(View.VISIBLE);
@@ -336,21 +369,5 @@ public class MainActivity extends BaseActivity {
                             View.SYSTEM_UI_FLAG_FULLSCREEN |
                             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         }
-    }
-
-    private HashMap<String, String> readIniFromAssets(String path) throws IOException {
-        var secrets = new HashMap<String, String>();
-        var inputStream = getAssets().open(path);
-        var reader = new BufferedReader(new InputStreamReader(inputStream));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            line = line.trim();
-            if (line.isEmpty() || line.startsWith("#") || !line.contains("="))
-                continue;
-            var parts = line.split("=", 2);
-            secrets.put(parts[0].trim(), parts[1].trim());
-        }
-        reader.close();
-        return secrets;
     }
 }

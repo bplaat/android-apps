@@ -8,6 +8,7 @@ package ml.coinlist.android.activities;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -106,7 +107,7 @@ public class SettingsActivity extends BaseActivity {
         try {
             ((TextView) findViewById(R.id.settings_version_label))
                     .setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
-        } catch (Exception exception) {
+        } catch (NameNotFoundException exception) {
             Log.e(getPackageName(), "Can't get app version", exception);
         }
         findViewById(R.id.settings_version_button).setOnClickListener(view -> {

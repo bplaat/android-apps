@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 import ml.coinlist.android.tasks.FetchImageTask;
 import ml.coinlist.android.models.Coin;
@@ -140,7 +141,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
                 }
                 settingsEditor.putString("starred_coins", jsonStarredCoins.toString());
                 settingsEditor.apply();
-            } catch (Exception exception) {
+            } catch (JSONException exception) {
                 Log.e(getContext().getPackageName(), "Can't update coin list item view", exception);
             }
         });

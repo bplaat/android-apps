@@ -23,6 +23,8 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
+
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
 import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
@@ -161,7 +163,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                             sb.append(" ");
                             for (var j = 0; j < 8; j++) {
                                 sb.append(data[i * 16 + j] >= 40 && data[i * 16 + j] <= 176
-                                        ? new String(new byte[] { data[i * 16 + j] }, "UTF-8")
+                                        ? new String(new byte[] { data[i * 16 + j] }, StandardCharsets.UTF_8)
                                         : ".");
                                 sb.append(j < 8 - 1 ? " " : "\n");
                             }
@@ -173,7 +175,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                             sb.append(" ");
                             for (var j = 0; j < 8; j++) {
                                 sb.append(data[i * 16 + 8 + j] >= 40 && data[i * 16 + 8 + j] <= 176
-                                        ? new String(new byte[] { data[i * 16 + 8 + j] }, "UTF-8")
+                                        ? new String(new byte[] { data[i * 16 + 8 + j] }, StandardCharsets.UTF_8)
                                         : ".");
                                 sb.append(j < 8 - 1 ? " " : "\n");
                             }

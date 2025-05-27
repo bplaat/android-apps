@@ -18,7 +18,12 @@ import android.view.MenuItem;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
+
+import java.nio.charset.StandardCharsets;
+
 import javax.annotation.Nullable;
+
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import nl.plaatsoft.bassietest.components.RatingAlert;
@@ -73,14 +78,14 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 infoLoaded = true;
                 FetchDataTask.with(this).load("https://ipinfo.io/json").then(data -> {
                     try {
-                        var jsonData = new JSONObject(new String(data, "UTF-8"));
+                        var jsonData = new JSONObject(new String(data, StandardCharsets.UTF_8));
                         var locationLabel = (TextView) findViewById(R.id.main_data_location_label);
                         locationLabel.setText(jsonData.getString("city") + ", " + jsonData.getString("region"));
 
                         var set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
                         set.setTarget(locationLabel);
                         set.start();
-                    } catch (Exception exception) {
+                    } catch (JSONException exception) {
                         Log.e(getPackageName(), "Can't parse IP info", exception);
                     }
                 }).fetch();
