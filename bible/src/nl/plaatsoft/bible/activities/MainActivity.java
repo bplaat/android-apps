@@ -9,7 +9,6 @@ package nl.plaatsoft.bible.activities;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -42,6 +41,7 @@ import nl.plaatsoft.bible.views.DrawerLayout;
 import nl.plaatsoft.bible.views.SongView;
 import nl.plaatsoft.bible.views.SongsDialogBuilder;
 import nl.plaatsoft.bible.Settings;
+import nl.plaatsoft.bible.Utils;
 import nl.plaatsoft.bible.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -290,29 +290,17 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    @SuppressWarnings("deprecation")
     public void onActivityResult(int requestCode, int resultCode, @SuppressWarnings("null") Intent data) {
         // When search activity is closed check open selected book / chapter verse
         if (requestCode == SEARCH_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (openType == Settings.OPEN_TYPE_BIBLE) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        var book = data.getSerializableExtra(SearchActivity.BOOK, Book.class);
-                        var chapter = data.getSerializableExtra(SearchActivity.CHAPTER, Chapter.class);
-                        openChapter(book, chapter, 0, data.getIntExtra(SearchActivity.HIGHLIGHT_VERSE, -1));
-                    } else {
-                        var book = (Book) data.getSerializableExtra(SearchActivity.BOOK);
-                        var chapter = (Chapter) data.getSerializableExtra(SearchActivity.CHAPTER);
-                        openChapter(book, chapter, 0, data.getIntExtra(SearchActivity.HIGHLIGHT_VERSE, -1));
-                    }
+                    var book = Utils.intentGetSerializableExtra(data, SearchActivity.BOOK, Book.class);
+                    var chapter = Utils.intentGetSerializableExtra(data, SearchActivity.CHAPTER, Chapter.class);
+                    openChapter(book, chapter, 0, data.getIntExtra(SearchActivity.HIGHLIGHT_VERSE, -1));
                 }
-                if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        openSong(data.getSerializableExtra(SearchActivity.SONG, Song.class));
-                    } else {
-                        openSong((Song) data.getSerializableExtra(SearchActivity.SONG));
-                    }
-                }
+                if (openType == Settings.OPEN_TYPE_SONG_BUNDLE)
+                    openSong(Utils.intentGetSerializableExtra(data, SearchActivity.SONG, Song.class));
             }
             return;
         }

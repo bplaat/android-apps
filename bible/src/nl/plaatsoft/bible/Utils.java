@@ -7,7 +7,9 @@
 package nl.plaatsoft.bible;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
+import java.io.Serializable;
 
 public class Utils {
     private Utils() {
@@ -30,5 +32,12 @@ public class Utils {
             return languages;
         }
         return new String[] { context.getResources().getConfiguration().locale.getLanguage() };
+    }
+
+    @SuppressWarnings({ "deprecation", "unchecked" })
+    public static <T extends Serializable> T intentGetSerializableExtra(Intent intent, String name, Class<T> clazz) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+            return intent.getSerializableExtra(name, clazz);
+        return (T) intent.getSerializableExtra(name);
     }
 }
