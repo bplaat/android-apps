@@ -90,7 +90,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         chapterPage = findViewById(R.id.main_chapter_page);
         chapterNotAvailablePage = findViewById(R.id.main_chapter_not_available_page);
         songPage = findViewById(R.id.main_song_page);
-        useWindowInsets(chapterPage, chapterNotAvailablePage, songPage);
+        useWindowInsets(findViewById(R.id.main_drawer_scroll), chapterPage, chapterNotAvailablePage, songPage);
 
         // Menu button
         findViewById(R.id.main_menu_button).setOnClickListener(view -> {

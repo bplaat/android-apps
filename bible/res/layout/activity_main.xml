@@ -74,7 +74,9 @@
                 <View style="@style/ListDivider" />
             </LinearLayout>
 
-            <ScrollView style="@style/Fill">
+            <ScrollView android:id="@+id/main_drawer_scroll"
+                style="@style/Fill">
+
                 <LinearLayout style="@style/List"
                     android:padding="0dp">
                     <TextView android:text="@string/main_drawer_bibles"
