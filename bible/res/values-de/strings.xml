@@ -3,6 +3,7 @@
     <string name="app_name">Bibel</string>
 
     <!-- Menu options -->
+    <string name="menu_options_last_open_chapter">Letztes offenes Kapitel</string>
     <string name="menu_options_random_verse">Zufälliger Vers</string>
     <string name="menu_options_random_song">Zufälliges Lied</string>
     <string name="menu_options_settings">Einstellungen</string>

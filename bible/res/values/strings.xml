@@ -3,6 +3,7 @@
     <string name="app_name">Bible</string>
 
     <!-- Menu options -->
+    <string name="menu_options_last_open_chapter">Last open chapter</string>
     <string name="menu_options_random_verse">Random verse</string>
     <string name="menu_options_random_song">Random song</string>
     <string name="menu_options_settings">Settings</string>

@@ -3,6 +3,7 @@
     <string name="app_name">Bijbel</string>
 
     <!-- Menu options -->
+    <string name="menu_options_last_open_chapter">Laast geopende hoofdstuk</string>
     <string name="menu_options_random_verse">Willekeurig vers</string>
     <string name="menu_options_random_song">Willekeurig lied</string>
     <string name="menu_options_settings">Instellingen</string>

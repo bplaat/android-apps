@@ -70,6 +70,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private @Nullable Bible openBible;
     private @Nullable Book openBook;
     private @Nullable ChapterWithVerses openChapter;
+    private @Nullable String lastBookKey;
+    private int lastChapterNumber;
+    private int lastChapterScroll;
     private @Nullable SongBundle openSongBundle;
     private @Nullable SongWithText openSong;
     private @Nullable AlertDialog dialog;
@@ -140,8 +143,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Options menu button
         findViewById(R.id.main_options_menu_button).setOnClickListener(view -> {
             var optionsMenu = new PopupMenu(this, view, Gravity.TOP | Gravity.RIGHT);
-            if (openType == Settings.OPEN_TYPE_BIBLE)
+            if (openType == Settings.OPEN_TYPE_BIBLE) {
                 optionsMenu.getMenuInflater().inflate(R.menu.options_bible, optionsMenu.getMenu());
+                optionsMenu.getMenu().findItem(R.id.menu_options_last_open_chapter).setVisible(lastBookKey != null);
+            }
             if (openType == Settings.OPEN_TYPE_SONG_BUNDLE)
                 optionsMenu.getMenuInflater().inflate(R.menu.options_song_bundle, optionsMenu.getMenu());
             optionsMenu.setOnMenuItemClickListener(this);
@@ -253,6 +258,15 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     @Override
     public boolean onMenuItemClick(@SuppressWarnings("null") MenuItem item) {
+        if (item.getItemId() == R.id.menu_options_last_open_chapter) {
+            if (lastBookKey != null) {
+                var currentLastChapterScrollY = lastChapterScroll;
+                lastChapterScroll = chapterPage.getScrollY();
+                openBookAndChapter(Objects.requireNonNull(lastBookKey), lastChapterNumber, currentLastChapterScrollY);
+            }
+            return true;
+        }
+
         if (item.getItemId() == R.id.menu_options_random_verse) {
             var openBibleTestaments = Objects.requireNonNull(openBible).testaments();
             var randomTestament = openBibleTestaments.get((int) (Math.random() * openBibleTestaments.size()));
@@ -339,36 +353,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         openType = settings.getOpenType();
         if (openType == Settings.OPEN_TYPE_BIBLE) {
             openBible = bibleService.readBible(this, settings.getOpenBible(), true);
-
-            // Find open book
-            Book book = null;
-            for (var testament : Objects.requireNonNull(openBible).testaments()) {
-                for (var otherBook : testament.books()) {
-                    if (otherBook.key().equals(settings.getOpenBook())) {
-                        book = otherBook;
-                        break;
-                    }
-                }
-                if (book != null)
-                    break;
-            }
-
-            // Find open chapter
-            if (book != null) {
-                var chapter = bibleService.readChapter(this, Objects.requireNonNull(openBible).path(),
-                        Objects.requireNonNull(book).key(), settings.getOpenChapter());
-                if (chapter != null) {
-                    openChapter(book, chapter, settings.getOpenChapterScroll(), -1);
-                    return;
-                }
-            }
-
-            // When book or chapter not available, show not available page
-            openBook = null;
-            openChapter = null;
-            nameButton.setText(book != null ? book.name() : settings.getOpenBook() + "?");
-            indexButton.setText(String.valueOf(settings.getOpenChapter()));
-            openPage(chapterNotAvailablePage);
+            openBookAndChapter(settings.getOpenBook(), settings.getOpenChapter(), settings.getOpenChapterScroll());
         }
 
         if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
@@ -376,6 +361,38 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             openSong(Objects.requireNonNull(songBundleService.readSong(this,
                     Objects.requireNonNull(openSongBundle).path(), settings.getOpenSongNumber())));
         }
+    }
+
+    private void openBookAndChapter(String bookKey, int chapterNumber, int scrollY) {
+        // Find open book
+        Book book = null;
+        for (var testament : Objects.requireNonNull(openBible).testaments()) {
+            for (var otherBook : testament.books()) {
+                if (otherBook.key().equals(bookKey)) {
+                    book = otherBook;
+                    break;
+                }
+            }
+            if (book != null)
+                break;
+        }
+
+        // Find open chapter
+        if (book != null) {
+            var chapter = bibleService.readChapter(this, Objects.requireNonNull(openBible).path(),
+                    Objects.requireNonNull(book).key(), chapterNumber);
+            if (chapter != null) {
+                openChapter(book, chapter, scrollY, -1);
+                return;
+            }
+        }
+
+        // When book or chapter not available, show not available page
+        openBook = null;
+        openChapter = null;
+        nameButton.setText(book != null ? book.name() : bookKey + "?");
+        indexButton.setText(String.valueOf(chapterNumber));
+        openPage(chapterNotAvailablePage);
     }
 
     private void openChapter(Book book, Chapter chapter) {
@@ -390,10 +407,18 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void openChapter(Book book, ChapterWithVerses chapter, int scrollY, int highlightVerseId) {
+        if (openBook != null && openChapter != null && !(openBook.key().equals(book.key())
+                && Objects.requireNonNull(openChapter).number() == chapter.number())) {
+            lastBookKey = Objects.requireNonNull(openBook).key();
+            lastChapterNumber = Objects.requireNonNull(openChapter).number();
+            lastChapterScroll = chapterPage.getScrollY();
+        }
+
         openBook = book;
-        settings.setOpenBook(Objects.requireNonNull(openBook).key());
         openChapter = chapter;
+        settings.setOpenBook(Objects.requireNonNull(openBook).key());
         settings.setOpenChapter(Objects.requireNonNull(openChapter).number());
+
         nameButton.setText(openBook != null ? openBook.name() : settings.getOpenBook() + "?");
         indexButton.setText(String.valueOf(Objects.requireNonNull(openChapter).number()));
         chapterPage.openChapter(Objects.requireNonNull(openChapter), scrollY, highlightVerseId);
