@@ -41,16 +41,20 @@ public class BibleService {
         return Objects.requireNonNull(instance);
     }
 
-    public void installBiblesFromAssets(Context context) {
+    public void installBiblesFromAssets(Context context, boolean skipExisting) {
         // Copy and unzip .bible files from assets dir to app data dir
         try {
-            var biblesDir = new File(context.getFilesDir(), "bibles");
+            var biblesDir = new File(context.getCacheDir(), "bibles");
             if (!biblesDir.exists())
                 biblesDir.mkdirs();
             for (var filename : context.getAssets().list("bibles")) {
                 if (!filename.endsWith(".bible"))
                     continue;
+
                 var file = new File(biblesDir, filename);
+                if (skipExisting && file.exists() && file.length() > 0)
+                    continue;
+
                 var assetsFile = context.getAssets().openFd("bibles/" + filename);
                 try (var gzipInputStream = new GZIPInputStream(assetsFile.createInputStream());
                         var fileOutputStream = new FileOutputStream(file)) {
@@ -69,7 +73,7 @@ public class BibleService {
 
     public ArrayList<Bible> getInstalledBibles(Context context) {
         var bibles = new ArrayList<Bible>();
-        var biblesDir = new File(context.getFilesDir(), "bibles");
+        var biblesDir = new File(context.getCacheDir(), "bibles");
         for (var file : biblesDir.listFiles()) {
             if (!file.getName().endsWith(".bible"))
                 continue;
@@ -86,16 +90,17 @@ public class BibleService {
         return bibles;
     }
 
-    public SQLiteDatabase getDatabase(String path) {
+    private SQLiteDatabase getDatabase(Context context, String path) {
         if (databaseCache.containsKey(path))
             return databaseCache.get(path);
-        var database = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
+        var database = SQLiteDatabase.openDatabase(context.getCacheDir() + "/" + path, null,
+                SQLiteDatabase.OPEN_READONLY);
         databaseCache.put(path, database);
         return database;
     }
 
     public Bible readBible(Context context, String path, boolean readIndex) {
-        var database = getDatabase(context.getFilesDir() + "/" + path);
+        var database = getDatabase(context, path);
 
         // Read metadata
         var metadata = new HashMap<String, String>();
@@ -162,7 +167,7 @@ public class BibleService {
     }
 
     public @Nullable ChapterWithVerses readChapter(Context context, String path, String bookKey, int chapterNumber) {
-        var database = getDatabase(context.getFilesDir() + "/" + path);
+        var database = getDatabase(context, path);
         try (var chapterCursor = database.rawQuery(
                 "SELECT id, number FROM chapters WHERE book_id = (SELECT id FROM books WHERE key = ?) AND number = ?",
                 new String[] { bookKey, String.valueOf(chapterNumber) })) {
@@ -192,7 +197,7 @@ public class BibleService {
     }
 
     public ArrayList<SearchVerse> searchVerses(Context context, String path, String query, int maxResults) {
-        var database = getDatabase(context.getFilesDir() + "/" + path);
+        var database = getDatabase(context, path);
         var results = new ArrayList<SearchVerse>();
         try (var cursor = database.rawQuery(
                 "SELECT books.id AS book_id, books.key AS book_key, books.name AS book_name, " +

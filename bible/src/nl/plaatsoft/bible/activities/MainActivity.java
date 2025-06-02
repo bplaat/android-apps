@@ -243,11 +243,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             Log.e(getPackageName(), "Can't get app version", exception);
         }
         Runnable installAssetsAndOpen = () -> {
-            if (!settings.getInstalledAssetsVersion().equals(appVersionName)) {
-                settings.setInstalledAssetsVersion(appVersionName);
-                bibleService.installBiblesFromAssets(this);
-                songBundleService.installSongBundlesFromAssets(this);
-            }
+            var skipExisting = settings.getInstalledAssetsVersion().equals(appVersionName);
+            settings.setInstalledAssetsVersion(appVersionName);
+            bibleService.installBiblesFromAssets(this, skipExisting);
+            songBundleService.installSongBundlesFromAssets(this, skipExisting);
 
             bibles = bibleService.getInstalledBibles(this);
             songBundles = songBundleService.getInstalledSongBundles(this);
@@ -358,8 +357,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
             openSongBundle = songBundleService.readSongBundle(this, settings.getOpenSongBundle());
-            openSong(Objects.requireNonNull(songBundleService.readSong(this,
-                    Objects.requireNonNull(openSongBundle).path(), settings.getOpenSongNumber())));
+            openSong(Objects.requireNonNull(
+                    songBundleService.readSong(this, openSongBundle.path(), settings.getOpenSongNumber())));
         }
     }
 
