@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2025 Bastiaan van der Plaat
+ * Copyright (c) 2020-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
 
 @ParametersAreNonnullByDefault
-package nl.plaatsoft.bassietest.components;
+package nl.plaatsoft.android.ratingalert;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -13,6 +13,10 @@ A collection of various Android apps that I created for myself and others
 -   [RFID Viewer](rfidviewer/) A Mifare Classic / RFID card viewer / writer app
 -   [Tweakers](tweakers/) A simple [Tweakers](https://tweakers.net/) webview app because installed PWA's suck sadly
 
+## Android Libraries
+
+-   [RatingAlert](lib/ratingalert/) A simple rating alert dialog
+
 ## Getting Started
 
 -   Install Java JDK 21
