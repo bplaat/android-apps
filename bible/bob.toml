@@ -3,6 +3,9 @@ name = "bible"
 identifier = "nl.plaatsoft.bible"
 version = "1.4.0"
 
+[dependencies]
+nullsafe = { path = "../lib/nullsafe" }
+
 [package.metadata.android]
 main_activity = ".activities.MainActivity"
 key_alias = ""
