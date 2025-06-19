@@ -3,9 +3,9 @@ name = "bassietest"
 identifier = "nl.plaatsoft.bassietest"
 version = "1.0.0"
 
+[dependencies]
+ratingalert = { path = "../lib/ratingalert" }
+
 [package.metadata.android]
 main_activity = ".activities.MainActivity"
 key_alias = ""
-
-[dependencies]
-ratingalert = { path = "../lib/ratingalert" }
