@@ -35,11 +35,4 @@
     <string name="settings_about_alert_message_label">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
     <string name="settings_about_alert_website_button">Website</string>
     <string name="settings_about_alert_ok_button">OK</string>
-
-    <!-- Rating alert -->
-    <string name="rating_alert_title_label">Beoordeel BassieTest?</string>
-    <string name="rating_alert_message_label">Als je de BassieTest-app leuk vindt, neem dan even de tijd om deze te beoordelen. Bedankt voor je steun!</string>
-    <string name="rating_alert_rate_button">Beoordeel</string>
-    <string name="rating_alert_later_button">Later</string>
-    <string name="rating_alert_never_button">Nooit</string>
 </resources>

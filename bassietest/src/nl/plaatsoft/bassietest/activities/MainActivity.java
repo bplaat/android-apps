@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import nl.plaatsoft.bassietest.components.RatingAlert;
+import nl.plaatsoft.android.ratingalert.RatingAlert;
 import nl.plaatsoft.bassietest.tasks.FetchDataTask;
 import nl.plaatsoft.bassietest.tasks.FetchImageTask;
 import nl.plaatsoft.bassietest.R;
