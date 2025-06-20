@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.ratingalert.RatingAlert;
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;
@@ -253,6 +254,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             handler.post(() -> openFromSettings());
         };
         installAssetsAndOpen.run();
+
+        // Show rating alert
+        RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override

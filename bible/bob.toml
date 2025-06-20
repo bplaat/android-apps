@@ -5,6 +5,7 @@ version = "1.4.0"
 
 [dependencies]
 nullsafe = { path = "../lib/nullsafe" }
+ratingalert = { path = "../lib/ratingalert" }
 
 [package.metadata.android]
 main_activity = ".activities.MainActivity"

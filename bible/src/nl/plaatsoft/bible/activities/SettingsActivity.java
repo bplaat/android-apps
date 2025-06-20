@@ -22,7 +22,7 @@ import nl.plaatsoft.bible.Settings;
 import nl.plaatsoft.bible.R;
 
 public class SettingsActivity extends BaseActivity {
-    private static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bible";
+    public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bible";
     private static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 
     private int font;
