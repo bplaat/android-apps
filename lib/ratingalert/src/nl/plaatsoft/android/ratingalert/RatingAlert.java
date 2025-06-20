@@ -17,18 +17,18 @@ public class RatingAlert {
 
     public static void updateAndShow(Context context, String storePageUrl) {
         var settings = context.getSharedPreferences("settings", Context.MODE_PRIVATE);
-        if (settings.getBoolean("rating_alert_hidden", false))
+        if (settings.getBoolean("ratingalert_hidden", false))
             return;
 
         // Increment or set rating counters and time
-        var launchCount = settings.getInt("rating_alert_launch_count", 0) + 1;
-        var firstLaunchTime = settings.getLong("rating_alert_first_launch_time", -1);
+        var launchCount = settings.getInt("ratingalert_launch_count", 0) + 1;
+        var firstLaunchTime = settings.getLong("ratingalert_first_launch_time", -1);
         {
             var settingsEditor = settings.edit();
-            settingsEditor.putInt("rating_alert_launch_count", launchCount);
+            settingsEditor.putInt("ratingalert_launch_count", launchCount);
             if (firstLaunchTime == -1) {
                 firstLaunchTime = System.currentTimeMillis();
-                settingsEditor.putLong("rating_alert_first_launch_time", firstLaunchTime);
+                settingsEditor.putLong("ratingalert_first_launch_time", firstLaunchTime);
             }
             settingsEditor.commit();
         }
@@ -38,24 +38,24 @@ public class RatingAlert {
                 System.currentTimeMillis() - firstLaunchTime >= TIME_UNTIL_PROMPT) {
             var appName = context.getPackageManager().getApplicationLabel(context.getApplicationInfo());
             new AlertDialog.Builder(context)
-                    .setTitle(context.getString(R.string.rating_alert_title_label).replace("$0", appName))
-                    .setMessage(context.getString(R.string.rating_alert_message_label).replace("$0", appName))
-                    .setNeutralButton(R.string.rating_alert_later_button, (dialog, which) -> {
+                    .setTitle(context.getString(R.string.ratingalert_title_label).replace("$0", appName))
+                    .setMessage(context.getString(R.string.ratingalert_message_label).replace("$0", appName))
+                    .setNeutralButton(R.string.ratingalert_later_button, (dialog, which) -> {
                         // Reset the rating counters
                         var settingsEditor = settings.edit();
-                        settingsEditor.putInt("rating_alert_launch_count", 0);
-                        settingsEditor.putLong("rating_alert_first_launch_time", System.currentTimeMillis());
+                        settingsEditor.putInt("ratingalert_launch_count", 0);
+                        settingsEditor.putLong("ratingalert_first_launch_time", System.currentTimeMillis());
                         settingsEditor.commit();
                     })
-                    .setNegativeButton(R.string.rating_alert_never_button, (dialog, which) -> {
+                    .setNegativeButton(R.string.ratingalert_never_button, (dialog, which) -> {
                         var settingsEditor = settings.edit();
-                        settingsEditor.putBoolean("rating_alert_hidden", true);
+                        settingsEditor.putBoolean("ratingalert_hidden", true);
                         settingsEditor.commit();
                     })
-                    .setPositiveButton(R.string.rating_alert_rate_button, (dialog, which) -> {
+                    .setPositiveButton(R.string.ratingalert_rate_button, (dialog, which) -> {
                         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storePageUrl)));
                         var settingsEditor = settings.edit();
-                        settingsEditor.putBoolean("rating_alert_hidden", true);
+                        settingsEditor.putBoolean("ratingalert_hidden", true);
                         settingsEditor.commit();
                     })
                     .show();
