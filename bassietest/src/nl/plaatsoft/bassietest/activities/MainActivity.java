@@ -94,6 +94,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             }
         });
 
+        // Show rating alert
         RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
     }
 

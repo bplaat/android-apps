@@ -58,11 +58,4 @@
     <string name="settings_about_alert_message_label">This application is made by Bastiaan van der Plaat\n\nWith album covers from the nice and open Deezer API</string>
     <string name="settings_about_alert_website_button">Website</string>
     <string name="settings_about_alert_ok_button">OK</string>
-
-    <!-- Rating alert -->
-    <string name="rating_alert_title_label">Rate BassieMusic?</string>
-    <string name="rating_alert_message_label">If you like the BassieMusic app, please take a moment to rate it. Thanks for your support!</string>
-    <string name="rating_alert_rate_button">Rate</string>
-    <string name="rating_alert_later_button">Later</string>
-    <string name="rating_alert_never_button">Never</string>
 </resources>
