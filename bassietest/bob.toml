@@ -5,6 +5,7 @@ version = "1.0.0"
 
 [dependencies]
 fetch = { path = "../lib/fetch" }
+nullsafe = { path = "../lib/nullsafe" }
 ratingalert = { path = "../lib/ratingalert" }
 
 [package.metadata.android]
