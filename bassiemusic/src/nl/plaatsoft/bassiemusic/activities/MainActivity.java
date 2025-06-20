@@ -31,8 +31,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Nullable;
 
-import nl.plaatsoft.android.ratingalert.RatingAlert;
-import nl.plaatsoft.android.updatealert.UpdateAlert;
+import nl.plaatsoft.android.alerts.RatingAlert;
+import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.bassiemusic.components.MusicAdapter;
 import nl.plaatsoft.bassiemusic.components.MusicPlayer;
 import nl.plaatsoft.bassiemusic.models.Music;

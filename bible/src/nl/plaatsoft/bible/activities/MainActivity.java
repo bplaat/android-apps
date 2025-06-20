@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
-import nl.plaatsoft.android.ratingalert.RatingAlert;
-import nl.plaatsoft.android.updatealert.UpdateAlert;
+import nl.plaatsoft.android.alerts.RatingAlert;
+import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;

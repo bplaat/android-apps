@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-package nl.plaatsoft.android.updatealert;
+package nl.plaatsoft.android.alerts;
 
 import android.app.AlertDialog;
 import android.content.Context;

@@ -32,9 +32,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import nl.plaatsoft.android.alerts.RatingAlert;
+import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.fetch.FetchDataTask;
-import nl.plaatsoft.android.ratingalert.RatingAlert;
-import nl.plaatsoft.android.updatealert.UpdateAlert;
 import ml.coinlist.android.components.CoinsAdapter;
 import ml.coinlist.android.models.Coin;
 import ml.coinlist.android.Formatters;

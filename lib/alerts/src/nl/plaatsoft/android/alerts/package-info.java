@@ -5,6 +5,6 @@
  */
 
 @ParametersAreNonnullByDefault
-package nl.plaatsoft.android.ratingalert;
+package nl.plaatsoft.android.alerts;
 
 import javax.annotation.ParametersAreNonnullByDefault;

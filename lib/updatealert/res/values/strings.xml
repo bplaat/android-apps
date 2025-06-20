@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="updatealert_title_label">Update $0</string>
-    <string name="updatealert_message_label">A new version v$0 of $1 is released, download the update now!</string>
-    <string name="updatealert_update_button">Update</string>
-    <string name="updatealert_later_button">Later</string>
-</resources>

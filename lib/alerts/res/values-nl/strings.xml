@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Rating alert -->
     <string name="ratingalert_title_label">Beoordeel $0?</string>
     <string name="ratingalert_message_label">Als je $0 leuk vindt, neem dan even de tijd om deze te beoordelen. Bedankt voor je steun!</string>
     <string name="ratingalert_rate_button">Beoordeel</string>
     <string name="ratingalert_later_button">Later</string>
     <string name="ratingalert_never_button">Nooit</string>
+
+    <!-- Update alert -->
+    <string name="updatealert_title_label">$0 updaten</string>
+    <string name="updatealert_message_label">Een nieuwe version v$0 van $1 is uitgekomen, download de update nu!</string>
+    <string name="updatealert_update_button">Updaten</string>
+    <string name="updatealert_later_button">Later</string>
 </resources>

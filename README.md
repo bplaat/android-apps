@@ -15,9 +15,9 @@ A collection of various Android apps that I created for myself and others
 
 ## Android Libraries
 
+-   [Alerts](lib/alerts/) A rating and update alert library
 -   [Fetch](lib/fetch/) Some utils to fetch data and image from the internet
 -   [NullSafe](lib/nullsafe/) The unreleased null-safe annotations from `javax.annotation`
--   [RatingAlert](lib/ratingalert/) A simple rating alert dialog
 
 ## Getting Started
 

@@ -1,7 +1,0 @@
-[package]
-name = "ratingalert"
-identifier = "nl.plaatsoft.android.ratingalert"
-version = "0.1.0"
-
-[dependencies]
-nullsafe = { path = "../nullsafe" }
