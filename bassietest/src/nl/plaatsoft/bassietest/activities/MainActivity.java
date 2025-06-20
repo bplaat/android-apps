@@ -27,9 +27,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import nl.plaatsoft.android.ratingalert.RatingAlert;
-import nl.plaatsoft.bassietest.tasks.FetchDataTask;
-import nl.plaatsoft.bassietest.tasks.FetchImageTask;
+import nl.plaatsoft.android.fetch.FetchDataTask;
+import nl.plaatsoft.android.fetch.FetchImageTask;
 import nl.plaatsoft.bassietest.R;
+import nl.plaatsoft.bassietest.Utils;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int SETTINGS_REQUEST_CODE = 1;
@@ -69,6 +70,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         .load("https://picsum.photos/" + (int) (320 * density) + "/" + (int) (240 * density))
                         .noCache()
                         .fadeIn()
+                        .loadingColor(Utils.contextGetColor(this, R.color.loading_background_color))
                         .into(findViewById(R.id.main_data_random_image))
                         .fetch();
             }

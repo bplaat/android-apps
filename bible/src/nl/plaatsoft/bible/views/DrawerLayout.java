@@ -23,8 +23,6 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
         void onClose();
     }
 
-    private static int ANIMATION_DURATION = 150;
-
     private boolean isOpen = false;
     private boolean isFirstLayout = true;
     private @Nullable OnCloseListener onCloseListener;
@@ -78,9 +76,10 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
         isOpen = true;
         setVisibility(View.VISIBLE);
         post(() -> {
+            var animationDuration = (long) getResources().getInteger(R.integer.animation_duration);
             var colorAnimation = ValueAnimator.ofArgb(Color.TRANSPARENT,
                     Utils.contextGetColor(getContext(), R.color.drawer_overlay_background_color));
-            colorAnimation.setDuration(ANIMATION_DURATION);
+            colorAnimation.setDuration(animationDuration);
             colorAnimation.setInterpolator(new DecelerateInterpolator());
             colorAnimation.addUpdateListener(animator -> setBackgroundColor((int) animator.getAnimatedValue()));
             colorAnimation.start();
@@ -88,7 +87,7 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
             var child = getChildAt(0);
             child.animate()
                     .translationX(0)
-                    .setDuration(ANIMATION_DURATION)
+                    .setDuration(animationDuration)
                     .setInterpolator(new DecelerateInterpolator())
                     .start();
         });
@@ -96,10 +95,11 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
 
     public void close() {
         isOpen = false;
+        var animationDuration = (long) getResources().getInteger(R.integer.animation_duration);
         var colorAnimation = ValueAnimator.ofArgb(
                 Utils.contextGetColor(getContext(), R.color.drawer_overlay_background_color),
                 Color.TRANSPARENT);
-        colorAnimation.setDuration(ANIMATION_DURATION);
+        colorAnimation.setDuration(animationDuration);
         colorAnimation.setInterpolator(new DecelerateInterpolator());
         colorAnimation.addUpdateListener(animator -> setBackgroundColor((int) animator.getAnimatedValue()));
         colorAnimation.start();
@@ -107,7 +107,7 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
         var child = getChildAt(0);
         child.animate()
                 .translationX(-child.getWidth())
-                .setDuration(ANIMATION_DURATION)
+                .setDuration(animationDuration)
                 .setInterpolator(new DecelerateInterpolator())
                 .withEndAction(() -> setVisibility(View.GONE))
                 .start();

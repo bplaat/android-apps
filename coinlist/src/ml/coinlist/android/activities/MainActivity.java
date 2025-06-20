@@ -30,8 +30,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import nl.plaatsoft.android.fetch.FetchDataTask;
 import ml.coinlist.android.components.CoinsAdapter;
-import ml.coinlist.android.tasks.FetchDataTask;
 import ml.coinlist.android.models.Coin;
 import ml.coinlist.android.Formatters;
 import ml.coinlist.android.Utils;

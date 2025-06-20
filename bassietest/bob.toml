@@ -4,6 +4,7 @@ identifier = "nl.plaatsoft.bassietest"
 version = "1.0.0"
 
 [dependencies]
+fetch = { path = "../lib/fetch" }
 ratingalert = { path = "../lib/ratingalert" }
 
 [package.metadata.android]

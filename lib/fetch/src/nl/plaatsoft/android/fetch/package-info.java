@@ -5,6 +5,6 @@
  */
 
 @ParametersAreNonnullByDefault
-package nl.plaatsoft.bassietest.tasks;
+package nl.plaatsoft.android.fetch;
 
 import javax.annotation.ParametersAreNonnullByDefault;

@@ -3,6 +3,9 @@ name = "bassiemusic"
 identifier = "nl.plaatsoft.bassiemusic"
 version = "2.11.0"
 
+[dependencies]
+fetch = { path = "../lib/fetch" }
+
 [package.metadata.android]
 main_activity = ".activities.MainActivity"
 key_alias = ""

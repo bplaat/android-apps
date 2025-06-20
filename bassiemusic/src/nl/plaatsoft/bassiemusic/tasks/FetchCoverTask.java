@@ -10,13 +10,17 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
+
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
 
+import nl.plaatsoft.android.fetch.FetchDataTask;
+import nl.plaatsoft.android.fetch.FetchImageTask;
 import nl.plaatsoft.bassiemusic.models.Music;
+import nl.plaatsoft.bassiemusic.R;
+import nl.plaatsoft.bassiemusic.Utils;
 
 public class FetchCoverTask {
     private static final String DEEZER_API_URL = "https://api.deezer.com";
@@ -102,36 +106,39 @@ public class FetchCoverTask {
     }
 
     public FetchCoverTask fetch() {
-        FetchImageTask imageCoverTask = FetchImageTask.with(context).load(music.getCoverUri());
+        var imageCoverTask = FetchImageTask.with(context).load(music.getCoverUri().toString())
+                .loadingColor(Utils.contextGetColor(context, R.color.loading_background_color));
         if (isFadedIn)
             imageCoverTask.fadeIn();
         imageCoverTask.into(imageView).then(image -> {
             onLoad(image);
         }, exception -> {
-            // When an album cover dont exists fetch and cache it from the nice and open
-            // Deezer API
-            // I know this code is a callback / exception nightmare, I'm working on it
+            // When an album cover don't exists fetch and cache it from the nice and open
+            // Deezer API. I know this code is a callback / exception nightmare, I'm not
+            // working on it :^)
             try {
-                FetchDataTask fetchDataTask = FetchDataTask.with(context).load(DEEZER_API_SEARCH_ALBUM + "?q=" +
-                        URLEncoder.encode(music.getArtists().get(0) + " - " + music.getAlbum(), StandardCharsets.UTF_8)
-                        + "&limit=1");
+                var fetchDataTask = FetchDataTask.with(context)
+                        .load(DEEZER_API_SEARCH_ALBUM + "?q="
+                                + URLEncoder.encode(music.getArtists().get(0) + " - " + music.getAlbum(),
+                                        StandardCharsets.UTF_8.name())
+                                + "&limit=1");
                 if (isLoadedFomCache)
-                    fetchDataTask.fromCache();
+                    fetchDataTask.loadFromCache(true);
                 if (isSavedToCache)
-                    fetchDataTask.toCache();
+                    fetchDataTask.saveToCache(true);
                 fetchDataTask.then(data -> {
                     try {
-                        JSONArray albumsJson = new JSONObject(data).getJSONArray("data");
+                        var albumsJson = new JSONObject(new String(data, StandardCharsets.UTF_8)).getJSONArray("data");
                         if (albumsJson.length() > 0) {
-                            JSONObject albumJson = albumsJson.getJSONObject(0);
-                            FetchImageTask fetchImageTask = FetchImageTask.with(context)
-                                    .load(albumJson.getString("cover_medium"));
+                            var albumJson = albumsJson.getJSONObject(0);
+                            var fetchImageTask = FetchImageTask.with(context).load(albumJson.getString("cover_medium"))
+                                    .loadingColor(Utils.contextGetColor(context, R.color.loading_background_color));
                             if (isFadedIn)
                                 fetchImageTask.fadeIn();
                             if (!isLoadedFomCache)
-                                fetchImageTask.notFromCache();
+                                fetchImageTask.loadFromCache(false);
                             if (!isSavedToCache)
-                                fetchImageTask.notToCache();
+                                fetchImageTask.saveToCache(false);
                             fetchImageTask.into(imageView).then(image -> {
                                 onLoad(image);
                             }, exception2 -> {

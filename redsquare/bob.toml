@@ -3,6 +3,9 @@ name = "redsquare"
 identifier = "nl.plaatsoft.redsquare.android"
 version = "1.1.0"
 
+[dependencies]
+fetch = { path = "../lib/fetch" }
+
 [package.metadata.android]
 main_activity = ".activities.MainActivity"
 key_alias = ""

@@ -199,7 +199,7 @@
         <item name="android:layout_width">48dp</item>
         <item name="android:layout_height">48dp</item>
         <item name="android:layout_marginRight">16dp</item>
-        <item name="android:background">@color/loading_color</item>
+        <item name="android:background">@color/loading_background_color</item>
     </style>
 
     <style name="MusicItemInfo">

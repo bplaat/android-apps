@@ -32,10 +32,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.redsquare.android.components.GamePage;
 import nl.plaatsoft.redsquare.android.components.ScoreAdapter;
 import nl.plaatsoft.redsquare.android.models.Score;
-import nl.plaatsoft.redsquare.android.tasks.FetchDataTask;
 import nl.plaatsoft.redsquare.android.Consts;
 import nl.plaatsoft.redsquare.android.R;
 
@@ -95,7 +95,7 @@ public class MainActivity extends BaseActivity {
             // Get product id
             FetchDataTask.with(this)
                     .load(Consts.SCORE_SERVICE_URL + "?action=getProduct&product=Android-RedSquare&os=Android&version="
-                            + URLEncoder.encode(versionName, StandardCharsets.UTF_8))
+                            + uriEncode(versionName))
                     .then(productData -> {
                         try {
                             var productDataJSON = new JSONObject(new String(productData, StandardCharsets.UTF_8));
@@ -105,9 +105,9 @@ public class MainActivity extends BaseActivity {
                             FetchDataTask.with(this)
                                     .load(Consts.SCORE_SERVICE_URL + "?action=getUser"
                                             + "&username="
-                                            + URLEncoder.encode(settings.getName(), StandardCharsets.UTF_8)
+                                            + uriEncode(settings.getName())
                                             + "&nickname="
-                                            + URLEncoder.encode(settings.getName(), StandardCharsets.UTF_8)
+                                            + uriEncode(settings.getName())
                                             + "&ip=&country=&city=")
                                     .then(userData -> {
                                         try {
@@ -195,7 +195,7 @@ public class MainActivity extends BaseActivity {
             // Get product id
             FetchDataTask.with(this)
                     .load(Consts.SCORE_SERVICE_URL + "?action=getProduct&product=Android-RedSquare&os=Android&version="
-                            + URLEncoder.encode(versionName, StandardCharsets.UTF_8))
+                            + uriEncode(versionName))
                     .then(productData -> {
                         try {
                             var productDataJSON = new JSONObject(new String(productData, StandardCharsets.UTF_8));
@@ -368,6 +368,14 @@ public class MainActivity extends BaseActivity {
                             View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
                             View.SYSTEM_UI_FLAG_FULLSCREEN |
                             View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        }
+    }
+
+    private String uriEncode(String value) {
+        try {
+            return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
+        } catch (Exception exception) {
+            return null;
         }
     }
 }

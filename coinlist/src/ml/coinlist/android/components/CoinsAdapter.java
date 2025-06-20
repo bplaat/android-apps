@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.json.JSONException;
 
-import ml.coinlist.android.tasks.FetchImageTask;
+import nl.plaatsoft.android.fetch.FetchImageTask;
 import ml.coinlist.android.models.Coin;
 import ml.coinlist.android.Formatters;
 import ml.coinlist.android.Utils;
@@ -78,7 +78,9 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
             return convertView;
         }
 
-        FetchImageTask.with(getContext()).load(coin.getImageUrl()).transparent().fadeIn().into(viewHolder.coinImage)
+        FetchImageTask.with(getContext()).load(coin.getImageUrl()).transparent().fadeIn()
+                .loadingColor(Utils.contextGetColor(getContext(), R.color.loading_background_color))
+                .into(viewHolder.coinImage)
                 .fetch();
 
         viewHolder.coinName.setText(coin.getName());
