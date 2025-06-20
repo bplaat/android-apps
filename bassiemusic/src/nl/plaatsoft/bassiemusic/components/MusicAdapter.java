@@ -18,6 +18,9 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.bassiemusic.models.Music;
 import nl.plaatsoft.bassiemusic.tasks.FetchCoverTask;
@@ -25,12 +28,12 @@ import nl.plaatsoft.bassiemusic.R;
 
 public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer {
     private static class ViewHolder {
-        public TextView musicPosition;
-        public ImageView musicCover;
-        public TextView musicTitle;
-        public TextView musicArtists;
-        public TextView musicAlbum;
-        public TextView musicDuration;
+        public @SuppressWarnings("null") TextView musicPosition;
+        public @SuppressWarnings("null") ImageView musicCover;
+        public @SuppressWarnings("null") TextView musicTitle;
+        public @SuppressWarnings("null") TextView musicArtists;
+        public @SuppressWarnings("null") TextView musicAlbum;
+        public @SuppressWarnings("null") TextView musicDuration;
     }
 
     private static class Section {
@@ -38,7 +41,7 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
         public int position;
     }
 
-    private List<Section> sections;
+    private @Nullable List<Section> sections;
     private int selectedPosition = -1;
 
     public MusicAdapter(Context context) {
@@ -50,12 +53,12 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @SuppressWarnings("null") ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_music, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.musicPosition = convertView.findViewById(R.id.music_position);
+            viewHolder.musicPosition = Objects.requireNonNull(convertView).findViewById(R.id.music_position);
             viewHolder.musicCover = convertView.findViewById(R.id.music_cover);
             viewHolder.musicTitle = convertView.findViewById(R.id.music_title);
             viewHolder.musicArtists = convertView.findViewById(R.id.music_artists);
@@ -123,7 +126,7 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
                 var firstCharacter = Character.toUpperCase(music.getArtists().get(0).charAt(0));
 
                 var isCharacterFound = false;
-                for (var section : sections) {
+                for (var section : Objects.requireNonNull(sections)) {
                     if (section.character == firstCharacter) {
                         isCharacterFound = true;
                         break;
@@ -134,29 +137,29 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
                     var section = new Section();
                     section.character = firstCharacter;
                     section.position = position;
-                    sections.add(section);
+                    Objects.requireNonNull(sections).add(section);
                 }
             }
         }
 
-        var sectionsArray = new String[sections.size()];
-        for (var i = 0; i < sections.size(); i++) {
-            sectionsArray[i] = String.valueOf(sections.get(i).character);
+        var sectionsArray = new String[Objects.requireNonNull(sections).size()];
+        for (var i = 0; i < Objects.requireNonNull(sections).size(); i++) {
+            sectionsArray[i] = String.valueOf(Objects.requireNonNull(sections).get(i).character);
         }
         return sectionsArray;
     }
 
     @Override
     public int getPositionForSection(int section) {
-        return sections.get(section).position;
+        return Objects.requireNonNull(sections).get(section).position;
     }
 
     @Override
     public int getSectionForPosition(int position) {
         var music = getItem(position);
         var firstCharacter = Character.toUpperCase(music.getArtists().get(0).charAt(0));
-        for (var i = 0; i < sections.size(); i++) {
-            if (sections.get(i).character == firstCharacter) {
+        for (var i = 0; i < Objects.requireNonNull(sections).size(); i++) {
+            if (Objects.requireNonNull(sections).get(i).character == firstCharacter) {
                 return i;
             }
         }

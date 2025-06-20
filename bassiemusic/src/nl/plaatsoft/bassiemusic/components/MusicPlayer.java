@@ -6,6 +6,10 @@
 
 package nl.plaatsoft.bassiemusic.components;
 
+import java.util.Objects;
+
+import javax.annotation.Nullable;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -47,25 +51,31 @@ public class MusicPlayer extends LinearLayout {
         public void onNext(boolean inHistory);
     }
 
-    private IntentFilter becomingNoisyFilter;
-    private BroadcastReceiver becomingNoisyReceiver;
-    private boolean becomingNoisyIsRegistered;
+    private IntentFilter becomingNoisyFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+    private BroadcastReceiver becomingNoisyReceiver = new BroadcastReceiver() {
+        public void onReceive(@SuppressWarnings("null") Context context, @SuppressWarnings("null") Intent intent) {
+            if (intent.getAction().equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
+                pause();
+            }
+        }
+    };
+    private boolean becomingNoisyIsRegistered = false;
 
-    private PowerManager.WakeLock wakeLock;
-    private MediaPlayer mediaPlayer;
-    private Handler handler;
-    private Runnable syncUserInterfaceInterval;
+    private Handler handler = new Handler(Looper.getMainLooper());
+    private @SuppressWarnings("null") PowerManager.WakeLock wakeLock;
+    private @SuppressWarnings("null") MediaPlayer mediaPlayer;
+    private @SuppressWarnings("null") Runnable syncUserInterfaceInterval;
 
-    private ImageButton playButton;
-    private TextSwitcher timeCurrentLabel;
-    private TextSwitcher timeUntilLabel;
-    private SeekBar seekBar;
+    private @SuppressWarnings("null") ImageButton playButton;
+    private @SuppressWarnings("null") TextSwitcher timeCurrentLabel;
+    private @SuppressWarnings("null") TextSwitcher timeUntilLabel;
+    private @SuppressWarnings("null") SeekBar seekBar;
 
-    private OnInfoClickListener onInfoClickListener;
-    private OnPreviousListener onPreviousListener;
-    private OnNextListener onNextListener;
+    private @Nullable OnInfoClickListener onInfoClickListener;
+    private @Nullable OnPreviousListener onPreviousListener;
+    private @Nullable OnNextListener onNextListener;
 
-    private Music playingMusic;
+    private @Nullable Music playingMusic;
     private int requestStartPosition;
     private boolean requestAutoPlayed;
 
@@ -74,32 +84,21 @@ public class MusicPlayer extends LinearLayout {
     }
 
     @SuppressWarnings("this-escape")
-    public MusicPlayer(Context context, AttributeSet attrs) {
+    public MusicPlayer(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-
         inflate(context, R.layout.view_music_player, this);
-
-        becomingNoisyFilter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
-
-        becomingNoisyReceiver = new BroadcastReceiver() {
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals(AudioManager.ACTION_AUDIO_BECOMING_NOISY)) {
-                    pause();
-                }
-            }
-        };
 
         var powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BassieMusic::WakeLock");
 
-        handler = new Handler(Looper.getMainLooper());
         syncUserInterfaceInterval = () -> {
             syncUserInterface();
             handler.postDelayed(syncUserInterfaceInterval, SYNC_TIMEOUT);
         };
 
         findViewById(R.id.music_player_info_button).setOnClickListener(v -> {
-            onInfoClickListener.onInfoClick();
+            if (onInfoClickListener != null)
+                onInfoClickListener.onInfoClick();
         });
 
         var previousButton = findViewById(R.id.music_player_previous_button);
@@ -107,11 +106,13 @@ public class MusicPlayer extends LinearLayout {
             if (getCurrentPosition() > PREVIOUS_RESET_TIMEOUT) {
                 seekTo(0);
             } else {
-                onPreviousListener.onPrevious(false);
+                if (onPreviousListener != null)
+                    onPreviousListener.onPrevious(false);
             }
         });
         previousButton.setOnLongClickListener(v -> {
-            onPreviousListener.onPrevious(true);
+            if (onPreviousListener != null)
+                onPreviousListener.onPrevious(true);
             return true;
         });
 
@@ -134,10 +135,12 @@ public class MusicPlayer extends LinearLayout {
 
         var nextButton = findViewById(R.id.music_player_next_button);
         nextButton.setOnClickListener(v -> {
-            onNextListener.onNext(false);
+            if (onNextListener != null)
+                onNextListener.onNext(false);
         });
         nextButton.setOnLongClickListener(v -> {
-            onNextListener.onNext(true);
+            if (onNextListener != null)
+                onNextListener.onNext(true);
             return true;
         });
 
@@ -145,18 +148,18 @@ public class MusicPlayer extends LinearLayout {
         timeUntilLabel = findViewById(R.id.music_player_time_until_label);
         seekBar = findViewById(R.id.music_player_seekbar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            public void onStartTrackingTouch(SeekBar seekBar) {
+            public void onStartTrackingTouch(@SuppressWarnings("null") SeekBar seekBar) {
                 handler.removeCallbacks(syncUserInterfaceInterval);
             }
 
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            public void onProgressChanged(@SuppressWarnings("null") SeekBar seekBar, int progress, boolean fromUser) {
                 if (fromUser) {
                     timeCurrentLabel.setCurrentText(Music.formatDuration(progress));
                     timeUntilLabel.setCurrentText("-" + Music.formatDuration(mediaPlayer.getDuration() - progress));
                 }
             }
 
-            public void onStopTrackingTouch(SeekBar seekBar) {
+            public void onStopTrackingTouch(@SuppressWarnings("null") SeekBar seekBar) {
                 seekTo(seekBar.getProgress());
             }
         });
@@ -169,21 +172,22 @@ public class MusicPlayer extends LinearLayout {
         var infoDurationLabel = (TextSwitcher) findViewById(R.id.music_player_info_duration_label);
         mediaPlayer.setOnPreparedListener((MediaPlayer mediaPlayer) -> {
             // Update info texts
-            FetchCoverTask.with(getContext()).fromMusic(playingMusic).fadeIn().into(infoCoverImage).fetch();
+            FetchCoverTask.with(getContext()).fromMusic(Objects.requireNonNull(playingMusic)).fadeIn()
+                    .into(infoCoverImage).fetch();
 
-            var newTitleLabel = playingMusic.getTitle();
+            var newTitleLabel = Objects.requireNonNull(playingMusic).getTitle();
             if (!((TextView) infoTitleLabel.getCurrentView()).getText().equals(newTitleLabel)) {
                 infoTitleLabel.setText(newTitleLabel);
             }
             infoTitleLabel.setSelected(true);
 
-            var newArtistsLabel = String.join(", ", playingMusic.getArtists());
+            var newArtistsLabel = String.join(", ", Objects.requireNonNull(playingMusic).getArtists());
             if (!((TextView) infoArtistsLabel.getCurrentView()).getText().equals(newArtistsLabel)) {
                 infoArtistsLabel.setText(newArtistsLabel);
             }
             infoArtistsLabel.setSelected(true);
 
-            var newDurationLabel = Music.formatDuration(playingMusic.getDuration());
+            var newDurationLabel = Music.formatDuration(Objects.requireNonNull(playingMusic).getDuration());
             if (!((TextView) infoDurationLabel.getCurrentView()).getText().equals(newDurationLabel)) {
                 infoDurationLabel.setText(newDurationLabel);
             }
@@ -207,7 +211,8 @@ public class MusicPlayer extends LinearLayout {
         });
 
         mediaPlayer.setOnCompletionListener((MediaPlayer mediaPlayer) -> {
-            onNextListener.onNext(false);
+            if (onNextListener != null)
+                onNextListener.onNext(false);
         });
     }
 
@@ -283,7 +288,7 @@ public class MusicPlayer extends LinearLayout {
                 .build());
 
         try {
-            mediaPlayer.setDataSource(getContext(), playingMusic.getContentUri());
+            mediaPlayer.setDataSource(getContext(), Objects.requireNonNull(playingMusic).getContentUri());
             mediaPlayer.prepareAsync();
         } catch (Exception exception) {
             Log.e(getContext().getPackageName(), "An exception catched!", exception);

@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import javax.annotation.Nullable;
+
 import org.json.JSONObject;
 
 import nl.plaatsoft.android.fetch.FetchDataTask;
@@ -43,14 +45,15 @@ public class FetchCoverTask {
     }
 
     private Context context;
-    private Music music;
+    private @SuppressWarnings("null") Music music;
     private boolean isFadedIn;
     private boolean isLoadedFomCache = true;
     private boolean isSavedToCache = true;
-    private OnLoadListener onLoadListener;
-    private OnErrorListener onErrorListener;
-    private ImageView imageView;
+    private @Nullable OnLoadListener onLoadListener;
+    private @Nullable OnErrorListener onErrorListener;
+    private @SuppressWarnings("null") ImageView imageView;
 
+    @SuppressWarnings("null")
     private FetchCoverTask(Context context) {
         this.context = context;
     }

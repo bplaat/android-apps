@@ -17,13 +17,13 @@ import java.util.Collections;
 
 public class Music {
     private long id;
-    private List<String> artists;
-    private String album;
-    private Uri CoverUri;
-    private String title;
+    private @SuppressWarnings("null") List<String> artists;
+    private @SuppressWarnings("null") String album;
+    private @SuppressWarnings("null") Uri CoverUri;
+    private @SuppressWarnings("null") String title;
     private int position;
     private long duration;
-    private Uri contentUri;
+    private @SuppressWarnings("null") Uri contentUri;
 
     public long getId() {
         return id;

@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.bassiemusic.components.MusicAdapter;
 import nl.plaatsoft.bassiemusic.models.Music;
@@ -27,7 +28,7 @@ import nl.plaatsoft.bassiemusic.R;
 
 public class SearchActivity extends BaseActivity {
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
@@ -61,7 +62,8 @@ public class SearchActivity extends BaseActivity {
         });
 
         searchInput.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+            public void onTextChanged(@SuppressWarnings("null") CharSequence charSequence, int start, int before,
+                    int count) {
                 var searchQuery = charSequence.toString().toLowerCase();
 
                 searchAdapter.clear();
@@ -93,10 +95,11 @@ public class SearchActivity extends BaseActivity {
                 searchList.setSelectionAfterHeaderView();
             }
 
-            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+            public void beforeTextChanged(@SuppressWarnings("null") CharSequence charSequence, int start, int count,
+                    int after) {
             }
 
-            public void afterTextChanged(Editable editable) {
+            public void afterTextChanged(@SuppressWarnings("null") Editable editable) {
             }
         });
 

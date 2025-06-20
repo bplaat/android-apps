@@ -29,6 +29,7 @@ import android.window.OnBackInvokedDispatcher;
 import android.Manifest;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.bassiemusic.components.MusicAdapter;
 import nl.plaatsoft.bassiemusic.components.MusicPlayer;
@@ -45,22 +46,22 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private int oldTheme = -1;
 
     private Handler handler = new Handler(Looper.getMainLooper());
-    private LinearLayout musicPage;
-    private LinearLayout emptyPage;
-    private LinearLayout accessPage;
+    private @SuppressWarnings("null") LinearLayout musicPage;
+    private @SuppressWarnings("null") LinearLayout emptyPage;
+    private @SuppressWarnings("null") LinearLayout accessPage;
 
-    private List<Music> music;
+    private @SuppressWarnings("null") List<Music> music;
     private boolean isShuffling;
-    private ArrayList<Long> musicHistory;
+    private @SuppressWarnings("null") ArrayList<Long> musicHistory;
     private int musicHistoryCurrent;
-    private MusicPlayer musicPlayer;
-    private ListView musicList;
-    private MusicAdapter musicAdapter;
+    private @SuppressWarnings("null") MusicPlayer musicPlayer;
+    private @SuppressWarnings("null") ListView musicList;
+    private @SuppressWarnings("null") MusicAdapter musicAdapter;
 
     private int selectedPosition = -1;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -226,7 +227,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@SuppressWarnings("null") Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         var musicHistoryArray = new long[musicHistory.size()];
         for (var i = 0; i < musicHistory.size(); i++) {
@@ -257,7 +258,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @SuppressWarnings("null") String[] permissions,
+            @SuppressWarnings("null") int[] grantResults) {
         if (requestCode == STORAGE_PERMISSION_REQUEST_CODE
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             musicPage.setVisibility(View.VISIBLE);
@@ -268,7 +270,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
+    public boolean onMenuItemClick(@SuppressWarnings("null") MenuItem item) {
         if (item.getItemId() == R.id.menu_options_reload_music) {
             var isPlaying = musicPlayer.isPlaying();
             if (isPlaying) {
@@ -288,7 +290,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @SuppressWarnings("null") Intent data) {
         if (requestCode == SEARCH_ACTIVITY_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
             var musicId = data.getLongExtra("id", -1);
             if (musicId != -1) {

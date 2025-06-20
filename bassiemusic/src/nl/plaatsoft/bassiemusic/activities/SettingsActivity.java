@@ -19,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.bassiemusic.R;
 
@@ -29,7 +30,7 @@ public class SettingsActivity extends BaseActivity {
     private int versionButtonClickCounter = 0;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         useWindowInsets(findViewById(R.id.settings_scroll));

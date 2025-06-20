@@ -11,6 +11,7 @@ import android.content.ContextWrapper;
 import android.os.Build;
 import android.util.Log;
 import java.security.MessageDigest;
+import javax.annotation.Nullable;
 
 public class Utils {
     private Utils() {
@@ -23,7 +24,7 @@ public class Utils {
         return context.getResources().getColor(id);
     }
 
-    public static String md5(Context context, String data) {
+    public static @Nullable String md5(Context context, String data) {
         try {
             var messageDigest = MessageDigest.getInstance("MD5");
             messageDigest.update(data.getBytes());
