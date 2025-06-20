@@ -23,9 +23,9 @@ import android.view.View;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ScrollView;
-
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
 import nl.plaatsoft.rfidviewer.Utils;
@@ -35,24 +35,24 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private static final int PENDING_INTENT_REQUEST_CODE = 0;
     private static final int SETTINGS_REQUEST_CODE = 1;
 
-    private ScrollView landingPage;
-    private ScrollView readingPage;
-    private ScrollView dataPage;
-    private TextView dataOutputLabel;
-    private ScrollView errorPage;
+    private @SuppressWarnings("null") ScrollView landingPage;
+    private @SuppressWarnings("null") ScrollView readingPage;
+    private @SuppressWarnings("null") ScrollView dataPage;
+    private @SuppressWarnings("null") TextView dataOutputLabel;
+    private @SuppressWarnings("null") ScrollView errorPage;
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private int oldLanguage = -1;
     private int oldTheme = -1;
 
-    private MifareReadTask mifareReadTask = null;
-    private NfcAdapter nfcAdapter = null;
-    private PendingIntent pendingIntent;
-    private IntentFilter[] intentFiltersArray;
-    private String[][] techListsArray;
+    private @Nullable MifareReadTask mifareReadTask;
+    private @Nullable NfcAdapter nfcAdapter;
+    private @Nullable PendingIntent pendingIntent;
+    private @Nullable IntentFilter[] intentFiltersArray;
+    private @Nullable String[][] techListsArray;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         landingPage = findViewById(R.id.main_landing_page);
@@ -105,7 +105,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
+    public boolean onMenuItemClick(@SuppressWarnings("null") MenuItem item) {
         if (item.getItemId() == R.id.menu_options_settings) {
             oldLanguage = settings.getLanguage();
             oldTheme = settings.getTheme();
@@ -116,7 +116,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @SuppressWarnings("null") Intent data) {
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
@@ -128,7 +128,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
+    public void onNewIntent(@SuppressWarnings("null") Intent intent) {
         super.onNewIntent(intent);
 
         // Handle new incoming RFID tag messages

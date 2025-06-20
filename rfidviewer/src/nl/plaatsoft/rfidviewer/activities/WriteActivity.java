@@ -21,6 +21,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import java.util.Arrays;
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.rfidviewer.tasks.MifareWriteTask;
 import nl.plaatsoft.rfidviewer.Utils;
@@ -29,24 +30,24 @@ import nl.plaatsoft.rfidviewer.R;
 public class WriteActivity extends BaseActivity {
     private static final int PENDING_INTENT_REQUEST_CODE = 1;
 
-    private ScrollView formPage;
-    private EditText formBlockIdInput;
-    private ScrollView waitingPage;
-    private ScrollView writingPage;
-    private ScrollView successPage;
-    private ScrollView errorPage;
+    private @SuppressWarnings("null") ScrollView formPage;
+    private @SuppressWarnings("null") EditText formBlockIdInput;
+    private @SuppressWarnings("null") ScrollView waitingPage;
+    private @SuppressWarnings("null") ScrollView writingPage;
+    private @SuppressWarnings("null") ScrollView successPage;
+    private @SuppressWarnings("null") ScrollView errorPage;
 
-    private NfcAdapter nfcAdapter = null;
-    private PendingIntent pendingIntent;
-    private IntentFilter[] intentFiltersArray;
-    private String[][] techListsArray;
-    private MifareWriteTask mifareWriteTask = null;
+    private @Nullable NfcAdapter nfcAdapter;
+    private @Nullable PendingIntent pendingIntent;
+    private @Nullable IntentFilter[] intentFiltersArray;
+    private @Nullable String[][] techListsArray;
+    private @Nullable MifareWriteTask mifareWriteTask;
     private boolean isWritePending;
     private int pendingBlockId;
-    private byte[] pendingBlockData;
+    private byte[] pendingBlockData = new byte[16];
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write);
 
@@ -71,7 +72,7 @@ public class WriteActivity extends BaseActivity {
             try {
                 pendingBlockId = Integer.parseInt(formBlockIdInput.getText().toString());
 
-                pendingBlockData = new byte[16];
+                Arrays.fill(pendingBlockData, (byte) 0);
                 var dataAscii = formDataAsciiInput.getText().toString();
                 if (dataAscii.length() > 0) {
                     for (var i = 0; i < dataAscii.length(); i++) {
@@ -139,7 +140,7 @@ public class WriteActivity extends BaseActivity {
     }
 
     @Override
-    public void onNewIntent(Intent intent) {
+    public void onNewIntent(@SuppressWarnings("null") Intent intent) {
         super.onNewIntent(intent);
 
         // Handle new incoming RFID tag messages when a write is pending

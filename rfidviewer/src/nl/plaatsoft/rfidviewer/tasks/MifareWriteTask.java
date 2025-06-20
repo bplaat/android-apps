@@ -13,6 +13,9 @@ import android.os.Handler;
 import android.util.Log;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import javax.annotation.Nullable;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +46,8 @@ public class MifareWriteTask {
     private final MifareClassic mfc;
     private boolean isCanceled = false;
     private boolean isFinished = false;
-    private OnSuccessListener onSuccessListener = null;
-    private OnErrorListener onErrorListener = null;
+    private @Nullable OnSuccessListener onSuccessListener;
+    private @Nullable OnErrorListener onErrorListener;
     private List<PendingWrite> pendingWrites = new ArrayList<>();
 
     private MifareWriteTask(Context context, MifareClassic mfc) {

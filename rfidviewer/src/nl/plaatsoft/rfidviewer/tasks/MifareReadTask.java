@@ -14,6 +14,8 @@ import android.util.Log;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
+import javax.annotation.Nullable;
+
 public class MifareReadTask {
     public static interface OnLoadListener {
         void onLoad(byte[] data);
@@ -30,8 +32,8 @@ public class MifareReadTask {
     private final MifareClassic mfc;
     private boolean isCanceled = false;
     private boolean isFinished = false;
-    private OnLoadListener onLoadListener = null;
-    private OnErrorListener onErrorListener = null;
+    private @Nullable OnLoadListener onLoadListener;
+    private @Nullable OnErrorListener onErrorListener;
 
     private MifareReadTask(Context context, MifareClassic mfc) {
         this.context = context;
