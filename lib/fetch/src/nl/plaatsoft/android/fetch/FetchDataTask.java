@@ -106,7 +106,7 @@ public class FetchDataTask {
         executor.execute(() -> {
             try {
                 isPending = true;
-                var data = fetchData(context, Objects.requireNonNull(url), isLoadedFomCache, isSavedToCache);
+                var data = fetchData(context, new URI(Objects.requireNonNull(url)), isLoadedFomCache, isSavedToCache);
                 handler.post(() -> {
                     isPending = false;
                     isLoaded = true;
@@ -128,11 +128,11 @@ public class FetchDataTask {
         return this;
     }
 
-    public static byte[] fetchData(Context context, String url, boolean isLoadedFomCache, boolean isSavedToCache)
+    public static byte[] fetchData(Context context, URI uri, boolean isLoadedFomCache, boolean isSavedToCache)
             throws Exception {
         // Get MD5 hash of url
         var messageDigest = MessageDigest.getInstance("MD5");
-        messageDigest.update(url.getBytes());
+        messageDigest.update(uri.toString().getBytes());
         var hashBytes = messageDigest.digest();
         var hashStringBuilder = new StringBuilder();
         for (var i = 0; i < hashBytes.length; i++)
@@ -155,7 +155,7 @@ public class FetchDataTask {
         }
 
         // Load url from network
-        var bufferedInputStream = new BufferedInputStream(new URI(url).toURL().openStream());
+        var bufferedInputStream = new BufferedInputStream(uri.toURL().openStream());
         var byteArrayOutputStream = new ByteArrayOutputStream();
         try (bufferedInputStream; byteArrayOutputStream) {
             var buffer = new byte[1024];

@@ -9,6 +9,7 @@ package nl.plaatsoft.android.fetch;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,6 +20,7 @@ import android.util.LruCache;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 
+import java.net.URI;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -165,11 +167,7 @@ public class FetchImageTask {
 
         executor.execute(() -> {
             try {
-                var data = FetchDataTask.fetchData(context, Objects.requireNonNull(url), isLoadedFomCache,
-                        isSavedToCache);
-                var options = new BitmapFactory.Options();
-                options.inPreferredConfig = isTransparent ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
-                var image = BitmapFactory.decodeByteArray(data, 0, data.length, options);
+                var image = fetchImage(new URI(Objects.requireNonNull(url)));
                 if (bitmapCache.get(url) == null)
                     bitmapCache.put(url, image);
                 handler.post(() -> onLoad(image, startTime));
@@ -186,6 +184,19 @@ public class FetchImageTask {
             }
         });
         return this;
+    }
+
+    public Bitmap fetchImage(URI uri) throws Exception {
+        var options = new BitmapFactory.Options();
+        options.inPreferredConfig = isTransparent ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
+        if (uri.getScheme().equals("content")) {
+            return BitmapFactory.decodeStream(
+                    context.getContentResolver().openInputStream(Uri.parse(uri.toString())),
+                    null, options);
+        } else {
+            var data = FetchDataTask.fetchData(context, uri, isLoadedFomCache, isSavedToCache);
+            return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        }
     }
 
     public void onLoad(Bitmap image, long startTime) {
