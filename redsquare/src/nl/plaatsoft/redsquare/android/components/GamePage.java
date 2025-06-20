@@ -13,6 +13,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import javax.annotation.Nullable;
 
 import nl.plaatsoft.redsquare.android.models.BlueSquare;
 import nl.plaatsoft.redsquare.android.models.RedSquare;
@@ -36,17 +37,17 @@ public class GamePage extends View {
     private long levelTime;
     private int level;
     private int borderWidth;
-    private Random random;
-    private RedSquare redsquare;
-    private BlueSquare[] blueSquares;
+    private @SuppressWarnings("null") Random random;
+    private @SuppressWarnings("null") RedSquare redsquare;
+    private @SuppressWarnings("null") BlueSquare[] blueSquares;
     private final Paint paint;
     private final String scoreLabelString;
     private final String timeLabelString;
     private final String levelLabelString;
-    private OnEventListener onEventListener;
+    private @Nullable OnEventListener onEventListener;
 
-    @SuppressWarnings("this-escape")
-    public GamePage(Context context, AttributeSet attrs) {
+    @SuppressWarnings({ "this-escape", "null" })
+    public GamePage(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
         paint = new Paint();
@@ -115,10 +116,11 @@ public class GamePage extends View {
     private void gameover() {
         stop();
         var seconds = (int) ((System.currentTimeMillis() - startTime) / 1000);
-        onEventListener.onGameover(score, seconds, level);
+        if (onEventListener != null)
+            onEventListener.onGameover(score, seconds, level);
     }
 
-    protected void onDraw(Canvas canvas) {
+    protected void onDraw(@SuppressWarnings("null") Canvas canvas) {
         if (!started)
             return;
 
@@ -179,7 +181,7 @@ public class GamePage extends View {
         }
     }
 
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(@SuppressWarnings("null") MotionEvent event) {
         if (!started)
             return false;
 

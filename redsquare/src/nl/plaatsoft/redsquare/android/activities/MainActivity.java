@@ -28,6 +28,8 @@ import android.widget.TextView;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
+import javax.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,12 +45,12 @@ public class MainActivity extends BaseActivity {
     public static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 
     private final Handler handler = new Handler(Looper.getMainLooper());
-    private String versionName;
-    private RelativeLayout menuPage;
-    private GamePage gamePage;
-    private LinearLayout settingsPage;
+    private @SuppressWarnings("null") String versionName;
+    private @SuppressWarnings("null") RelativeLayout menuPage;
+    private @SuppressWarnings("null") GamePage gamePage;
+    private @SuppressWarnings("null") LinearLayout settingsPage;
 
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             var attributes = getWindow().getAttributes();
@@ -317,13 +319,13 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
+    public void onSaveInstanceState(@SuppressWarnings("null") Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putBoolean("settingsPageOpen", settingsPage.getVisibility() == View.VISIBLE);
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
+    public void onRestoreInstanceState(@SuppressWarnings("null") Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.getBoolean("settingsPageOpen", false)) {
             menuPage.setVisibility(View.GONE);
@@ -371,7 +373,7 @@ public class MainActivity extends BaseActivity {
         }
     }
 
-    private String uriEncode(String value) {
+    private @Nullable String uriEncode(String value) {
         try {
             return URLEncoder.encode(value, StandardCharsets.UTF_8.name());
         } catch (Exception exception) {

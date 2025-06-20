@@ -16,10 +16,10 @@ import java.util.Locale;
 import nl.plaatsoft.redsquare.android.Settings;
 
 public abstract class BaseActivity extends Activity {
-    protected Settings settings;
+    protected @SuppressWarnings("null") Settings settings;
 
     @Override
-    public void attachBaseContext(Context context) {
+    public void attachBaseContext(@SuppressWarnings("null") Context context) {
         settings = new Settings(context);
         var language = settings.getLanguage();
         var theme = settings.getTheme();

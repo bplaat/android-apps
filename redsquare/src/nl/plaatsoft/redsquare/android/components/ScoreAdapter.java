@@ -6,6 +6,10 @@
 
 package nl.plaatsoft.redsquare.android.components;
 
+import java.util.Objects;
+
+import javax.annotation.Nullable;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +22,8 @@ import nl.plaatsoft.redsquare.android.R;
 
 public class ScoreAdapter extends ArrayAdapter<Score> {
     private static class ViewHolder {
-        public TextView scoreName;
-        public TextView scoreScore;
+        public @SuppressWarnings("null") TextView scoreName;
+        public @SuppressWarnings("null") TextView scoreScore;
     }
 
     public ScoreAdapter(Context context) {
@@ -27,12 +31,13 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView,
+            @SuppressWarnings("null") ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_score, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.scoreName = convertView.findViewById(R.id.score_name);
+            viewHolder.scoreName = Objects.requireNonNull(convertView).findViewById(R.id.score_name);
             viewHolder.scoreScore = convertView.findViewById(R.id.score_score);
             convertView.setTag(viewHolder);
         } else {

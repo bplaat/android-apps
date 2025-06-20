@@ -6,11 +6,13 @@
 
 package nl.plaatsoft.redsquare.android.models;
 
+import javax.annotation.Nullable;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public record Score(long id, String name, int time, int score, int level) {
-    public static Score fromJSON(JSONObject json) {
+    public static @Nullable Score fromJSON(JSONObject json) {
         try {
             return new Score(
                     json.optLong("id", 0),
@@ -23,7 +25,7 @@ public record Score(long id, String name, int time, int score, int level) {
         }
     }
 
-    public static Score fromPlaatServiceJSON(JSONObject json) {
+    public static @Nullable Score fromPlaatServiceJSON(JSONObject json) {
         try {
             return new Score(
                     json.getLong("sid"),
