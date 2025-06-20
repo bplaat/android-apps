@@ -27,6 +27,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import nl.plaatsoft.android.ratingalert.RatingAlert;
+import nl.plaatsoft.android.updatealert.UpdateAlert;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.android.fetch.FetchImageTask;
 import nl.plaatsoft.bassietest.R;
@@ -96,6 +97,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Show rating alert
         RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
+
+        // Show update alert
+        UpdateAlert.checkAndShow(this,
+                "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bassietest/bob.toml",
+                SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override
