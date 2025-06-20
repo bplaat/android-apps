@@ -33,6 +33,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import nl.plaatsoft.android.fetch.FetchDataTask;
+import nl.plaatsoft.android.ratingalert.RatingAlert;
 import ml.coinlist.android.components.CoinsAdapter;
 import ml.coinlist.android.models.Coin;
 import ml.coinlist.android.Formatters;
@@ -120,6 +121,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         Formatters.number(settings, coin.getSupply()));
             }
         });
+
+        // Show rating alert
+        RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override

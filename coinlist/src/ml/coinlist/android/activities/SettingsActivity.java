@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import ml.coinlist.android.R;
 
 public class SettingsActivity extends BaseActivity {
-    private static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/coinlist";
+    public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/coinlist";
     private static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 
     private int currency;
