@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="rating_alert_title_label">$0 bewerten?</string>
-    <string name="rating_alert_message_label">Wenn dir $0 gefällt, bewerte es bitte kurz. Vielen Dank für deine Unterstützung!</string>
-    <string name="rating_alert_rate_button">Bewerte</string>
-    <string name="rating_alert_later_button">Später</string>
-    <string name="rating_alert_never_button">Nimmer</string>
+    <string name="ratingalert_title_label">$0 bewerten?</string>
+    <string name="ratingalert_message_label">Wenn dir $0 gefällt, bewerte es bitte kurz. Vielen Dank für deine Unterstützung!</string>
+    <string name="ratingalert_rate_button">Bewerte</string>
+    <string name="ratingalert_later_button">Später</string>
+    <string name="ratingalert_never_button">Nimmer</string>
 </resources>
