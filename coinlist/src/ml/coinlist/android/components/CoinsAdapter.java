@@ -23,6 +23,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import java.util.Objects;
+
+import javax.annotation.Nullable;
+
 import org.json.JSONException;
 
 import nl.plaatsoft.android.fetch.FetchImageTask;
@@ -34,15 +39,15 @@ import ml.coinlist.android.Settings;
 
 public class CoinsAdapter extends ArrayAdapter<Coin> {
     private static class ViewHolder {
-        public ImageView coinImage;
-        public LinearLayout coinFirstLine;
-        public TextView coinName;
-        public TextView coinPrice;
-        public LinearLayout coinSecondLine;
-        public TextView coinRank;
-        public TextView coinChange;
-        public TextView coinExtra;
-        public ImageButton coinStarButton;
+        public @SuppressWarnings("null") ImageView coinImage;
+        public @SuppressWarnings("null") LinearLayout coinFirstLine;
+        public @SuppressWarnings("null") TextView coinName;
+        public @SuppressWarnings("null") TextView coinPrice;
+        public @SuppressWarnings("null") LinearLayout coinSecondLine;
+        public @SuppressWarnings("null") TextView coinRank;
+        public @SuppressWarnings("null") TextView coinChange;
+        public @SuppressWarnings("null") TextView coinExtra;
+        public @SuppressWarnings("null") ImageButton coinStarButton;
     }
 
     private final Settings settings;
@@ -53,12 +58,12 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @SuppressWarnings("null") ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_coin, parent, false);
             viewHolder = new ViewHolder();
-            viewHolder.coinImage = convertView.findViewById(R.id.coin_image);
+            viewHolder.coinImage = Objects.requireNonNull(convertView).findViewById(R.id.coin_image);
             viewHolder.coinFirstLine = convertView.findViewById(R.id.coin_first_line);
             viewHolder.coinName = convertView.findViewById(R.id.coin_name);
             viewHolder.coinPrice = convertView.findViewById(R.id.coin_price);

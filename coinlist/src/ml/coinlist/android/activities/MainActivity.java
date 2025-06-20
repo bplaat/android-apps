@@ -26,6 +26,8 @@ import android.widget.TextView;
 
 import java.nio.charset.StandardCharsets;
 
+import javax.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,12 +48,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private int oldLanguage = -1;
     private int oldTheme = -1;
     private boolean starredOnly;
-    private ListView coinsList;
-    private LinearLayout globalInfo;
-    private CoinsAdapter coinsAdapter;
+    private @SuppressWarnings("null") ListView coinsList;
+    private @SuppressWarnings("null") LinearLayout globalInfo;
+    private @SuppressWarnings("null") CoinsAdapter coinsAdapter;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         coinsList = findViewById(R.id.main_coins_list);
@@ -128,7 +130,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public boolean onMenuItemClick(MenuItem item) {
+    public boolean onMenuItemClick(@SuppressWarnings("null") MenuItem item) {
         if (item.getItemId() == R.id.menu_options_settings) {
             oldLanguage = settings.getLanguage();
             oldTheme = settings.getTheme();
@@ -139,7 +141,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, @SuppressWarnings("null") Intent data) {
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldCurrency != -1) {

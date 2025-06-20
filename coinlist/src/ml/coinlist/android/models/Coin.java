@@ -22,6 +22,9 @@ public class Coin {
 
     private Coin() {
         this.empty = true;
+        this.id = "";
+        this.name = "";
+        this.imageUrl = "";
     }
 
     private Coin(
