@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.android.ratingalert.RatingAlert;
+import nl.plaatsoft.android.updatealert.UpdateAlert;
 import ml.coinlist.android.components.CoinsAdapter;
 import ml.coinlist.android.models.Coin;
 import ml.coinlist.android.Formatters;
@@ -124,6 +125,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Show rating alert
         RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
+
+        // Show update alert
+        UpdateAlert.checkAndShow(this,
+                "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/coinlist/bob.toml",
+                SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override

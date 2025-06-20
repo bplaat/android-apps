@@ -32,6 +32,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.ratingalert.RatingAlert;
+import nl.plaatsoft.android.updatealert.UpdateAlert;
 import nl.plaatsoft.bassiemusic.components.MusicAdapter;
 import nl.plaatsoft.bassiemusic.components.MusicPlayer;
 import nl.plaatsoft.bassiemusic.models.Music;
@@ -223,8 +224,18 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             loadMusic(false);
         }
 
+        showAlerts();
+    }
+
+    public void showAlerts() {
+
         // Show rating alert
         RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
+
+        // Show update alert
+        UpdateAlert.checkAndShow(this,
+                "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bassiemusic/bob.toml",
+                SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override
@@ -266,9 +277,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             musicPage.setVisibility(View.VISIBLE);
             accessPage.setVisibility(View.GONE);
             loadMusic(false);
-
-            // Show rating alert
-            RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
+            showAlerts();
         }
     }
 

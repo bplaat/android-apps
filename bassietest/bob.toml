@@ -7,6 +7,7 @@ version = "1.0.0"
 fetch = { path = "../lib/fetch" }
 nullsafe = { path = "../lib/nullsafe" }
 ratingalert = { path = "../lib/ratingalert" }
+updatealert = { path = "../lib/updatealert" }
 
 [package.metadata.android]
 main_activity = ".activities.MainActivity"

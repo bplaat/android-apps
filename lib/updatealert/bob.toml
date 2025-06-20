@@ -1,0 +1,8 @@
+[package]
+name = "updatealert"
+identifier = "nl.plaatsoft.android.updatealert"
+version = "0.1.0"
+
+[dependencies]
+fetch = { path = "../fetch" }
+nullsafe = { path = "../nullsafe" }
