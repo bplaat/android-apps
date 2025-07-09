@@ -1,6 +1,6 @@
 [package]
 name = "bible"
-identifier = "nl.plaatsoft.bible"
+id = "nl.plaatsoft.bible"
 version = "1.4.0"
 
 [dependencies]

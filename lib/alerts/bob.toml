@@ -1,6 +1,6 @@
 [package]
 name = "alerts"
-identifier = "nl.plaatsoft.android.alerts"
+id = "nl.plaatsoft.android.alerts"
 version = "0.1.0"
 
 [dependencies]

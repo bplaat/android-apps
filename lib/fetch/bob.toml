@@ -1,6 +1,6 @@
 [package]
 name = "fetch"
-identifier = "nl.plaatsoft.android.fetch"
+id = "nl.plaatsoft.android.fetch"
 version = "0.1.0"
 
 [dependencies]

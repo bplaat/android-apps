@@ -1,6 +1,6 @@
 [package]
 name = "coinlist"
-identifier = "ml.coinlist.android"
+id = "ml.coinlist.android"
 version = "1.0.0"
 
 [dependencies]

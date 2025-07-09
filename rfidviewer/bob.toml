@@ -1,6 +1,6 @@
 [package]
 name = "rfidviewer"
-identifier = "nl.plaatsoft.rfidviewer"
+id = "nl.plaatsoft.rfidviewer"
 version = "1.0.0"
 
 [dependencies]

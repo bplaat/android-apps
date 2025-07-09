@@ -1,6 +1,6 @@
 [package]
 name = "bassietest"
-identifier = "nl.plaatsoft.bassietest"
+id = "nl.plaatsoft.bassietest"
 version = "1.0.0"
 
 [dependencies]

@@ -1,6 +1,6 @@
 [package]
 name = "hackernews"
-identifier = "com.ycombinator.news"
+id = "com.ycombinator.news"
 version = "1.0.0"
 
 [dependencies]

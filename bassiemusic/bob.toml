@@ -1,6 +1,6 @@
 [package]
 name = "bassiemusic"
-identifier = "nl.plaatsoft.bassiemusic"
+id = "nl.plaatsoft.bassiemusic"
 version = "2.11.0"
 
 [dependencies]
