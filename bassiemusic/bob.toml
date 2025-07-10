@@ -13,3 +13,6 @@ main_activity = ".activities.MainActivity"
 key_alias = ""
 keystore_password = "bassiemusic"
 key_password = "bassiemusic"
+proguard_keep = [
+    "public class nl.plaatsoft.bassiemusic.components.MusicPlayer { *; }",
+]

@@ -10,3 +10,8 @@ nullsafe = { path = "../lib/nullsafe" }
 [package.metadata.android]
 main_activity = ".activities.MainActivity"
 key_alias = ""
+proguard_keep = [
+    "public class nl.plaatsoft.bible.views.ChapterView { *; }",
+    "public class nl.plaatsoft.bible.views.SongView { *; }",
+    "public class nl.plaatsoft.bible.views.DrawerLayout { *; }",
+]

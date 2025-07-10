@@ -12,3 +12,6 @@ main_activity = ".activities.MainActivity"
 key_alias = ""
 keystore_password = "redsquare"
 key_password = "redsquare"
+proguard_keep = [
+    "public class nl.plaatsoft.redsquare.android.components.GamePage { *; }",
+]
