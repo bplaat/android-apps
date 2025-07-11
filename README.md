@@ -22,7 +22,7 @@ A collection of various Android apps that I created for myself and others
 ## Getting Started
 
 -   Install Java JDK 21
--   Install Android SDK with `platform-tools`, `build-tools:36` and `platforms:android-36` and set `$ANDROID_HOME` env var
+-   Install Android SDK with `cmdline-tools`, `platform-tools`, `build-tools:36` and `platforms:android-36` and set `$ANDROID_HOME` env var
 -   Install a [Rust toolchain](https://rustup.rs/)
 -   Install [bob](https://github.com/bplaat/crates/tree/master/bin/bob)
     ```sh

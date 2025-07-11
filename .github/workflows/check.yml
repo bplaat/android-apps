@@ -18,8 +18,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - run: |
+      - name: Set Java 21 as default
+        run: |
           echo "JAVA_HOME=${JAVA_HOME_21_X64}" >> $GITHUB_ENV
           echo "${JAVA_HOME_21_X64}/bin" >> $GITHUB_PATH
-      - run: cargo install --git https://github.com/bplaat/crates.git bob
+      - name: Install bob
+        run: cargo install --git https://github.com/bplaat/crates.git bob
       - run: ./meta.sh check

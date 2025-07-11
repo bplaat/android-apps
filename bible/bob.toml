@@ -11,7 +11,7 @@ nullsafe = { path = "../lib/nullsafe" }
 main_activity = ".activities.MainActivity"
 key_alias = ""
 proguard_keep = [
-    "public class nl.plaatsoft.bible.views.ChapterView { public ChapterView(android.content.Context, android.util.AttributeSet); }",
-    "public class nl.plaatsoft.bible.views.SongView { public SongView(android.content.Context, android.util.AttributeSet); }",
-    "public class nl.plaatsoft.bible.views.DrawerLayout { public DrawerLayout(android.content.Context, android.util.AttributeSet); }",
+    "public class nl.plaatsoft.bible.views.ChapterView { public <init>(android.content.Context, android.util.AttributeSet); }",
+    "public class nl.plaatsoft.bible.views.SongView { public <init>(android.content.Context, android.util.AttributeSet); }",
+    "public class nl.plaatsoft.bible.views.DrawerLayout { public <init>(android.content.Context, android.util.AttributeSet); }",
 ]
