@@ -13,5 +13,5 @@ key_alias = ""
 keystore_password = "redsquare"
 key_password = "redsquare"
 proguard_keep = [
-    "public class nl.plaatsoft.redsquare.android.components.GamePage { *; }",
+    "public class nl.plaatsoft.redsquare.android.components.GamePage { public GamePage(android.content.Context, android.util.AttributeSet); }",
 ]

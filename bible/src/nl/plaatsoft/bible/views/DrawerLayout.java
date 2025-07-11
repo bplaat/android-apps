@@ -27,10 +27,6 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
     private boolean isFirstLayout = true;
     private @Nullable OnCloseListener onCloseListener;
 
-    public DrawerLayout(Context context) {
-        this(context, null);
-    }
-
     @SuppressWarnings("this-escape")
     public DrawerLayout(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);

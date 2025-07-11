@@ -79,10 +79,6 @@ public class MusicPlayer extends LinearLayout {
     private int requestStartPosition;
     private boolean requestAutoPlayed;
 
-    public MusicPlayer(Context context) {
-        this(context, null);
-    }
-
     @SuppressWarnings("this-escape")
     public MusicPlayer(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
