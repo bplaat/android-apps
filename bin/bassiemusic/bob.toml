@@ -1,0 +1,18 @@
+[package]
+name = "bassiemusic"
+id = "nl.plaatsoft.bassiemusic"
+version = "2.11.0"
+
+[dependencies]
+alerts = { path = "../../lib/alerts" }
+fetch = { path = "../../lib/fetch" }
+nullsafe = { path = "../../lib/nullsafe" }
+
+[package.metadata.android]
+main_activity = ".activities.MainActivity"
+key_alias = ""
+keystore_password = "bassiemusic"
+key_password = "bassiemusic"
+proguard_keep = [
+    "public class nl.plaatsoft.bassiemusic.components.MusicPlayer { public <init>(android.content.Context, android.util.AttributeSet); }",
+]

@@ -42,14 +42,14 @@ function check_copyright() {
 function check() {
     check_copyright
     # FIXME: Check format and lint Java code
-    bob build -C bassiemusic
-    bob build -C bassietest
-    bob build -C bible
-    bob build -C coinlist
-    bob build -C hackernews
-    bob build -C redsquare
-    bob build -C rfidviewer
-    bob build -C tweakers
+    bob build -C bin/bassiemusic
+    bob build -C bin/bassietest
+    bob build -C bin/bible
+    bob build -C bin/coinlist
+    bob build -C bin/hackernews
+    bob build -C bin/redsquare
+    bob build -C bin/rfidviewer
+    bob build -C bin/tweakers
 }
 
 case "${1:-check}" in

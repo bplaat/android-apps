@@ -1,0 +1,10 @@
+[package]
+name = "hackernews"
+id = "com.ycombinator.news"
+version = "1.0.0"
+
+[dependencies]
+nullsafe = { path = "../../lib/nullsafe" }
+
+[package.metadata.android]
+key_alias = ""
