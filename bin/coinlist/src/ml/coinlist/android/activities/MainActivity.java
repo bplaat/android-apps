@@ -6,11 +6,13 @@
 
 package ml.coinlist.android.activities;
 
+import java.nio.charset.StandardCharsets;
+
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -24,22 +26,20 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import java.nio.charset.StandardCharsets;
-
-import javax.annotation.Nullable;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import nl.plaatsoft.android.alerts.RatingAlert;
 import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
-import ml.coinlist.android.components.CoinsAdapter;
-import ml.coinlist.android.models.Coin;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jspecify.annotations.Nullable;
+
 import ml.coinlist.android.Formatters;
 import ml.coinlist.android.R;
+import ml.coinlist.android.components.CoinsAdapter;
+import ml.coinlist.android.models.Coin;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int SETTINGS_REQUEST_CODE = 1;

@@ -4,7 +4,5 @@
  * SPDX-License-Identifier: MIT
  */
 
-@ParametersAreNonnullByDefault
+@org.jspecify.annotations.NullMarked
 package nl.plaatsoft.bassietest.activities;
-
-import javax.annotation.ParametersAreNonnullByDefault;

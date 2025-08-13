@@ -4,7 +4,5 @@
  * SPDX-License-Identifier: MIT
  */
 
-@ParametersAreNonnullByDefault
+@org.jspecify.annotations.NullMarked
 package nl.plaatsoft.bassiemusic.activities;
-
-import javax.annotation.ParametersAreNonnullByDefault;

@@ -7,24 +7,25 @@
 package nl.plaatsoft.bassiemusic.activities;
 
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.inputmethod.EditorInfo;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import javax.annotation.Nullable;
 
+import nl.plaatsoft.bassiemusic.R;
 import nl.plaatsoft.bassiemusic.components.MusicAdapter;
 import nl.plaatsoft.bassiemusic.models.Music;
-import nl.plaatsoft.bassiemusic.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class SearchActivity extends BaseActivity {
     @Override

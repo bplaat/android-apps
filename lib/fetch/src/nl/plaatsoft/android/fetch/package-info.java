@@ -4,7 +4,5 @@
  * SPDX-License-Identifier: MIT
  */
 
-@ParametersAreNonnullByDefault
+@org.jspecify.annotations.NullMarked
 package nl.plaatsoft.android.fetch;
-
-import javax.annotation.ParametersAreNonnullByDefault;

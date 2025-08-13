@@ -13,13 +13,14 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.compat.ContextCompat;
-import nl.plaatsoft.redsquare.android.models.BlueSquare;
-import nl.plaatsoft.redsquare.android.models.RedSquare;
 import nl.plaatsoft.redsquare.android.R;
 import nl.plaatsoft.redsquare.android.Random;
+import nl.plaatsoft.redsquare.android.models.BlueSquare;
+import nl.plaatsoft.redsquare.android.models.RedSquare;
+
+import org.jspecify.annotations.Nullable;
 
 public class GamePage extends View {
     public static interface OnEventListener {

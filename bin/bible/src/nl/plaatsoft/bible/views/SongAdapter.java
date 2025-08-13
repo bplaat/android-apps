@@ -6,6 +6,8 @@
 
 package nl.plaatsoft.bible.views;
 
+import java.util.Objects;
+
 import android.content.Context;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -15,12 +17,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import java.util.Objects;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.compat.ContextCompat;
-import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
+import nl.plaatsoft.bible.models.Song;
+
+import org.jspecify.annotations.Nullable;
 
 public class SongAdapter extends ArrayAdapter<Song> {
     private static record ViewHolder(TextView name) {

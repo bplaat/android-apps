@@ -6,13 +6,16 @@
 
 package nl.plaatsoft.rfidviewer.activities;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.nfc.tech.NfcA;
-import android.nfc.tech.MifareClassic;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.nfc.tech.MifareClassic;
+import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -21,15 +24,14 @@ import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.ScrollView;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import javax.annotation.Nullable;
+import android.widget.TextView;
 
 import nl.plaatsoft.android.compat.IntentCompat;
-import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
 import nl.plaatsoft.rfidviewer.R;
+import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
+
+import org.jspecify.annotations.Nullable;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int PENDING_INTENT_REQUEST_CODE = 0;

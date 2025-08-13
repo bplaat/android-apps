@@ -6,10 +6,9 @@
 
 package nl.plaatsoft.redsquare.android.models;
 
-import javax.annotation.Nullable;
-
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jspecify.annotations.Nullable;
 
 public record Score(long id, String name, int time, int score, int level) {
     public static @Nullable Score fromJSON(JSONObject json) {

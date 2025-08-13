@@ -6,8 +6,6 @@
 
 package nl.plaatsoft.bassietest.activities;
 
-import javax.annotation.Nullable;
-
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -19,6 +17,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import nl.plaatsoft.bassietest.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class SettingsActivity extends BaseActivity {
     public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bin/bassietest";

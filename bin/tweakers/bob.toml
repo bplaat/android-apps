@@ -5,7 +5,7 @@ version = "1.0.0"
 
 [dependencies]
 compat = { path = "../../lib/compat" }
-nullsafe = { path = "../../lib/nullsafe" }
+jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
 
 [package.metadata.android]
 key_alias = ""

@@ -6,6 +6,8 @@
 
 package nl.plaatsoft.bible.activities;
 
+import java.util.Arrays;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -15,11 +17,11 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-import java.util.Arrays;
-import javax.annotation.Nullable;
 
-import nl.plaatsoft.bible.Settings;
 import nl.plaatsoft.bible.R;
+import nl.plaatsoft.bible.Settings;
+
+import org.jspecify.annotations.Nullable;
 
 public class SettingsActivity extends BaseActivity {
     public static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bin/bible";

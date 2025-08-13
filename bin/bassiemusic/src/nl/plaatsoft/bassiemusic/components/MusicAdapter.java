@@ -6,6 +6,10 @@
 
 package nl.plaatsoft.bassiemusic.components;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 import android.content.Context;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -16,15 +20,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
-import javax.annotation.Nullable;
-
+import nl.plaatsoft.bassiemusic.R;
 import nl.plaatsoft.bassiemusic.models.Music;
 import nl.plaatsoft.bassiemusic.tasks.FetchCoverTask;
-import nl.plaatsoft.bassiemusic.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer {
     private static class ViewHolder {

@@ -10,15 +10,18 @@ function clean() {
 
 function vscode() {
     mkdir -p .vscode
-    echo "{\"editor.formatOnSave\":true,\"java.project.sourcePaths\":[" > .vscode/settings.json
+    echo "{\"editor.formatOnSave\":true," > .vscode/settings.json
+    echo "\"java.saveActions.organizeImports\":true," >> .vscode/settings.json
+    echo "\"java.completion.importOrder\":[\"java\",\"android\",\"com\",\"nl\",\"org\",\"\"]," >> .vscode/settings.json
+    echo "\"java.project.sourcePaths\":[" >> .vscode/settings.json
     for dir in $(find . -name "src" ! -path "*/target/*") $(find . -name "src-gen"); do
         echo "\"$dir\"," >> .vscode/settings.json
     done
-    echo "],\"java.project.referencedLibraries\":[\"$platform\"]," >> .vscode/settings.json
+    echo "],\"java.project.referencedLibraries\":[\"$platform\",\"./bin/bassiemusic/target/jar-cache/*.jar\"]," >> .vscode/settings.json
     echo "\"java.compile.nullAnalysis.mode\":\"automatic\"," >> .vscode/settings.json
-    echo "\"java.compile.nullAnalysis.nullable\":[\"javax.annotation.Nullable\"]," >> .vscode/settings.json
-    echo "\"java.compile.nullAnalysis.nonnull\":[\"javax.annotation.Nonnull\"]," >> .vscode/settings.json
-    echo "\"java.compile.nullAnalysis.nonnullbydefault\":[\"javax.annotation.ParametersAreNonnullByDefault\"]," >> .vscode/settings.json
+    echo "\"java.compile.nullAnalysis.nullable\":[\"org.jspecify.annotations.Nullable\"]," >> .vscode/settings.json
+    echo "\"java.compile.nullAnalysis.nonnull\":[\"org.jspecify.annotations.NonNull\"]," >> .vscode/settings.json
+    echo "\"java.compile.nullAnalysis.nonnullbydefault\":[\"org.jspecify.annotations.NullMarked\"]," >> .vscode/settings.json
     echo "\"rust-analyzer.linkedProjects\":[" >> .vscode/settings.json
     for file in $(find . -name "Cargo.toml"); do
         echo "\"$file\"," >> .vscode/settings.json

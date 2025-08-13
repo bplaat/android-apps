@@ -15,7 +15,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-import javax.annotation.Nullable;
+
+import org.jspecify.annotations.Nullable;
 
 import ml.coinlist.android.R;
 

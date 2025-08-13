@@ -19,9 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.bassiemusic.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class SettingsActivity extends BaseActivity {
     public static final String STORE_PAGE_URL = "https://play.google.com/store/apps/details?id=nl.plaatsoft.bassiemusic";

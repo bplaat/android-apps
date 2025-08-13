@@ -6,26 +6,26 @@
 
 package nl.plaatsoft.android.fetch;
 
-import android.animation.ValueAnimator;
-import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
-import android.net.Uri;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Looper;
-import android.os.Handler;
-import android.util.Log;
-import android.util.LruCache;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.ImageView;
-
 import java.net.URI;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import javax.annotation.Nullable;
+import android.animation.ValueAnimator;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+import android.util.LruCache;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.ImageView;
+
+import org.jspecify.annotations.Nullable;
 
 public class FetchImageTask {
     public static interface OnLoadListener {

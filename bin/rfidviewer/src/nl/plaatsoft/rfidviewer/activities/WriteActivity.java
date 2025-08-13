@@ -6,26 +6,28 @@
 
 package nl.plaatsoft.rfidviewer.activities;
 
+import java.util.Arrays;
+
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.nfc.tech.NfcA;
-import android.nfc.tech.MifareClassic;
 import android.nfc.NfcAdapter;
 import android.nfc.Tag;
+import android.nfc.tech.MifareClassic;
+import android.nfc.tech.NfcA;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.inputmethod.InputMethodManager;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ScrollView;
-import java.util.Arrays;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.compat.IntentCompat;
-import nl.plaatsoft.rfidviewer.tasks.MifareWriteTask;
 import nl.plaatsoft.rfidviewer.R;
+import nl.plaatsoft.rfidviewer.tasks.MifareWriteTask;
+
+import org.jspecify.annotations.Nullable;
 
 public class WriteActivity extends BaseActivity {
     private static final int PENDING_INTENT_REQUEST_CODE = 1;

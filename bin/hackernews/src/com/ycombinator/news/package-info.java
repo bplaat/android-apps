@@ -4,7 +4,5 @@
  * SPDX-License-Identifier: MIT
  */
 
-@ParametersAreNonnullByDefault
+@org.jspecify.annotations.NullMarked
 package com.ycombinator.news;
-
-import javax.annotation.ParametersAreNonnullByDefault;

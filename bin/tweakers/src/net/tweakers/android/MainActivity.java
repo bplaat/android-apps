@@ -6,6 +6,8 @@
 
 package net.tweakers.android;
 
+import java.util.HashMap;
+
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -19,8 +21,8 @@ import android.webkit.WebResourceResponse;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
-import java.util.HashMap;
-import javax.annotation.Nullable;
+
+import org.jspecify.annotations.Nullable;
 
 public class MainActivity extends BaseActivity {
     private @SuppressWarnings("null") WebView webviewPage;

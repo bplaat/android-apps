@@ -8,8 +8,6 @@ package nl.plaatsoft.redsquare.android.components;
 
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +15,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import nl.plaatsoft.redsquare.android.models.Score;
 import nl.plaatsoft.redsquare.android.R;
+import nl.plaatsoft.redsquare.android.models.Score;
+
+import org.jspecify.annotations.Nullable;
 
 public class ScoreAdapter extends ArrayAdapter<Score> {
     private static class ViewHolder {

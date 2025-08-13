@@ -6,11 +6,15 @@
 
 package nl.plaatsoft.bassiemusic.activities;
 
-import android.animation.AnimatorSet;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.Manifest;
 import android.animation.AnimatorInflater;
+import android.animation.AnimatorSet;
 import android.app.Activity;
-import android.content.pm.PackageManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,17 +30,15 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.window.OnBackInvokedDispatcher;
-import android.Manifest;
-import java.util.ArrayList;
-import java.util.List;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.alerts.RatingAlert;
 import nl.plaatsoft.android.alerts.UpdateAlert;
+import nl.plaatsoft.bassiemusic.R;
 import nl.plaatsoft.bassiemusic.components.MusicAdapter;
 import nl.plaatsoft.bassiemusic.components.MusicPlayer;
 import nl.plaatsoft.bassiemusic.models.Music;
-import nl.plaatsoft.bassiemusic.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     public static final int SEARCH_ACTIVITY_REQUEST_CODE = 1;

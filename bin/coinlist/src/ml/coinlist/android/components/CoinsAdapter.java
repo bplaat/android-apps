@@ -6,36 +6,36 @@
 
 package ml.coinlist.android.components;
 
+import java.util.Objects;
+
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.drawable.ColorDrawable;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import java.util.Objects;
-
-import javax.annotation.Nullable;
-
-import org.json.JSONException;
-
 import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchImageTask;
-import ml.coinlist.android.models.Coin;
+
+import org.json.JSONException;
+import org.jspecify.annotations.Nullable;
+
 import ml.coinlist.android.Formatters;
 import ml.coinlist.android.R;
 import ml.coinlist.android.Settings;
+import ml.coinlist.android.models.Coin;
 
 public class CoinsAdapter extends ArrayAdapter<Coin> {
     private static class ViewHolder {

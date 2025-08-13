@@ -4,4 +4,4 @@ id = "nl.plaatsoft.android.fetch"
 version = "0.1.0"
 
 [dependencies]
-nullsafe = { path = "../nullsafe" }
+jspecify = { maven = "org.jspecify:jspecify:1.0.0" }

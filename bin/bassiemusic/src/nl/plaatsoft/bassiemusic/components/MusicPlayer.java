@@ -8,8 +8,6 @@ package nl.plaatsoft.bassiemusic.components;
 
 import java.util.Objects;
 
-import javax.annotation.Nullable;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -26,13 +24,15 @@ import android.util.Log;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.SeekBar;
 import android.widget.TextSwitcher;
 import android.widget.TextView;
-import android.widget.SeekBar;
 
+import nl.plaatsoft.bassiemusic.R;
 import nl.plaatsoft.bassiemusic.models.Music;
 import nl.plaatsoft.bassiemusic.tasks.FetchCoverTask;
-import nl.plaatsoft.bassiemusic.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class MusicPlayer extends LinearLayout {
     private static final int PREVIOUS_RESET_TIMEOUT = 25000;

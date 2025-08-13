@@ -6,11 +6,8 @@
 
 package com.ycombinator.news;
 
-import android.content.res.Configuration;
-
-import javax.annotation.Nullable;
-
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -24,6 +21,8 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import nl.plaatsoft.android.compat.WebSettingsCompat;
+
+import org.jspecify.annotations.Nullable;
 
 public class MainActivity extends BaseActivity {
     private @SuppressWarnings("null") WebView webviewPage;

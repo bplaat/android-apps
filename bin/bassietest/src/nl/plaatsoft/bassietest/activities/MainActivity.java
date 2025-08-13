@@ -6,6 +6,8 @@
 
 package nl.plaatsoft.bassietest.activities;
 
+import java.nio.charset.StandardCharsets;
+
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Intent;
@@ -19,19 +21,16 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ViewSwitcher;
 
-import java.nio.charset.StandardCharsets;
-
-import javax.annotation.Nullable;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import nl.plaatsoft.android.alerts.RatingAlert;
 import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.android.fetch.FetchImageTask;
 import nl.plaatsoft.bassietest.R;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.jspecify.annotations.Nullable;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int SETTINGS_REQUEST_CODE = 1;

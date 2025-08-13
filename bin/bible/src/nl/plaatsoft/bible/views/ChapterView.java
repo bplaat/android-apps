@@ -22,11 +22,12 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.compat.ContextCompat;
-import nl.plaatsoft.bible.models.ChapterWithVerses;
 import nl.plaatsoft.bible.R;
+import nl.plaatsoft.bible.models.ChapterWithVerses;
+
+import org.jspecify.annotations.Nullable;
 
 public class ChapterView extends ScrollView {
     public static interface OnPreviousListener {

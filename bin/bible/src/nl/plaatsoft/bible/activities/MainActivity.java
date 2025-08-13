@@ -6,6 +6,9 @@
 
 package nl.plaatsoft.bible.activities;
 
+import java.util.ArrayList;
+import java.util.Objects;
+
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -18,15 +21,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.ScrollView;
-import java.util.ArrayList;
-import java.util.Objects;
-import javax.annotation.Nullable;
+import android.widget.TextView;
 
 import nl.plaatsoft.android.alerts.RatingAlert;
 import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.IntentCompat;
+import nl.plaatsoft.bible.R;
+import nl.plaatsoft.bible.Settings;
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;
@@ -43,8 +45,8 @@ import nl.plaatsoft.bible.views.ChaptersDialogBuilder;
 import nl.plaatsoft.bible.views.DrawerLayout;
 import nl.plaatsoft.bible.views.SongView;
 import nl.plaatsoft.bible.views.SongsDialogBuilder;
-import nl.plaatsoft.bible.Settings;
-import nl.plaatsoft.bible.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
     private static final int SEARCH_REQUEST_CODE = 0;
@@ -71,7 +73,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private int openType = -1;
     private @Nullable Bible openBible;
     private @Nullable Book openBook;
-    private @Nullable ChapterWithVerses openChapter;
+    private ChapterWithVerses openChapter;
     private @Nullable String lastBookKey;
     private int lastChapterNumber;
     private int lastChapterScroll;

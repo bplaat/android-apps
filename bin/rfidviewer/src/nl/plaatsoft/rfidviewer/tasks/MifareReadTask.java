@@ -6,15 +6,16 @@
 
 package nl.plaatsoft.rfidviewer.tasks;
 
-import android.content.Context;
-import android.nfc.tech.MifareClassic;
-import android.os.Looper;
-import android.os.Handler;
-import android.util.Log;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import javax.annotation.Nullable;
+import android.content.Context;
+import android.nfc.tech.MifareClassic;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
+import org.jspecify.annotations.Nullable;
 
 public class MifareReadTask {
     public static interface OnLoadListener {

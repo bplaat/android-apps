@@ -6,9 +6,10 @@
 
 package nl.plaatsoft.android.compat;
 
+import java.io.Serializable;
+
 import android.content.Intent;
 import android.os.Build;
-import java.io.Serializable;
 
 public class IntentCompat {
     private IntentCompat() {

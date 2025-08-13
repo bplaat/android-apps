@@ -4,7 +4,5 @@
  * SPDX-License-Identifier: MIT
  */
 
-@ParametersAreNonnullByDefault
+@org.jspecify.annotations.NullMarked
 package ml.coinlist.android.components;
-
-import javax.annotation.ParametersAreNonnullByDefault;

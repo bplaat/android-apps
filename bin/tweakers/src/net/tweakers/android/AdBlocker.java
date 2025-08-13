@@ -6,17 +6,19 @@
 
 package net.tweakers.android;
 
-import android.content.Context;
-import android.net.Uri;
-import android.util.Log;
-import android.webkit.WebResourceResponse;
-import java.io.ByteArrayInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.annotation.Nullable;
+
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
+import android.webkit.WebResourceResponse;
+
+import org.jspecify.annotations.Nullable;
 
 public class AdBlocker {
     private static @Nullable AdBlocker instance;

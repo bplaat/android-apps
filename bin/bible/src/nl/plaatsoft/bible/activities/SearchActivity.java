@@ -6,6 +6,8 @@
 
 package nl.plaatsoft.bible.activities;
 
+import java.util.Objects;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,15 +16,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import java.util.Objects;
-import javax.annotation.Nullable;
 
+import nl.plaatsoft.bible.R;
+import nl.plaatsoft.bible.Settings;
 import nl.plaatsoft.bible.services.BibleService;
 import nl.plaatsoft.bible.services.SongBundleService;
 import nl.plaatsoft.bible.views.SearchVerseAdapter;
 import nl.plaatsoft.bible.views.SongAdapter;
-import nl.plaatsoft.bible.R;
-import nl.plaatsoft.bible.Settings;
+
+import org.jspecify.annotations.Nullable;
 
 public class SearchActivity extends BaseActivity implements TextWatcher {
     public static final String BOOK = "book_key";

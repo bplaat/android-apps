@@ -15,9 +15,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.rfidviewer.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class SettingsActivity extends BaseActivity {
     private static final String STORE_PAGE_URL = "https://github.com/bplaat/android-apps/tree/master/bin/rfidviewer";

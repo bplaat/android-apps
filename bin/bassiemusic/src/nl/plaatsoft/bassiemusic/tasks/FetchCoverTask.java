@@ -6,23 +6,22 @@
 
 package nl.plaatsoft.bassiemusic.tasks;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.util.Log;
 import android.widget.ImageView;
 
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-
-import javax.annotation.Nullable;
-
-import org.json.JSONObject;
-
 import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.android.fetch.FetchImageTask;
-import nl.plaatsoft.bassiemusic.models.Music;
 import nl.plaatsoft.bassiemusic.R;
+import nl.plaatsoft.bassiemusic.models.Music;
+
+import org.json.JSONObject;
+import org.jspecify.annotations.Nullable;
 
 public class FetchCoverTask {
     private static final String DEEZER_API_URL = "https://api.deezer.com";

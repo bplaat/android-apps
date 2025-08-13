@@ -6,12 +6,13 @@
 
 package nl.plaatsoft.android.alerts;
 
+import java.util.regex.Pattern;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
-import java.util.regex.Pattern;
 
 import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;

@@ -6,9 +6,6 @@
 
 package nl.plaatsoft.bible.services;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -17,15 +14,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
-import javax.annotation.Nullable;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import nl.plaatsoft.bible.models.Bible;
+import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;
 import nl.plaatsoft.bible.models.ChapterWithVerses;
 import nl.plaatsoft.bible.models.SearchVerse;
-import nl.plaatsoft.bible.models.Book;
-import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Testament;
 import nl.plaatsoft.bible.models.Verse;
+
+import org.jspecify.annotations.Nullable;
 
 public class BibleService {
     private static @Nullable BibleService instance;

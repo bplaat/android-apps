@@ -6,6 +6,8 @@
 
 package nl.plaatsoft.bible.views;
 
+import java.util.ArrayList;
+
 import android.app.AlertDialog;
 import android.content.Context;
 import android.os.Handler;
@@ -13,11 +15,10 @@ import android.os.Looper;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import java.util.ArrayList;
 
+import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Testament;
-import nl.plaatsoft.bible.R;
 
 public class BooksDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {

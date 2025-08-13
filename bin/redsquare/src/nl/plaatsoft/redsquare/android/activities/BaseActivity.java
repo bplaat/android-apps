@@ -6,12 +6,13 @@
 
 package nl.plaatsoft.redsquare.android.activities;
 
+import java.util.Locale;
+
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.PowerManager;
-import java.util.Locale;
 
 import nl.plaatsoft.redsquare.android.Settings;
 

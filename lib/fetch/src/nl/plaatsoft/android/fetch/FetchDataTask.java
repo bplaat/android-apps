@@ -6,10 +6,6 @@
 
 package nl.plaatsoft.android.fetch;
 
-import android.content.Context;
-import android.os.Handler;
-import android.os.Looper;
-import android.util.Log;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,7 +16,13 @@ import java.security.MessageDigest;
 import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
-import javax.annotation.Nullable;
+
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
+import android.util.Log;
+
+import org.jspecify.annotations.Nullable;
 
 public class FetchDataTask {
     public static interface OnLoadListener {

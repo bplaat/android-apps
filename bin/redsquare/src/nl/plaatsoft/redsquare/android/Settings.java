@@ -8,6 +8,7 @@ package nl.plaatsoft.redsquare.android;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 

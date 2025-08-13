@@ -6,19 +6,21 @@
 
 package nl.plaatsoft.bassietest.activities;
 
+import java.util.Locale;
+
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.PowerManager;
 import android.view.ViewGroup;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
-import java.util.Locale;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.compat.WindowInsetsCompat;
 import nl.plaatsoft.bassietest.Settings;
+
+import org.jspecify.annotations.Nullable;
 
 public abstract class BaseActivity extends Activity {
     protected @SuppressWarnings("null") Settings settings;

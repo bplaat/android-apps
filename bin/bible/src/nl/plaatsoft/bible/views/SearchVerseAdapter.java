@@ -6,6 +6,8 @@
 
 package nl.plaatsoft.bible.views;
 
+import java.util.Objects;
+
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.Spannable;
@@ -18,12 +20,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-import java.util.Objects;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.compat.ContextCompat;
-import nl.plaatsoft.bible.models.SearchVerse;
 import nl.plaatsoft.bible.R;
+import nl.plaatsoft.bible.models.SearchVerse;
+
+import org.jspecify.annotations.Nullable;
 
 public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
     private static record ViewHolder(TextView contents, TextView bookChapter) {

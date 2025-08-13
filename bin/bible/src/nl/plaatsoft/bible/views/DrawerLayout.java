@@ -13,10 +13,11 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.bible.R;
+
+import org.jspecify.annotations.Nullable;
 
 public class DrawerLayout extends ViewGroup implements View.OnClickListener {
     public static interface OnCloseListener {

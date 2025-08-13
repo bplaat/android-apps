@@ -6,9 +6,6 @@
 
 package nl.plaatsoft.bible.services;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -16,11 +13,16 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
-import javax.annotation.Nullable;
+
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.models.SongBundle;
 import nl.plaatsoft.bible.models.SongWithText;
+
+import org.jspecify.annotations.Nullable;
 
 public class SongBundleService {
     private static @Nullable SongBundleService instance;

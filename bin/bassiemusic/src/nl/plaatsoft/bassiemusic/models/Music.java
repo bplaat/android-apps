@@ -6,14 +6,15 @@
 
 package nl.plaatsoft.bassiemusic.models;
 
-import android.content.Context;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import android.content.ContentUris;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Collections;
 
 public class Music {
     private long id;

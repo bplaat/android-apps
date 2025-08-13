@@ -6,16 +6,15 @@
 
 package com.ycombinator.news;
 
-import javax.annotation.Nullable;
-
 import android.app.Activity;
 import android.os.Build;
 import android.view.ViewGroup;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
-import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.compat.WindowInsetsCompat;
+
+import org.jspecify.annotations.Nullable;
 
 public abstract class BaseActivity extends Activity {
     private @Nullable OnBackInvokedCallback onBackCallback;
