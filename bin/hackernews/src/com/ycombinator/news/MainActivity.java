@@ -15,15 +15,15 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Build;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
+
+import nl.plaatsoft.android.compat.WebSettingsCompat;
 
 public class MainActivity extends BaseActivity {
     private @SuppressWarnings("null") WebView webviewPage;
@@ -41,7 +41,10 @@ public class MainActivity extends BaseActivity {
 
         var webSettings = webviewPage.getSettings();
         webSettings.setJavaScriptEnabled(true);
-        webSettingsSetForceDark(webSettings);
+        if ((getResources().getConfiguration().uiMode
+                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
+            WebSettingsCompat.setForceDark(webSettings, true);
+        }
 
         // Disconnected page
         disconnectedPage = findViewById(R.id.main_disconnected_page);
@@ -149,17 +152,5 @@ public class MainActivity extends BaseActivity {
     protected void onBack() {
         if (webviewPage.canGoBack())
             webviewPage.goBack();
-    }
-
-    @SuppressWarnings("deprecation")
-    private void webSettingsSetForceDark(WebSettings webSettings) {
-        if ((getResources().getConfiguration().uiMode
-                & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_YES) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                webSettings.setAlgorithmicDarkeningAllowed(true);
-            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                webSettings.setForceDark(WebSettings.FORCE_DARK_ON);
-            }
-        }
     }
 }

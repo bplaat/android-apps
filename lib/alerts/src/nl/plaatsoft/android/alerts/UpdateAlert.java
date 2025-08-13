@@ -12,13 +12,15 @@ import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import java.util.regex.Pattern;
+
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 
 public class UpdateAlert {
     @SuppressWarnings("unused")
     public static void checkAndShow(Context context, String versionUrl, String storePageUrl) {
         // Check if app is installed from direct .apk
-        String installerPackageName = getInstallerPackageName(context);
+        String installerPackageName = ContextCompat.getInstallerPackageName(context);
         if (installerPackageName != null) {
             return;
         }
@@ -47,17 +49,5 @@ public class UpdateAlert {
             } catch (NameNotFoundException e) {
             }
         }).fetch();
-    }
-
-    @SuppressWarnings("deprecation")
-    private static String getInstallerPackageName(Context context) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
-            try {
-                return context.getPackageManager().getInstallSourceInfo(context.getPackageName())
-                        .getInstallingPackageName();
-            } catch (NameNotFoundException e) {
-            }
-        }
-        return context.getPackageManager().getInstallerPackageName(context.getPackageName());
     }
 }

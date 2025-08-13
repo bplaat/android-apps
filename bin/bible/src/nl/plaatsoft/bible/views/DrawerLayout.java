@@ -15,8 +15,8 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.bible.R;
-import nl.plaatsoft.bible.Utils;
 
 public class DrawerLayout extends ViewGroup implements View.OnClickListener {
     public static interface OnCloseListener {
@@ -74,7 +74,7 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
         post(() -> {
             var animationDuration = (long) getResources().getInteger(R.integer.animation_duration);
             var colorAnimation = ValueAnimator.ofArgb(Color.TRANSPARENT,
-                    Utils.contextGetColor(getContext(), R.color.drawer_overlay_background_color));
+                    ContextCompat.getColor(getContext(), R.color.drawer_overlay_background_color));
             colorAnimation.setDuration(animationDuration);
             colorAnimation.setInterpolator(new DecelerateInterpolator());
             colorAnimation.addUpdateListener(animator -> setBackgroundColor((int) animator.getAnimatedValue()));
@@ -93,7 +93,7 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
         isOpen = false;
         var animationDuration = (long) getResources().getInteger(R.integer.animation_duration);
         var colorAnimation = ValueAnimator.ofArgb(
-                Utils.contextGetColor(getContext(), R.color.drawer_overlay_background_color),
+                ContextCompat.getColor(getContext(), R.color.drawer_overlay_background_color),
                 Color.TRANSPARENT);
         colorAnimation.setDuration(animationDuration);
         colorAnimation.setInterpolator(new DecelerateInterpolator());

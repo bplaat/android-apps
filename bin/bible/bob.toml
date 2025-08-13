@@ -5,6 +5,7 @@ version = "1.4.0"
 
 [dependencies]
 alerts = { path = "../../lib/alerts" }
+compat = { path = "../../lib/compat" }
 nullsafe = { path = "../../lib/nullsafe" }
 
 [package.metadata.android]

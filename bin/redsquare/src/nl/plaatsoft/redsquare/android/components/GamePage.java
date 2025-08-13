@@ -15,9 +15,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.redsquare.android.models.BlueSquare;
 import nl.plaatsoft.redsquare.android.models.RedSquare;
-import nl.plaatsoft.redsquare.android.Utils;
 import nl.plaatsoft.redsquare.android.R;
 import nl.plaatsoft.redsquare.android.Random;
 
@@ -152,7 +152,7 @@ public class GamePage extends View {
 
         canvas.drawColor(Color.TRANSPARENT);
 
-        paint.setColor(Utils.contextGetColor(getContext(), R.color.border_background_color));
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.border_background_color));
         canvas.drawRect(borderWidth * scale, borderWidth * scale, (width - borderWidth) * scale,
                 (height - borderWidth) * scale, paint);
 
@@ -162,7 +162,7 @@ public class GamePage extends View {
         redsquare.draw(canvas);
 
         var textPadding = 24.0f;
-        paint.setColor(Utils.contextGetColor(getContext(), R.color.primary_text_color));
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.primary_text_color));
         paint.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(String.format(scoreLabelString, score), textPadding * scale, (textPadding + 8) * scale, paint);
 

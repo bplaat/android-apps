@@ -18,11 +18,11 @@ import javax.annotation.Nullable;
 
 import org.json.JSONObject;
 
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.android.fetch.FetchImageTask;
 import nl.plaatsoft.bassiemusic.models.Music;
 import nl.plaatsoft.bassiemusic.R;
-import nl.plaatsoft.bassiemusic.Utils;
 
 public class FetchCoverTask {
     private static final String DEEZER_API_URL = "https://api.deezer.com";
@@ -110,7 +110,7 @@ public class FetchCoverTask {
 
     public FetchCoverTask fetch() {
         var imageCoverTask = FetchImageTask.with(context).load(music.getCoverUri().toString())
-                .loadingColor(Utils.contextGetColor(context, R.color.loading_background_color));
+                .loadingColor(ContextCompat.getColor(context, R.color.loading_background_color));
         if (isFadedIn)
             imageCoverTask.fadeIn();
         imageCoverTask.into(imageView).then(image -> {
@@ -135,7 +135,7 @@ public class FetchCoverTask {
                         if (albumsJson.length() > 0) {
                             var albumJson = albumsJson.getJSONObject(0);
                             var fetchImageTask = FetchImageTask.with(context).load(albumJson.getString("cover_medium"))
-                                    .loadingColor(Utils.contextGetColor(context, R.color.loading_background_color));
+                                    .loadingColor(ContextCompat.getColor(context, R.color.loading_background_color));
                             if (isFadedIn)
                                 fetchImageTask.fadeIn();
                             if (!isLoadedFomCache)

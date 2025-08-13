@@ -18,9 +18,9 @@ import android.widget.TextView;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.R;
-import nl.plaatsoft.bible.Utils;
 
 public class SongAdapter extends ArrayAdapter<Song> {
     private static record ViewHolder(TextView name) {
@@ -55,7 +55,7 @@ public class SongAdapter extends ArrayAdapter<Song> {
         var highlightStart = songName.toLowerCase().indexOf(searchQuery.toLowerCase());
         if (highlightStart != -1)
             span.setSpan(
-                    new BackgroundColorSpan(Utils.contextGetColor(getContext(), R.color.highlight_text_color)),
+                    new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
                     highlightStart, highlightStart + searchQuery.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         viewHolder.name.setText(span);
 

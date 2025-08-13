@@ -9,15 +9,15 @@ package net.tweakers.android;
 import android.app.Activity;
 import android.os.Build;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.WindowInsetsCompat;
+
 public abstract class BaseActivity extends Activity {
     private @Nullable OnBackInvokedCallback onBackCallback;
 
-    @SuppressWarnings("deprecation")
     protected void useWindowInsets(ViewGroup... scrollViews) {
         getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
             if (scrollViews != null) {
@@ -27,43 +27,25 @@ public abstract class BaseActivity extends Activity {
                         scrollView.setTag(scrollView.getPaddingBottom());
                 }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                var insets = windowInsets.getInsets(
-                        WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout() | WindowInsets.Type.ime());
-                view.setPadding(insets.left, insets.top, insets.right, scrollViews != null ? 0 : insets.bottom);
-                if (scrollViews != null) {
-                    for (var scrollView : scrollViews)
-                        scrollView.setPadding(
-                                scrollView.getPaddingLeft(),
-                                scrollView.getPaddingTop(),
-                                scrollView.getPaddingRight(),
-                                (int) scrollView.getTag() + insets.bottom);
-                }
-            } else {
-                view.setPadding(
-                        windowInsets.getSystemWindowInsetLeft(),
-                        windowInsets.getSystemWindowInsetTop(),
-                        windowInsets.getSystemWindowInsetRight(),
-                        scrollViews != null ? 0 : windowInsets.getSystemWindowInsetBottom());
-                if (scrollViews != null) {
-                    for (var scrollView : scrollViews)
-                        scrollView.setPadding(
-                                scrollView.getPaddingLeft(),
-                                scrollView.getPaddingTop(),
-                                scrollView.getPaddingRight(),
-                                (int) scrollView.getTag() + windowInsets.getSystemWindowInsetBottom());
-                }
+
+            var insets = WindowInsetsCompat.getInsets(windowInsets);
+            view.setPadding(insets.left(), insets.top(), insets.right(), scrollViews != null ? 0 : insets.bottom());
+            if (scrollViews != null) {
+                for (var scrollView : scrollViews)
+                    scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
+                            scrollView.getPaddingRight(), (int) scrollView.getTag() + insets.bottom());
             }
             return windowInsets;
         });
     }
 
-    // Back button override
+    // MARK: Back button
     protected boolean shouldBackOverride() {
         return false;
     }
 
     protected void onBack() {
+        // Default noop
     }
 
     @Override

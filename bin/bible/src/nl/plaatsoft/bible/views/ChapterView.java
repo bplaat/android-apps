@@ -24,9 +24,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.bible.models.ChapterWithVerses;
 import nl.plaatsoft.bible.R;
-import nl.plaatsoft.bible.Utils;
 
 public class ChapterView extends ScrollView {
     public static interface OnPreviousListener {
@@ -81,14 +81,14 @@ public class ChapterView extends ScrollView {
 
             var verseSpannable = new SpannableString(verse.number() + " " + verse.text());
             verseSpannable.setSpan(
-                    new ForegroundColorSpan(Utils.contextGetColor(getContext(), R.color.secondary_text_color)), 0,
+                    new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.secondary_text_color)), 0,
                     verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             verseSpannable.setSpan(new RelativeSizeSpan(0.75f), 0, verse.number().length(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             if (highlightVerseId != -1 && verse.id() == highlightVerseId) {
                 scrollToVerse = true;
                 verseSpannable.setSpan(
-                        new BackgroundColorSpan(Utils.contextGetColor(getContext(), R.color.highlight_text_color)),
+                        new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
                         0, verseSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             ssb.append(verseSpannable);

@@ -4,6 +4,7 @@ id = "net.tweakers.android"
 version = "1.0.0"
 
 [dependencies]
+compat = { path = "../../lib/compat" }
 nullsafe = { path = "../../lib/nullsafe" }
 
 [package.metadata.android]

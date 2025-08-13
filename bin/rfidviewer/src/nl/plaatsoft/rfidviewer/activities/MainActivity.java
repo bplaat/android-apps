@@ -27,8 +27,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
-import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -133,7 +133,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Handle new incoming RFID tag messages
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction())) {
-            var tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
+            var tag = IntentCompat.getParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Create an output string add uid line
             var sb = new StringBuilder();

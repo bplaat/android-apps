@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 
+import nl.plaatsoft.android.compat.ContextCompat;
+
 public class Settings {
     private final Context context;
     private final SharedPreferences prefs;
@@ -100,7 +102,7 @@ public class Settings {
 
     // Open bible
     private String getBibleDefault() {
-        var languages = Utils.contextGetLanguages(context);
+        var languages = ContextCompat.getLanguages(context);
         for (var language : languages) {
             if (language.equals("nl"))
                 return "bibles/nbv21.bible";

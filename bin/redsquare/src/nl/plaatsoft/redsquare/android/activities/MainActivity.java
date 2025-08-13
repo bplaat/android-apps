@@ -16,8 +16,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.inputmethod.EditorInfo;
-import android.view.WindowInsetsController;
-import android.view.WindowInsets;
 import android.view.WindowManager;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +32,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import nl.plaatsoft.android.compat.WindowCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.redsquare.android.components.GamePage;
 import nl.plaatsoft.redsquare.android.components.ScoreAdapter;
@@ -265,7 +264,7 @@ public class MainActivity extends BaseActivity {
         settingsNameInput.setOnEditorActionListener((view, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 settings.setName(settingsNameInput.getText().toString());
-                hideSystemUI();
+                WindowCompat.hideSystemUI(getWindow());
             }
             return false;
         });
@@ -337,7 +336,7 @@ public class MainActivity extends BaseActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus)
-            hideSystemUI();
+            WindowCompat.hideSystemUI(getWindow());
     }
 
     @Override
@@ -352,25 +351,6 @@ public class MainActivity extends BaseActivity {
         if (gamePage.isRunning())
             gamePage.stop();
         super.onPause();
-    }
-
-    @SuppressWarnings("deprecation")
-    private void hideSystemUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            var controller = getWindow().getInsetsController();
-            if (controller != null) {
-                controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-                controller.hide(WindowInsets.Type.systemBars());
-            }
-        } else {
-            getWindow().getDecorView().setSystemUiVisibility(
-                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                            View.SYSTEM_UI_FLAG_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
-        }
     }
 
     private @Nullable String uriEncode(String value) {

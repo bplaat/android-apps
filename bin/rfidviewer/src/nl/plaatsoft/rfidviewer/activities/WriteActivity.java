@@ -23,8 +23,8 @@ import android.widget.ScrollView;
 import java.util.Arrays;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.rfidviewer.tasks.MifareWriteTask;
-import nl.plaatsoft.rfidviewer.Utils;
 import nl.plaatsoft.rfidviewer.R;
 
 public class WriteActivity extends BaseActivity {
@@ -146,7 +146,7 @@ public class WriteActivity extends BaseActivity {
         // Handle new incoming RFID tag messages when a write is pending
         if (NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()) && isWritePending) {
             isWritePending = false;
-            var tag = Utils.intentGetParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
+            var tag = IntentCompat.getParcelableExtra(intent, NfcAdapter.EXTRA_TAG, Tag.class);
 
             // Check if tag is Mifare Classic
             if (Arrays.asList(tag.getTechList()).contains(MifareClassic.class.getName())) {

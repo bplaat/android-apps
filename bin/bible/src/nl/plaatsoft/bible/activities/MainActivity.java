@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
 
 import nl.plaatsoft.android.alerts.RatingAlert;
 import nl.plaatsoft.android.alerts.UpdateAlert;
+import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.bible.models.Bible;
 import nl.plaatsoft.bible.models.Book;
 import nl.plaatsoft.bible.models.Chapter;
@@ -43,7 +44,6 @@ import nl.plaatsoft.bible.views.DrawerLayout;
 import nl.plaatsoft.bible.views.SongView;
 import nl.plaatsoft.bible.views.SongsDialogBuilder;
 import nl.plaatsoft.bible.Settings;
-import nl.plaatsoft.bible.Utils;
 import nl.plaatsoft.bible.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -318,12 +318,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         if (requestCode == SEARCH_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 if (openType == Settings.OPEN_TYPE_BIBLE) {
-                    var book = Utils.intentGetSerializableExtra(data, SearchActivity.BOOK, Book.class);
-                    var chapter = Utils.intentGetSerializableExtra(data, SearchActivity.CHAPTER, Chapter.class);
+                    var book = IntentCompat.getSerializableExtra(data, SearchActivity.BOOK, Book.class);
+                    var chapter = IntentCompat.getSerializableExtra(data, SearchActivity.CHAPTER, Chapter.class);
                     openChapter(book, chapter, 0, data.getIntExtra(SearchActivity.HIGHLIGHT_VERSE, -1));
                 }
                 if (openType == Settings.OPEN_TYPE_SONG_BUNDLE)
-                    openSong(Utils.intentGetSerializableExtra(data, SearchActivity.SONG, Song.class));
+                    openSong(IntentCompat.getSerializableExtra(data, SearchActivity.SONG, Song.class));
             }
             return;
         }

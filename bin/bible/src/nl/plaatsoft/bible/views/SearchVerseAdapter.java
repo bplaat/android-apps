@@ -21,9 +21,9 @@ import android.widget.TextView;
 import java.util.Objects;
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.bible.models.SearchVerse;
 import nl.plaatsoft.bible.R;
-import nl.plaatsoft.bible.Utils;
 
 public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
     private static record ViewHolder(TextView contents, TextView bookChapter) {
@@ -65,14 +65,14 @@ public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
         var span = new SpannableString(verseContents);
         if (!searchVerse.verse().isSubtitle()) {
             span.setSpan(
-                    new ForegroundColorSpan(Utils.contextGetColor(getContext(), R.color.secondary_text_color)), 0,
+                    new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.secondary_text_color)), 0,
                     searchVerse.verse().number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new RelativeSizeSpan(0.75f), 0, searchVerse.verse().number().length(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         var highlightStart = verseContents.toLowerCase().indexOf(searchQuery.toLowerCase());
         span.setSpan(
-                new BackgroundColorSpan(Utils.contextGetColor(getContext(), R.color.highlight_text_color)),
+                new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
                 highlightStart, highlightStart + searchQuery.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         viewHolder.contents.setTypeface(

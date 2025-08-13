@@ -30,10 +30,10 @@ import javax.annotation.Nullable;
 
 import org.json.JSONException;
 
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchImageTask;
 import ml.coinlist.android.models.Coin;
 import ml.coinlist.android.Formatters;
-import ml.coinlist.android.Utils;
 import ml.coinlist.android.R;
 import ml.coinlist.android.Settings;
 
@@ -84,7 +84,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         }
 
         FetchImageTask.with(getContext()).load(coin.getImageUrl()).transparent().fadeIn()
-                .loadingColor(Utils.contextGetColor(getContext(), R.color.loading_background_color))
+                .loadingColor(ContextCompat.getColor(getContext(), R.color.loading_background_color))
                 .into(viewHolder.coinImage)
                 .fetch();
 
@@ -99,11 +99,11 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         viewHolder.coinRank.setText("#" + coin.getRank());
         viewHolder.coinChange.setText(Formatters.changePercent(coin.getChange()));
         if (coin.getChange() > 0) {
-            viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.positive_color));
+            viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.positive_color));
         } else if (coin.getChange() < 0) {
-            viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.negative_color));
+            viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.negative_color));
         } else {
-            viewHolder.coinChange.setTextColor(Utils.contextGetColor(getContext(), R.color.secondary_text_color));
+            viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.secondary_text_color));
         }
 
         if (coin.getExtraIndex() == 0) {

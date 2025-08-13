@@ -34,11 +34,11 @@ import org.json.JSONObject;
 
 import nl.plaatsoft.android.alerts.RatingAlert;
 import nl.plaatsoft.android.alerts.UpdateAlert;
+import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import ml.coinlist.android.components.CoinsAdapter;
 import ml.coinlist.android.models.Coin;
 import ml.coinlist.android.Formatters;
-import ml.coinlist.android.Utils;
 import ml.coinlist.android.R;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -186,12 +186,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                                 .findViewById(R.id.global_info_market_cap_change);
                         marketCapChangeLabel.setText(Formatters.changePercent(marketCapChange));
                         if (marketCapChange > 0) {
-                            marketCapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.positive_color));
+                            marketCapChangeLabel.setTextColor(ContextCompat.getColor(this, R.color.positive_color));
                         } else if (marketCapChange < 0) {
-                            marketCapChangeLabel.setTextColor(Utils.contextGetColor(this, R.color.negative_color));
+                            marketCapChangeLabel.setTextColor(ContextCompat.getColor(this, R.color.negative_color));
                         } else {
                             marketCapChangeLabel
-                                    .setTextColor(Utils.contextGetColor(this, R.color.secondary_text_color));
+                                    .setTextColor(ContextCompat.getColor(this, R.color.secondary_text_color));
                         }
                         var marketCapLine = globalInfo.findViewById(R.id.global_info_market_cap_line);
                         if (((ColorDrawable) marketCapLine.getBackground()).getColor() != Color.TRANSPARENT) {

@@ -5,6 +5,7 @@ version = "2.11.0"
 
 [dependencies]
 alerts = { path = "../../lib/alerts" }
+compat = { path = "../../lib/compat" }
 fetch = { path = "../../lib/fetch" }
 nullsafe = { path = "../../lib/nullsafe" }
 

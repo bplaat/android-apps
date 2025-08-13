@@ -12,14 +12,15 @@ import android.content.Context;
 import android.os.Build;
 import android.os.PowerManager;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
 import java.util.Locale;
 
+import nl.plaatsoft.android.compat.WindowInsetsCompat;
 import ml.coinlist.android.Settings;
 
 public abstract class BaseActivity extends Activity {
     protected @SuppressWarnings("null") Settings settings;
 
+    // MARK: Context creation
     @Override
     public void attachBaseContext(@SuppressWarnings("null") Context context) {
         settings = new Settings(context);
@@ -61,7 +62,7 @@ public abstract class BaseActivity extends Activity {
         super.attachBaseContext(context);
     }
 
-    @SuppressWarnings("deprecation")
+    // MARK: Window insets
     protected void useWindowInsets(ViewGroup... scrollViews) {
         getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
             if (scrollViews != null) {
@@ -71,32 +72,13 @@ public abstract class BaseActivity extends Activity {
                         scrollView.setTag(scrollView.getPaddingBottom());
                 }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                var insets = windowInsets.getInsets(
-                        WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout() | WindowInsets.Type.ime());
-                view.setPadding(insets.left, insets.top, insets.right, scrollViews != null ? 0 : insets.bottom);
-                if (scrollViews != null) {
-                    for (var scrollView : scrollViews)
-                        scrollView.setPadding(
-                                scrollView.getPaddingLeft(),
-                                scrollView.getPaddingTop(),
-                                scrollView.getPaddingRight(),
-                                (int) scrollView.getTag() + insets.bottom);
-                }
-            } else {
-                view.setPadding(
-                        windowInsets.getSystemWindowInsetLeft(),
-                        windowInsets.getSystemWindowInsetTop(),
-                        windowInsets.getSystemWindowInsetRight(),
-                        scrollViews != null ? 0 : windowInsets.getSystemWindowInsetBottom());
-                if (scrollViews != null) {
-                    for (var scrollView : scrollViews)
-                        scrollView.setPadding(
-                                scrollView.getPaddingLeft(),
-                                scrollView.getPaddingTop(),
-                                scrollView.getPaddingRight(),
-                                (int) scrollView.getTag() + windowInsets.getSystemWindowInsetBottom());
-                }
+
+            var insets = WindowInsetsCompat.getInsets(windowInsets);
+            view.setPadding(insets.left(), insets.top(), insets.right(), scrollViews != null ? 0 : insets.bottom());
+            if (scrollViews != null) {
+                for (var scrollView : scrollViews)
+                    scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
+                            scrollView.getPaddingRight(), (int) scrollView.getTag() + insets.bottom());
             }
             return windowInsets;
         });

@@ -12,19 +12,19 @@ import android.content.Context;
 import android.os.Build;
 import android.os.PowerManager;
 import android.view.ViewGroup;
-import android.view.WindowInsets;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 import java.util.Locale;
-
 import javax.annotation.Nullable;
 
+import nl.plaatsoft.android.compat.WindowInsetsCompat;
 import nl.plaatsoft.bible.Settings;
 
 public abstract class BaseActivity extends Activity {
     protected @SuppressWarnings("null") Settings settings;
     private @Nullable OnBackInvokedCallback onBackCallback;
 
+    // MARK: Context creation
     @Override
     public void attachBaseContext(@SuppressWarnings("null") Context context) {
         settings = new Settings(context);
@@ -32,8 +32,7 @@ public abstract class BaseActivity extends Activity {
         var theme = settings.getTheme();
 
         // Update configuration when different from system defaults
-        if (language != Settings.LANGUAGE_SYSTEM ||
-                theme != Settings.THEME_SYSTEM ||
+        if (language != Settings.LANGUAGE_SYSTEM || theme != Settings.THEME_SYSTEM ||
                 (theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)) {
             var configuration = new Configuration(context.getResources().getConfiguration());
 
@@ -69,7 +68,7 @@ public abstract class BaseActivity extends Activity {
         super.attachBaseContext(context);
     }
 
-    @SuppressWarnings("deprecation")
+    // MARK: Window insets
     protected void useWindowInsets(ViewGroup... scrollViews) {
         getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
             if (scrollViews != null) {
@@ -79,43 +78,25 @@ public abstract class BaseActivity extends Activity {
                         scrollView.setTag(scrollView.getPaddingBottom());
                 }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                var insets = windowInsets.getInsets(
-                        WindowInsets.Type.systemBars() | WindowInsets.Type.displayCutout() | WindowInsets.Type.ime());
-                view.setPadding(insets.left, insets.top, insets.right, scrollViews != null ? 0 : insets.bottom);
-                if (scrollViews != null) {
-                    for (var scrollView : scrollViews)
-                        scrollView.setPadding(
-                                scrollView.getPaddingLeft(),
-                                scrollView.getPaddingTop(),
-                                scrollView.getPaddingRight(),
-                                (int) scrollView.getTag() + insets.bottom);
-                }
-            } else {
-                view.setPadding(
-                        windowInsets.getSystemWindowInsetLeft(),
-                        windowInsets.getSystemWindowInsetTop(),
-                        windowInsets.getSystemWindowInsetRight(),
-                        scrollViews != null ? 0 : windowInsets.getSystemWindowInsetBottom());
-                if (scrollViews != null) {
-                    for (var scrollView : scrollViews)
-                        scrollView.setPadding(
-                                scrollView.getPaddingLeft(),
-                                scrollView.getPaddingTop(),
-                                scrollView.getPaddingRight(),
-                                (int) scrollView.getTag() + windowInsets.getSystemWindowInsetBottom());
-                }
+
+            var insets = WindowInsetsCompat.getInsets(windowInsets);
+            view.setPadding(insets.left(), insets.top(), insets.right(), scrollViews != null ? 0 : insets.bottom());
+            if (scrollViews != null) {
+                for (var scrollView : scrollViews)
+                    scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
+                            scrollView.getPaddingRight(), (int) scrollView.getTag() + insets.bottom());
             }
             return windowInsets;
         });
     }
 
-    // Back button override
+    // MARK: Back button
     protected boolean shouldBackOverride() {
         return false;
     }
 
     protected void onBack() {
+        // Default noop
     }
 
     @Override

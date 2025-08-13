@@ -4,5 +4,6 @@ id = "nl.plaatsoft.android.alerts"
 version = "0.1.0"
 
 [dependencies]
+compat = { path = "../compat" }
 fetch = { path = "../fetch" }
 nullsafe = { path = "../nullsafe" }
