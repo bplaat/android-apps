@@ -31,6 +31,7 @@ import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.rfidviewer.R;
 import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
@@ -50,8 +51,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private @Nullable MifareReadTask mifareReadTask;
     private @Nullable NfcAdapter nfcAdapter;
     private @Nullable PendingIntent pendingIntent;
-    private @Nullable IntentFilter[] intentFiltersArray;
-    private @Nullable String[][] techListsArray;
+    private @NonNull IntentFilter[] intentFiltersArray = new IntentFilter[0];
+    private @NonNull String[][] techListsArray = new String[0][0];
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {

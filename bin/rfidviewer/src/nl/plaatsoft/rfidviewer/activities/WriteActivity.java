@@ -27,6 +27,7 @@ import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.rfidviewer.R;
 import nl.plaatsoft.rfidviewer.tasks.MifareWriteTask;
 
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
 public class WriteActivity extends BaseActivity {
@@ -41,8 +42,8 @@ public class WriteActivity extends BaseActivity {
 
     private @Nullable NfcAdapter nfcAdapter;
     private @Nullable PendingIntent pendingIntent;
-    private @Nullable IntentFilter[] intentFiltersArray;
-    private @Nullable String[][] techListsArray;
+    private @NonNull IntentFilter[] intentFiltersArray = new IntentFilter[0];
+    private @NonNull String[][] techListsArray = new String[0][0];
     private @Nullable MifareWriteTask mifareWriteTask;
     private boolean isWritePending;
     private int pendingBlockId;

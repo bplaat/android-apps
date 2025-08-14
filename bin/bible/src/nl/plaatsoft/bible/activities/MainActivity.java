@@ -73,7 +73,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     private int openType = -1;
     private @Nullable Bible openBible;
     private @Nullable Book openBook;
-    private ChapterWithVerses openChapter;
+    private @Nullable ChapterWithVerses openChapter;
     private @Nullable String lastBookKey;
     private int lastChapterNumber;
     private int lastChapterScroll;
