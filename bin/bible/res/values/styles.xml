@@ -190,16 +190,12 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
-    <style name="ChapterViewVerse">
+    <style name="ChapterViewVerses">
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:textIsSelectable">true</item>
         <item name="android:lineSpacingMultiplier">1.2</item>
-    </style>
-
-    <style name="ChapterViewSubtitle" parent="ChapterViewVerse">
-        <item name="android:lineSpacingMultiplier">1</item>
     </style>
 
     <style name="ChapterViewButtons">
@@ -222,7 +218,7 @@
         <item name="android:textIsSelectable">true</item>
     </style>
 
-    <style name="SongViewText" parent="ChapterViewVerse"/>
+    <style name="SongViewText" parent="ChapterViewVerses"/>
 
     <style name="SongViewCopyright">
         <item name="android:paddingTop">8dp</item>

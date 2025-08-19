@@ -24,6 +24,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 
 import nl.plaatsoft.android.compat.ContextCompat;
+import nl.plaatsoft.android.compat.TypefaceSpanCompat;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.models.ChapterWithVerses;
 
@@ -63,22 +64,35 @@ public class ChapterView extends ScrollView {
         this.onNextListener = onNextListener;
     }
 
-    public void openChapter(ChapterWithVerses chapter, int scrollY, int highlightVerseId) {
+    public void openChapter(ChapterWithVerses chapter, int previousScrollY, int highlightVerseId) {
         scrollTo(0, 0);
         root.removeAllViews();
 
-        // Add verse text blocks
-        var ssb = new SpannableStringBuilder();
-        var scrollToVerse = false;
-        for (var verse : chapter.verses()) {
+        // Add verses
+        var spannable = new SpannableStringBuilder();
+        var addSpace = false;
+        var scrollToOffset = new int[] { -1 };
+        for (var i = 0; i < chapter.verses().size(); i++) {
+            var verse = chapter.verses().get(i);
+
+            // Add subtitle
             if (verse.isSubtitle()) {
-                addVerseBlock(new SpannableString(verse.text()), true, scrollToVerse);
-                scrollToVerse = false;
+                var subtitleSpannable = new SpannableString(verse.text() + "\n");
+                subtitleSpannable.setSpan(new TypefaceSpanCompat(Typeface.create(typeface, Typeface.BOLD)),
+                        0, subtitleSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.append(subtitleSpannable);
+
+                var linebreakSpannable = new SpannableString("\n");
+                linebreakSpannable.setSpan(new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.append(linebreakSpannable);
+                addSpace = false;
                 continue;
             }
 
-            if (ssb.length() > 0)
-                ssb.append(" ");
+            // Add normal verse
+            if (addSpace)
+                spannable.append(" ");
 
             var verseSpannable = new SpannableString(verse.number() + " " + verse.text());
             verseSpannable.setSpan(
@@ -86,27 +100,48 @@ public class ChapterView extends ScrollView {
                     verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             verseSpannable.setSpan(new RelativeSizeSpan(0.75f), 0, verse.number().length(),
                     Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            if (highlightVerseId != -1 && verse.id() == highlightVerseId) {
-                scrollToVerse = true;
+            if (verse.id() == highlightVerseId) {
+                scrollToOffset[0] = spannable.length();
                 verseSpannable.setSpan(
                         new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
                         0, verseSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
-            ssb.append(verseSpannable);
+            spannable.append(verseSpannable);
+            addSpace = true;
 
-            if (verse.isLast()) {
-                addVerseBlock(ssb, false, scrollToVerse);
-                scrollToVerse = false;
-                ssb = new SpannableStringBuilder();
+            // Add normal verse endings
+            if (verse.isLast() && i != chapter.verses().size() - 1) {
+                spannable.append("\n");
+
+                var linebreakSpannable = new SpannableString("\n");
+                linebreakSpannable.setSpan(new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                spannable.append(linebreakSpannable);
+                addSpace = false;
             }
         }
+
+        // Add verses text view
+        var versesView = new TextView(getContext(), null, 0, R.style.ChapterViewVerses);
+        versesView.setTypeface(typeface);
+        versesView.setText(spannable);
+        root.addView(versesView);
 
         // Add buttons container
         addButtonsContainer();
 
-        // Restore scroll position
-        if (scrollY > 0 && highlightVerseId == -1)
-            handler.post(() -> scrollTo(0, scrollY));
+        // Restore previous scroll position
+        if (previousScrollY > 0 && highlightVerseId == -1)
+            handler.post(() -> scrollTo(0, previousScrollY));
+
+        // Or scroll to offset
+        if (scrollToOffset[0] != -1) {
+            handler.post(() -> {
+                var layout = versesView.getLayout();
+                var line = layout.getLineForOffset(scrollToOffset[0]);
+                scrollTo(0, layout.getLineTop(line));
+            });
+        }
     }
 
     private void addButtonsContainer() {
@@ -132,16 +167,5 @@ public class ChapterView extends ScrollView {
                 onNextListener.onNext();
         });
         buttonsContainer.addView(nextButton);
-    }
-
-    private void addVerseBlock(Spannable spannable, boolean isSubtitle, boolean scrollToVerse) {
-        var verseView = new TextView(getContext(), null, 0,
-                isSubtitle ? R.style.ChapterViewSubtitle : R.style.ChapterViewVerse);
-        verseView.setTypeface(isSubtitle ? Typeface.create(typeface, Typeface.BOLD) : typeface);
-        verseView.setText(spannable);
-        root.addView(verseView);
-
-        if (scrollToVerse)
-            handler.post(() -> scrollTo(0, verseView.getTop() - (root.getPaddingTop() + verseView.getPaddingTop())));
     }
 }
