@@ -209,26 +209,8 @@
 
     <!-- Song View -->
     <style name="SongView" parent="ChapterView"/>
-
-    <style name="SongViewTitle">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:textIsSelectable">true</item>
-    </style>
-
     <style name="SongViewText" parent="ChapterViewVerses"/>
-
-    <style name="SongViewCopyright">
-        <item name="android:paddingTop">8dp</item>
-        <item name="android:paddingBottom">8dp</item>
-        <item name="android:textColor">@color/secondary_text_color</item>
-        <item name="android:textIsSelectable">true</item>
-    </style>
-
     <style name="SongViewButtons" parent="ChapterViewButtons"/>
-
     <style name="SongViewButtonsButton" parent="ChapterViewButtonsButton"/>
 
     <!-- Search Item -->
