@@ -2,6 +2,7 @@
 name = "compat"
 id = "nl.plaatsoft.android.compat"
 version = "0.1.0"
+type = "lib"
 
 [dependencies]
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
