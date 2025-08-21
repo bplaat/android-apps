@@ -5,7 +5,7 @@ set -e
 platform=$ANDROID_HOME/platforms/android-36/android.jar
 
 function clean() {
-    find . -type d -name "target" -exec rm -rf {} +
+    bob clean
 }
 
 function vscode() {
@@ -45,14 +45,7 @@ function check_copyright() {
 function check() {
     check_copyright
     # FIXME: Check format and lint Java code
-    bob build -C bin/bassiemusic
-    bob build -C bin/bassietest
-    bob build -C bin/bible
-    bob build -C bin/coinlist
-    bob build -C bin/hackernews
-    bob build -C bin/redsquare
-    bob build -C bin/rfidviewer
-    bob build -C bin/tweakers
+    bob build
 }
 
 case "${1:-check}" in

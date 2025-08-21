@@ -4,8 +4,8 @@ id = "nl.plaatsoft.redsquare.android"
 version = "1.1.0"
 
 [dependencies]
-compat = { path = "../../lib/compat" }
-fetch = { path = "../../lib/fetch" }
+compat = "0.1.0"
+fetch = "0.1.0"
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
 
 [package.metadata.android]

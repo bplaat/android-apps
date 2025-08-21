@@ -4,6 +4,6 @@ id = "nl.plaatsoft.android.alerts"
 version = "0.1.0"
 
 [dependencies]
-compat = { path = "../compat" }
-fetch = { path = "../fetch" }
+compat = "0.1.0"
+fetch = "0.1.0"
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }

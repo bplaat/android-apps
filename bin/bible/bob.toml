@@ -4,8 +4,8 @@ id = "nl.plaatsoft.bible"
 version = "1.4.0"
 
 [dependencies]
-alerts = { path = "../../lib/alerts" }
-compat = { path = "../../lib/compat" }
+alerts = "0.1.0"
+compat = "0.1.0"
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
 
 [package.metadata.android]

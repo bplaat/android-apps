@@ -4,9 +4,9 @@ id = "ml.coinlist.android"
 version = "1.0.0"
 
 [dependencies]
-alerts = { path = "../../lib/alerts" }
-compat = { path = "../../lib/compat" }
-fetch = { path = "../../lib/fetch" }
+alerts = "0.1.0"
+compat = "0.1.0"
+fetch = "0.1.0"
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
 
 [package.metadata.android]
