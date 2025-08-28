@@ -2,7 +2,8 @@
 name = "alerts"
 id = "nl.plaatsoft.android.alerts"
 version = "0.1.0"
-type = "lib"
+
+[lib]
 
 [dependencies]
 compat = { path = "../compat" }
