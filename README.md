@@ -9,6 +9,7 @@ A collection of various Android apps that I created for myself and others
 -   [Bible](bin/bible/) An offline Android Bible app containing multiple bible translations
 -   [CoinList](bin/coinlist/) A cryptocurrency information app similar to the [coinlist](https://github.com/bplaat/coinlist) website
 -   [HackerNews](bin/hackernews/) A simple [HackerNews](https://news.ycombinator.com/) webview app because installed PWA's suck sadly
+-   [ReactTest](bin/reacttest/) A test app for the [ReactDroid](lib/reactdroid/) library
 -   [Redsquare](bin/redsquare/) A port of the [RedSquare](https://github.com/plaatsoft/redsquare) game to Android
 -   [RFID Viewer](bin/rfidviewer/) A Mifare Classic / RFID card viewer / writer app
 -   [Tweakers](bin/tweakers/) A simple [Tweakers](https://tweakers.net/) webview app because installed PWA's suck sadly
@@ -18,6 +19,7 @@ A collection of various Android apps that I created for myself and others
 -   [Alerts](lib/alerts/) A rating and update alert library
 -   [Compat](lib/compat/) Wrappers around deprecated/changed Android API's
 -   [Fetch](lib/fetch/) Some utils to fetch data and image from the internet
+-   [ReactDroid](lib/reactdroid/) A [Litho](https://fblitho.com/) inspired declarative Android view component library
 
 ## Getting Started
 
