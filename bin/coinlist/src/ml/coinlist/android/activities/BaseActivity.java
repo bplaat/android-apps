@@ -67,20 +67,14 @@ public abstract class BaseActivity extends Activity {
     // MARK: Window insets
     protected void useWindowInsets(ViewGroup... scrollViews) {
         getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
-            if (scrollViews != null) {
-                for (var scrollView : scrollViews) {
-                    scrollView.setClipToPadding(false);
-                    if (scrollView.getTag() == null)
-                        scrollView.setTag(scrollView.getPaddingBottom());
-                }
-            }
-
             var insets = WindowInsetsCompat.getInsets(windowInsets);
             view.setPadding(insets.left(), insets.top(), insets.right(), scrollViews != null ? 0 : insets.bottom());
             if (scrollViews != null) {
-                for (var scrollView : scrollViews)
+                for (var scrollView : scrollViews) {
+                    scrollView.setClipToPadding(false);
                     scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
-                            scrollView.getPaddingRight(), (int) scrollView.getTag() + insets.bottom());
+                            scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
+                }
             }
             return windowInsets;
         });
