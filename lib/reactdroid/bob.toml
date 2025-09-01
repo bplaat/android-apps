@@ -6,4 +6,5 @@ version = "0.1.0"
 [lib]
 
 [dependencies]
+compat = { path = "../compat" }
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }

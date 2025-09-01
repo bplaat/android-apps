@@ -12,33 +12,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-public class Box extends Container {
-    public static int HORIZONTAL = 0;
-    public static int VERTICAL = 1;
+import org.jspecify.annotations.Nullable;
 
-    protected int orientation = VERTICAL;
-
-    protected Box(WidgetContext context) {
+public class Row extends Container {
+    public Row(WidgetContext context) {
         super(context);
     }
 
-    public static Box create(WidgetContext context) {
-        return new Box(context);
-    }
-
-    public Box orientation(int orientation) {
-        this.orientation = orientation;
+    public Row paddingDp(int padding) {
+        super.paddingDp(padding);
         return this;
     }
 
-    public Box child(Widget child) {
+    public Row paddingDp(int paddingVertical, int paddingHorizontal) {
+        super.paddingDp(paddingVertical, paddingHorizontal);
+        return this;
+    }
+
+    @Override
+    public Row child(Widget child) {
         if (child != null) {
             children.add(child);
         }
         return this;
     }
 
-    public Box child(List<Widget> children) {
+    @Override
+    public Row child(List<Widget> children) {
         for (var child : children) {
             if (child != null) {
                 this.children.add(child);
@@ -47,7 +47,8 @@ public class Box extends Container {
         return this;
     }
 
-    public View render(ViewGroup parent, View view) {
+    @Override
+    public View render(ViewGroup parent, @Nullable View view) {
         LinearLayout linearLayout;
         if (view != null && view.getClass().equals(LinearLayout.class)) {
             linearLayout = (LinearLayout) view;
@@ -55,17 +56,14 @@ public class Box extends Container {
             if (view != null) {
                 int index = parent.indexOfChild(view);
                 parent.removeView(view);
-                linearLayout = new LinearLayout(context.getContext());
+                linearLayout = new LinearLayout(getContext());
                 parent.addView(linearLayout, index);
             } else {
-                linearLayout = new LinearLayout(context.getContext());
+                linearLayout = new LinearLayout(getContext());
                 parent.addView(linearLayout);
             }
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
             linearLayout.setTag(key);
-        }
-
-        if (linearLayout.getOrientation() != orientation) {
-            linearLayout.setOrientation(orientation);
         }
 
         linearLayout.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);

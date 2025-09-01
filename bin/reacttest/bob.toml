@@ -9,3 +9,4 @@ main_activity = ".activities.MainActivity"
 [dependencies]
 compat = { path = "../../lib/compat" }
 reactdroid = { path = "../../lib/reactdroid" }
+jspecify = { maven = "org.jspecify:jspecify:1.0.0" }

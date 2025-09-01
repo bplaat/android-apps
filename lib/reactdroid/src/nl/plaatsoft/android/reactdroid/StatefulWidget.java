@@ -9,12 +9,14 @@ package nl.plaatsoft.android.reactdroid;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.jspecify.annotations.Nullable;
+
 public abstract class StatefulWidget extends Widget {
     protected ViewGroup _parent;
     protected View _view;
 
-    protected StatefulWidget(WidgetContext context) {
-        super(context);
+    protected StatefulWidget(WidgetContext c) {
+        super(c);
     }
 
     public abstract Widget build();
@@ -23,7 +25,8 @@ public abstract class StatefulWidget extends Widget {
         build().render(_parent, _view);
     }
 
-    public View render(ViewGroup parent, View view) {
+    @Override
+    public View render(ViewGroup parent, @Nullable View view) {
         _parent = parent;
         return _view = build().render(parent, view);
     }

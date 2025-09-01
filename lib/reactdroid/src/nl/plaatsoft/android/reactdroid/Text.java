@@ -14,18 +14,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.jspecify.annotations.Nullable;
+
 public class Text extends Widget {
     protected String text;
     protected int textColor = -1;
     protected int fontSize = -1;
     protected int fontWeight = 400;
 
-    protected Text(WidgetContext context) {
+    public Text(WidgetContext context) {
         super(context);
-    }
-
-    public static Text create(WidgetContext context) {
-        return new Text(context);
     }
 
     public Text text(String text) {
@@ -35,7 +33,7 @@ public class Text extends Widget {
 
     public Text fontSizeSp(int fontSize) {
         this.fontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, fontSize,
-                context.getContext().getResources().getDisplayMetrics());
+                getContext().getResources().getDisplayMetrics());
         return this;
     }
 
@@ -47,14 +45,15 @@ public class Text extends Widget {
     @SuppressWarnings("deprecation")
     public Text textColorRes(int colorId) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            textColor = new ContextWrapper(context.getContext()).getColor(colorId);
+            textColor = new ContextWrapper(getContext()).getColor(colorId);
         } else {
-            textColor = context.getContext().getResources().getColor(colorId);
+            textColor = getContext().getResources().getColor(colorId);
         }
         return this;
     }
 
-    public View render(ViewGroup parent, View view) {
+    @Override
+    public View render(ViewGroup parent, @Nullable View view) {
         TextView textView;
         if (view != null && view.getClass().equals(TextView.class)) {
             textView = (TextView) view;
@@ -62,10 +61,10 @@ public class Text extends Widget {
             if (view != null) {
                 int index = parent.indexOfChild(view);
                 parent.removeView(view);
-                textView = new TextView(context.getContext());
+                textView = new TextView(getContext());
                 parent.addView(textView, index);
             } else {
-                textView = new TextView(context.getContext());
+                textView = new TextView(getContext());
                 parent.addView(textView);
             }
             textView.setTag(key);

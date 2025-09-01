@@ -12,14 +12,15 @@ import android.view.ViewGroup;
 import nl.plaatsoft.android.reactdroid.WidgetContext;
 import nl.plaatsoft.reacttest.components.HomeScreen;
 
+import org.jspecify.annotations.Nullable;
+
 public class MainActivity extends BaseActivity {
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         var context = new WidgetContext(this);
         var root = (ViewGroup) findViewById(android.R.id.content);
-        HomeScreen.create(context).render(root, null);
-
+        new HomeScreen(context).render(root, null);
         useWindowInsets();
     }
 }

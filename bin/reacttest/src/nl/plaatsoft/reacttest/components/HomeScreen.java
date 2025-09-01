@@ -7,8 +7,8 @@
 package nl.plaatsoft.reacttest.components;
 
 import nl.plaatsoft.android.compat.MapList;
-import nl.plaatsoft.android.reactdroid.Box;
 import nl.plaatsoft.android.reactdroid.Button;
+import nl.plaatsoft.android.reactdroid.Column;
 import nl.plaatsoft.android.reactdroid.Scroll;
 import nl.plaatsoft.android.reactdroid.StatefulWidget;
 import nl.plaatsoft.android.reactdroid.Text;
@@ -20,7 +20,7 @@ import nl.plaatsoft.reacttest.models.Person;
 public class HomeScreen extends StatefulWidget {
     protected MapList<Person> persons;
 
-    protected HomeScreen(WidgetContext context) {
+    public HomeScreen(WidgetContext context) {
         super(context);
 
         persons = new MapList<Person>(6);
@@ -32,36 +32,21 @@ public class HomeScreen extends StatefulWidget {
         persons.add(new Person(6, "Jiska", 13));
     }
 
-    public static HomeScreen create(WidgetContext context) {
-        return new HomeScreen(context);
-    }
-
     public Widget build() {
-        return Scroll.create(context)
-                .child(Box.create(context)
-                        .child(
-                                Text.create(context)
-                                        .text("ReactTest")
-                                        .fontSizeSp(16)
-                                        .fontWeight(500)
-                                        .paddingDp(16))
-                        .child(Button.create(context).text("Add person").onClick(view -> {
+        return new Scroll(c)
+                .useWindowInsets()
+                .child(new Column(c)
+                        .child(new Text(c).text("ReactTest").fontSizeSp(16)
+                                .fontWeight(500).paddingDp(16))
+
+                        .child(persons.map(person -> new PersonItem(c).person(person).key(person.id)))
+
+                        .child(new Button(c).text("Add person").onClick(view -> {
                             persons.add(new Person(persons.size() + 1, "Person " + (persons.size() + 1),
                                     (int) (Math.random() * 100)));
                             refresh();
                         }))
-
-                        .child(persons.map(person -> PersonItem.create(context).person(person).key(person.id)))
-
-                        .child(Button.create(context).text("Add person").onClick(view -> {
-                            persons.add(new Person(persons.size() + 1, "Person " + (persons.size() + 1),
-                                    (int) (Math.random() * 100)));
-                            refresh();
-                        }))
-                        .child(
-                                Text.create(context)
-                                        .text("Made by Bastiaan van der Plaat")
-                                        .textColorRes(R.color.secondary_text_color)
-                                        .paddingDp(16)));
+                        .child(new Text(c).text("Made by Bastiaan van der Plaat")
+                                .textColorRes(R.color.secondary_text_color).paddingDp(16)));
     }
 }

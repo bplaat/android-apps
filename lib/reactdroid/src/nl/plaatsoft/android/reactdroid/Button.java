@@ -12,12 +12,8 @@ import android.view.ViewGroup;
 public class Button extends Text {
     protected View.OnClickListener clickListener;
 
-    protected Button(WidgetContext context) {
+    public Button(WidgetContext context) {
         super(context);
-    }
-
-    public static Button create(WidgetContext context) {
-        return new Button(context);
     }
 
     public Button text(String text) {
@@ -30,6 +26,7 @@ public class Button extends Text {
         return this;
     }
 
+    @Override
     public View render(ViewGroup parent, View view) {
         android.widget.Button button;
         if (view != null && view.getClass().equals(android.widget.Button.class)) {
@@ -38,10 +35,10 @@ public class Button extends Text {
             if (view != null) {
                 int index = parent.indexOfChild(view);
                 parent.removeView(view);
-                button = new android.widget.Button(context.getContext());
+                button = new android.widget.Button(getContext());
                 parent.addView(button, index);
             } else {
-                button = new android.widget.Button(context.getContext());
+                button = new android.widget.Button(getContext());
                 parent.addView(button);
             }
             button.setTag(key);
