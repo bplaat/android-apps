@@ -14,8 +14,7 @@ import android.util.Log;
 import org.jspecify.annotations.Nullable;
 
 public class Utils {
-    private Utils() {
-    }
+    private Utils() {}
 
     public static @Nullable String md5(Context context, String data) {
         try {

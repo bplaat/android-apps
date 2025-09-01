@@ -22,6 +22,11 @@ jobs:
         run: |
           echo "JAVA_HOME=${JAVA_HOME_21_X64}" >> $GITHUB_ENV
           echo "${JAVA_HOME_21_X64}/bin" >> $GITHUB_PATH
+      - name: Install clang-format@21
+        run: |
+          wget -qO /usr/local/bin/clang-format https://github.com/cpp-linter/clang-tools-static-binaries/releases/latest/download/clang-format-21_linux-amd64
+          chmod a+x /usr/local/bin/clang-format
+          clang-format --version
       - name: Install bob
         run: cargo install --git https://github.com/bplaat/crates.git bob
       - run: ./meta.sh check

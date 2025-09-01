@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-@org.jspecify.annotations.NullMarked
-package net.tweakers.android;
+@org.jspecify.annotations.NullMarked package net.tweakers.android;

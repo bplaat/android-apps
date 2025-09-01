@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-@org.jspecify.annotations.NullMarked
-package nl.plaatsoft.rfidviewer.tasks;
+@org.jspecify.annotations.NullMarked package nl.plaatsoft.rfidviewer.tasks;

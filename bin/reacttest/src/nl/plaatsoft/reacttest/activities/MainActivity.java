@@ -19,7 +19,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
 
         var context = new WidgetContext(this);
-        var root = (ViewGroup) findViewById(android.R.id.content);
+        var root = (ViewGroup)findViewById(android.R.id.content);
         new HomeScreen(context).render(root, null);
         useWindowInsets();
     }

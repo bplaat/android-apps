@@ -33,20 +33,19 @@ public class HomeScreen extends StatefulWidget {
     }
 
     public Widget build() {
-        return new Scroll(c)
-                .useWindowInsets()
-                .child(new Column(c)
-                        .child(new Text(c).text("ReactTest").fontSizeSp(16)
-                                .fontWeight(500).paddingDp(16))
+        return new Scroll(c).useWindowInsets().child(new Column(c)
+                .child(new Text(c).text("ReactTest").fontSizeSp(16).fontWeight(500).paddingDp(16))
 
-                        .child(persons.map(person -> new PersonItem(c).person(person).key(person.id)))
+                .child(persons.map(person -> new PersonItem(c).person(person).key(person.id)))
 
-                        .child(new Button(c).text("Add person").onClick(view -> {
-                            persons.add(new Person(persons.size() + 1, "Person " + (persons.size() + 1),
-                                    (int) (Math.random() * 100)));
-                            refresh();
-                        }))
-                        .child(new Text(c).text("Made by Bastiaan van der Plaat")
-                                .textColorRes(R.color.secondary_text_color).paddingDp(16)));
+                .child(new Button(c).text("Add person").onClick(view -> {
+                    persons.add(
+                        new Person(persons.size() + 1, "Person " + (persons.size() + 1), (int)(Math.random() * 100)));
+                    refresh();
+                }))
+                .child(new Text(c)
+                        .text("Made by Bastiaan van der Plaat")
+                        .textColorRes(R.color.secondary_text_color)
+                        .paddingDp(16)));
     }
 }

@@ -30,26 +30,23 @@ public class PersonItem extends StatefulWidget {
 
     public Widget build() {
         return new Column(c)
-                .paddingDp(8, 16)
-                .child(!person.dead
-                        ? new Text(c).text("Hello " + person.name + ", i'm " + person.age + " old!")
-                        : new Text(c).text("Oh no " + person.name + " is dead!")
-                                .textColorRes(R.color.secondary_text_color))
-                .child(
-                        !person.dead
-                                ? new Row(c)
-                                        .child(new Button(c).text("+").onClick(view -> {
-                                            if (person.age < 100)
-                                                person.age++;
-                                            if (person.age == 100)
-                                                person.dead = true;
-                                            refresh();
-                                        }))
-                                        .child(new Button(c).text("-").onClick(view -> {
-                                            if (person.age > 0)
-                                                person.age--;
-                                            refresh();
-                                        }))
+            .paddingDp(8, 16)
+            .child(!person.dead
+                    ? new Text(c).text("Hello " + person.name + ", i'm " + person.age + " old!")
+                    : new Text(c).text("Oh no " + person.name + " is dead!").textColorRes(R.color.secondary_text_color))
+            .child(!person.dead ? new Row(c)
+                                      .child(new Button(c).text("+").onClick(view -> {
+                                          if (person.age < 100)
+                                              person.age++;
+                                          if (person.age == 100)
+                                              person.dead = true;
+                                          refresh();
+                                      }))
+                                      .child(new Button(c).text("-").onClick(view -> {
+                                          if (person.age > 0)
+                                              person.age--;
+                                          refresh();
+                                      }))
                                 : null);
     }
 }

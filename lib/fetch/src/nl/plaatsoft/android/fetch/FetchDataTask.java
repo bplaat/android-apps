@@ -131,14 +131,13 @@ public class FetchDataTask {
     }
 
     public static byte[] fetchData(Context context, URI uri, boolean isLoadedFomCache, boolean isSavedToCache)
-            throws Exception {
+        throws Exception {
         // Get MD5 hash of url
         var messageDigest = MessageDigest.getInstance("MD5");
         messageDigest.update(uri.toString().getBytes());
         var hashBytes = messageDigest.digest();
         var hashStringBuilder = new StringBuilder();
-        for (var i = 0; i < hashBytes.length; i++)
-            hashStringBuilder.append(String.format("%02x", hashBytes[i]));
+        for (var i = 0; i < hashBytes.length; i++) hashStringBuilder.append(String.format("%02x", hashBytes[i]));
         var urlHash = hashStringBuilder.toString();
 
         // Try to load url from cache

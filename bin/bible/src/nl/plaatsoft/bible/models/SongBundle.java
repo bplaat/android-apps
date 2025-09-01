@@ -9,5 +9,4 @@ package nl.plaatsoft.bible.models;
 import java.util.ArrayList;
 
 public record SongBundle(String path, String name, String abbreviation, String language, String copyright,
-        String scrapedAt, ArrayList<Song> songs) {
-}
+    String scrapedAt, ArrayList<Song> songs) {}

@@ -28,7 +28,7 @@ public abstract class BaseActivity extends Activity {
                 for (var scrollView : scrollViews) {
                     scrollView.setClipToPadding(false);
                     scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
-                            scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
+                        scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
                 }
             }
             return windowInsets;
@@ -59,8 +59,8 @@ public abstract class BaseActivity extends Activity {
             if (onBackCallback == null)
                 onBackCallback = () -> onBack();
             if (shouldBackOverride()) {
-                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-                        onBackCallback);
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                    OnBackInvokedDispatcher.PRIORITY_DEFAULT, onBackCallback);
             } else {
                 getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackCallback);
             }

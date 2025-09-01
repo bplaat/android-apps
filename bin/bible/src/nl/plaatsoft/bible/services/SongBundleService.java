@@ -29,8 +29,7 @@ public class SongBundleService {
 
     private final HashMap<String, SQLiteDatabase> databaseCache = new HashMap<>();
 
-    private SongBundleService() {
-    }
+    private SongBundleService() {}
 
     public static SongBundleService getInstance() {
         if (instance == null)
@@ -56,11 +55,10 @@ public class SongBundleService {
                 if (file.exists() && file.length() == assetsFile.getLength())
                     continue;
                 try (var gzipInputStream = new GZIPInputStream(assetsFile.createInputStream());
-                        var fileOutputStream = new FileOutputStream(file)) {
+                    var fileOutputStream = new FileOutputStream(file)) {
                     var buffer = new byte[1024];
                     var length = 0;
-                    while ((length = gzipInputStream.read(buffer)) > 0)
-                        fileOutputStream.write(buffer, 0, length);
+                    while ((length = gzipInputStream.read(buffer)) > 0) fileOutputStream.write(buffer, 0, length);
                 } catch (Exception exception) {
                     Log.e(context.getPackageName(), "Can't copy and unzip: " + file.getPath(), exception);
                 }
@@ -90,8 +88,8 @@ public class SongBundleService {
     private SQLiteDatabase getDatabase(Context context, String path) {
         if (databaseCache.containsKey(path))
             return databaseCache.get(path);
-        var database = SQLiteDatabase.openDatabase(context.getCacheDir() + "/" + path, null,
-                SQLiteDatabase.OPEN_READONLY);
+        var database =
+            SQLiteDatabase.openDatabase(context.getCacheDir() + "/" + path, null, SQLiteDatabase.OPEN_READONLY);
         databaseCache.put(path, database);
         return database;
     }
@@ -101,36 +99,36 @@ public class SongBundleService {
         var metadata = new HashMap<String, String>();
         try (var cursor = database.rawQuery("SELECT key, value FROM metadata", null)) {
             while (cursor.moveToNext())
-                metadata.put(cursor.getString(cursor.getColumnIndex("key")),
-                        cursor.getString(cursor.getColumnIndex("value")));
+                metadata.put(
+                    cursor.getString(cursor.getColumnIndex("key")), cursor.getString(cursor.getColumnIndex("value")));
         }
 
         var songs = new ArrayList<Song>();
         try (var cursor = database.rawQuery("SELECT id, number, title FROM songs", null)) {
             while (cursor.moveToNext())
                 songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
-                        cursor.getString(cursor.getColumnIndex("number")),
-                        cursor.getString(cursor.getColumnIndex("title"))));
+                    cursor.getString(cursor.getColumnIndex("number")),
+                    cursor.getString(cursor.getColumnIndex("title"))));
         }
         Collections.sort(songs, (a, b) -> a.number().compareTo(b.number()));
-        Collections.sort(songs, (a, b) -> Integer.parseInt(a.number().replaceAll("^\\d+", "$0"))
+        Collections.sort(songs,
+            (a, b)
+                -> Integer.parseInt(a.number().replaceAll("^\\d+", "$0"))
                 - Integer.parseInt(b.number().replaceAll("^\\d+", "$0")));
 
-        return new SongBundle(path, metadata.get("name"), metadata.get("abbreviation"),
-                metadata.get("language"), metadata.get("copyright"), metadata.get("scraped_at"), songs);
+        return new SongBundle(path, metadata.get("name"), metadata.get("abbreviation"), metadata.get("language"),
+            metadata.get("copyright"), metadata.get("scraped_at"), songs);
     }
 
     public @Nullable SongWithText readSong(Context context, String path, String songNumber) {
         var database = getDatabase(context, path);
-        try (var cursor = database.rawQuery("SELECT id, number, title, text, copyright FROM songs WHERE number = ?",
-                new String[] { songNumber })) {
+        try (var cursor = database.rawQuery(
+                 "SELECT id, number, title, text, copyright FROM songs WHERE number = ?", new String[] {songNumber})) {
             if (!cursor.moveToNext())
                 return null;
             return new SongWithText(cursor.getInt(cursor.getColumnIndex("id")),
-                    cursor.getString(cursor.getColumnIndex("number")),
-                    cursor.getString(cursor.getColumnIndex("title")),
-                    cursor.getString(cursor.getColumnIndex("text")),
-                    cursor.getString(cursor.getColumnIndex("copyright")));
+                cursor.getString(cursor.getColumnIndex("number")), cursor.getString(cursor.getColumnIndex("title")),
+                cursor.getString(cursor.getColumnIndex("text")), cursor.getString(cursor.getColumnIndex("copyright")));
         }
     }
 
@@ -138,12 +136,12 @@ public class SongBundleService {
         var database = getDatabase(context, path);
         var songs = new ArrayList<Song>();
         try (var cursor = database.rawQuery(
-                "SELECT id, number, title FROM songs WHERE number LIKE ? OR title LIKE ? OR text LIKE ? LIMIT ?",
-                new String[] { "%" + query + "%", "%" + query + "%", "%" + query + "%", String.valueOf(maxResults) })) {
+                 "SELECT id, number, title FROM songs WHERE number LIKE ? OR title LIKE ? OR text LIKE ? LIMIT ?",
+                 new String[] {"%" + query + "%", "%" + query + "%", "%" + query + "%", String.valueOf(maxResults)})) {
             while (cursor.moveToNext())
                 songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
-                        cursor.getString(cursor.getColumnIndex("number")),
-                        cursor.getString(cursor.getColumnIndex("title"))));
+                    cursor.getString(cursor.getColumnIndex("number")),
+                    cursor.getString(cursor.getColumnIndex("title"))));
         }
         return songs;
     }

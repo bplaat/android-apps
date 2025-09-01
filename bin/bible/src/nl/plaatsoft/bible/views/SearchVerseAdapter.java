@@ -28,8 +28,7 @@ import nl.plaatsoft.bible.models.SearchVerse;
 import org.jspecify.annotations.Nullable;
 
 public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
-    private static record ViewHolder(TextView contents, TextView bookChapter) {
-    }
+    private static record ViewHolder(TextView contents, TextView bookChapter) {}
 
     private String searchQuery = "";
     private Typeface verseTypeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
@@ -51,39 +50,36 @@ public class SearchVerseAdapter extends ArrayAdapter<SearchVerse> {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = Objects.requireNonNull(
-                    LayoutInflater.from(getContext()).inflate(R.layout.item_search_verse, parent, false));
+                LayoutInflater.from(getContext()).inflate(R.layout.item_search_verse, parent, false));
             viewHolder = new ViewHolder(convertView.findViewById(R.id.search_verse_contents),
-                    convertView.findViewById(R.id.search_verse_book_chapter));
+                convertView.findViewById(R.id.search_verse_book_chapter));
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder)convertView.getTag();
         }
 
         var searchVerse = getItem(position);
 
         var verseContents = searchVerse.verse().isSubtitle()
-                ? searchVerse.verse().text()
-                : searchVerse.verse().number() + " " + searchVerse.verse().text();
+            ? searchVerse.verse().text()
+            : searchVerse.verse().number() + " " + searchVerse.verse().text();
         var span = new SpannableString(verseContents);
         if (!searchVerse.verse().isSubtitle()) {
-            span.setSpan(
-                    new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.secondary_text_color)), 0,
-                    searchVerse.verse().number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.secondary_text_color)), 0,
+                searchVerse.verse().number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             span.setSpan(new RelativeSizeSpan(0.75f), 0, searchVerse.verse().number().length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         }
         var highlightStart = verseContents.toLowerCase().indexOf(searchQuery.toLowerCase());
-        span.setSpan(
-                new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
-                highlightStart, highlightStart + searchQuery.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        span.setSpan(new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
+            highlightStart, highlightStart + searchQuery.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
         viewHolder.contents.setTypeface(
-                searchVerse.verse().isSubtitle() ? Typeface.create(verseTypeface, Typeface.BOLD) : verseTypeface);
+            searchVerse.verse().isSubtitle() ? Typeface.create(verseTypeface, Typeface.BOLD) : verseTypeface);
         viewHolder.contents.setLineSpacing(0, searchVerse.verse().isSubtitle() ? 1.0f : 1.2f);
         viewHolder.contents.setText(span);
 
-        viewHolder.bookChapter
-                .setText(searchVerse.book().name() + " " + searchVerse.chapter().number());
+        viewHolder.bookChapter.setText(searchVerse.book().name() + " " + searchVerse.chapter().number());
 
         return convertView;
     }

@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-@org.jspecify.annotations.NullMarked
-package com.ycombinator.news;
+@org.jspecify.annotations.NullMarked package com.ycombinator.news;

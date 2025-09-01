@@ -6,6 +6,4 @@
 
 package nl.plaatsoft.bible.models;
 
-public record SongWithText(int id, String number, String title, String text,
-        String copyright) {
-}
+public record SongWithText(int id, String number, String title, String text, String copyright) {}

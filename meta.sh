@@ -10,7 +10,7 @@ function clean() {
 
 function vscode() {
     mkdir -p .vscode
-    echo "{\"editor.formatOnSave\":true," > .vscode/settings.json
+    echo "{\"[java]\": {\"editor.defaultFormatter\": \"xaver.clang-format\", \"editor.formatOnSave\": true}," > .vscode/settings.json
     echo "\"java.saveActions.organizeImports\":true," >> .vscode/settings.json
     echo "\"java.completion.importOrder\":[\"java\",\"android\",\"com\",\"nl\",\"org\",\"\"]," >> .vscode/settings.json
     echo "\"java.project.sourcePaths\":[" >> .vscode/settings.json
@@ -42,9 +42,16 @@ function check_copyright() {
     fi
 }
 
+function check_format() {
+    # Format
+    echo "Checking Java formatting..."
+    clang-format --dry-run --Werror $(find . -name "*.java" | grep -v "src-gen")
+}
+
 function check() {
     check_copyright
-    # FIXME: Check format and lint Java code
+    check_format
+    # FIXME: Do null analysis
     for dir in $(ls bin); do
         bob build -C "bin/$dir"
     done

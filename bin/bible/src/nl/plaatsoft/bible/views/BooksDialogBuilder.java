@@ -28,8 +28,8 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
     private Handler handler = new Handler(Looper.getMainLooper());
 
     @SuppressWarnings("this-escape")
-    public BooksDialogBuilder(Context context, ArrayList<Testament> testaments, String currentBookKey,
-            OnResultListener onResultListener) {
+    public BooksDialogBuilder(
+        Context context, ArrayList<Testament> testaments, String currentBookKey, OnResultListener onResultListener) {
         super(context);
 
         setTitle(R.string.main_book_alert_title_label);
@@ -49,8 +49,7 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
 
             for (var book : testament.books()) {
                 var bookButton = new TextView(context, null, 0,
-                        book.key().equals(currentBookKey) ? R.style.BooksDialogButtonActive
-                                : R.style.BooksDialogButton);
+                    book.key().equals(currentBookKey) ? R.style.BooksDialogButtonActive : R.style.BooksDialogButton);
                 bookButton.setText(book.name());
                 bookButton.setOnClickListener(view -> onResultListener.onResult(book));
                 booksFlowLayout.addView(bookButton);

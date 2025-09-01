@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-@org.jspecify.annotations.NullMarked
-package nl.plaatsoft.reacttest.components;
+@org.jspecify.annotations.NullMarked package nl.plaatsoft.reacttest.components;

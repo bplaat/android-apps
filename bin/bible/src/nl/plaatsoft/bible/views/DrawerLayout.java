@@ -39,10 +39,10 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         var width = MeasureSpec.getSize(widthMeasureSpec);
         var density = getResources().getDisplayMetrics().density;
-        var drawerWidth = Math.min((int) (480 * density), width - (int) (56 * density));
+        var drawerWidth = Math.min((int)(480 * density), width - (int)(56 * density));
         var child = getChildAt(0);
-        child.measure(MeasureSpec.makeMeasureSpec(drawerWidth, MeasureSpec.getMode(widthMeasureSpec)),
-                heightMeasureSpec);
+        child.measure(
+            MeasureSpec.makeMeasureSpec(drawerWidth, MeasureSpec.getMode(widthMeasureSpec)), heightMeasureSpec);
         setMeasuredDimension(width, child.getMeasuredHeight());
     }
 
@@ -73,41 +73,40 @@ public class DrawerLayout extends ViewGroup implements View.OnClickListener {
         isOpen = true;
         setVisibility(View.VISIBLE);
         post(() -> {
-            var animationDuration = (long) getResources().getInteger(R.integer.animation_duration);
-            var colorAnimation = ValueAnimator.ofArgb(Color.TRANSPARENT,
-                    ContextCompat.getColor(getContext(), R.color.drawer_overlay_background_color));
+            var animationDuration = (long)getResources().getInteger(R.integer.animation_duration);
+            var colorAnimation = ValueAnimator.ofArgb(
+                Color.TRANSPARENT, ContextCompat.getColor(getContext(), R.color.drawer_overlay_background_color));
             colorAnimation.setDuration(animationDuration);
             colorAnimation.setInterpolator(new DecelerateInterpolator());
-            colorAnimation.addUpdateListener(animator -> setBackgroundColor((int) animator.getAnimatedValue()));
+            colorAnimation.addUpdateListener(animator -> setBackgroundColor((int)animator.getAnimatedValue()));
             colorAnimation.start();
 
             var child = getChildAt(0);
             child.animate()
-                    .translationX(0)
-                    .setDuration(animationDuration)
-                    .setInterpolator(new DecelerateInterpolator())
-                    .start();
+                .translationX(0)
+                .setDuration(animationDuration)
+                .setInterpolator(new DecelerateInterpolator())
+                .start();
         });
     }
 
     public void close() {
         isOpen = false;
-        var animationDuration = (long) getResources().getInteger(R.integer.animation_duration);
+        var animationDuration = (long)getResources().getInteger(R.integer.animation_duration);
         var colorAnimation = ValueAnimator.ofArgb(
-                ContextCompat.getColor(getContext(), R.color.drawer_overlay_background_color),
-                Color.TRANSPARENT);
+            ContextCompat.getColor(getContext(), R.color.drawer_overlay_background_color), Color.TRANSPARENT);
         colorAnimation.setDuration(animationDuration);
         colorAnimation.setInterpolator(new DecelerateInterpolator());
-        colorAnimation.addUpdateListener(animator -> setBackgroundColor((int) animator.getAnimatedValue()));
+        colorAnimation.addUpdateListener(animator -> setBackgroundColor((int)animator.getAnimatedValue()));
         colorAnimation.start();
 
         var child = getChildAt(0);
         child.animate()
-                .translationX(-child.getWidth())
-                .setDuration(animationDuration)
-                .setInterpolator(new DecelerateInterpolator())
-                .withEndAction(() -> setVisibility(View.GONE))
-                .start();
+            .translationX(-child.getWidth())
+            .setDuration(animationDuration)
+            .setInterpolator(new DecelerateInterpolator())
+            .withEndAction(() -> setVisibility(View.GONE))
+            .start();
 
         if (onCloseListener != null)
             onCloseListener.onClose();

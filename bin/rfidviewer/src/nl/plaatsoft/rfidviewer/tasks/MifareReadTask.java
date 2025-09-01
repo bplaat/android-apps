@@ -111,8 +111,7 @@ public class MifareReadTask {
                 var blockIndex = mfc.sectorToBlock(i);
                 for (var j = 0; j < mfc.getBlockCountInSector(i); j++) {
                     var bytes = mfc.readBlock(blockIndex++);
-                    for (var k = 0; k < 16; k++)
-                        data[pos++] = bytes[k];
+                    for (var k = 0; k < 16; k++) data[pos++] = bytes[k];
                 }
             }
         }

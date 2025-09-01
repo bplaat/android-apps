@@ -74,7 +74,7 @@ public class Settings {
     public static final int CURRENCY_SATS = 3;
     public static final int CURRENCY_ETH = 4;
     public static final int CURRENCY_BNB = 5;
-    private static final String[] CURRENCY_NAMES = { "usd", "eur", "btc", "sats", "eth", "bnb" };
+    private static final String[] CURRENCY_NAMES = {"usd", "eur", "btc", "sats", "eth", "bnb"};
 
     public int getCurrency() {
         return prefs.getInt("currency", CURRENCY_USD);

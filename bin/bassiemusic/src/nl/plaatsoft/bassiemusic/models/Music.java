@@ -70,42 +70,34 @@ public class Music {
     public static List<Music> loadMusic(Context context) {
         var musicList = new ArrayList<Music>();
 
-        var columns = new ArrayList<>(List.of(
-                MediaStore.Audio.Media._ID,
-                MediaStore.Audio.Media.ARTIST,
-                MediaStore.Audio.Media.ALBUM,
-                MediaStore.Audio.Media.TITLE,
-                MediaStore.Audio.Media.DURATION,
-                MediaStore.Audio.Media.ALBUM_ID));
+        var columns = new ArrayList<>(
+            List.of(MediaStore.Audio.Media._ID, MediaStore.Audio.Media.ARTIST, MediaStore.Audio.Media.ALBUM,
+                MediaStore.Audio.Media.TITLE, MediaStore.Audio.Media.DURATION, MediaStore.Audio.Media.ALBUM_ID));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
             columns.add(MediaStore.Audio.Media.CD_TRACK_NUMBER);
 
         var musicCursor = context.getContentResolver().query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                columns.toArray(new String[columns.size()]),
-                null, null, null);
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, columns.toArray(new String[columns.size()]), null, null, null);
 
         if (musicCursor != null) {
             while (musicCursor.moveToNext()) {
                 var music = new Music();
                 music.id = musicCursor.getLong(musicCursor.getColumnIndex(MediaStore.Audio.Media._ID));
                 music.contentUri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, music.id);
-                var artist = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST))
-                        .trim();
+                var artist = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.ARTIST)).trim();
                 music.album = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM)).trim();
                 music.title = musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.TITLE)).trim();
 
                 var trackNumber = "1";
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    trackNumber = musicCursor
-                            .getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.CD_TRACK_NUMBER));
+                    trackNumber =
+                        musicCursor.getString(musicCursor.getColumnIndex(MediaStore.Audio.Media.CD_TRACK_NUMBER));
                 }
 
                 music.duration = musicCursor.getLong(musicCursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                long albumId = musicCursor.getLong(musicCursor.getColumnIndex(
-                        MediaStore.Audio.Media.ALBUM_ID));
-                music.CoverUri = ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"),
-                        albumId);
+                long albumId = musicCursor.getLong(musicCursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                music.CoverUri =
+                    ContentUris.withAppendedId(Uri.parse("content://media/external/audio/albumart"), albumId);
 
                 music.artists = new ArrayList<String>();
                 music.position = 1;
@@ -163,12 +155,9 @@ public class Music {
             musicCursor.close();
         }
 
-        Collections.sort(musicList,
-                (a, b) -> a.getPosition() - b.getPosition());
-        Collections.sort(musicList,
-                (a, b) -> a.getAlbum().compareToIgnoreCase(b.getAlbum()));
-        Collections.sort(musicList,
-                (a, b) -> a.getArtists().get(0).compareToIgnoreCase(b.getArtists().get(0)));
+        Collections.sort(musicList, (a, b) -> a.getPosition() - b.getPosition());
+        Collections.sort(musicList, (a, b) -> a.getAlbum().compareToIgnoreCase(b.getAlbum()));
+        Collections.sort(musicList, (a, b) -> a.getArtists().get(0).compareToIgnoreCase(b.getArtists().get(0)));
 
         return musicList;
     }

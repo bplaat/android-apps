@@ -47,7 +47,7 @@ public class GamePage extends View {
     private final String levelLabelString;
     private @Nullable OnEventListener onEventListener;
 
-    @SuppressWarnings({ "this-escape", "null" })
+    @SuppressWarnings({"this-escape", "null"})
     public GamePage(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
 
@@ -73,8 +73,8 @@ public class GamePage extends View {
         running = true;
 
         scale = getResources().getDisplayMetrics().density;
-        width = (int) (getWidth() / scale);
-        height = (int) (getHeight() / scale);
+        width = (int)(getWidth() / scale);
+        height = (int)(getHeight() / scale);
         paint.setTextSize(16 * scale);
 
         score = 0;
@@ -86,25 +86,25 @@ public class GamePage extends View {
 
         var redsquareSize = 60;
         redsquare = new RedSquare(((width - redsquareSize) / 2) * scale, ((height - redsquareSize) / 2) * scale,
-                redsquareSize * scale, redsquareSize * scale);
+            redsquareSize * scale, redsquareSize * scale);
 
         blueSquares = new BlueSquare[4];
 
-        blueSquares[0] = new BlueSquare(random, scale, scale, random.nextInt(50, 100) * scale,
-                random.nextInt(75, 125) * scale, 1, 1, 0.5f * scale);
+        blueSquares[0] = new BlueSquare(
+            random, scale, scale, random.nextInt(50, 100) * scale, random.nextInt(75, 125) * scale, 1, 1, 0.5f * scale);
 
         var _width = random.nextInt(125, 150);
         blueSquares[1] = new BlueSquare(random, (width - _width - 1) * scale, scale, _width * scale,
-                random.nextInt(50, 100) * scale, -1, 1, 0.5f * scale);
+            random.nextInt(50, 100) * scale, -1, 1, 0.5f * scale);
 
         var _height = random.nextInt(75, 125);
         blueSquares[2] = new BlueSquare(random, 2 * scale, (height - _height - 1) * scale,
-                random.nextInt(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
+            random.nextInt(50, 100) * scale, _height * scale, 1, -1, 0.5f * scale);
 
         _width = random.nextInt(75, 125);
         _height = random.nextInt(125, 150);
         blueSquares[3] = new BlueSquare(random, (width - _width - 1) * scale, (height - _height - 1) * scale,
-                _width * scale, _height * scale, -1, -1, 0.5f * scale);
+            _width * scale, _height * scale, -1, -1, 0.5f * scale);
 
         invalidate();
     }
@@ -116,7 +116,7 @@ public class GamePage extends View {
 
     private void gameover() {
         stop();
-        var seconds = (int) ((System.currentTimeMillis() - startTime) / 1000);
+        var seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
         if (onEventListener != null)
             onEventListener.onGameover(score, seconds, level);
     }
@@ -143,10 +143,9 @@ public class GamePage extends View {
                 }
             }
 
-            if (redsquare.getX() < borderWidth * scale ||
-                    redsquare.getY() < borderWidth * scale ||
-                    redsquare.getX() + redsquare.getWidth() > (width - borderWidth) * scale ||
-                    redsquare.getY() + redsquare.getHeight() > (height - borderWidth) * scale) {
+            if (redsquare.getX() < borderWidth * scale || redsquare.getY() < borderWidth * scale
+                || redsquare.getX() + redsquare.getWidth() > (width - borderWidth) * scale
+                || redsquare.getY() + redsquare.getHeight() > (height - borderWidth) * scale) {
                 gameover();
             }
         }
@@ -155,7 +154,7 @@ public class GamePage extends View {
 
         paint.setColor(ContextCompat.getColor(getContext(), R.color.border_background_color));
         canvas.drawRect(borderWidth * scale, borderWidth * scale, (width - borderWidth) * scale,
-                (height - borderWidth) * scale, paint);
+            (height - borderWidth) * scale, paint);
 
         for (var i = 0; i < blueSquares.length; i++) {
             blueSquares[i].draw(canvas);
@@ -168,13 +167,13 @@ public class GamePage extends View {
         canvas.drawText(String.format(scoreLabelString, score), textPadding * scale, (textPadding + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.CENTER);
-        var seconds = (int) ((System.currentTimeMillis() - startTime) / 1000);
+        var seconds = (int)((System.currentTimeMillis() - startTime) / 1000);
         canvas.drawText(String.format(timeLabelString, seconds / 60, seconds % 60), (width / 2) * scale,
-                (textPadding + 8) * scale, paint);
+            (textPadding + 8) * scale, paint);
 
         paint.setTextAlign(Paint.Align.RIGHT);
-        canvas.drawText(String.format(levelLabelString, level), (width - textPadding) * scale,
-                (textPadding + 8) * scale, paint);
+        canvas.drawText(
+            String.format(levelLabelString, level), (width - textPadding) * scale, (textPadding + 8) * scale, paint);
 
         if (running) {
             invalidate();
@@ -190,10 +189,9 @@ public class GamePage extends View {
         var touchY = event.getY();
 
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            if (touchX >= redsquare.getX() &&
-                    touchY >= redsquare.getY() &&
-                    touchX < redsquare.getX() + redsquare.getWidth() &&
-                    touchY < redsquare.getY() + redsquare.getHeight()) {
+            if (touchX >= redsquare.getX() && touchY >= redsquare.getY()
+                && touchX < redsquare.getX() + redsquare.getWidth()
+                && touchY < redsquare.getY() + redsquare.getHeight()) {
                 dragging = true;
             }
             return true;

@@ -26,8 +26,8 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
     private Handler handler = new Handler(Looper.getMainLooper());
 
     @SuppressWarnings("this-escape")
-    public ChaptersDialogBuilder(Context context, ArrayList<Chapter> chapters, int currentChapterNumber,
-            OnResultListener onResultListener) {
+    public ChaptersDialogBuilder(
+        Context context, ArrayList<Chapter> chapters, int currentChapterNumber, OnResultListener onResultListener) {
         super(context);
 
         setTitle(R.string.main_chapter_alert_title_label);
@@ -40,8 +40,7 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
 
         for (var chapter : chapters) {
             var chapterButton = new TextView(context, null, 0,
-                    chapter.number() == currentChapterNumber ? R.style.IndexDialogButtonActive
-                            : R.style.IndexDialogButton);
+                chapter.number() == currentChapterNumber ? R.style.IndexDialogButtonActive : R.style.IndexDialogButton);
             chapterButton.setText(String.valueOf(chapter.number()));
             chapterButton.setOnClickListener(view -> onResultListener.onResult(chapter));
             grid.addView(chapterButton);

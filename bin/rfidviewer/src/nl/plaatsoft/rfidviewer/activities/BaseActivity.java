@@ -34,8 +34,8 @@ public abstract class BaseActivity extends Activity {
         var theme = settings.getTheme();
 
         // Update configuration when different from system defaults
-        if (language != Settings.LANGUAGE_SYSTEM || theme != Settings.THEME_SYSTEM ||
-                (theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)) {
+        if (language != Settings.LANGUAGE_SYSTEM || theme != Settings.THEME_SYSTEM
+            || (theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)) {
             var configuration = new Configuration(context.getResources().getConfiguration());
 
             if (language == Settings.LANGUAGE_ENGLISH)
@@ -53,7 +53,7 @@ public abstract class BaseActivity extends Activity {
             }
             // Set dark mode on when in battery saver mode
             if (theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                if (((PowerManager) context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode()) {
+                if (((PowerManager)context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode()) {
                     configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
                     configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
                 } else {
@@ -77,7 +77,7 @@ public abstract class BaseActivity extends Activity {
                 for (var scrollView : scrollViews) {
                     scrollView.setClipToPadding(false);
                     scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
-                            scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
+                        scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
                 }
             }
             return windowInsets;
@@ -108,8 +108,8 @@ public abstract class BaseActivity extends Activity {
             if (onBackCallback == null)
                 onBackCallback = () -> onBack();
             if (shouldBackOverride()) {
-                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-                        onBackCallback);
+                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                    OnBackInvokedDispatcher.PRIORITY_DEFAULT, onBackCallback);
             } else {
                 getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackCallback);
             }

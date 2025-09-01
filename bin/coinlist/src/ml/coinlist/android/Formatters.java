@@ -9,8 +9,7 @@ package ml.coinlist.android;
 import java.text.NumberFormat;
 
 public class Formatters {
-    private Formatters() {
-    }
+    private Formatters() {}
 
     public static String money(Settings settings, double number) {
         var currency = settings.getCurrency();
@@ -31,7 +30,7 @@ public class Formatters {
         } else {
             var decimals = number < 10 ? (number < 0.1 ? 8 : 4) : 2;
             if (currency == Settings.CURRENCY_BTC || currency == Settings.CURRENCY_ETH
-                    || currency == Settings.CURRENCY_BNB)
+                || currency == Settings.CURRENCY_BNB)
                 decimals = number < 10 ? (number < 0.1 ? 12 : 6) : 4;
             if (currency == Settings.CURRENCY_SATS)
                 decimals = number < 1 ? 4 : 0;

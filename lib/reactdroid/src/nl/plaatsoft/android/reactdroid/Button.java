@@ -30,7 +30,7 @@ public class Button extends Text {
     public View render(ViewGroup parent, View view) {
         android.widget.Button button;
         if (view != null && view.getClass().equals(android.widget.Button.class)) {
-            button = (android.widget.Button) view;
+            button = (android.widget.Button)view;
         } else {
             if (view != null) {
                 int index = parent.indexOfChild(view);

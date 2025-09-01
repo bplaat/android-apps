@@ -68,13 +68,13 @@ public class SongView extends ScrollView {
         var spannable = new SpannableStringBuilder();
 
         var titleSpannable = new SpannableString(song.number() + ". " + song.title() + "\n");
-        titleSpannable.setSpan(new TypefaceSpanCompat(Typeface.create(typeface, Typeface.BOLD)),
-                0, titleSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        titleSpannable.setSpan(new TypefaceSpanCompat(Typeface.create(typeface, Typeface.BOLD)), 0,
+            titleSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannable.append(titleSpannable);
 
         var linebreakSpannable = new SpannableString("\n");
-        linebreakSpannable.setSpan(new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        linebreakSpannable.setSpan(
+            new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannable.append(linebreakSpannable);
 
         var songText = song.text();
@@ -83,16 +83,16 @@ public class SongView extends ScrollView {
         spannable.append(songText);
 
         linebreakSpannable = new SpannableString("\n");
-        linebreakSpannable.setSpan(new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        linebreakSpannable.setSpan(
+            new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannable.append(linebreakSpannable);
 
         var copyrightSpannable = new SpannableString(song.copyright());
         copyrightSpannable.setSpan(
-                new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.secondary_text_color)), 0,
-                copyrightSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-        copyrightSpannable.setSpan(new RelativeSizeSpan(0.85f), 0, copyrightSpannable.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.secondary_text_color)), 0,
+            copyrightSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+        copyrightSpannable.setSpan(
+            new RelativeSizeSpan(0.85f), 0, copyrightSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannable.append(copyrightSpannable);
 
         var text = new TextView(getContext(), null, 0, R.style.SongViewText);

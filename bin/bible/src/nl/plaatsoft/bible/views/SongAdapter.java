@@ -25,8 +25,7 @@ import nl.plaatsoft.bible.models.Song;
 import org.jspecify.annotations.Nullable;
 
 public class SongAdapter extends ArrayAdapter<Song> {
-    private static record ViewHolder(TextView name) {
-    }
+    private static record ViewHolder(TextView name) {}
 
     private String searchQuery = "";
 
@@ -42,12 +41,12 @@ public class SongAdapter extends ArrayAdapter<Song> {
     public View getView(int position, @Nullable View convertView, @Nullable ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
-            convertView = Objects
-                    .requireNonNull(LayoutInflater.from(getContext()).inflate(R.layout.item_song, parent, false));
+            convertView =
+                Objects.requireNonNull(LayoutInflater.from(getContext()).inflate(R.layout.item_song, parent, false));
             viewHolder = new ViewHolder(convertView.findViewById(R.id.song_name));
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder)convertView.getTag();
         }
 
         var song = getItem(position);
@@ -56,9 +55,8 @@ public class SongAdapter extends ArrayAdapter<Song> {
         var span = new SpannableString(songName);
         var highlightStart = songName.toLowerCase().indexOf(searchQuery.toLowerCase());
         if (highlightStart != -1)
-            span.setSpan(
-                    new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
-                    highlightStart, highlightStart + searchQuery.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            span.setSpan(new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
+                highlightStart, highlightStart + searchQuery.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         viewHolder.name.setText(span);
 
         return convertView;

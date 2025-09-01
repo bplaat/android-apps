@@ -68,8 +68,7 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
         var openType = settings.getOpenType();
         if (openType == Settings.OPEN_TYPE_BIBLE) {
             searchVerseAdapter = new SearchVerseAdapter(this);
-            searchVerseAdapter
-                    .setVerseTypeface(settings.getFontTypeface());
+            searchVerseAdapter.setVerseTypeface(settings.getFontTypeface());
             resultsPage.setAdapter(searchVerseAdapter);
             resultsPage.setOnItemClickListener((adapterView, view, position, id) -> {
                 var searchVerse = Objects.requireNonNull(searchVerseAdapter).getItem(position);
@@ -130,13 +129,11 @@ public class SearchActivity extends BaseActivity implements TextWatcher {
     }
 
     @Override
-    public void beforeTextChanged(@SuppressWarnings("null") CharSequence charSequence, int start, int count,
-            int after) {
-    }
+    public void beforeTextChanged(
+        @SuppressWarnings("null") CharSequence charSequence, int start, int count, int after) {}
 
     @Override
-    public void afterTextChanged(@SuppressWarnings("null") Editable editable) {
-    }
+    public void afterTextChanged(@SuppressWarnings("null") Editable editable) {}
 
     private void openPage(View page) {
         startPage.setVisibility(page.equals(startPage) ? View.VISIBLE : View.GONE);

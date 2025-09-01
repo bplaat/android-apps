@@ -67,30 +67,33 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 imageLoaded = true;
                 var density = getResources().getDisplayMetrics().density;
                 FetchImageTask.with(this)
-                        .load("https://picsum.photos/" + (int) (320 * density) + "/" + (int) (240 * density))
-                        .noCache()
-                        .fadeIn()
-                        .loadingColor(ContextCompat.getColor(this, R.color.loading_background_color))
-                        .into(findViewById(R.id.main_data_random_image))
-                        .fetch();
+                    .load("https://picsum.photos/" + (int)(320 * density) + "/" + (int)(240 * density))
+                    .noCache()
+                    .fadeIn()
+                    .loadingColor(ContextCompat.getColor(this, R.color.loading_background_color))
+                    .into(findViewById(R.id.main_data_random_image))
+                    .fetch();
             }
 
             // Fetch IP info
             if (!infoLoaded) {
                 infoLoaded = true;
-                FetchDataTask.with(this).load("https://ipinfo.io/json").then(data -> {
-                    try {
-                        var jsonData = new JSONObject(new String(data, StandardCharsets.UTF_8));
-                        var locationLabel = (TextView) findViewById(R.id.main_data_location_label);
-                        locationLabel.setText(jsonData.getString("city") + ", " + jsonData.getString("region"));
+                FetchDataTask.with(this)
+                    .load("https://ipinfo.io/json")
+                    .then(data -> {
+                        try {
+                            var jsonData = new JSONObject(new String(data, StandardCharsets.UTF_8));
+                            var locationLabel = (TextView)findViewById(R.id.main_data_location_label);
+                            locationLabel.setText(jsonData.getString("city") + ", " + jsonData.getString("region"));
 
-                        var set = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
-                        set.setTarget(locationLabel);
-                        set.start();
-                    } catch (JSONException exception) {
-                        Log.e(getPackageName(), "Can't parse IP info", exception);
-                    }
-                }).fetch();
+                            var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
+                            set.setTarget(locationLabel);
+                            set.start();
+                        } catch (JSONException exception) {
+                            Log.e(getPackageName(), "Can't parse IP info", exception);
+                        }
+                    })
+                    .fetch();
             }
         });
 
@@ -99,8 +102,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Show update alert
         UpdateAlert.checkAndShow(this,
-                "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/bassietest/bob.toml",
-                SettingsActivity.STORE_PAGE_URL);
+            "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/bassietest/bob.toml",
+            SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override

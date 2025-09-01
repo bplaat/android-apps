@@ -27,28 +27,33 @@ public class UpdateAlert {
         }
 
         // Fetch version url
-        FetchDataTask.with(context).load(versionUrl).then(data -> {
-            try {
-                var matcher = Pattern.compile("(\\d+\\.\\d+\\.\\d+)").matcher(new String(data));
-                if (matcher.find()) {
-                    var foundVersion = matcher.group(1);
-                    var appName = context.getPackageManager().getApplicationLabel(context.getApplicationInfo());
-                    var appVersion = context.getPackageManager().getPackageInfo(context.getPackageName(),
-                            0).versionName;
-                    if (!foundVersion.equals(appVersion)) {
-                        new AlertDialog.Builder(context)
+        FetchDataTask.with(context)
+            .load(versionUrl)
+            .then(data -> {
+                try {
+                    var matcher = Pattern.compile("(\\d+\\.\\d+\\.\\d+)").matcher(new String(data));
+                    if (matcher.find()) {
+                        var foundVersion = matcher.group(1);
+                        var appName = context.getPackageManager().getApplicationLabel(context.getApplicationInfo());
+                        var appVersion =
+                            context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
+                        if (!foundVersion.equals(appVersion)) {
+                            new AlertDialog.Builder(context)
                                 .setTitle(context.getString(R.string.updatealert_title_label).replace("$0", appName))
                                 .setMessage(context.getString(R.string.updatealert_message_label)
-                                        .replace("$0", appVersion).replace("$1", appName))
-                                .setPositiveButton(R.string.updatealert_update_button, (dialog, which) -> {
-                                    context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storePageUrl)));
-                                })
+                                        .replace("$0", appVersion)
+                                        .replace("$1", appName))
+                                .setPositiveButton(R.string.updatealert_update_button,
+                                    (dialog, which) -> {
+                                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storePageUrl)));
+                                    })
                                 .setNegativeButton(R.string.updatealert_later_button, null)
                                 .show();
+                        }
                     }
+                } catch (NameNotFoundException e) {
                 }
-            } catch (NameNotFoundException e) {
-            }
-        }).fetch();
+            })
+            .fetch();
     }
 }

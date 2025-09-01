@@ -51,28 +51,28 @@ public class MainActivity extends BaseActivity {
         webviewPage.setWebViewClient(new WebViewClient() {
             @Override
             @SuppressWarnings("deprecation")
-            public boolean shouldOverrideUrlLoading(@SuppressWarnings("null") WebView view,
-                    @SuppressWarnings("null") String url) {
+            public boolean shouldOverrideUrlLoading(
+                @SuppressWarnings("null") WebView view, @SuppressWarnings("null") String url) {
                 return shouldOverrideUrlLoading(view, Uri.parse(url));
             }
 
             @Override
-            public boolean shouldOverrideUrlLoading(@SuppressWarnings("null") WebView view,
-                    @SuppressWarnings("null") WebResourceRequest request) {
+            public boolean shouldOverrideUrlLoading(
+                @SuppressWarnings("null") WebView view, @SuppressWarnings("null") WebResourceRequest request) {
                 return shouldOverrideUrlLoading(view, request.getUrl());
             }
 
             private boolean shouldOverrideUrlLoading(WebView view, Uri uri) {
                 if (uri.getScheme().equals("https")
-                        && (uri.getHost().endsWith("tweakers.net") || uri.getHost().equals("myprivacy.dpgmedia.nl")))
+                    && (uri.getHost().endsWith("tweakers.net") || uri.getHost().equals("myprivacy.dpgmedia.nl")))
                     return false;
                 startActivity(new Intent(Intent.ACTION_VIEW, uri));
                 return true;
             }
 
             @Override
-            public WebResourceResponse shouldInterceptRequest(@SuppressWarnings("null") WebView view,
-                    @SuppressWarnings("null") WebResourceRequest request) {
+            public WebResourceResponse shouldInterceptRequest(
+                @SuppressWarnings("null") WebView view, @SuppressWarnings("null") WebResourceRequest request) {
                 var adblocker = AdBlocker.getInstance(MainActivity.this);
                 var url = request.getUrl().toString();
 
@@ -90,14 +90,14 @@ public class MainActivity extends BaseActivity {
             @Override
             @SuppressWarnings("deprecation")
             public void onReceivedError(@SuppressWarnings("null") WebView view, int errorCode,
-                    @SuppressWarnings("null") String description, @SuppressWarnings("null") String failingUrl) {
+                @SuppressWarnings("null") String description, @SuppressWarnings("null") String failingUrl) {
                 onReceivedError(view);
             }
 
             @Override
             public void onReceivedError(@SuppressWarnings("null") WebView view,
-                    @SuppressWarnings("null") WebResourceRequest webResourceRequest,
-                    @SuppressWarnings("null") WebResourceError webResourceError) {
+                @SuppressWarnings("null") WebResourceRequest webResourceRequest,
+                @SuppressWarnings("null") WebResourceError webResourceError) {
                 if (webResourceRequest.isForMainFrame()) {
                     onReceivedError(view);
                 }
@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onPageStarted(@SuppressWarnings("null") WebView view, @SuppressWarnings("null") String url,
-                    @SuppressWarnings("null") Bitmap favicon) {
+                @SuppressWarnings("null") Bitmap favicon) {
                 if (disconnectedPage.getVisibility() == View.VISIBLE) {
                     disconnectedPage.setVisibility(View.GONE);
                     webviewPage.setVisibility(View.VISIBLE);
@@ -129,7 +129,7 @@ public class MainActivity extends BaseActivity {
             public void onPageFinished(@SuppressWarnings("null") WebView view, @SuppressWarnings("null") String url) {
                 var density = getResources().getDisplayMetrics().density;
                 view.loadUrl("javascript:(function(){document.body.style.paddingBottom='"
-                        + (int) (view.getPaddingBottom() / density) + "px'})();");
+                    + (int)(view.getPaddingBottom() / density) + "px'})();");
 
                 CookieManager.getInstance().flush();
                 super.onPageFinished(view, url);

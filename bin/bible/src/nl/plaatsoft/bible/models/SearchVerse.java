@@ -6,5 +6,4 @@
 
 package nl.plaatsoft.bible.models;
 
-public record SearchVerse(Verse verse, Book book, Chapter chapter) {
-}
+public record SearchVerse(Verse verse, Book book, Chapter chapter) {}

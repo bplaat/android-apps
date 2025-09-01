@@ -36,8 +36,7 @@ public class MifareWriteTask {
         }
     }
 
-    private static record PendingWrite(int blockIndex, byte[] data) {
-    };
+    private static record PendingWrite(int blockIndex, byte[] data){};
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
     private static final Executor executor = Executors.newFixedThreadPool(1);
@@ -124,14 +123,14 @@ public class MifareWriteTask {
         // Connect to the tag and write pending block writes
         mfc.connect();
         for (var pendingWrite : pendingWrites) {
-            if (mfc.authenticateSectorWithKeyA(mfc.blockToSector(pendingWrite.blockIndex()),
-                    MifareClassic.KEY_DEFAULT)) {
+            if (mfc.authenticateSectorWithKeyA(
+                    mfc.blockToSector(pendingWrite.blockIndex()), MifareClassic.KEY_DEFAULT)) {
                 mfc.writeBlock(pendingWrite.blockIndex(), pendingWrite.data());
                 var writtenBytes = mfc.readBlock(pendingWrite.blockIndex());
                 for (var i = 0; i < 16; i++) {
                     if (pendingWrite.data()[i] != writtenBytes[i]) {
                         throw new FailedWriteException("Failed to write block " + pendingWrite.blockIndex()
-                                + ": read back data is not the same as written data!");
+                            + ": read back data is not the same as written data!");
                     }
                 }
             }

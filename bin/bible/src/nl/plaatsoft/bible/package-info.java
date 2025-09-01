@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-@org.jspecify.annotations.NullMarked
-package nl.plaatsoft.bible;
+@org.jspecify.annotations.NullMarked package nl.plaatsoft.bible;

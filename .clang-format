@@ -1,0 +1,7 @@
+---
+BasedOnStyle: Google
+IndentWidth: 4
+ColumnLimit: 120
+AllowShortFunctionsOnASingleLine: Empty
+SpaceAfterCStyleCast: false
+JavaImportGroups: [java, android, com, nl, org]

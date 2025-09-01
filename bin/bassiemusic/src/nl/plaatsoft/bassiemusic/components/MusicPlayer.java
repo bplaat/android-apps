@@ -84,7 +84,7 @@ public class MusicPlayer extends LinearLayout {
         super(context, attrs);
         inflate(context, R.layout.view_music_player, this);
 
-        var powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        var powerManager = (PowerManager)context.getSystemService(Context.POWER_SERVICE);
         wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "BassieMusic::WakeLock");
 
         syncUserInterfaceInterval = () -> {
@@ -162,29 +162,32 @@ public class MusicPlayer extends LinearLayout {
 
         mediaPlayer = new MediaPlayer();
 
-        var infoCoverImage = (ImageView) findViewById(R.id.music_player_info_cover_image);
-        var infoTitleLabel = (TextSwitcher) findViewById(R.id.music_player_info_title_label);
-        var infoArtistsLabel = (TextSwitcher) findViewById(R.id.music_player_info_artists_label);
-        var infoDurationLabel = (TextSwitcher) findViewById(R.id.music_player_info_duration_label);
+        var infoCoverImage = (ImageView)findViewById(R.id.music_player_info_cover_image);
+        var infoTitleLabel = (TextSwitcher)findViewById(R.id.music_player_info_title_label);
+        var infoArtistsLabel = (TextSwitcher)findViewById(R.id.music_player_info_artists_label);
+        var infoDurationLabel = (TextSwitcher)findViewById(R.id.music_player_info_duration_label);
         mediaPlayer.setOnPreparedListener((MediaPlayer mediaPlayer) -> {
             // Update info texts
-            FetchCoverTask.with(getContext()).fromMusic(Objects.requireNonNull(playingMusic)).fadeIn()
-                    .into(infoCoverImage).fetch();
+            FetchCoverTask.with(getContext())
+                .fromMusic(Objects.requireNonNull(playingMusic))
+                .fadeIn()
+                .into(infoCoverImage)
+                .fetch();
 
             var newTitleLabel = Objects.requireNonNull(playingMusic).getTitle();
-            if (!((TextView) infoTitleLabel.getCurrentView()).getText().equals(newTitleLabel)) {
+            if (!((TextView)infoTitleLabel.getCurrentView()).getText().equals(newTitleLabel)) {
                 infoTitleLabel.setText(newTitleLabel);
             }
             infoTitleLabel.setSelected(true);
 
             var newArtistsLabel = String.join(", ", Objects.requireNonNull(playingMusic).getArtists());
-            if (!((TextView) infoArtistsLabel.getCurrentView()).getText().equals(newArtistsLabel)) {
+            if (!((TextView)infoArtistsLabel.getCurrentView()).getText().equals(newArtistsLabel)) {
                 infoArtistsLabel.setText(newArtistsLabel);
             }
             infoArtistsLabel.setSelected(true);
 
             var newDurationLabel = Music.formatDuration(Objects.requireNonNull(playingMusic).getDuration());
-            if (!((TextView) infoDurationLabel.getCurrentView()).getText().equals(newDurationLabel)) {
+            if (!((TextView)infoDurationLabel.getCurrentView()).getText().equals(newDurationLabel)) {
                 infoDurationLabel.setText(newDurationLabel);
             }
 

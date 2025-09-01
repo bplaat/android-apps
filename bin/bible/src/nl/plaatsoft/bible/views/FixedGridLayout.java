@@ -32,7 +32,7 @@ public class FixedGridLayout extends ViewGroup {
             var child = getChildAt(i);
             child.measure(childMeasureSpec, childMeasureSpec);
         }
-        var rowCount = (int) Math.ceil((double) getChildCount() / columnCount);
+        var rowCount = (int)Math.ceil((double)getChildCount() / columnCount);
         var height = rowCount * childSize + getPaddingTop() + getPaddingBottom();
         setMeasuredDimension(resolveSize(width, widthMeasureSpec), resolveSize(height, heightMeasureSpec));
     }

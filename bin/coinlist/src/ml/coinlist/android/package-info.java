@@ -4,5 +4,4 @@
  * SPDX-License-Identifier: MIT
  */
 
-@org.jspecify.annotations.NullMarked
-package ml.coinlist.android;
+@org.jspecify.annotations.NullMarked package ml.coinlist.android;

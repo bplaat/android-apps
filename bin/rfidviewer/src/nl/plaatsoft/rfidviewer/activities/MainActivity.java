@@ -82,9 +82,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
         if (nfcAdapter != null) {
             pendingIntent = PendingIntent.getActivity(this, PENDING_INTENT_REQUEST_CODE,
-                    new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
-            intentFiltersArray = new IntentFilter[] { new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED) };
-            techListsArray = new String[][] { new String[] { NfcA.class.getName(), MifareClassic.class.getName() } };
+                new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), PendingIntent.FLAG_MUTABLE);
+            intentFiltersArray = new IntentFilter[] {new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED)};
+            techListsArray = new String[][] {new String[] {NfcA.class.getName(), MifareClassic.class.getName()}};
         }
 
         // Pass intent of to intent handler
@@ -153,47 +153,54 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
                 // Read Mifare Classic tag async
                 var mfc = MifareClassic.get(tag);
-                mifareReadTask = MifareReadTask.with(this, mfc).then(data -> {
-                    try {
-                        // Generate output lines
-                        sb.append("Mifare Classic (" + data.length + " bytes):\n\n");
-                        for (var i = 0; i < mfc.getSize() / 16; i++) {
-                            sb.append("Block " + i + ":\n");
-                            // First half off the block
-                            for (var j = 0; j < 8; j++) {
-                                sb.append(String.format("%02x ", data[i * 16 + j]));
-                            }
-                            sb.append(" ");
-                            for (var j = 0; j < 8; j++) {
-                                sb.append(data[i * 16 + j] >= 40 && data[i * 16 + j] <= 176
-                                        ? new String(new byte[] { data[i * 16 + j] }, StandardCharsets.UTF_8)
-                                        : ".");
-                                sb.append(j < 8 - 1 ? " " : "\n");
-                            }
+                mifareReadTask =
+                    MifareReadTask.with(this, mfc)
+                        .then(
+                            data
+                            -> {
+                                try {
+                                    // Generate output lines
+                                    sb.append("Mifare Classic (" + data.length + " bytes):\n\n");
+                                    for (var i = 0; i < mfc.getSize() / 16; i++) {
+                                        sb.append("Block " + i + ":\n");
+                                        // First half off the block
+                                        for (var j = 0; j < 8; j++) {
+                                            sb.append(String.format("%02x ", data[i * 16 + j]));
+                                        }
+                                        sb.append(" ");
+                                        for (var j = 0; j < 8; j++) {
+                                            sb.append(data[i * 16 + j] >= 40 && data[i * 16 + j] <= 176
+                                                    ? new String(new byte[] {data[i * 16 + j]}, StandardCharsets.UTF_8)
+                                                    : ".");
+                                            sb.append(j < 8 - 1 ? " " : "\n");
+                                        }
 
-                            // Second half off the block
-                            for (var j = 0; j < 8; j++) {
-                                sb.append(String.format("%02x ", data[i * 16 + 8 + j]));
-                            }
-                            sb.append(" ");
-                            for (var j = 0; j < 8; j++) {
-                                sb.append(data[i * 16 + 8 + j] >= 40 && data[i * 16 + 8 + j] <= 176
-                                        ? new String(new byte[] { data[i * 16 + 8 + j] }, StandardCharsets.UTF_8)
-                                        : ".");
-                                sb.append(j < 8 - 1 ? " " : "\n");
-                            }
-                        }
+                                        // Second half off the block
+                                        for (var j = 0; j < 8; j++) {
+                                            sb.append(String.format("%02x ", data[i * 16 + 8 + j]));
+                                        }
+                                        sb.append(" ");
+                                        for (var j = 0; j < 8; j++) {
+                                            sb.append(data[i * 16 + 8 + j] >= 40 && data[i * 16 + 8 + j] <= 176
+                                                    ? new String(
+                                                          new byte[] {data[i * 16 + 8 + j]}, StandardCharsets.UTF_8)
+                                                    : ".");
+                                            sb.append(j < 8 - 1 ? " " : "\n");
+                                        }
+                                    }
 
-                        // Set lines in data output label and show data page
-                        dataOutputLabel.setText(sb.toString());
-                        openPage(dataPage);
-                    } catch (Exception exception) {
-                        Log.e(getPackageName(), "Can't read Mifare Classic tag", exception);
-                    }
-                }, exception -> {
-                    Log.e(getPackageName(), "Can't read Mifare Classic tag", exception);
-                    openPage(errorPage);
-                }).read();
+                                    // Set lines in data output label and show data page
+                                    dataOutputLabel.setText(sb.toString());
+                                    openPage(dataPage);
+                                } catch (Exception exception) {
+                                    Log.e(getPackageName(), "Can't read Mifare Classic tag", exception);
+                                }
+                            },
+                            exception -> {
+                                Log.e(getPackageName(), "Can't read Mifare Classic tag", exception);
+                                openPage(errorPage);
+                            })
+                        .read();
             } else {
                 // Not an Mifare Classic tag print techs list, set data output string and show
                 // data page

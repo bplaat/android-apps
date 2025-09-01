@@ -13,12 +13,8 @@ import org.jspecify.annotations.Nullable;
 public record Score(long id, String name, int time, int score, int level) {
     public static @Nullable Score fromJSON(JSONObject json) {
         try {
-            return new Score(
-                    json.optLong("id", 0),
-                    json.getString("name"),
-                    json.optInt("time", 0),
-                    json.getInt("score"),
-                    json.optInt("level", 0));
+            return new Score(json.optLong("id", 0), json.getString("name"), json.optInt("time", 0),
+                json.getInt("score"), json.optInt("level", 0));
         } catch (JSONException exception) {
             return null;
         }
@@ -26,12 +22,8 @@ public record Score(long id, String name, int time, int score, int level) {
 
     public static @Nullable Score fromPlaatServiceJSON(JSONObject json) {
         try {
-            return new Score(
-                    json.getLong("sid"),
-                    json.optJSONObject("user").getString("nickname"),
-                    json.getInt("dt"),
-                    json.getInt("score"),
-                    json.getInt("level"));
+            return new Score(json.getLong("sid"), json.optJSONObject("user").getString("nickname"), json.getInt("dt"),
+                json.getInt("score"), json.getInt("level"));
         } catch (JSONException exception) {
             return null;
         }

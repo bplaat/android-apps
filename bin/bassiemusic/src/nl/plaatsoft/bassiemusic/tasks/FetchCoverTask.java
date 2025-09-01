@@ -108,57 +108,66 @@ public class FetchCoverTask {
     }
 
     public FetchCoverTask fetch() {
-        var imageCoverTask = FetchImageTask.with(context).load(music.getCoverUri().toString())
-                .loadingColor(ContextCompat.getColor(context, R.color.loading_background_color));
+        var imageCoverTask = FetchImageTask.with(context)
+                                 .load(music.getCoverUri().toString())
+                                 .loadingColor(ContextCompat.getColor(context, R.color.loading_background_color));
         if (isFadedIn)
             imageCoverTask.fadeIn();
-        imageCoverTask.into(imageView).then(image -> {
-            onLoad(image);
-        }, exception -> {
-            // When an album cover don't exists fetch and cache it from the nice and open
-            // Deezer API. I know this code is a callback / exception nightmare, I'm not
-            // working on it :^)
-            try {
-                var fetchDataTask = FetchDataTask.with(context)
-                        .load(DEEZER_API_SEARCH_ALBUM + "?q="
-                                + URLEncoder.encode(music.getArtists().get(0) + " - " + music.getAlbum(),
-                                        StandardCharsets.UTF_8.name())
-                                + "&limit=1");
-                if (isLoadedFomCache)
-                    fetchDataTask.loadFromCache(true);
-                if (isSavedToCache)
-                    fetchDataTask.saveToCache(true);
-                fetchDataTask.then(data -> {
+        imageCoverTask.into(imageView)
+            .then(image
+                -> { onLoad(image); },
+                exception -> {
+                    // When an album cover don't exists fetch and cache it from the nice and open
+                    // Deezer API. I know this code is a callback / exception nightmare, I'm not
+                    // working on it :^)
                     try {
-                        var albumsJson = new JSONObject(new String(data, StandardCharsets.UTF_8)).getJSONArray("data");
-                        if (albumsJson.length() > 0) {
-                            var albumJson = albumsJson.getJSONObject(0);
-                            var fetchImageTask = FetchImageTask.with(context).load(albumJson.getString("cover_medium"))
-                                    .loadingColor(ContextCompat.getColor(context, R.color.loading_background_color));
-                            if (isFadedIn)
-                                fetchImageTask.fadeIn();
-                            if (!isLoadedFomCache)
-                                fetchImageTask.loadFromCache(false);
-                            if (!isSavedToCache)
-                                fetchImageTask.saveToCache(false);
-                            fetchImageTask.into(imageView).then(image -> {
-                                onLoad(image);
-                            }, exception2 -> {
-                                onException(exception2);
-                            }).fetch();
-                        } else {
-                            onException(new NoCoverFound("No album cover was found via the Deezer API"));
-                        }
+                        var fetchDataTask = FetchDataTask.with(context).load(DEEZER_API_SEARCH_ALBUM + "?q="
+                            + URLEncoder.encode(
+                                music.getArtists().get(0) + " - " + music.getAlbum(), StandardCharsets.UTF_8.name())
+                            + "&limit=1");
+                        if (isLoadedFomCache)
+                            fetchDataTask.loadFromCache(true);
+                        if (isSavedToCache)
+                            fetchDataTask.saveToCache(true);
+                        fetchDataTask
+                            .then(
+                                data
+                                -> {
+                                    try {
+                                        var albumsJson = new JSONObject(new String(data, StandardCharsets.UTF_8))
+                                                             .getJSONArray("data");
+                                        if (albumsJson.length() > 0) {
+                                            var albumJson = albumsJson.getJSONObject(0);
+                                            var fetchImageTask = FetchImageTask.with(context)
+                                                                     .load(albumJson.getString("cover_medium"))
+                                                                     .loadingColor(ContextCompat.getColor(
+                                                                         context, R.color.loading_background_color));
+                                            if (isFadedIn)
+                                                fetchImageTask.fadeIn();
+                                            if (!isLoadedFomCache)
+                                                fetchImageTask.loadFromCache(false);
+                                            if (!isSavedToCache)
+                                                fetchImageTask.saveToCache(false);
+                                            fetchImageTask.into(imageView)
+                                                .then(image
+                                                    -> { onLoad(image); },
+                                                    exception2 -> { onException(exception2); })
+                                                .fetch();
+                                        } else {
+                                            onException(
+                                                new NoCoverFound("No album cover was found via the Deezer API"));
+                                        }
+                                    } catch (Exception exception2) {
+                                        onException(exception2);
+                                    }
+                                },
+                                exception2 -> { onException(exception2); })
+                            .fetch();
                     } catch (Exception exception2) {
                         onException(exception2);
                     }
-                }, exception2 -> {
-                    onException(exception2);
-                }).fetch();
-            } catch (Exception exception2) {
-                onException(exception2);
-            }
-        }).fetch();
+                })
+            .fetch();
         return this;
     }
 

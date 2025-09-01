@@ -39,76 +39,75 @@ public class SettingsActivity extends BaseActivity {
         // Currency button
         var currencies = getResources().getStringArray(R.array.settings_currencies);
         currency = settings.getCurrency();
-        var currencyLabel = (TextView) findViewById(R.id.settings_currency_label);
+        var currencyLabel = (TextView)findViewById(R.id.settings_currency_label);
         currencyLabel.setText(currencies[currency]);
         findViewById(R.id.settings_currency_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.settings_currency_button)
-                    .setSingleChoiceItems(currencies, currency, (dialog, which) -> {
-                        dialog.dismiss();
-                        if (currency != which) {
-                            currency = which;
-                            settings.setCurrency(currency);
-                            currencyLabel.setText(currencies[currency]);
-                        }
-                    })
-                    .show();
+                                  .setTitle(R.string.settings_currency_button)
+                                  .setSingleChoiceItems(currencies, currency,
+                                      (dialog, which) -> {
+                                          dialog.dismiss();
+                                          if (currency != which) {
+                                              currency = which;
+                                              settings.setCurrency(currency);
+                                              currencyLabel.setText(currencies[currency]);
+                                          }
+                                      })
+                                  .show();
             var density = getResources().getDisplayMetrics().density;
-            alertDialog.getListView().setPadding(0, 0, 0, (int) (16 * density));
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Language button
-        var languages = new String[] {
-                getResources().getString(R.string.settings_language_english),
-                getResources().getString(R.string.settings_language_dutch),
-                getResources().getString(R.string.settings_language_system)
-        };
+        var languages = new String[] {getResources().getString(R.string.settings_language_english),
+            getResources().getString(R.string.settings_language_dutch),
+            getResources().getString(R.string.settings_language_system)};
         var language = settings.getLanguage();
-        ((TextView) findViewById(R.id.settings_language_label)).setText(languages[language]);
+        ((TextView)findViewById(R.id.settings_language_label)).setText(languages[language]);
         findViewById(R.id.settings_language_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.settings_language_button)
-                    .setSingleChoiceItems(languages, language, (dialog, which) -> {
-                        dialog.dismiss();
-                        if (language != which) {
-                            settings.setLanguage(which);
-                            recreate();
-                        }
-                    })
-                    .show();
+                                  .setTitle(R.string.settings_language_button)
+                                  .setSingleChoiceItems(languages, language,
+                                      (dialog, which) -> {
+                                          dialog.dismiss();
+                                          if (language != which) {
+                                              settings.setLanguage(which);
+                                              recreate();
+                                          }
+                                      })
+                                  .show();
             var density = getResources().getDisplayMetrics().density;
-            alertDialog.getListView().setPadding(0, 0, 0, (int) (16 * density));
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Themes button
-        var themes = new String[] {
-                getResources().getString(R.string.settings_theme_light),
-                getResources().getString(R.string.settings_theme_dark),
-                Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
-                        ? getResources().getString(R.string.settings_theme_battery_saver)
-                        : getResources().getString(R.string.settings_theme_system)
-        };
+        var themes = new String[] {getResources().getString(R.string.settings_theme_light),
+            getResources().getString(R.string.settings_theme_dark),
+            Build.VERSION.SDK_INT < Build.VERSION_CODES.Q
+                ? getResources().getString(R.string.settings_theme_battery_saver)
+                : getResources().getString(R.string.settings_theme_system)};
         var theme = settings.getTheme();
-        ((TextView) findViewById(R.id.settings_theme_label)).setText(themes[theme]);
+        ((TextView)findViewById(R.id.settings_theme_label)).setText(themes[theme]);
         findViewById(R.id.settings_theme_button).setOnClickListener(view -> {
             var alertDialog = new AlertDialog.Builder(this)
-                    .setTitle(R.string.settings_theme_button)
-                    .setSingleChoiceItems(themes, theme, (dialog, which) -> {
-                        dialog.dismiss();
-                        if (theme != which) {
-                            settings.setTheme(which);
-                            recreate();
-                        }
-                    })
-                    .show();
+                                  .setTitle(R.string.settings_theme_button)
+                                  .setSingleChoiceItems(themes, theme,
+                                      (dialog, which) -> {
+                                          dialog.dismiss();
+                                          if (theme != which) {
+                                              settings.setTheme(which);
+                                              recreate();
+                                          }
+                                      })
+                                  .show();
             var density = getResources().getDisplayMetrics().density;
-            alertDialog.getListView().setPadding(0, 0, 0, (int) (16 * density));
+            alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
         // Version button easter egg
         try {
-            ((TextView) findViewById(R.id.settings_version_label))
-                    .setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+            ((TextView)findViewById(R.id.settings_version_label))
+                .setText("v" + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         } catch (NameNotFoundException exception) {
             Log.e(getPackageName(), "Can't get app version", exception);
         }
@@ -131,21 +130,20 @@ public class SettingsActivity extends BaseActivity {
             var intent = new Intent();
             intent.setAction(Intent.ACTION_SEND);
             intent.setType("text/plain");
-            intent.putExtra(Intent.EXTRA_TEXT,
-                    getResources().getString(R.string.settings_share_message) + " " + STORE_PAGE_URL);
+            intent.putExtra(
+                Intent.EXTRA_TEXT, getResources().getString(R.string.settings_share_message) + " " + STORE_PAGE_URL);
             startActivity(Intent.createChooser(intent, null));
         });
 
         // About button
         findViewById(R.id.settings_about_button).setOnClickListener(view -> {
             new AlertDialog.Builder(this)
-                    .setTitle(R.string.settings_about_alert_title_label)
-                    .setMessage(R.string.settings_about_alert_message_label)
-                    .setNegativeButton(R.string.settings_about_alert_website_button, (dialog, which) -> {
-                        startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_WEBSITE_URL)));
-                    })
-                    .setPositiveButton(R.string.settings_about_alert_ok_button, null)
-                    .show();
+                .setTitle(R.string.settings_about_alert_title_label)
+                .setMessage(R.string.settings_about_alert_message_label)
+                .setNegativeButton(R.string.settings_about_alert_website_button,
+                    (dialog, which) -> { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_WEBSITE_URL))); })
+                .setPositiveButton(R.string.settings_about_alert_ok_button, null)
+                .show();
         });
 
         // Footer button

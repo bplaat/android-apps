@@ -10,8 +10,7 @@ import android.os.Build;
 import android.webkit.WebSettings;
 
 public class WebSettingsCompat {
-    private WebSettingsCompat() {
-    }
+    private WebSettingsCompat() {}
 
     @SuppressWarnings("deprecation")
     public static void setForceDark(WebSettings webSettings, boolean forceDark) {

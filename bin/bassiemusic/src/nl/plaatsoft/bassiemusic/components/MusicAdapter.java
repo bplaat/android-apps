@@ -67,7 +67,7 @@ public class MusicAdapter extends ArrayAdapter<Music> implements SectionIndexer 
             viewHolder.musicDuration = convertView.findViewById(R.id.music_duration);
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder)convertView.getTag();
         }
 
         if (position == selectedPosition) {

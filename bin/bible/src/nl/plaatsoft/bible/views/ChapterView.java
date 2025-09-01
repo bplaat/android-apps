@@ -71,20 +71,20 @@ public class ChapterView extends ScrollView {
         // Add verses
         var spannable = new SpannableStringBuilder();
         var addSpace = false;
-        var scrollToOffset = new int[] { -1 };
+        var scrollToOffset = new int[] {-1};
         for (var i = 0; i < chapter.verses().size(); i++) {
             var verse = chapter.verses().get(i);
 
             // Add subtitle
             if (verse.isSubtitle()) {
                 var subtitleSpannable = new SpannableString(verse.text() + "\n");
-                subtitleSpannable.setSpan(new TypefaceSpanCompat(Typeface.create(typeface, Typeface.BOLD)),
-                        0, subtitleSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                subtitleSpannable.setSpan(new TypefaceSpanCompat(Typeface.create(typeface, Typeface.BOLD)), 0,
+                    subtitleSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 spannable.append(subtitleSpannable);
 
                 var linebreakSpannable = new SpannableString("\n");
-                linebreakSpannable.setSpan(new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                linebreakSpannable.setSpan(
+                    new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 spannable.append(linebreakSpannable);
                 addSpace = false;
                 continue;
@@ -96,15 +96,15 @@ public class ChapterView extends ScrollView {
 
             var verseSpannable = new SpannableString(verse.number() + " " + verse.text());
             verseSpannable.setSpan(
-                    new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.secondary_text_color)), 0,
-                    verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            verseSpannable.setSpan(new RelativeSizeSpan(0.75f), 0, verse.number().length(),
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                new ForegroundColorSpan(ContextCompat.getColor(getContext(), R.color.secondary_text_color)), 0,
+                verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            verseSpannable.setSpan(
+                new RelativeSizeSpan(0.75f), 0, verse.number().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             if (verse.id() == highlightVerseId) {
                 scrollToOffset[0] = spannable.length();
                 verseSpannable.setSpan(
-                        new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)),
-                        0, verseSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    new BackgroundColorSpan(ContextCompat.getColor(getContext(), R.color.highlight_text_color)), 0,
+                    verseSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
             spannable.append(verseSpannable);
             addSpace = true;
@@ -114,8 +114,8 @@ public class ChapterView extends ScrollView {
                 spannable.append("\n");
 
                 var linebreakSpannable = new SpannableString("\n");
-                linebreakSpannable.setSpan(new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                linebreakSpannable.setSpan(
+                    new RelativeSizeSpan(0.5f), 0, linebreakSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                 spannable.append(linebreakSpannable);
                 addSpace = false;
             }

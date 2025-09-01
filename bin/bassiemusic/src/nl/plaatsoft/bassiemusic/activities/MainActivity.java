@@ -70,25 +70,21 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // On back handler
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT, () -> {
-                moveTaskToBack(false);
-            });
+            getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT, () -> { moveTaskToBack(false); });
         }
 
         // Pages
-        musicPage = (LinearLayout) findViewById(R.id.main_music_page);
-        emptyPage = (LinearLayout) findViewById(R.id.main_empty_page);
-        accessPage = (LinearLayout) findViewById(R.id.main_access_page);
-        useWindowInsets(
-                findViewById(R.id.main_music_music_player),
-                findViewById(R.id.main_empty_scroll),
-                findViewById(R.id.main_access_scroll));
+        musicPage = (LinearLayout)findViewById(R.id.main_music_page);
+        emptyPage = (LinearLayout)findViewById(R.id.main_empty_page);
+        accessPage = (LinearLayout)findViewById(R.id.main_access_page);
+        useWindowInsets(findViewById(R.id.main_music_music_player), findViewById(R.id.main_empty_scroll),
+            findViewById(R.id.main_access_scroll));
 
         // Music page
         musicHistory = new ArrayList<Long>();
-        if (savedInstanceState != null &&
-                savedInstanceState.getLongArray("music_history") != null &&
-                savedInstanceState.getInt("music_history_current", -1) != -1) {
+        if (savedInstanceState != null && savedInstanceState.getLongArray("music_history") != null
+            && savedInstanceState.getInt("music_history_current", -1) != -1) {
             var musicHistoryArray = savedInstanceState.getLongArray("music_history");
             for (var i = 0; i < musicHistoryArray.length; i++) {
                 musicHistory.add(musicHistoryArray[i]);
@@ -98,11 +94,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             musicHistoryCurrent = 0;
         }
 
-        musicPlayer = (MusicPlayer) findViewById(R.id.main_music_music_player);
+        musicPlayer = (MusicPlayer)findViewById(R.id.main_music_music_player);
 
-        musicPlayer.setOnInfoClickListener(() -> {
-            scrollToMusicByPosition(selectedPosition);
-        });
+        musicPlayer.setOnInfoClickListener(() -> { scrollToMusicByPosition(selectedPosition); });
 
         musicPlayer.setOnPreviousListener((boolean inHistory) -> {
             if (inHistory || isShuffling) {
@@ -115,7 +109,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         }
                     }
                 } else if (isShuffling) {
-                    playMusicByPosition((int) (Math.random() * musicAdapter.getCount()));
+                    playMusicByPosition((int)(Math.random() * musicAdapter.getCount()));
                 }
             } else {
                 playMusicByPosition(selectedPosition == 0 ? musicAdapter.getCount() - 1 : selectedPosition - 1);
@@ -133,31 +127,29 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         }
                     }
                 } else if (isShuffling) {
-                    playMusicByPosition((int) (Math.random() * musicAdapter.getCount()));
+                    playMusicByPosition((int)(Math.random() * musicAdapter.getCount()));
                 }
             } else {
                 playMusicByPosition(selectedPosition == musicAdapter.getCount() - 1 ? 0 : selectedPosition + 1);
             }
         });
 
-        musicList = (ListView) findViewById(R.id.main_music_list);
+        musicList = (ListView)findViewById(R.id.main_music_list);
         musicList.setFastScrollEnabled(settings.isFastScroll());
 
         musicAdapter = new MusicAdapter(this);
         musicList.setAdapter(musicAdapter);
 
-        musicList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
-            playMusicByPosition(position);
-        });
+        musicList.setOnItemClickListener(
+            (AdapterView<?> adapterView, View view, int position, long id) -> { playMusicByPosition(position); });
 
-        var musicShuffleButton = (ImageButton) findViewById(R.id.main_music_shuffle_button);
+        var musicShuffleButton = (ImageButton)findViewById(R.id.main_music_shuffle_button);
         isShuffling = settings.isShuffling();
         if (isShuffling) {
             musicShuffleButton.setImageResource(R.drawable.ic_shuffle_disabled);
         }
-        musicShuffleButton.setOnClickListener(v -> {
-            playMusicByPosition((int) (Math.random() * musicAdapter.getCount()));
-        });
+        musicShuffleButton.setOnClickListener(
+            v -> { playMusicByPosition((int)(Math.random() * musicAdapter.getCount())); });
         musicShuffleButton.setOnLongClickListener(v -> {
             isShuffling = !isShuffling;
             if (isShuffling) {
@@ -198,10 +190,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Access page
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             var permission = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-                    ? Manifest.permission.READ_MEDIA_AUDIO
-                    : Manifest.permission.READ_EXTERNAL_STORAGE;
+                ? Manifest.permission.READ_MEDIA_AUDIO
+                : Manifest.permission.READ_EXTERNAL_STORAGE;
             View.OnClickListener accessOnClick = v -> {
-                requestPermissions(new String[] { permission }, STORAGE_PERMISSION_REQUEST_CODE);
+                requestPermissions(new String[] {permission}, STORAGE_PERMISSION_REQUEST_CODE);
             };
             findViewById(R.id.main_access_refresh_button).setOnClickListener(accessOnClick);
             findViewById(R.id.main_access_hero_button).setOnClickListener(accessOnClick);
@@ -215,7 +207,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             if (checkSelfPermission(permission) == PackageManager.PERMISSION_DENIED) {
                 accessPage.setVisibility(View.VISIBLE);
                 musicPage.setVisibility(View.GONE);
-                requestPermissions(new String[] { permission }, STORAGE_PERMISSION_REQUEST_CODE);
+                requestPermissions(new String[] {permission}, STORAGE_PERMISSION_REQUEST_CODE);
                 return;
             }
         }
@@ -230,14 +222,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     public void showAlerts() {
-
         // Show rating alert
         RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
 
         // Show update alert
         UpdateAlert.checkAndShow(this,
-                "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/bassiemusic/bob.toml",
-                SettingsActivity.STORE_PAGE_URL);
+            "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/bassiemusic/bob.toml",
+            SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override
@@ -272,10 +263,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @SuppressWarnings("null") String[] permissions,
-            @SuppressWarnings("null") int[] grantResults) {
-        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    public void onRequestPermissionsResult(
+        int requestCode, @SuppressWarnings("null") String[] permissions, @SuppressWarnings("null") int[] grantResults) {
+        if (requestCode == STORAGE_PERMISSION_REQUEST_CODE && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
             musicPage.setVisibility(View.VISIBLE);
             accessPage.setVisibility(View.GONE);
             loadMusic(false);
@@ -362,15 +352,15 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 for (var musicItem : music) {
                     if (musicItem.getId() == musicId) {
                         isMusicFound = true;
-                        playMusicByPosition(musicAdapter.getPosition(musicItem),
-                                settings.getPlayingMusicPosition(), isAutoPlayed, false);
+                        playMusicByPosition(musicAdapter.getPosition(musicItem), settings.getPlayingMusicPosition(),
+                            isAutoPlayed, false);
                         break;
                     }
                 }
             }
 
             if (!isMusicFound) {
-                playMusicByPosition((int) (Math.random() * musicAdapter.getCount()), 0, isAutoPlayed, false);
+                playMusicByPosition((int)(Math.random() * musicAdapter.getCount()), 0, isAutoPlayed, false);
             }
         }
     }
@@ -385,7 +375,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         var music = musicAdapter.getItem(position);
         if (musicHistoryCurrent == musicHistory.size() - 1
-                && musicHistory.get(musicHistory.size() - 1) == music.getId()) {
+            && musicHistory.get(musicHistory.size() - 1) == music.getId()) {
             inHistory = true;
         }
         if (!inHistory) {
@@ -407,50 +397,46 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
             if (position > musicList.getLastVisiblePosition()) {
                 musicList.setSelection(
-                        position - (musicList.getLastVisiblePosition() - musicList.getFirstVisiblePosition() - 1));
+                    position - (musicList.getLastVisiblePosition() - musicList.getFirstVisiblePosition() - 1));
             }
         });
     }
 
     private void updateSelectedView() {
-        var selectedView = (LinearLayout) musicList
-                .getChildAt(selectedPosition - musicList.getFirstVisiblePosition());
+        var selectedView = (LinearLayout)musicList.getChildAt(selectedPosition - musicList.getFirstVisiblePosition());
         if (selectedView != null) {
-            var animation = (AnimatorSet) AnimatorInflater.loadAnimator(this, R.animator.selected_music_in);
+            var animation = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.selected_music_in);
             animation.setTarget(selectedView);
             animation.start();
 
-            var musicTitle = (TextView) selectedView.findViewById(R.id.music_title);
+            var musicTitle = (TextView)selectedView.findViewById(R.id.music_title);
             musicTitle.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             musicTitle.setSelected(true);
 
-            var musicArtists = (TextView) selectedView.findViewById(R.id.music_artists);
+            var musicArtists = (TextView)selectedView.findViewById(R.id.music_artists);
             musicArtists.setEllipsize(TextUtils.TruncateAt.MARQUEE);
             musicArtists.setSelected(true);
         } else {
             // When the view doesn't exist right now try again next sweep
-            musicList.post(() -> {
-                updateSelectedView();
-            });
+            musicList.post(() -> { updateSelectedView(); });
         }
     }
 
     private void setSelectedPosition(int selectedPosition) {
         if (this.selectedPosition != selectedPosition) {
             if (this.selectedPosition != -1) {
-                var oldSelectedView = (LinearLayout) musicList
-                        .getChildAt(this.selectedPosition - musicList.getFirstVisiblePosition());
+                var oldSelectedView =
+                    (LinearLayout)musicList.getChildAt(this.selectedPosition - musicList.getFirstVisiblePosition());
                 if (oldSelectedView != null) {
-                    var animation = (AnimatorSet) AnimatorInflater.loadAnimator(this,
-                            R.animator.selected_music_out);
+                    var animation = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.selected_music_out);
                     animation.setTarget(oldSelectedView);
                     animation.start();
 
-                    var musicTitle = (TextView) oldSelectedView.findViewById(R.id.music_title);
+                    var musicTitle = (TextView)oldSelectedView.findViewById(R.id.music_title);
                     musicTitle.setEllipsize(null);
                     musicTitle.setSelected(false);
 
-                    var musicArtists = (TextView) oldSelectedView.findViewById(R.id.music_artists);
+                    var musicArtists = (TextView)oldSelectedView.findViewById(R.id.music_artists);
                     musicArtists.setEllipsize(null);
                     musicArtists.setSelected(false);
                 }

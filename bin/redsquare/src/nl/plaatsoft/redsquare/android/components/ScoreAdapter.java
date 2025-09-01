@@ -31,8 +31,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
     }
 
     @Override
-    public View getView(int position, @Nullable View convertView,
-            @SuppressWarnings("null") ViewGroup parent) {
+    public View getView(int position, @Nullable View convertView, @SuppressWarnings("null") ViewGroup parent) {
         ViewHolder viewHolder;
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_score, parent, false);
@@ -41,7 +40,7 @@ public class ScoreAdapter extends ArrayAdapter<Score> {
             viewHolder.scoreScore = convertView.findViewById(R.id.score_score);
             convertView.setTag(viewHolder);
         } else {
-            viewHolder = (ViewHolder) convertView.getTag();
+            viewHolder = (ViewHolder)convertView.getTag();
         }
 
         var score = getItem(position);

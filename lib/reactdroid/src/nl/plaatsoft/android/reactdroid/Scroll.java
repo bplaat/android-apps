@@ -37,7 +37,7 @@ public class Scroll extends Bin {
     public View render(ViewGroup parent, @Nullable View view) {
         ScrollView scrollView;
         if (view != null && view.getClass().equals(ScrollView.class)) {
-            scrollView = (ScrollView) view;
+            scrollView = (ScrollView)view;
         } else {
             if (view != null) {
                 int index = parent.indexOfChild(view);
@@ -55,11 +55,13 @@ public class Scroll extends Bin {
             scrollView.setOnApplyWindowInsetsListener((v, windowInsets) -> {
                 this.windowInsets = WindowInsetsCompat.getInsets(windowInsets);
                 scrollView.setClipToPadding(false);
-                scrollView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom + this.windowInsets.bottom());
+                scrollView.setPadding(
+                    paddingLeft, paddingTop, paddingRight, paddingBottom + this.windowInsets.bottom());
                 return windowInsets;
             });
             if (windowInsets != null)
-                scrollView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom + this.windowInsets.bottom());
+                scrollView.setPadding(
+                    paddingLeft, paddingTop, paddingRight, paddingBottom + this.windowInsets.bottom());
         } else {
             scrollView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
         }

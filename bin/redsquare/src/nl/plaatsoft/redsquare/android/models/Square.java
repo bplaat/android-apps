@@ -52,7 +52,7 @@ abstract public class Square {
     }
 
     public boolean collision(Square otherSquare) {
-        return otherSquare.getX() < x + width && otherSquare.getX() + otherSquare.getWidth() > x &&
-                otherSquare.getY() < y + height && otherSquare.getY() + otherSquare.getHeight() > y;
+        return otherSquare.getX() < x + width && otherSquare.getX() + otherSquare.getWidth() > x
+            && otherSquare.getY() < y + height && otherSquare.getY() + otherSquare.getHeight() > y;
     }
 }

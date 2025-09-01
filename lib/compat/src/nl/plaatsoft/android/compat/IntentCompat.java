@@ -12,8 +12,7 @@ import android.content.Intent;
 import android.os.Build;
 
 public class IntentCompat {
-    private IntentCompat() {
-    }
+    private IntentCompat() {}
 
     @SuppressWarnings("deprecation")
     public static <T> T getParcelableExtra(Intent intent, String name, Class<T> clazz) {
@@ -22,10 +21,10 @@ public class IntentCompat {
         return intent.getParcelableExtra(name);
     }
 
-    @SuppressWarnings({ "deprecation", "unchecked" })
+    @SuppressWarnings({"deprecation", "unchecked"})
     public static <T extends Serializable> T getSerializableExtra(Intent intent, String name, Class<T> clazz) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
             return intent.getSerializableExtra(name, clazz);
-        return (T) intent.getSerializableExtra(name);
+        return (T)intent.getSerializableExtra(name);
     }
 }

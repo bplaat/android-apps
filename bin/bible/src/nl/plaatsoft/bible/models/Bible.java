@@ -9,5 +9,4 @@ package nl.plaatsoft.bible.models;
 import java.util.ArrayList;
 
 public record Bible(String path, String name, String abbreviation, String language, String copyright, String releasedAt,
-        String scrapedAt, ArrayList<Testament> testaments) {
-}
+    String scrapedAt, ArrayList<Testament> testaments) {}

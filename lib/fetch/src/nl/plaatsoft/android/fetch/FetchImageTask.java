@@ -40,13 +40,13 @@ public class FetchImageTask {
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
     private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    private static final LruCache<String, Bitmap> bitmapCache = new LruCache<String, Bitmap>(
-            (int) (Runtime.getRuntime().freeMemory() / 4)) {
-        @Override
-        protected int sizeOf(@SuppressWarnings("null") String url, @SuppressWarnings("null") Bitmap bitmap) {
-            return bitmap.getByteCount();
-        }
-    };
+    private static final LruCache<String, Bitmap> bitmapCache =
+        new LruCache<String, Bitmap>((int)(Runtime.getRuntime().freeMemory() / 4)) {
+            @Override
+            protected int sizeOf(@SuppressWarnings("null") String url, @SuppressWarnings("null") Bitmap bitmap) {
+                return bitmap.getByteCount();
+            }
+        };
 
     private final Context context;
     private @Nullable String url;
@@ -191,8 +191,7 @@ public class FetchImageTask {
         options.inPreferredConfig = isTransparent ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565;
         if (uri.getScheme().equals("content")) {
             return BitmapFactory.decodeStream(
-                    context.getContentResolver().openInputStream(Uri.parse(uri.toString())),
-                    null, options);
+                context.getContentResolver().openInputStream(Uri.parse(uri.toString())), null, options);
         } else {
             var data = FetchDataTask.fetchData(context, uri, isLoadedFomCache, isSavedToCache);
             return BitmapFactory.decodeByteArray(data, 0, data.length, options);
@@ -203,19 +202,19 @@ public class FetchImageTask {
         isPending = false;
         isLoaded = true;
         if (imageView != null) {
-            var imageViewTask = (FetchImageTask) imageView.getTag();
+            var imageViewTask = (FetchImageTask)imageView.getTag();
             if (Objects.requireNonNull(url).equals(imageViewTask.getUrl())) {
                 Objects.requireNonNull(imageView).setImageBitmap(image);
                 if (isFadedIn && (System.currentTimeMillis() - startTime) > ANIMATION_IMAGE_LOADING_TIMEOUT) {
                     if (isTransparent && loadingColor != Color.TRANSPARENT) {
-                        var backgroundColorAnimation = ValueAnimator
-                                .ofArgb(((ColorDrawable) Objects.requireNonNull(imageView).getBackground()).getColor(),
-                                        Color.TRANSPARENT);
+                        var backgroundColorAnimation = ValueAnimator.ofArgb(
+                            ((ColorDrawable)Objects.requireNonNull(imageView).getBackground()).getColor(),
+                            Color.TRANSPARENT);
                         backgroundColorAnimation.setDuration(animationDuration);
                         backgroundColorAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
                         backgroundColorAnimation.addUpdateListener(animator -> {
-                            Objects.requireNonNull(imageView)
-                                    .setBackgroundColor((int) backgroundColorAnimation.getAnimatedValue());
+                            Objects.requireNonNull(imageView).setBackgroundColor(
+                                (int)backgroundColorAnimation.getAnimatedValue());
                         });
                         backgroundColorAnimation.start();
                     }
@@ -224,7 +223,7 @@ public class FetchImageTask {
                     alphaAnimation.setDuration(animationDuration);
                     alphaAnimation.setInterpolator(new AccelerateDecelerateInterpolator());
                     alphaAnimation.addUpdateListener(animator -> {
-                        Objects.requireNonNull(imageView).setImageAlpha((int) alphaAnimation.getAnimatedValue());
+                        Objects.requireNonNull(imageView).setImageAlpha((int)alphaAnimation.getAnimatedValue());
                     });
                     Objects.requireNonNull(imageView).setImageAlpha(0);
                     alphaAnimation.start();

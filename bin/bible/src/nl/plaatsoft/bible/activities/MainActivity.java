@@ -110,11 +110,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         nameButton.setOnClickListener(view -> {
             if (openType == Settings.OPEN_TYPE_BIBLE) {
                 dialog = new BooksDialogBuilder(this, Objects.requireNonNull(openBible).testaments(),
-                        openBook != null ? openBook.key() : settings.getOpenBook(),
-                        book -> {
-                            Objects.requireNonNull(dialog).dismiss();
-                            openChapter(book, book.chapters().get(0));
-                        }).show();
+                    openBook != null ? openBook.key() : settings.getOpenBook(), book -> {
+                        Objects.requireNonNull(dialog).dismiss();
+                        openChapter(book, book.chapters().get(0));
+                    }).show();
             }
         });
 
@@ -124,18 +123,17 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 if (openChapter == null)
                     return;
                 dialog = new ChaptersDialogBuilder(this, Objects.requireNonNull(openBook).chapters(),
-                        Objects.requireNonNull(openChapter).number(), chapter -> {
-                            Objects.requireNonNull(dialog).dismiss();
-                            openChapter(Objects.requireNonNull(openBook), chapter);
-                        }).show();
+                    Objects.requireNonNull(openChapter).number(), chapter -> {
+                        Objects.requireNonNull(dialog).dismiss();
+                        openChapter(Objects.requireNonNull(openBook), chapter);
+                    }).show();
             }
             if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
                 dialog = new SongsDialogBuilder(this, Objects.requireNonNull(openSongBundle).songs(),
-                        Objects.requireNonNull(openSong).number(),
-                        song -> {
-                            Objects.requireNonNull(dialog).dismiss();
-                            openSong(song);
-                        }).show();
+                    Objects.requireNonNull(openSong).number(), song -> {
+                        Objects.requireNonNull(dialog).dismiss();
+                        openSong(song);
+                    }).show();
             }
         });
 
@@ -166,8 +164,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             if (Objects.requireNonNull(openChapter).number() == 1) {
                 // Find previous book
                 var allBooks = new ArrayList<Book>();
-                for (var testament : Objects.requireNonNull(openBible).testaments())
-                    allBooks.addAll(testament.books());
+                for (var testament : Objects.requireNonNull(openBible).testaments()) allBooks.addAll(testament.books());
                 for (var i = 0; i < allBooks.size(); i++) {
                     if (allBooks.get(i).key().equals(Objects.requireNonNull(openBook).key())) {
                         var previousBook = allBooks.get(i == 0 ? allBooks.size() - 1 : i - 1);
@@ -189,8 +186,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             if (Objects.requireNonNull(openChapter).number() == Objects.requireNonNull(openBook).chapters().size()) {
                 // Find next book
                 var allBooks = new ArrayList<Book>();
-                for (var testament : Objects.requireNonNull(openBible).testaments())
-                    allBooks.addAll(testament.books());
+                for (var testament : Objects.requireNonNull(openBible).testaments()) allBooks.addAll(testament.books());
                 for (var i = 0; i < allBooks.size(); i++) {
                     if (allBooks.get(i).key().equals(Objects.requireNonNull(openBook).key())) {
                         var nextBook = allBooks.get(i == allBooks.size() - 1 ? 0 : i + 1);
@@ -263,8 +259,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Show update alert
         UpdateAlert.checkAndShow(this,
-                "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/bible/bob.toml",
-                SettingsActivity.STORE_PAGE_URL);
+            "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/bible/bob.toml",
+            SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override
@@ -280,26 +276,25 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         if (item.getItemId() == R.id.menu_options_random_verse) {
             var openBibleTestaments = Objects.requireNonNull(openBible).testaments();
-            var randomTestament = openBibleTestaments.get((int) (Math.random() * openBibleTestaments.size()));
-            var randomBook = randomTestament.books().get((int) (Math.random() * randomTestament.books().size()));
-            var randomChapter = Objects
-                    .requireNonNull(bibleService.readChapter(this, Objects.requireNonNull(openBible).path(),
-                            randomBook.key(),
-                            (int) (Math.random() * randomBook.chapters().size()) + 1));
+            var randomTestament = openBibleTestaments.get((int)(Math.random() * openBibleTestaments.size()));
+            var randomBook = randomTestament.books().get((int)(Math.random() * randomTestament.books().size()));
+            var randomChapter =
+                Objects.requireNonNull(bibleService.readChapter(this, Objects.requireNonNull(openBible).path(),
+                    randomBook.key(), (int)(Math.random() * randomBook.chapters().size()) + 1));
 
             var realVerses = new ArrayList<Verse>();
             for (var verse : randomChapter.verses()) {
                 if (!verse.isSubtitle())
                     realVerses.add(verse);
             }
-            var randomVerse = realVerses.get((int) (Math.random() * realVerses.size()));
+            var randomVerse = realVerses.get((int)(Math.random() * realVerses.size()));
             openChapter(randomBook, randomChapter, 0, randomVerse.id());
             return true;
         }
 
         if (item.getItemId() == R.id.menu_options_random_song) {
             var openSongBundleSongs = Objects.requireNonNull(openSongBundle).songs();
-            var randomSong = openSongBundleSongs.get((int) (Math.random() * openSongBundleSongs.size()));
+            var randomSong = openSongBundleSongs.get((int)(Math.random() * openSongBundleSongs.size()));
             openSong(randomSong);
             return true;
         }
@@ -370,7 +365,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
             openSongBundle = songBundleService.readSongBundle(this, settings.getOpenSongBundle());
             openSong(Objects.requireNonNull(
-                    songBundleService.readSong(this, openSongBundle.path(), settings.getOpenSongNumber())));
+                songBundleService.readSong(this, openSongBundle.path(), settings.getOpenSongNumber())));
         }
     }
 
@@ -390,8 +385,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Find open chapter
         if (book != null) {
-            var chapter = bibleService.readChapter(this, Objects.requireNonNull(openBible).path(),
-                    Objects.requireNonNull(book).key(), chapterNumber);
+            var chapter = bibleService.readChapter(
+                this, Objects.requireNonNull(openBible).path(), Objects.requireNonNull(book).key(), chapterNumber);
             if (chapter != null) {
                 openChapter(book, chapter, scrollY, -1);
                 return;
@@ -412,13 +407,14 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     private void openChapter(Book book, Chapter chapter, int scrollY, int highlightVerseId) {
         openChapter(book,
-                Objects.requireNonNull(bibleService.readChapter(this, Objects.requireNonNull(openBible).path(),
-                        book.key(), chapter.number())),
-                scrollY, highlightVerseId);
+            Objects.requireNonNull(
+                bibleService.readChapter(this, Objects.requireNonNull(openBible).path(), book.key(), chapter.number())),
+            scrollY, highlightVerseId);
     }
 
     private void openChapter(Book book, ChapterWithVerses chapter, int scrollY, int highlightVerseId) {
-        if (openBook != null && openChapter != null && !(openBook.key().equals(book.key())
+        if (openBook != null && openChapter != null
+            && !(openBook.key().equals(book.key())
                 && Objects.requireNonNull(openChapter).number() == chapter.number())) {
             lastBookKey = Objects.requireNonNull(openBook).key();
             lastChapterNumber = Objects.requireNonNull(openChapter).number();
@@ -438,7 +434,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
     private void openSong(Song song) {
         openSong(Objects.requireNonNull(
-                songBundleService.readSong(this, Objects.requireNonNull(openSongBundle).path(), song.number())));
+            songBundleService.readSong(this, Objects.requireNonNull(openSongBundle).path(), song.number())));
     }
 
     private void openSong(SongWithText song) {
@@ -469,11 +465,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         drawerBibles.removeAllViews();
         for (var bible : bibles) {
             var listItemButton = new LinearLayout(this, null, 0, R.style.ListItemButton);
-            listItemButton
-                    .setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            (int) (56 * density)));
+            listItemButton.setLayoutParams(
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int)(56 * density)));
             if (openType == Settings.OPEN_TYPE_BIBLE && openBible != null
-                    && bible.path().equals(Objects.requireNonNull(openBible).path()))
+                && bible.path().equals(Objects.requireNonNull(openBible).path()))
                 listItemButton.setBackgroundResource(R.drawable.list_item_button_selected);
             listItemButton.setOnClickListener(view -> {
                 saveScroll();
@@ -485,8 +480,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             drawerBibles.addView(listItemButton);
 
             var listItemButtonLabel = new TextView(this, null, 0, R.style.ListItemButtonLabel);
-            listItemButtonLabel
-                    .setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1));
+            listItemButtonLabel.setLayoutParams(
+                new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1));
             listItemButtonLabel.setText(bible.name());
             listItemButton.addView(listItemButtonLabel);
 
@@ -504,18 +499,17 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         drawerSongBundles.removeAllViews();
         for (var songBundle : songBundles) {
             var listItemButton = new LinearLayout(this, null, 0, R.style.ListItemButton);
-            listItemButton
-                    .setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            (int) (56 * density)));
+            listItemButton.setLayoutParams(
+                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int)(56 * density)));
             if (openType == Settings.OPEN_TYPE_SONG_BUNDLE && openSongBundle != null
-                    && songBundle.path().equals(Objects.requireNonNull(openSongBundle).path()))
+                && songBundle.path().equals(Objects.requireNonNull(openSongBundle).path()))
                 listItemButton.setBackgroundResource(R.drawable.list_item_button_selected);
             listItemButton.setOnClickListener(view -> {
                 saveScroll();
                 settings.setOpenType(Settings.OPEN_TYPE_SONG_BUNDLE);
                 settings.setOpenSongBundle(songBundle.path());
                 if (openSongBundle != null
-                        && !songBundle.path().equals(Objects.requireNonNull(openSongBundle).path())) {
+                    && !songBundle.path().equals(Objects.requireNonNull(openSongBundle).path())) {
                     settings.setOpenSongNumber("1");
                 }
                 openFromSettings();
@@ -524,8 +518,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             drawerSongBundles.addView(listItemButton);
 
             var listItemButtonLabel = new TextView(this, null, 0, R.style.ListItemButtonLabel);
-            listItemButtonLabel
-                    .setLayoutParams(new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1));
+            listItemButtonLabel.setLayoutParams(
+                new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1));
             listItemButtonLabel.setText(songBundle.name());
             listItemButton.addView(listItemButtonLabel);
 

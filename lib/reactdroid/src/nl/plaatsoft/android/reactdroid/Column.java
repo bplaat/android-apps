@@ -51,7 +51,7 @@ public class Column extends Container {
     public View render(ViewGroup parent, @Nullable View view) {
         LinearLayout linearLayout;
         if (view != null && view.getClass().equals(LinearLayout.class)) {
-            linearLayout = (LinearLayout) view;
+            linearLayout = (LinearLayout)view;
         } else {
             if (view != null) {
                 int index = parent.indexOfChild(view);

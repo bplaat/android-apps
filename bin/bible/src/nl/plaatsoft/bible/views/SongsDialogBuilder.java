@@ -26,8 +26,8 @@ public class SongsDialogBuilder extends AlertDialog.Builder {
     private Handler handler = new Handler(Looper.getMainLooper());
 
     @SuppressWarnings("this-escape")
-    public SongsDialogBuilder(Context context, ArrayList<Song> songs, String currentSongNumber,
-            OnResultListener onResultListener) {
+    public SongsDialogBuilder(
+        Context context, ArrayList<Song> songs, String currentSongNumber, OnResultListener onResultListener) {
         super(context);
 
         setTitle(R.string.main_song_alert_title_label);
@@ -40,8 +40,7 @@ public class SongsDialogBuilder extends AlertDialog.Builder {
 
         for (var song : songs) {
             var songButton = new TextView(context, null, 0,
-                    song.number().equals(currentSongNumber) ? R.style.IndexDialogButtonActive
-                            : R.style.IndexDialogButton);
+                song.number().equals(currentSongNumber) ? R.style.IndexDialogButtonActive : R.style.IndexDialogButton);
             songButton.setText(String.valueOf(song.number()));
             songButton.setOnClickListener(view -> onResultListener.onResult(song));
             grid.addView(songButton);

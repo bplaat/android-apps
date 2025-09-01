@@ -33,15 +33,13 @@ public class SearchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        findViewById(R.id.search_back_button).setOnClickListener(v -> {
-            finish();
-        });
+        findViewById(R.id.search_back_button).setOnClickListener(v -> { finish(); });
 
         var music = Music.loadMusic(this);
 
-        var startPage = (ScrollView) findViewById(R.id.search_start_page);
-        var searchList = (ListView) findViewById(R.id.search_music_page);
-        var emptyPage = (ScrollView) findViewById(R.id.search_empty_page);
+        var startPage = (ScrollView)findViewById(R.id.search_start_page);
+        var searchList = (ListView)findViewById(R.id.search_music_page);
+        var emptyPage = (ScrollView)findViewById(R.id.search_empty_page);
         useWindowInsets(startPage, searchList, emptyPage);
 
         var searchAdapter = new MusicAdapter(this);
@@ -54,7 +52,7 @@ public class SearchActivity extends BaseActivity {
             finish();
         });
 
-        var searchInput = (EditText) findViewById(R.id.search_input);
+        var searchInput = (EditText)findViewById(R.id.search_input);
 
         searchInput.setOnEditorActionListener((TextView view, int actionId, KeyEvent event) -> {
             if (actionId == EditorInfo.IME_ACTION_SEARCH)
@@ -63,17 +61,17 @@ public class SearchActivity extends BaseActivity {
         });
 
         searchInput.addTextChangedListener(new TextWatcher() {
-            public void onTextChanged(@SuppressWarnings("null") CharSequence charSequence, int start, int before,
-                    int count) {
+            public void onTextChanged(
+                @SuppressWarnings("null") CharSequence charSequence, int start, int before, int count) {
                 var searchQuery = charSequence.toString().toLowerCase();
 
                 searchAdapter.clear();
 
                 if (searchQuery.length() >= 1) {
                     for (var musicItem : music) {
-                        if (String.join(", ", musicItem.getArtists()).toLowerCase().contains(searchQuery) ||
-                                musicItem.getAlbum().toLowerCase().contains(searchQuery) ||
-                                musicItem.getTitle().toLowerCase().contains(searchQuery)) {
+                        if (String.join(", ", musicItem.getArtists()).toLowerCase().contains(searchQuery)
+                            || musicItem.getAlbum().toLowerCase().contains(searchQuery)
+                            || musicItem.getTitle().toLowerCase().contains(searchQuery)) {
                             searchAdapter.add(musicItem);
                         }
                     }
@@ -96,12 +94,10 @@ public class SearchActivity extends BaseActivity {
                 searchList.setSelectionAfterHeaderView();
             }
 
-            public void beforeTextChanged(@SuppressWarnings("null") CharSequence charSequence, int start, int count,
-                    int after) {
-            }
+            public void beforeTextChanged(
+                @SuppressWarnings("null") CharSequence charSequence, int start, int count, int after) {}
 
-            public void afterTextChanged(@SuppressWarnings("null") Editable editable) {
-            }
+            public void afterTextChanged(@SuppressWarnings("null") Editable editable) {}
         });
 
         View.OnClickListener clearSearchInput = v -> {

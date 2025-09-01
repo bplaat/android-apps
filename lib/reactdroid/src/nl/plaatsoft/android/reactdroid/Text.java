@@ -32,8 +32,8 @@ public class Text extends Widget {
     }
 
     public Text fontSizeSp(int fontSize) {
-        this.fontSize = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, fontSize,
-                getContext().getResources().getDisplayMetrics());
+        this.fontSize = (int)TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_SP, fontSize, getContext().getResources().getDisplayMetrics());
         return this;
     }
 
@@ -56,7 +56,7 @@ public class Text extends Widget {
     public View render(ViewGroup parent, @Nullable View view) {
         TextView textView;
         if (view != null && view.getClass().equals(TextView.class)) {
-            textView = (TextView) view;
+            textView = (TextView)view;
         } else {
             if (view != null) {
                 int index = parent.indexOfChild(view);
@@ -84,10 +84,11 @@ public class Text extends Widget {
 
         var currentTypeface = textView.getTypeface();
         var currentStyle = currentTypeface != null ? currentTypeface.getStyle() : Typeface.NORMAL;
-        if ((fontWeight == 700 && currentStyle != Typeface.BOLD) ||
-                (fontWeight == 400 && currentStyle != Typeface.NORMAL) ||
-                (fontWeight == 500 && (currentTypeface == null
-                        || !Typeface.create("sans-serif-medium", Typeface.NORMAL).equals(currentTypeface)))) {
+        if ((fontWeight == 700 && currentStyle != Typeface.BOLD)
+            || (fontWeight == 400 && currentStyle != Typeface.NORMAL)
+            || (fontWeight == 500
+                && (currentTypeface == null
+                    || !Typeface.create("sans-serif-medium", Typeface.NORMAL).equals(currentTypeface)))) {
             if (fontWeight == 400)
                 textView.setTypeface(null, Typeface.NORMAL);
             if (fontWeight == 500)
