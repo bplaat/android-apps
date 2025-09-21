@@ -18,10 +18,6 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
-      - name: Set Java 21 as default
-        run: |
-          echo "JAVA_HOME=${JAVA_HOME_21_X64}" >> $GITHUB_ENV
-          echo "${JAVA_HOME_21_X64}/bin" >> $GITHUB_PATH
       - name: Install clang-format@21
         run: |
           wget -qO /usr/local/bin/clang-format https://github.com/cpp-linter/clang-tools-static-binaries/releases/latest/download/clang-format-21_linux-amd64
