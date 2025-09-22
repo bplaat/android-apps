@@ -53,7 +53,7 @@ function check() {
     check_format
     # FIXME: Do null analysis
     for dir in $(ls bin); do
-        bob build -C "bin/$dir"
+        bob build --time -C "bin/$dir"
     done
 }
 
