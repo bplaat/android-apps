@@ -6,31 +6,31 @@ A collection of various Android apps that I created for myself and others
 
 <table>
 <tr>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/bassiemusic/">
     <img src="bin/bassiemusic/res/mipmap-xxxhdpi/ic_launcher.png" alt="BassieMusic icon" width="48" height="48"/><br/>
     BassieMusic
 </a>
 </td>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/bassietest/">
     <img src="bin/bassietest/res/mipmap-xxxhdpi/ic_launcher.png" alt="BassieTest icon" width="48" height="48"/><br/>
     BassieTest
 </a>
 </td>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/bible/">
     <img src="bin/bible/res/mipmap-xxxhdpi/ic_launcher.png" alt="Bible icon" width="48" height="48"/><br/>
     Bible
 </a>
 </td>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/coinlist/">
     <img src="bin/coinlist/res/mipmap-xxxhdpi/ic_launcher.png" alt="CoinList icon" width="48" height="48"/><br/>
     CoinList
 </a>
 </td>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/hackernews/">
     <img src="bin/hackernews/res/mipmap-xxxhdpi/ic_launcher.png" alt="HackerNews icon" width="48" height="48"/><br/>
     HackerNews
@@ -38,25 +38,25 @@ A collection of various Android apps that I created for myself and others
 </td>
 </tr>
 <tr>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/reacttest/">
     <img src="bin/bassietest/res/mipmap-xxxhdpi/ic_launcher.png" alt="ReactTest icon" width="48" height="48"/><br/>
     ReactTest
 </a>
 </td>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/redsquare/">
     <img src="bin/redsquare/res/mipmap-xxxhdpi/ic_launcher.png" alt="Redsquare icon" width="48" height="48"/><br/>
     Redsquare
 </a>
 </td>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/rfidviewer/">
     <img src="bin/rfidviewer/res/mipmap-xxxhdpi/ic_launcher.png" alt="RFID Viewer icon" width="48" height="48"/><br/>
     RFID Viewer
 </a>
 </td>
-<td align="center">
+<td width="120" align="center">
 <a href="bin/tweakers/">
     <img src="bin/tweakers/res/mipmap-xxxhdpi/ic_launcher.png" alt="Tweakers icon" width="48" height="48"/><br/>
     Tweakers
