@@ -1,5 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
     <defs>
+        <clipPath id="squircle">
+            <path d="M 0 12 C 0 3, 3 0, 12 0 S24 3, 24 12, 21 24 12 24, 0 21, 0 12"/>
+        </clipPath>
         <linearGradient id="background" gradientTransform="rotate(45)">
             <stop offset="0%" stop-color="#2196F3"/>
             <stop offset="100%" stop-color="#1976D2"/>
@@ -9,7 +13,7 @@
         </filter>
     </defs>
 
-    <rect fill="url(#background)" x="0" y="0" width="24" height="24" />
+    <rect fill="url(#background)" clip-path="url(#squircle)" x="0" y="0" width="24" height="24" />
     <g transform="translate(2.4, 2.4) scale(0.8)">
         <path fill="#fff" filter="url(#shadow)" d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
     </g>
