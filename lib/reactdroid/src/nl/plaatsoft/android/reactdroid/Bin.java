@@ -6,7 +6,7 @@
 
 package nl.plaatsoft.android.reactdroid;
 
-abstract public class Bin extends Widget {
+public abstract class Bin extends Widget {
     protected Widget child;
 
     protected Bin(WidgetContext context) {

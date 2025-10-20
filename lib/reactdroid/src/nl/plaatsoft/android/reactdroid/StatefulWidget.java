@@ -11,23 +11,21 @@ import android.view.ViewGroup;
 
 import org.jspecify.annotations.Nullable;
 
-public abstract class StatefulWidget extends Widget {
-    protected ViewGroup _parent;
-    protected View _view;
+public abstract class StatefulWidget extends StatelessWidget {
+    private ViewGroup parent;
+    private View view;
 
     protected StatefulWidget(WidgetContext c) {
         super(c);
     }
 
-    public abstract Widget build();
-
     public void refresh() {
-        build().render(_parent, _view);
+        build().render(parent, view);
     }
 
     @Override
     public View render(ViewGroup parent, @Nullable View view) {
-        _parent = parent;
-        return _view = build().render(parent, view);
+        this.parent = parent;
+        return this.view = build().render(parent, view);
     }
 }

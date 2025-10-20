@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 
 import org.jspecify.annotations.Nullable;
 
-abstract public class StatelessWidget extends Widget {
+public abstract class StatelessWidget extends Widget {
     public StatelessWidget(WidgetContext c) {
         super(c);
     }

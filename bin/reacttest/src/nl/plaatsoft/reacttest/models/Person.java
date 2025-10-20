@@ -6,15 +6,13 @@
 
 package nl.plaatsoft.reacttest.models;
 
-public class Person {
-    public long id;
-    public String name;
-    public int age;
-    public boolean dead = false;
-
+public record Person(long id, String name, int age, boolean isDead) {
     public Person(long id, String name, int age) {
-        this.id = id;
-        this.name = name;
-        this.age = age;
+        this(id, name, age, age >= 100);
+    }
+
+    public Person ageInYears(int years) {
+        var new_age = Math.max(0, Math.min(100, age + years));
+        return new Person(id, name, new_age, new_age >= 100);
     }
 }

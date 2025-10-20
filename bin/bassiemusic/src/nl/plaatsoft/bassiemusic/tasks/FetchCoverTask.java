@@ -28,11 +28,10 @@ public class FetchCoverTask {
     private static final String DEEZER_API_SEARCH_ALBUM = DEEZER_API_URL + "/search/album";
 
     public static interface OnLoadListener {
-        public abstract void onLoad(Bitmap image);
+        public void onLoad(Bitmap image);
     }
-
     public static interface OnErrorListener {
-        public abstract void onError(Exception exception);
+        public void onError(Exception exception);
     }
 
     public class NoCoverFound extends Exception {

@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 
 import org.jspecify.annotations.Nullable;
 
-abstract public class Widget {
+public abstract class Widget {
     protected WidgetContext c;
     protected long key;
     protected int paddingTop;

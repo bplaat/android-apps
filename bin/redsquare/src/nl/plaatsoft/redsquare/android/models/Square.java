@@ -6,7 +6,7 @@
 
 package nl.plaatsoft.redsquare.android.models;
 
-abstract public class Square {
+public abstract class Square {
     protected float x;
     protected float y;
     protected float width;

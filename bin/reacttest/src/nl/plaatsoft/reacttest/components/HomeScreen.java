@@ -36,7 +36,18 @@ public class HomeScreen extends StatefulWidget {
         return new Scroll(c).useWindowInsets().child(new Column(c)
                 .child(new Text(c).text("ReactTest").fontSizeSp(16).fontWeight(500).paddingDp(16))
 
-                .child(persons.map(person -> new PersonItem(c).person(person).key(person.id)))
+                .child(persons.map(person
+                    -> new PersonItem(c)
+                        .person(person)
+                        .onUpdate(updatedPerson -> {
+                            persons = persons.map(p -> p.id() == updatedPerson.id() ? updatedPerson : p);
+                            refresh();
+                        })
+                        .onDelete(id -> {
+                            persons = persons.filter(p -> p.id() != id);
+                            refresh();
+                        })
+                        .key(person.id())))
 
                 .child(new Button(c).text("Add person").onClick(view -> {
                     persons.add(

@@ -9,7 +9,7 @@ package nl.plaatsoft.android.reactdroid;
 import java.util.ArrayList;
 import java.util.List;
 
-abstract public class Container extends Widget {
+public abstract class Container extends Widget {
     protected List<Widget> children;
 
     protected Container(WidgetContext context) {
