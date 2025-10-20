@@ -6,6 +6,8 @@
 
 package nl.plaatsoft.reacttest.components;
 
+import java.util.UUID;
+
 import nl.plaatsoft.android.reactdroid.Button;
 import nl.plaatsoft.android.reactdroid.Column;
 import nl.plaatsoft.android.reactdroid.Row;
@@ -21,7 +23,7 @@ public class PersonItem extends StatelessWidget {
         void onUpdate(Person person);
     }
     public static interface OnDelete {
-        void onDelete(long id);
+        void onDelete(UUID id);
     }
 
     protected Person person;

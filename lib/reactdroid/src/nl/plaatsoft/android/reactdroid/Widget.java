@@ -15,7 +15,7 @@ import org.jspecify.annotations.Nullable;
 
 public abstract class Widget {
     protected WidgetContext c;
-    protected long key;
+    protected Object key;
     protected int paddingTop;
     protected int paddingRight;
     protected int paddingBottom;
@@ -25,7 +25,7 @@ public abstract class Widget {
         this.c = c;
     }
 
-    public Widget key(long key) {
+    public Widget key(Object key) {
         this.key = key;
         return this;
     }

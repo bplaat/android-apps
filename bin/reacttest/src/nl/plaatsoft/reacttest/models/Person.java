@@ -6,9 +6,11 @@
 
 package nl.plaatsoft.reacttest.models;
 
-public record Person(long id, String name, int age, boolean isDead) {
-    public Person(long id, String name, int age) {
-        this(id, name, age, age >= 100);
+import java.util.UUID;
+
+public record Person(UUID id, String name, int age, boolean isDead) {
+    public Person(String name, int age) {
+        this(UUID.randomUUID(), name, age, age >= 100);
     }
 
     public Person ageInYears(int years) {
