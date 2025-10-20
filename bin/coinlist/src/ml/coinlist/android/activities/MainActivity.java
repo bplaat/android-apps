@@ -93,7 +93,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         coinsAdapter = new CoinsAdapter(this, settings);
         coinsList.setAdapter(coinsAdapter);
-        for (var i = 0; i < 100; i++) coinsAdapter.add(Coin.createEmpty());
+        for (var i = 0; i < 100; i++) coinsAdapter.add(Coin.PLACEHOLDER);
 
         coinsList.setOnItemClickListener((adapterView, view, position, id) -> {
             if (position == 0) {
@@ -102,24 +102,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 return;
             }
 
-            var coin = coinsAdapter.getItem(position - 1);
-            if (coin.isEmpty())
+            var index = position - 1;
+            var coin = coinsAdapter.getItem(index);
+            if (coin.isPlaceholder())
                 return;
 
-            coin.setExtraIndex(coin.getExtraIndex() == 2 ? 0 : coin.getExtraIndex() + 1);
-            var coinExtra = (TextView)view.findViewById(R.id.coin_extra);
-            if (coin.getExtraIndex() == 0) {
-                coinExtra.setText(getResources().getString(R.string.main_extra_market_cap) + " "
-                    + Formatters.money(settings, coin.getMarketCap()));
-            }
-            if (coin.getExtraIndex() == 1) {
-                coinExtra.setText(getResources().getString(R.string.main_extra_volume) + " "
-                    + Formatters.money(settings, coin.getVolume()));
-            }
-            if (coin.getExtraIndex() == 2) {
-                coinExtra.setText(getResources().getString(R.string.main_extra_supply) + " "
-                    + Formatters.number(settings, coin.getSupply()));
-            }
+            coinsAdapter.remove(coin);
+            coinsAdapter.insert(coin.nextVisibleStat(), index);
         });
 
         // Show rating alert
@@ -254,11 +243,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                             continue;
                         }
 
-                        coinsAdapter.add(Coin.createNormal(jsonCoin.getString("id"), jsonCoin.getInt("market_cap_rank"),
-                            jsonCoin.getString("name"), jsonCoin.getString("image"),
-                            jsonCoin.getDouble("current_price"), jsonCoin.getDouble("price_change_percentage_24h"),
-                            jsonCoin.getDouble("market_cap"), jsonCoin.getDouble("total_volume"),
-                            jsonCoin.getDouble("circulating_supply"), isStarred));
+                        coinsAdapter.add(Coin.fromJSON(jsonCoin, isStarred));
                     }
                 } catch (JSONException exception) {
                     Log.e(getPackageName(), "Can't parse coins data", exception);

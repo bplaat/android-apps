@@ -78,48 +78,48 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         }
 
         var coin = getItem(position);
-        if (coin.isEmpty()) {
+        if (coin.isPlaceholder()) {
             viewHolder.coinStarButton.setImageAlpha(0);
             return convertView;
         }
 
         FetchImageTask.with(getContext())
-            .load(coin.getImageUrl())
+            .load(coin.imageUrl())
             .transparent()
             .fadeIn()
             .loadingColor(ContextCompat.getColor(getContext(), R.color.loading_background_color))
             .into(viewHolder.coinImage)
             .fetch();
 
-        viewHolder.coinName.setText(coin.getName());
-        viewHolder.coinPrice.setText(Formatters.money(settings, coin.getPrice()));
+        viewHolder.coinName.setText(coin.name());
+        viewHolder.coinPrice.setText(Formatters.money(settings, coin.price()));
         if (((ColorDrawable)viewHolder.coinFirstLine.getBackground()).getColor() != Color.TRANSPARENT) {
             var set = (AnimatorSet)AnimatorInflater.loadAnimator(getContext(), R.animator.fade_in);
             set.setTarget(viewHolder.coinFirstLine);
             set.start();
         }
 
-        viewHolder.coinRank.setText("#" + coin.getRank());
-        viewHolder.coinChange.setText(Formatters.changePercent(coin.getChange()));
-        if (coin.getChange() > 0) {
+        viewHolder.coinRank.setText("#" + coin.rank());
+        viewHolder.coinChange.setText(Formatters.changePercent(coin.change()));
+        if (coin.change() > 0) {
             viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.positive_color));
-        } else if (coin.getChange() < 0) {
+        } else if (coin.change() < 0) {
             viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.negative_color));
         } else {
             viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.secondary_text_color));
         }
 
-        if (coin.getExtraIndex() == 0) {
+        if (coin.visibleStat() == Coin.VISIBLE_STAT_MARKET_CAP) {
             viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_market_cap) + " "
-                + Formatters.money(settings, coin.getMarketCap()));
+                + Formatters.money(settings, coin.marketCap()));
         }
-        if (coin.getExtraIndex() == 1) {
+        if (coin.visibleStat() == Coin.VISIBLE_STAT_VOLUME) {
             viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_volume) + " "
-                + Formatters.money(settings, coin.getVolume()));
+                + Formatters.money(settings, coin.volume()));
         }
-        if (coin.getExtraIndex() == 2) {
+        if (coin.visibleStat() == Coin.VISIBLE_STAT_SUPPLY) {
             viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_supply) + " "
-                + Formatters.number(settings, coin.getSupply()));
+                + Formatters.number(settings, coin.supply()));
         }
 
         if (((ColorDrawable)viewHolder.coinSecondLine.getBackground()).getColor() != Color.TRANSPARENT) {
@@ -128,21 +128,21 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
             set.start();
         }
 
-        viewHolder.coinStarButton.setImageResource(coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
+        viewHolder.coinStarButton.setImageResource(coin.starred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
         viewHolder.coinStarButton.setOnClickListener(view -> {
-            coin.setStarred(!coin.getStarred());
+            var updatedCoin = coin.toggleStarred();
+
             viewHolder.coinStarButton.setImageResource(
-                coin.getStarred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
+                updatedCoin.starred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
 
             try {
                 var jsonStarredCoins = settings.getStarredCoins();
-                if (coin.getStarred()) {
-                    jsonStarredCoins.put(coin.getId());
+                if (updatedCoin.starred()) {
+                    jsonStarredCoins.put(updatedCoin.id());
                 } else {
                     for (var i = 0; i < jsonStarredCoins.length(); i++) {
-                        if (coin.getId().equals(jsonStarredCoins.getString(i))) {
+                        if (updatedCoin.id().equals(jsonStarredCoins.getString(i))) {
                             jsonStarredCoins.remove(i);
-                            break;
                         }
                     }
                 }
@@ -150,6 +150,9 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
             } catch (JSONException exception) {
                 Log.e(getContext().getPackageName(), "Can't update coin list item view", exception);
             }
+
+            remove(coin);
+            insert(updatedCoin, position);
         });
 
         var coinStarBackground = viewHolder.coinStarButton.getBackground();

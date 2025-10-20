@@ -6,105 +6,35 @@
 
 package ml.coinlist.android.models;
 
-public class Coin {
-    private final boolean empty;
-    private String id;
-    private int rank;
-    private String name;
-    private String imageUrl;
-    private double price;
-    private double change;
-    private double marketCap;
-    private double volume;
-    private double supply;
-    private int extraIndex;
-    private boolean starred;
+import org.json.JSONException;
+import org.json.JSONObject;
 
-    private Coin() {
-        this.empty = true;
-        this.id = "";
-        this.name = "";
-        this.imageUrl = "";
+public record Coin(boolean isPlaceholder, String id, int rank, String name, String imageUrl, double price,
+    double change, double marketCap, double volume, double supply, int visibleStat, boolean starred) {
+    public static final int VISIBLE_STAT_MARKET_CAP = 0;
+    public static final int VISIBLE_STAT_VOLUME = 1;
+    public static final int VISIBLE_STAT_SUPPLY = 2;
+
+    public static final Coin PLACEHOLDER = new Coin(true, "", 0, "", "", 0, 0, 0, 0, 0, VISIBLE_STAT_MARKET_CAP, false);
+
+    public static Coin fromJSON(JSONObject json, boolean isStarred) throws JSONException {
+        try {
+            return new Coin(false, json.getString("id"), json.getInt("market_cap_rank"), json.getString("name"),
+                json.getString("image"), json.getDouble("current_price"), json.getDouble("price_change_percentage_24h"),
+                json.getDouble("market_cap"), json.getDouble("total_volume"), json.getDouble("circulating_supply"),
+                VISIBLE_STAT_MARKET_CAP, isStarred);
+        } catch (JSONException e) {
+            return null;
+        }
     }
 
-    private Coin(String id, int rank, String name, String imageUrl, double price, double change, double marketCap,
-        double volume, double supply, boolean starred) {
-        this.empty = false;
-        this.id = id;
-        this.rank = rank;
-        this.name = name;
-        this.imageUrl = imageUrl;
-        this.price = price;
-        this.change = change;
-        this.marketCap = marketCap;
-        this.volume = volume;
-        this.supply = supply;
-        this.extraIndex = 0;
-        this.starred = starred;
+    public Coin nextVisibleStat() {
+        return new Coin(isPlaceholder, id, rank, name, imageUrl, price, change, marketCap, volume, supply,
+            (visibleStat + 1) % 3, starred);
     }
 
-    public static Coin createEmpty() {
-        return new Coin();
-    }
-
-    public static Coin createNormal(String id, int rank, String name, String imageUrl, double price, double change,
-        double marketCap, double volume, double supply, boolean starred) {
-        return new Coin(id, rank, name, imageUrl, price, change, marketCap, volume, supply, starred);
-    }
-
-    public boolean isEmpty() {
-        return empty;
-    }
-
-    public String getId() {
-        return id;
-    }
-
-    public int getRank() {
-        return rank;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public double getChange() {
-        return change;
-    }
-
-    public double getMarketCap() {
-        return marketCap;
-    }
-
-    public double getVolume() {
-        return volume;
-    }
-
-    public double getSupply() {
-        return supply;
-    }
-
-    public int getExtraIndex() {
-        return extraIndex;
-    }
-
-    public void setExtraIndex(int extraIndex) {
-        this.extraIndex = extraIndex;
-    }
-
-    public boolean getStarred() {
-        return starred;
-    }
-
-    public void setStarred(boolean starred) {
-        this.starred = starred;
+    public Coin toggleStarred() {
+        return new Coin(
+            isPlaceholder, id, rank, name, imageUrl, price, change, marketCap, volume, supply, visibleStat, !starred);
     }
 }
