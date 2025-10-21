@@ -9,7 +9,7 @@
 
         <activity android:name=".activities.MainActivity"
             android:launchMode="singleInstance"
-            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden"
             android:exported="true">
 
             <intent-filter>

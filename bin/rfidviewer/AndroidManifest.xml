@@ -13,7 +13,7 @@
 
         <activity android:name=".activities.MainActivity"
             android:launchMode="singleTask"
-            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden"
             android:exported="true">
 
             <intent-filter>
@@ -33,13 +33,13 @@
             android:parentActivityName=".activities.MainActivity"
             android:launchMode="singleTop"
             android:windowSoftInputMode="stateVisible|adjustResize"
-            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden"
             android:exported="false" />
 
         <activity android:name=".activities.SettingsActivity"
             android:parentActivityName=".activities.MainActivity"
             android:launchMode="singleTop"
-            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
+            android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden"
             android:exported="false" />
     </application>
 </manifest>
