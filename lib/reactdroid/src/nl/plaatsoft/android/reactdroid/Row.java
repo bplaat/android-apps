@@ -7,7 +7,11 @@
 package nl.plaatsoft.android.reactdroid;
 
 public class Row extends Box {
-    public Row(WidgetContext context) {
-        super(context, Box.Orientation.HORIZONTAL);
+    public Row(Modifier modifier, OnChildren onChildren) {
+        super(Box.Orientation.HORIZONTAL, modifier, onChildren);
+    }
+
+    public Row(OnChildren onChildren) {
+        this(null, onChildren);
     }
 }

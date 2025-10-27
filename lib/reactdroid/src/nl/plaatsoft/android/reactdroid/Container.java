@@ -10,14 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Container extends Widget {
-    protected List<Widget> children;
-
-    protected Container(WidgetContext context) {
-        super(context);
-        children = new ArrayList<Widget>();
+    public static interface OnChildren {
+        void onChildren();
     }
 
-    abstract public Container child(Widget child);
+    protected OnChildren onChildren;
 
-    abstract public Container child(List<Widget> children);
+    protected Container(Modifier modifier, OnChildren onChildren) {
+        super(modifier);
+        this.onChildren = onChildren;
+    }
+
+    protected Container(OnChildren onChildren) {
+        this(null, onChildren);
+    }
 }

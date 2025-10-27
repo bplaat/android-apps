@@ -18,38 +18,14 @@ import org.jspecify.annotations.Nullable;
 
 public class Text extends Widget {
     protected String text;
-    protected int textColor = -1;
-    protected int fontSize = -1;
-    protected int fontWeight = 400;
 
-    public Text(WidgetContext context) {
-        super(context);
-    }
-
-    public Text text(String text) {
+    public Text(String text, Modifier modifier) {
+        super(modifier);
         this.text = text;
-        return this;
     }
 
-    public Text fontSizeSp(int fontSize) {
-        this.fontSize = (int)TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_SP, fontSize, getContext().getResources().getDisplayMetrics());
-        return this;
-    }
-
-    public Text fontWeight(int fontWeight) {
-        this.fontWeight = fontWeight;
-        return this;
-    }
-
-    @SuppressWarnings("deprecation")
-    public Text textColorRes(int colorId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            textColor = new ContextWrapper(getContext()).getColor(colorId);
-        } else {
-            textColor = getContext().getResources().getColor(colorId);
-        }
-        return this;
+    public Text(String text) {
+        this(text, null);
     }
 
     @Override
@@ -61,40 +37,17 @@ public class Text extends Widget {
             if (view != null) {
                 int index = parent.indexOfChild(view);
                 parent.removeView(view);
-                textView = new TextView(getContext());
+                textView = new TextView(WidgetContext.getContext());
                 parent.addView(textView, index);
             } else {
-                textView = new TextView(getContext());
+                textView = new TextView(WidgetContext.getContext());
                 parent.addView(textView);
             }
             textView.setTag(key);
         }
 
-        textView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
-
-        if (!textView.getText().equals(text)) {
-            textView.setText(text);
-        }
-        if (textColor != -1) {
-            textView.setTextColor(textColor);
-        }
-        if (fontSize != -1 && textView.getTextSize() != fontSize) {
-            textView.setTextSize(fontSize);
-        }
-
-        var currentTypeface = textView.getTypeface();
-        var currentStyle = currentTypeface != null ? currentTypeface.getStyle() : Typeface.NORMAL;
-        if ((fontWeight == 700 && currentStyle != Typeface.BOLD)
-            || (fontWeight == 400 && currentStyle != Typeface.NORMAL)
-            || (fontWeight == 500
-                && (currentTypeface == null
-                    || !Typeface.create("sans-serif-medium", Typeface.NORMAL).equals(currentTypeface)))) {
-            if (fontWeight == 400)
-                textView.setTypeface(null, Typeface.NORMAL);
-            if (fontWeight == 500)
-                textView.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-            if (fontWeight == 700)
-                textView.setTypeface(null, Typeface.BOLD);
+        if (modifier != null) {
+            modifier.applyTo(textView);
         }
 
         return textView;

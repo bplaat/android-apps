@@ -7,7 +7,11 @@
 package nl.plaatsoft.android.reactdroid;
 
 public class Column extends Box {
-    public Column(WidgetContext context) {
-        super(context, Box.Orientation.VERTICAL);
+    public Column(Modifier modifier, OnChildren onChildren) {
+        super(Box.Orientation.VERTICAL, modifier, onChildren);
+    }
+
+    public Column(OnChildren onChildren) {
+        this(null, onChildren);
     }
 }

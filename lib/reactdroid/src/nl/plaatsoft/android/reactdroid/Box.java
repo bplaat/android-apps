@@ -19,37 +19,13 @@ public abstract class Box extends Container {
 
     protected Orientation orientation;
 
-    public Box(WidgetContext context, Orientation orientation) {
-        super(context);
+    public Box(Orientation orientation, Modifier modifier, OnChildren onChildren) {
+        super(modifier, onChildren);
         this.orientation = orientation;
     }
 
-    public Box paddingDp(int padding) {
-        super.paddingDp(padding);
-        return this;
-    }
-
-    public Box paddingDp(float paddingVertical, float paddingHorizontal) {
-        super.paddingDp(paddingVertical, paddingHorizontal);
-        return this;
-    }
-
-    @Override
-    public Box child(Widget child) {
-        if (child != null) {
-            children.add(child);
-        }
-        return this;
-    }
-
-    @Override
-    public Box child(List<Widget> children) {
-        for (var child : children) {
-            if (child != null) {
-                this.children.add(child);
-            }
-        }
-        return this;
+    public Box(Orientation orientation, OnChildren onChildren) {
+        this(orientation, null, onChildren);
     }
 
     @Override
@@ -61,10 +37,10 @@ public abstract class Box extends Container {
             if (view != null) {
                 int index = parent.indexOfChild(view);
                 parent.removeView(view);
-                linearLayout = new LinearLayout(getContext());
+                linearLayout = new LinearLayout(WidgetContext.getContext());
                 parent.addView(linearLayout, index);
             } else {
-                linearLayout = new LinearLayout(getContext());
+                linearLayout = new LinearLayout(WidgetContext.getContext());
                 parent.addView(linearLayout);
             }
             linearLayout.setOrientation(
@@ -72,14 +48,16 @@ public abstract class Box extends Container {
             linearLayout.setTag(key);
         }
 
-        linearLayout.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+        if (modifier != null) {
+            modifier.applyTo(linearLayout);
+        }
 
-        for (int i = 0; i < children.size(); i++) {
-            children.get(i).render(linearLayout, linearLayout.getChildAt(i));
-        }
-        for (int i = children.size(); i < linearLayout.getChildCount(); i++) {
-            linearLayout.removeViewAt(i);
-        }
+        // for (int i = 0; i < children.size(); i++) {
+        //     children.get(i).render(linearLayout, linearLayout.getChildAt(i));
+        // }
+        // for (int i = children.size(); i < linearLayout.getChildCount(); i++) {
+        //     linearLayout.removeViewAt(i);
+        // }
 
         return linearLayout;
     }

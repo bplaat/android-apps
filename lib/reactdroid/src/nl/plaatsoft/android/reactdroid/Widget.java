@@ -14,55 +14,20 @@ import android.view.ViewGroup;
 import org.jspecify.annotations.Nullable;
 
 public abstract class Widget {
-    protected WidgetContext c;
+    protected Modifier modifier;
     protected Object key;
-    protected int paddingTop;
-    protected int paddingRight;
-    protected int paddingBottom;
-    protected int paddingLeft;
 
-    protected Widget(WidgetContext c) {
-        this.c = c;
+    public Widget(Modifier modifier) {
+        this.modifier = modifier;
+        WidgetContext.widgets.add(this);
+    }
+
+    public Widget() {
+        this(null);
     }
 
     public Widget key(Object key) {
         this.key = key;
-        return this;
-    }
-
-    protected Context getContext() {
-        return c.getContext();
-    }
-
-    public Widget paddingDp(float padding) {
-        paddingTop = Utils.dpToPx(getContext(), padding);
-        paddingRight = paddingTop;
-        paddingBottom = paddingTop;
-        paddingLeft = paddingTop;
-        return this;
-    }
-
-    public Widget paddingDp(float paddingVertical, float paddingHorizontal) {
-        paddingTop = Utils.dpToPx(getContext(), paddingVertical);
-        paddingRight = Utils.dpToPx(getContext(), paddingHorizontal);
-        paddingBottom = paddingTop;
-        paddingLeft = paddingRight;
-        return this;
-    }
-
-    public Widget paddingDp(float paddingTop, float paddingRight, float paddingBottom) {
-        this.paddingTop = Utils.dpToPx(getContext(), paddingTop);
-        this.paddingRight = Utils.dpToPx(getContext(), paddingRight);
-        this.paddingBottom = Utils.dpToPx(getContext(), paddingBottom);
-        paddingLeft = this.paddingRight;
-        return this;
-    }
-
-    public Widget paddingDp(float paddingTop, float paddingRight, float paddingBottom, float paddingLeft) {
-        this.paddingTop = Utils.dpToPx(getContext(), paddingTop);
-        this.paddingRight = Utils.dpToPx(getContext(), paddingRight);
-        this.paddingBottom = Utils.dpToPx(getContext(), paddingBottom);
-        this.paddingLeft = Utils.dpToPx(getContext(), paddingLeft);
         return this;
     }
 

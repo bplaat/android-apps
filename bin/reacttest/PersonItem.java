@@ -49,18 +49,25 @@ public class PersonItem extends StatelessWidget {
         return this;
     }
 
-    public Widget build() {
-        return new Column(c)
-            .paddingDp(8, 16)
-            .child(!person.isDead() ? new Text(c).text("Hello " + person.name() + ", i'm " + person.age() + " old!")
-                                    : new Text(c)
-                                          .text("Oh no " + person.name() + " is dead!")
-                                          .textColorRes(R.color.secondary_text_color))
-            .child(!person.isDead()
-                    ? new Row(c)
-                          .child(new Button(c).text("+").onClick(view -> { onUpdate.onUpdate(person.ageInYears(1)); }))
-                          .child(new Button(c).text("-").onClick(view -> { onUpdate.onUpdate(person.ageInYears(-1)); }))
-                          .child(new Button(c).text("DEL").onClick(view -> { onDelete.onDelete(person.id()); }))
-                    : null);
+    public void build() {
+        new Column(new Modifier().padding(8, 16), () -> {
+            new Text("Text 1");
+            new Text("Text 2");
+            new Text("Text 3");
+        });
+
+        // return new Column(c)
+        //     .paddingDp(8, 16)
+        //     .child(!person.isDead() ? new Text(c).text("Hello " + person.name() + ", i'm " + person.age() + " old!")
+        //                             : new Text(c)
+        //                                   .text("Oh no " + person.name() + " is dead!")
+        //                                   .textColorRes(R.color.secondary_text_color))
+        //     .child(!person.isDead()
+        //             ? new Row(c)
+        //                   .child(new Button(c).text("+").onClick(view -> { onUpdate.onUpdate(person.ageInYears(1));
+        //                   })) .child(new Button(c).text("-").onClick(view -> {
+        //                   onUpdate.onUpdate(person.ageInYears(-1)); })) .child(new Button(c).text("DEL").onClick(view
+        //                   -> { onDelete.onDelete(person.id()); }))
+        //             : null);
     }
 }

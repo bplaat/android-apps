@@ -15,8 +15,8 @@ public abstract class StatefulWidget extends StatelessWidget {
     private ViewGroup parent;
     private View view;
 
-    protected StatefulWidget(WidgetContext c) {
-        super(c);
+    protected StatefulWidget() {
+        super();
     }
 
     public void refresh() {
@@ -26,6 +26,7 @@ public abstract class StatefulWidget extends StatelessWidget {
     @Override
     public View render(ViewGroup parent, @Nullable View view) {
         this.parent = parent;
-        return this.view = build().render(parent, view);
+        build();
+        // return this.view = .render(parent, view);
     }
 }

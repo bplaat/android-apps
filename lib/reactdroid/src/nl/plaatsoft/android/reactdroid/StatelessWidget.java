@@ -12,14 +12,17 @@ import android.view.ViewGroup;
 import org.jspecify.annotations.Nullable;
 
 public abstract class StatelessWidget extends Widget {
-    public StatelessWidget(WidgetContext c) {
-        super(c);
+    public StatelessWidget() {
+        super();
     }
 
-    abstract public Widget build();
+    abstract public void build();
 
     @Override
     public View render(ViewGroup parent, @Nullable View view) {
-        return build().render(parent, view);
+        var widgets = new ArrayList<Widget>();
+        WidgetContext.widgets = widgets;
+        build();
+        // return super.render(parent, view);
     }
 }
