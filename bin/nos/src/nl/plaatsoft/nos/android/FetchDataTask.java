@@ -1,16 +1,23 @@
+/*
+ * Copyright (c) 2019-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.nos.android;
 
-import android.content.Context;
-import android.os.Looper;
-import android.os.Handler;
 import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import android.content.Context;
+import android.os.Handler;
+import android.os.Looper;
 
 public class FetchDataTask {
     private static final Executor executor = Executors.newFixedThreadPool(4);
@@ -28,7 +35,8 @@ public class FetchDataTask {
     private boolean finished;
     private boolean canceled;
 
-    public FetchDataTask(Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
+    public FetchDataTask(
+        Context context, String url, boolean loadFomCache, boolean saveToCache, OnLoadListener onLoadListener) {
         this.context = context;
         this.url = url;
         this.loadFomCache = loadFomCache;
@@ -62,6 +70,7 @@ public class FetchDataTask {
         canceled = true;
     }
 
+    @SuppressWarnings("deprecation")
     private String fetchData() {
         try {
             File file = new File(context.getCacheDir(), Utils.md5(url));
@@ -93,8 +102,7 @@ public class FetchDataTask {
                 fileWriter.close();
             }
             return data;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }

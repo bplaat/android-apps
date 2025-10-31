@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2019-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.nos.android;
 
 import android.graphics.Typeface;
@@ -7,20 +13,20 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.Jsoup;
 
 public class ArticleActivity extends BaseActivity {
+    @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
 
         Article article = (Article)getIntent().getSerializableExtra("article");
 
-        ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener((View view) -> {
-            finish();
-        });
+        ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener((View view) -> { finish(); });
 
         new FetchImageTask(this, (ImageView)findViewById(R.id.article_image), article.getImageUrl(), true, true);
         ((TextView)findViewById(R.id.article_title_label)).setText(article.getTitle());
@@ -41,8 +47,11 @@ public class ArticleActivity extends BaseActivity {
                 }
 
                 if (child.nextElementSibling() != null) {
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(0, 0, 0, (int)TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()));
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(0, 0, 0,
+                        (int)TypedValue.applyDimension(
+                            TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()));
                     textView.setLayoutParams(params);
                 }
 

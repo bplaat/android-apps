@@ -1,11 +1,11 @@
+/*
+ * Copyright (c) 2019-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.nos.android;
 
-import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.Looper;
-import android.os.Handler;
-import android.widget.ImageView;
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -13,6 +13,13 @@ import java.io.FileOutputStream;
 import java.net.URL;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.ImageView;
 
 public class FetchImageTask {
     private static final Executor executor = Executors.newFixedThreadPool(4);
@@ -67,6 +74,7 @@ public class FetchImageTask {
         canceled = true;
     }
 
+    @SuppressWarnings("deprecation")
     private Bitmap fetchImage() {
         try {
             File file = new File(context.getCacheDir(), Utils.md5(url));
@@ -95,8 +103,7 @@ public class FetchImageTask {
             }
 
             return BitmapFactory.decodeByteArray(image, 0, image.length, options);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }

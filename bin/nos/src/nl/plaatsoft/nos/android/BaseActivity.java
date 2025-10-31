@@ -1,12 +1,19 @@
+/*
+ * Copyright (c) 2019-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.nos.android;
 
+import java.util.Locale;
+
 import android.app.Activity;
-import android.content.res.Configuration;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.PowerManager;
-import java.util.Locale;
 
 public abstract class BaseActivity extends Activity {
     protected SharedPreferences settings;
@@ -21,11 +28,11 @@ public abstract class BaseActivity extends Activity {
             Configuration configuration = new Configuration(context.getResources().getConfiguration());
 
             if (language == 0) {
-                configuration.setLocale(new Locale("en"));
+                configuration.setLocale(Locale.forLanguageTag("en"));
             }
 
             if (language == 1) {
-                configuration.setLocale(new Locale("nl"));
+                configuration.setLocale(Locale.forLanguageTag("nl"));
             }
 
             if (theme == 0) {

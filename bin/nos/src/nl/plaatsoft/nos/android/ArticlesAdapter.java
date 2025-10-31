@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2019-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.nos.android;
 
 import android.content.Context;
@@ -15,7 +21,7 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
     }
 
     public ArticlesAdapter(Context context) {
-       super(context, 0);
+        super(context, 0);
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {

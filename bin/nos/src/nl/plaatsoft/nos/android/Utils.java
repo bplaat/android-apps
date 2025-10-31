@@ -1,3 +1,9 @@
+/*
+ * Copyright (c) 2019-2025 Bastiaan van der Plaat
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 package nl.plaatsoft.nos.android;
 
 import java.security.MessageDigest;
@@ -15,8 +21,7 @@ public class Utils {
                 hash += String.format("%02x", bytes[i]);
             }
             return hash;
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
             return null;
         }
