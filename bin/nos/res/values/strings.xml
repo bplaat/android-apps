@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">NOS</string>
+
+    <string name="economy_title">Economy news</string>
+    <string name="economy_button">Economy</string>
+
+    <string name="latest_title">Latest news</string>
+    <string name="latest_button">Latest</string>
+
+    <string name="sports_title">Sports news</string>
+    <string name="sports_button">Sports</string>
+
+    <string name="tech_title">Tech news</string>
+    <string name="tech_button">Tech</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="settings_button">Settings</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_theme">Theme</string>
+    <string name="settings_cancel">Cancel</string>
+    <string name="settings_about">This application is made by Bastiaan van der Plaat but all the news data is from the NOS site</string>
+
+    <string-array name="languages">
+        <item>English</item>
+        <item>Nederlands</item>
+        <item>Use system default</item>
+    </string-array>
+
+    <string-array name="themes">
+        <item>Light</item>
+        <item>Dark</item>
+        <item>Set by Battery Saver</item>
+    </string-array>
+</resources>
