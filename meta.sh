@@ -4,11 +4,11 @@ set -e
 
 platform=$ANDROID_HOME/platforms/android-36/android.jar
 
-function clean() {
+clean() {
     find . -type d -name "target" -exec rm -rf {} +
 }
 
-function vscode() {
+vscode() {
     mkdir -p .vscode
     echo "{\"[java]\": {\"editor.defaultFormatter\": \"xaver.clang-format\", \"editor.formatOnSave\": true}," > .vscode/settings.json
     echo "\"java.saveActions.organizeImports\":true," >> .vscode/settings.json
@@ -29,9 +29,9 @@ function vscode() {
     echo "]}" >> .vscode/settings.json
 }
 
-function check_copyright() {
+check_copyright() {
     exit=0
-    for file in $(find . \( -name "*.java" -o -name "*.rs" \) ! -path "*/target/*"); do
+    for file in $(find . -type f \( -name "*.java" -o -name "*.rs" \) ! -path "*/target/*"); do
         if ! grep -E -q "Copyright \(c\) 20[0-9]{2}(-20[0-9]{2})? Bastiaan van der Plaat" "$file"; then
             echo "Bad copyright header in: $file"
             exit=1
@@ -42,19 +42,24 @@ function check_copyright() {
     fi
 }
 
-function check_format() {
+check_format() {
     # Format
     echo "Checking Java formatting..."
-    clang-format --dry-run --Werror $(find . -name "*.java" | grep -v "src-gen")
+    clang-format --dry-run --Werror $(find . -type f -name "*.java" ! -path "*/target/*")
 }
 
-function check() {
-    check_copyright
-    check_format
+build() {
+    echo "Building all projects..."
     # FIXME: Do null analysis
     for dir in $(ls bin); do
         bob build --time -C "bin/$dir"
     done
+}
+
+check() {
+    check_copyright
+    check_format
+    build
 }
 
 case "${1:-check}" in
