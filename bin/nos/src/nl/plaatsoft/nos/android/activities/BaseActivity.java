@@ -1,10 +1,10 @@
 /*
- * Copyright (c) 2020-2025 Bastiaan van der Plaat
+ * Copyright (c) 2019-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
 
-package nl.plaatsoft.bassietest.activities;
+package nl.plaatsoft.nos.android.activities;
 
 import java.util.Locale;
 
@@ -18,13 +18,12 @@ import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 
 import nl.plaatsoft.android.compat.WindowInsetsCompat;
-import nl.plaatsoft.bassietest.Settings;
+import nl.plaatsoft.nos.android.Settings;
 
 import org.jspecify.annotations.Nullable;
 
 public abstract class BaseActivity extends Activity {
     protected @SuppressWarnings("null") Settings settings;
-    private @Nullable OnBackInvokedCallback onBackCallback;
 
     // MARK: Context creation
     @Override
@@ -83,37 +82,5 @@ public abstract class BaseActivity extends Activity {
             }
             return windowInsets;
         });
-    }
-
-    // MARK: Back button
-    protected boolean shouldBackOverride() {
-        return false;
-    }
-
-    protected void onBack() {
-        // Default noop
-    }
-
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onBackPressed() {
-        if (shouldBackOverride()) {
-            onBack();
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    protected void updateBackListener() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (onBackCallback == null)
-                onBackCallback = () -> onBack();
-            if (shouldBackOverride()) {
-                getOnBackInvokedDispatcher().registerOnBackInvokedCallback(
-                    OnBackInvokedDispatcher.PRIORITY_DEFAULT, onBackCallback);
-            } else {
-                getOnBackInvokedDispatcher().unregisterOnBackInvokedCallback(onBackCallback);
-            }
-        }
     }
 }

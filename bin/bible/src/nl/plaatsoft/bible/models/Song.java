@@ -8,4 +8,6 @@ package nl.plaatsoft.bible.models;
 
 import java.io.Serializable;
 
-public record Song(int id, String number, String title) implements Serializable {}
+public record Song(int id, String number, String title) implements Serializable {
+    private static final long serialVersionUID = 1;
+}

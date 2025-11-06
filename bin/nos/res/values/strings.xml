@@ -2,34 +2,52 @@
 <resources>
     <string name="app_name" translatable="false">NOS</string>
 
-    <string name="economy_title">Economy news</string>
-    <string name="economy_button">Economy</string>
+    <!-- Menu options -->
+    <string name="menu_options_settings">Settings</string>
 
+    <!-- Main activity -->
     <string name="latest_title">Latest news</string>
     <string name="latest_button">Latest</string>
 
-    <string name="sports_title">Sports news</string>
-    <string name="sports_button">Sports</string>
+    <string name="economy_title">Economy news</string>
+    <string name="economy_button">Economy</string>
+
+    <string name="politics_title">Politics news</string>
+    <string name="politics_button">Politics</string>
 
     <string name="tech_title">Tech news</string>
     <string name="tech_button">Tech</string>
 
-    <string name="settings_title">Settings</string>
-    <string name="settings_button">Settings</string>
-    <string name="settings_language">Language</string>
-    <string name="settings_theme">Theme</string>
-    <string name="settings_cancel">Cancel</string>
-    <string name="settings_about">This application is made by Bastiaan van der Plaat but all the news data is from the NOS site</string>
+    <string name="sports_title">Sports news</string>
+    <string name="sports_button">Sports</string>
 
-    <string-array name="languages">
-        <item>English</item>
-        <item>Nederlands</item>
-        <item>Use system default</item>
-    </string-array>
+    <!-- Settings activity -->
+    <string name="settings_title_label">Settings</string>
 
-    <string-array name="themes">
-        <item>Light</item>
-        <item>Dark</item>
-        <item>Set by Battery Saver</item>
-    </string-array>
+    <string name="settings_display_label">Display</string>
+
+    <string name="settings_language_button">Language</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_dutch">Nederlands</string>
+    <string name="settings_language_system">Use system default</string>
+
+    <string name="settings_theme_button">Theme</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_battery_saver">Set by Battery Saver</string>
+    <string name="settings_theme_system">Use system default</string>
+
+    <string name="settings_information_label">Information</string>
+    <string name="settings_version_button">App version</string>
+    <string name="settings_version_message">Who, you are an amazing hacker!</string>
+    <string name="settings_rate_button">Rate this app</string>
+    <string name="settings_share_button">Share this app</string>
+    <string name="settings_share_message">Check out this cool app:</string>
+    <string name="settings_about_button">About this app</string>
+    <string name="settings_footer_button">This application is made by Bastiaan van der Plaat</string>
+
+    <string name="settings_about_alert_title_label">About this app</string>
+    <string name="settings_about_alert_message_label">This application is made by Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
 </resources>

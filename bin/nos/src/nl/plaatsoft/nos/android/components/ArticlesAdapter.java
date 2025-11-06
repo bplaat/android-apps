@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-package nl.plaatsoft.nos.android;
+package nl.plaatsoft.nos.android.components;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import nl.plaatsoft.android.compat.ContextCompat;
+import nl.plaatsoft.android.fetch.FetchImageTask;
+import nl.plaatsoft.nos.android.R;
+import nl.plaatsoft.nos.android.models.Article;
 
 public class ArticlesAdapter extends ArrayAdapter<Article> {
     private static class ViewHolder {
@@ -36,9 +41,14 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
-        Article article = getItem(position);
-        new FetchImageTask(getContext(), viewHolder.articleItemImage, article.getImageUrl(), true, true);
-        viewHolder.articleItemTitleLabel.setText(article.getTitle());
+        var article = getItem(position);
+        FetchImageTask.with(getContext())
+            .load(article.imageUrl())
+            .fadeIn()
+            .loadingColor(ContextCompat.getColor(getContext(), R.color.loading_color))
+            .into(viewHolder.articleItemImage)
+            .fetch();
+        viewHolder.articleItemTitleLabel.setText(article.title());
         return convertView;
     }
 }

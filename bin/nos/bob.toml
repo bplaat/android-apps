@@ -4,4 +4,10 @@ id = "nl.plaatsoft.nos.android"
 version = "3.0.0"
 
 [dependencies]
+compat = { path = "../../lib/compat" }
+fetch = { path = "../../lib/fetch" }
+jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
 jsoup = { maven = "org.jsoup:jsoup:1.21.2" }
+
+[package.metadata.android]
+main_activity = ".activities.MainActivity"

@@ -8,7 +8,7 @@
         android:icon="@mipmap/ic_launcher"
         android:theme="@style/Theme.App">
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".activities.MainActivity"
             android:launchMode="singleTask"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="true">
@@ -19,8 +19,14 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".ArticleActivity"
-            android:parentActivityName=".MainActivity"
+        <activity android:name=".activities.ArticleActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
+            android:exported="true" />
+
+        <activity android:name=".activities.SettingsActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:launchMode="singleTop"
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="true" />

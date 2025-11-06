@@ -29,54 +29,16 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
 
-                <ImageView android:id="@+id/latest_refresh_button"
+                <ImageButton android:id="@+id/latest_refresh_button"
                     android:src="@drawable/ic_refresh"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:scaleType="center" />
+                    style="@style/ActionBarIconButton" />
+
+                <ImageButton android:id="@+id/latest_options_button"
+                    android:src="@drawable/ic_dots_vertical"
+                    style="@style/ActionBarIconButton" />
             </LinearLayout>
 
             <ListView android:id="@+id/latest_articles_list"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:divider="@null"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:clipToPadding="false"
-                android:scrollbarStyle="outsideOverlay" />
-        </LinearLayout>
-
-        <!-- Sports tab -->
-        <LinearLayout android:id="@+id/sports_tab"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:visibility="gone">
-
-            <LinearLayout android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:background="@color/primary_color"
-                android:elevation="4dp">
-
-                <TextView android:text="@string/sports_title"
-                    android:layout_width="0dp"
-                    android:layout_height="56dp"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:textStyle="bold"
-                    android:textSize="20sp"
-                    android:paddingLeft="16dp"
-                    android:paddingRight="16dp" />
-
-                <ImageView android:id="@+id/sports_refresh_button"
-                    android:src="@drawable/ic_refresh"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:scaleType="center" />
-            </LinearLayout>
-
-            <ListView android:id="@+id/sports_articles_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -109,14 +71,58 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
 
-                <ImageView android:id="@+id/economy_refresh_button"
+                <ImageButton android:id="@+id/economy_refresh_button"
                     android:src="@drawable/ic_refresh"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:scaleType="center" />
+                    style="@style/ActionBarIconButton" />
+
+                <ImageButton android:id="@+id/economy_options_button"
+                    android:src="@drawable/ic_dots_vertical"
+                    style="@style/ActionBarIconButton" />
             </LinearLayout>
 
             <ListView android:id="@+id/economy_articles_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:divider="@null"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:clipToPadding="false"
+                android:scrollbarStyle="outsideOverlay" />
+        </LinearLayout>
+
+        <!-- Politics tab -->
+        <LinearLayout android:id="@+id/politics_tab"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:background="@color/primary_color"
+                android:elevation="4dp">
+
+                <TextView android:text="@string/politics_title"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:paddingLeft="16dp"
+                    android:paddingRight="16dp" />
+
+                <ImageButton android:id="@+id/politics_refresh_button"
+                    android:src="@drawable/ic_refresh"
+                    style="@style/ActionBarIconButton" />
+
+                <ImageButton android:id="@+id/politics_options_button"
+                    android:src="@drawable/ic_dots_vertical"
+                    style="@style/ActionBarIconButton" />
+            </LinearLayout>
+
+            <ListView android:id="@+id/politics_articles_list"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
@@ -149,11 +155,13 @@
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
 
-                <ImageView android:id="@+id/tech_refresh_button"
+                <ImageButton android:id="@+id/tech_refresh_button"
                     android:src="@drawable/ic_refresh"
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:scaleType="center" />
+                    style="@style/ActionBarIconButton"/>
+
+                <ImageButton android:id="@+id/tech_options_button"
+                    android:src="@drawable/ic_dots_vertical"
+                    style="@style/ActionBarIconButton" />
             </LinearLayout>
 
             <ListView android:id="@+id/tech_articles_list"
@@ -167,8 +175,8 @@
                 android:scrollbarStyle="outsideOverlay" />
         </LinearLayout>
 
-        <!-- Settings tab -->
-        <LinearLayout android:id="@+id/settings_tab"
+        <!-- Sports tab -->
+        <LinearLayout android:id="@+id/sports_tab"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
@@ -179,7 +187,7 @@
                 android:background="@color/primary_color"
                 android:elevation="4dp">
 
-                <TextView android:text="@string/settings_button"
+                <TextView android:text="@string/sports_title"
                     android:layout_width="0dp"
                     android:layout_height="56dp"
                     android:layout_weight="1"
@@ -188,61 +196,25 @@
                     android:textSize="20sp"
                     android:paddingLeft="16dp"
                     android:paddingRight="16dp" />
+
+                <ImageButton android:id="@+id/sports_refresh_button"
+                    android:src="@drawable/ic_refresh"
+                    style="@style/ActionBarIconButton" />
+
+                <ImageButton android:id="@+id/sports_options_button"
+                    android:src="@drawable/ic_dots_vertical"
+                    style="@style/ActionBarIconButton" />
             </LinearLayout>
 
-            <ScrollView android:layout_width="match_parent"
+            <ListView android:id="@+id/sports_articles_list"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1">
-
-                <LinearLayout android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp">
-
-                    <LinearLayout android:id="@+id/settings_language_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:padding="16dp">
-
-                        <TextView android:text="@string/settings_language"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView android:id="@+id/settings_language_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/secondary_text_color" />
-                    </LinearLayout>
-
-                    <LinearLayout android:id="@+id/settings_theme_button"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:padding="16dp">
-
-                        <TextView android:text="@string/settings_theme"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                        <TextView android:id="@+id/settings_theme_label"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/secondary_text_color" />
-                    </LinearLayout>
-
-                    <TextView android:id="@+id/settings_about_button"
-                        android:text="@string/settings_about"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="16dp"
-                        android:gravity="center_horizontal"
-                        android:textColor="@color/secondary_text_color" />
-                </LinearLayout>
-            </ScrollView>
+                android:layout_weight="1"
+                android:divider="@null"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:clipToPadding="false"
+                android:scrollbarStyle="outsideOverlay" />
         </LinearLayout>
     </FrameLayout>
 
@@ -268,23 +240,6 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <LinearLayout android:id="@+id/sports_button"
-            android:layout_width="0dp"
-            android:layout_height="56dp"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:alpha="@dimen/bottom_bar_button_inactive_alpha">
-
-            <ImageView android:src="@drawable/ic_basketball"
-                android:layout_width="24dp"
-                android:layout_height="24dp" />
-
-            <TextView android:text="@string/sports_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-        </LinearLayout>
-
         <LinearLayout android:id="@+id/economy_button"
             android:layout_width="0dp"
             android:layout_height="56dp"
@@ -298,6 +253,23 @@
                 android:layout_height="24dp" />
 
             <TextView android:text="@string/economy_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+        </LinearLayout>
+
+        <LinearLayout android:id="@+id/politics_button"
+            android:layout_width="0dp"
+            android:layout_height="56dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:alpha="@dimen/bottom_bar_button_inactive_alpha">
+
+            <ImageView android:src="@drawable/ic_bank"
+                android:layout_width="24dp"
+                android:layout_height="24dp" />
+
+            <TextView android:text="@string/politics_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
@@ -319,7 +291,7 @@
                 android:layout_height="wrap_content" />
         </LinearLayout>
 
-        <LinearLayout android:id="@+id/settings_button"
+        <LinearLayout android:id="@+id/sports_button"
             android:layout_width="0dp"
             android:layout_height="56dp"
             android:layout_weight="1"
@@ -327,11 +299,11 @@
             android:gravity="center"
             android:alpha="@dimen/bottom_bar_button_inactive_alpha">
 
-            <ImageView android:src="@drawable/ic_settings"
+            <ImageView android:src="@drawable/ic_basketball"
                 android:layout_width="24dp"
                 android:layout_height="24dp" />
 
-            <TextView android:text="@string/settings_button"
+            <TextView android:text="@string/sports_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
         </LinearLayout>
