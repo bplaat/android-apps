@@ -20,6 +20,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
+import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.WebSettingsCompat;
 
 import org.jspecify.annotations.Nullable;
@@ -127,6 +128,11 @@ public class MainActivity extends BaseActivity {
         } else {
             webviewPage.loadUrl("https://news.ycombinator.com/");
         }
+
+        // Show update alert
+        UpdateAlert.checkAndShow(this,
+            "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/hackernews/bob.toml",
+            "https://github.com/bplaat/android-apps/tree/master/bin/hackernews");
     }
 
     @Override

@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.WindowCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.redsquare.android.Consts;
@@ -41,7 +42,7 @@ import org.json.JSONObject;
 import org.jspecify.annotations.Nullable;
 
 public class MainActivity extends BaseActivity {
-    public static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
+    private static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 
     private final Handler handler = new Handler(Looper.getMainLooper());
     private @SuppressWarnings("null") String versionName;
@@ -310,6 +311,11 @@ public class MainActivity extends BaseActivity {
             settingsPage.setVisibility(View.GONE);
             menuPage.setVisibility(View.VISIBLE);
         });
+
+        // Show update alert
+        UpdateAlert.checkAndShow(this,
+            "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/redsquare/bob.toml",
+            "https://github.com/bplaat/android-apps/tree/master/bin/redsquare");
     }
 
     @Override

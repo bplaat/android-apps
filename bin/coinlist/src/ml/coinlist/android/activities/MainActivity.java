@@ -26,7 +26,6 @@ import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
-import nl.plaatsoft.android.alerts.RatingAlert;
 import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.fetch.FetchDataTask;
@@ -110,9 +109,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             coinsAdapter.remove(coin);
             coinsAdapter.insert(coin.nextVisibleStat(), index);
         });
-
-        // Show rating alert
-        RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
 
         // Show update alert
         UpdateAlert.checkAndShow(this,

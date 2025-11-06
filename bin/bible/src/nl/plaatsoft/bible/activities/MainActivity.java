@@ -24,7 +24,6 @@ import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import nl.plaatsoft.android.alerts.RatingAlert;
 import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.bible.R;
@@ -253,9 +252,6 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             handler.post(() -> openFromSettings());
         };
         installAssetsAndOpen.run();
-
-        // Show rating alert
-        RatingAlert.updateAndShow(this, SettingsActivity.STORE_PAGE_URL);
 
         // Show update alert
         UpdateAlert.checkAndShow(this,

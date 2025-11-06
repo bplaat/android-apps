@@ -27,6 +27,7 @@ import android.widget.PopupMenu;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.rfidviewer.R;
 import nl.plaatsoft.rfidviewer.tasks.MifareReadTask;
@@ -91,6 +92,11 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         var intent = getIntent();
         if (intent != null)
             onNewIntent(intent);
+
+        // Show update alert
+        UpdateAlert.checkAndShow(this,
+            "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/rfidviewer/bob.toml",
+            SettingsActivity.STORE_PAGE_URL);
     }
 
     @Override

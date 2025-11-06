@@ -4,6 +4,7 @@ id = "nl.plaatsoft.redsquare.android"
 version = "1.1.0"
 
 [dependencies]
+alerts = { path = "../../lib/alerts" }
 compat = { path = "../../lib/compat" }
 fetch = { path = "../../lib/fetch" }
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
