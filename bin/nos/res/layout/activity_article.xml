@@ -1,59 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    style="@style/Fill">
 
-    <LinearLayout android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/primary_color"
-        android:elevation="4dp">
-
-        <ImageView android:id="@+id/article_back_button"
+    <LinearLayout style="@style/ActionBar">
+        <ImageButton android:id="@+id/article_back_button"
             android:src="@drawable/ic_arrow_left"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
-            android:scaleType="center" />
+            style="@style/ActionBarIconButton" />
     </LinearLayout>
 
     <ScrollView android:id="@+id/article_scroll"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1">
+        style="@style/Flex">
 
-        <LinearLayout android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
+        <LinearLayout style="@style/Fill">
             <ImageView android:id="@+id/article_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop" />
+                style="@style/ArticlePageImage" />
 
-            <LinearLayout android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:orientation="vertical">
+            <LinearLayout android:id="@+id/article_content"
+                style="@style/ArticlePageContent">
 
                 <TextView android:id="@+id/article_title_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:textStyle="bold"
-                    android:textSize="20sp" />
+                    style="@style/ArticlePageTitle" />
 
                 <TextView android:id="@+id/article_date_label"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:textStyle="italic"
-                    android:textColor="@color/secondary_text_color" />
-
-                <LinearLayout android:id="@+id/article_content"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
+                  style="@style/ArticlePageDate" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

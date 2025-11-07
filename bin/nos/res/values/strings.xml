@@ -6,20 +6,19 @@
     <string name="menu_options_settings">Settings</string>
 
     <!-- Main activity -->
-    <string name="latest_title">Latest news</string>
-    <string name="latest_button">Latest</string>
+    <string name="main_latest_title">Latest news</string>
+    <string name="main_latest_button">Latest</string>
+    <string name="main_economy_title">Economy news</string>
+    <string name="main_economy_button">Economy</string>
+    <string name="main_politics_title">Politics news</string>
+    <string name="main_politics_button">Politics</string>
+    <string name="main_tech_title">Tech news</string>
+    <string name="main_tech_button">Tech</string>
+    <string name="main_sports_title">Sports news</string>
+    <string name="main_sports_button">Sports</string>
 
-    <string name="economy_title">Economy news</string>
-    <string name="economy_button">Economy</string>
-
-    <string name="politics_title">Politics news</string>
-    <string name="politics_button">Politics</string>
-
-    <string name="tech_title">Tech news</string>
-    <string name="tech_button">Tech</string>
-
-    <string name="sports_title">Sports news</string>
-    <string name="sports_button">Sports</string>
+    <!-- Article activity -->
+    <string name="article_date_label">Written on %s</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Settings</string>

@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import nl.plaatsoft.android.compat.ContextCompat;
+import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.android.fetch.FetchImageTask;
 import nl.plaatsoft.nos.android.R;
 import nl.plaatsoft.nos.android.models.Article;
@@ -24,13 +25,12 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 public class ArticleActivity extends BaseActivity {
-    @SuppressWarnings("deprecation")
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
         useWindowInsets(findViewById(R.id.article_scroll));
 
-        var article = (Article)getIntent().getSerializableExtra("article");
+        var article = IntentCompat.getSerializableExtra(getIntent(), "article", Article.class);
 
         ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener((View view) -> { finish(); });
 
@@ -41,7 +41,8 @@ public class ArticleActivity extends BaseActivity {
             .into(findViewById(R.id.article_image))
             .fetch();
         ((TextView)findViewById(R.id.article_title_label)).setText(article.title());
-        ((TextView)findViewById(R.id.article_date_label)).setText(article.date());
+        ((TextView)findViewById(R.id.article_date_label))
+            .setText(getString(R.string.article_date_label, article.date()));
 
         var articleContent = (LinearLayout)findViewById(R.id.article_content);
         var document = Jsoup.parse(article.content());
