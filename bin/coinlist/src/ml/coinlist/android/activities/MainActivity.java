@@ -164,9 +164,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     var jsonData = new JSONObject(new String(data, StandardCharsets.UTF_8)).getJSONObject("data");
 
                     ((TextView)globalInfo.findViewById(R.id.global_info_market_cap_text))
-                        .setText(getResources().getString(R.string.main_global_market_cap) + ": "
-                            + Formatters.money(settings,
-                                jsonData.getJSONObject("total_market_cap").getDouble(settings.getCurrencyName())));
+                        .setText(getResources().getString(R.string.main_global_market_cap,
+                            Formatters.money(settings,
+                                jsonData.getJSONObject("total_market_cap").getDouble(settings.getCurrencyName()))));
                     var marketCapChange = jsonData.getDouble("market_cap_change_percentage_24h_usd");
                     var marketCapChangeLabel = (TextView)globalInfo.findViewById(R.id.global_info_market_cap_change);
                     marketCapChangeLabel.setText(Formatters.changePercent(marketCapChange));
@@ -185,9 +185,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     }
 
                     var volumeLabel = (TextView)globalInfo.findViewById(R.id.global_info_volume);
-                    volumeLabel.setText(getResources().getString(R.string.main_global_volume) + ": "
-                        + Formatters.money(
-                            settings, jsonData.getJSONObject("total_volume").getDouble(settings.getCurrencyName())));
+                    volumeLabel.setText(getResources().getString(R.string.main_global_volume,
+                        Formatters.money(
+                            settings, jsonData.getJSONObject("total_volume").getDouble(settings.getCurrencyName()))));
                     if (((ColorDrawable)volumeLabel.getBackground()).getColor() != Color.TRANSPARENT) {
                         var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
                         set.setTarget(volumeLabel);
@@ -195,11 +195,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     }
 
                     var dominanceLabel = (TextView)globalInfo.findViewById(R.id.global_info_dominance);
-                    dominanceLabel.setText(getResources().getString(R.string.main_global_dominance) + ": "
-                        + "BTC "
-                        + Formatters.percent(jsonData.getJSONObject("market_cap_percentage").getDouble("btc")) + "  "
-                        + "ETH "
-                        + Formatters.percent(jsonData.getJSONObject("market_cap_percentage").getDouble("eth")));
+                    dominanceLabel.setText(getResources().getString(R.string.main_global_dominance,
+                        Formatters.percent(jsonData.getJSONObject("market_cap_percentage").getDouble("btc")),
+                        Formatters.percent(jsonData.getJSONObject("market_cap_percentage").getDouble("eth"))));
                     if (((ColorDrawable)dominanceLabel.getBackground()).getColor() != Color.TRANSPARENT) {
                         var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.text_fade_in);
                         set.setTarget(dominanceLabel);

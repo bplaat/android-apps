@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Rating alert -->
-    <string name="ratingalert_title_label">Rate $0?</string>
-    <string name="ratingalert_message_label">If you like $0, please take a moment to rate it. Thanks for your support!</string>
+    <string name="ratingalert_title_label">Rate %s?</string>
+    <string name="ratingalert_message_label">If you like %s, please take a moment to rate it. Thanks for your support!</string>
     <string name="ratingalert_rate_button">Rate</string>
     <string name="ratingalert_later_button">Later</string>
     <string name="ratingalert_never_button">Never</string>
 
     <!-- Update alert -->
-    <string name="updatealert_title_label">Update $0</string>
-    <string name="updatealert_message_label">A new version v$0 of $1 is released, download the update now!</string>
+    <string name="updatealert_title_label">Update %s</string>
+    <string name="updatealert_message_label">A new version v%1$s of %2$s is released, download the update now!</string>
     <string name="updatealert_update_button">Update</string>
     <string name="updatealert_later_button">Later</string>
 </resources>

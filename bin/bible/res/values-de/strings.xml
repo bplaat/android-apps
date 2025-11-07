@@ -50,7 +50,7 @@
     <string name="settings_version_message">Wow, du bist ein großartiger Hacker!</string>
     <string name="settings_rate_button">Diese App bewerten</string>
     <string name="settings_share_button">Diese App teilen</string>
-    <string name="settings_share_message">Schau dir diese coole App an:</string>
+    <string name="settings_share_message">Schau dir diese coole App an: %s</string>
     <string name="settings_about_button">Über diese App</string>
     <string name="settings_footer_button">Diese App wurde von Bastiaan van der Plaat erstellt</string>
 

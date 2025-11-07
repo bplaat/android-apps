@@ -4,13 +4,13 @@
     <string name="menu_options_settings">Instellingen</string>
 
     <!-- Main activity -->
-    <string name="main_global_market_cap">Totale Markt Kap</string>
-    <string name="main_global_volume">Volume (24h)</string>
-    <string name="main_global_dominance">Dominantie</string>
+    <string name="main_global_market_cap">Totale Markt Kap: %s</string>
+    <string name="main_global_volume">Volume (24h): %s</string>
+    <string name="main_global_dominance">Dominantie: BTC %1$s ETH %2$s</string>
 
-    <string name="main_extra_market_cap">MKap</string>
-    <string name="main_extra_volume">Volume</string>
-    <string name="main_extra_supply">Hoeveel</string>
+    <string name="main_extra_market_cap">MKap %s</string>
+    <string name="main_extra_volume">Volume %s</string>
+    <string name="main_extra_supply">Hoeveel %s</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Instellingen</string>
@@ -33,7 +33,7 @@
     <string name="settings_version_message">Who, jij bent een geweldige hacker!</string>
     <string name="settings_rate_button">Beoordeel deze app</string>
     <string name="settings_share_button">Deel deze app</string>
-    <string name="settings_share_message">Bekijk deze coole app:</string>
+    <string name="settings_share_message">Bekijk deze coole app: %s</string>
     <string name="settings_about_button">Over deze app</string>
     <string name="settings_footer_button">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
 

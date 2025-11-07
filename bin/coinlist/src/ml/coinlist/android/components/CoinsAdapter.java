@@ -110,16 +110,16 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         }
 
         if (coin.visibleStat() == Coin.VISIBLE_STAT_MARKET_CAP) {
-            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_market_cap) + " "
-                + Formatters.money(settings, coin.marketCap()));
+            viewHolder.coinExtra.setText(getContext().getResources().getString(
+                R.string.main_extra_market_cap, Formatters.money(settings, coin.marketCap())));
         }
         if (coin.visibleStat() == Coin.VISIBLE_STAT_VOLUME) {
-            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_volume) + " "
-                + Formatters.money(settings, coin.volume()));
+            viewHolder.coinExtra.setText(getContext().getResources().getString(
+                R.string.main_extra_volume, Formatters.money(settings, coin.volume())));
         }
         if (coin.visibleStat() == Coin.VISIBLE_STAT_SUPPLY) {
-            viewHolder.coinExtra.setText(getContext().getResources().getString(R.string.main_extra_supply) + " "
-                + Formatters.number(settings, coin.supply()));
+            viewHolder.coinExtra.setText(getContext().getResources().getString(
+                R.string.main_extra_supply, Formatters.number(settings, coin.supply())));
         }
 
         if (((ColorDrawable)viewHolder.coinSecondLine.getBackground()).getColor() != Color.TRANSPARENT) {

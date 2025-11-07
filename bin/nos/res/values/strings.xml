@@ -41,7 +41,7 @@
     <string name="settings_version_message">Who, you are an amazing hacker!</string>
     <string name="settings_rate_button">Rate this app</string>
     <string name="settings_share_button">Share this app</string>
-    <string name="settings_share_message">Check out this cool app:</string>
+    <string name="settings_share_message">Check out this cool app: %s</string>
     <string name="settings_about_button">About this app</string>
     <string name="settings_footer_button">This application is made by Bastiaan van der Plaat</string>
 

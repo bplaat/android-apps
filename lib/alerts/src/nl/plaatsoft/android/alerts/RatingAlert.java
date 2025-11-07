@@ -37,8 +37,8 @@ public class RatingAlert {
         if (launchCount >= LAUNCHES_UNTIL_PROMPT && System.currentTimeMillis() - firstLaunchTime >= TIME_UNTIL_PROMPT) {
             var appName = context.getPackageManager().getApplicationLabel(context.getApplicationInfo());
             new AlertDialog.Builder(context)
-                .setTitle(context.getString(R.string.ratingalert_title_label).replace("$0", appName))
-                .setMessage(context.getString(R.string.ratingalert_message_label).replace("$0", appName))
+                .setTitle(context.getString(R.string.ratingalert_title_label, appName))
+                .setMessage(context.getString(R.string.ratingalert_message_label, appName))
                 .setNeutralButton(R.string.ratingalert_later_button,
                     (dialog, which) -> {
                         // Reset the rating counters

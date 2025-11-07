@@ -37,7 +37,7 @@
     <string name="settings_version_message">Who, jij bent een geweldige hacker!</string>
     <string name="settings_rate_button">Beoordeel deze app</string>
     <string name="settings_share_button">Deel deze app</string>
-    <string name="settings_share_message">Bekijk deze coole app:</string>
+    <string name="settings_share_message">Bekijk deze coole app: %s</string>
     <string name="settings_about_button">Over deze app</string>
     <string name="settings_footer_button">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
 
