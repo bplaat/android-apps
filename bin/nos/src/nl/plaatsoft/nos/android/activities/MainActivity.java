@@ -34,8 +34,8 @@ import android.widget.ViewFlipper;
 
 import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.fetch.FetchDataTask;
-import nl.plaatsoft.nos.android.Config;
 import nl.plaatsoft.nos.android.R;
+import nl.plaatsoft.nos.android.RssParser;
 import nl.plaatsoft.nos.android.components.ArticlesAdapter;
 import nl.plaatsoft.nos.android.models.Article;
 
@@ -80,18 +80,18 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         // Init tabs
         tabs = new ArrayList<>();
-        tabs.add(new Tab("http://feeds.nos.nl/nosnieuwsalgemeen", getString(R.string.main_latest_title),
+        tabs.add(new Tab("https://feeds.nos.nl/nosnieuwsalgemeen", getString(R.string.main_latest_title),
             (ListView)findViewById(R.id.main_latest_articles_list),
             (LinearLayout)findViewById(R.id.main_latest_button)));
-        tabs.add(new Tab("http://feeds.nos.nl/nosnieuwseconomie", getString(R.string.main_economy_title),
+        tabs.add(new Tab("https://feeds.nos.nl/nosnieuwseconomie", getString(R.string.main_economy_title),
             (ListView)findViewById(R.id.main_economy_articles_list),
             (LinearLayout)findViewById(R.id.main_economy_button)));
-        tabs.add(new Tab("http://feeds.nos.nl/nosnieuwspolitiek", getString(R.string.main_politics_title),
+        tabs.add(new Tab("https://feeds.nos.nl/nosnieuwspolitiek", getString(R.string.main_politics_title),
             (ListView)findViewById(R.id.main_politics_articles_list),
             (LinearLayout)findViewById(R.id.main_politics_button)));
-        tabs.add(new Tab("http://feeds.nos.nl/nosnieuwstech", getString(R.string.main_tech_title),
+        tabs.add(new Tab("https://feeds.nos.nl/nosnieuwstech", getString(R.string.main_tech_title),
             (ListView)findViewById(R.id.main_tech_articles_list), (LinearLayout)findViewById(R.id.main_tech_button)));
-        tabs.add(new Tab("http://feeds.nos.nl/nossportalgemeen", getString(R.string.main_sports_title),
+        tabs.add(new Tab("https://feeds.nos.nl/nossportalgemeen", getString(R.string.main_sports_title),
             (ListView)findViewById(R.id.main_sports_articles_list),
             (LinearLayout)findViewById(R.id.main_sports_button)));
 
@@ -182,29 +182,21 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void fetchNewsData(String rssUrl, boolean loadFromCache, ArticlesAdapter articlesAdapter) {
-        try {
-            FetchDataTask.with(this)
-                .load("https://api.rss2json.com/v1/api.json?rss_url=" + URLEncoder.encode(rssUrl, "UTF-8"))
-                .loadFromCache(loadFromCache)
-                .saveToCache(true)
-                .then(data -> {
-                    try {
-                        var feed = new JSONObject(new String(data, StandardCharsets.UTF_8));
-                        var articles = feed.getJSONArray("items");
-                        articlesAdapter.clear();
-                        for (int i = 0; i < articles.length(); i++) {
-                            var article = articles.getJSONObject(i);
-                            articlesAdapter.add(new Article(article.getString("title"),
-                                article.getJSONObject("enclosure").getString("link"), article.getString("pubDate"),
-                                article.getString("content")));
-                        }
-                    } catch (Exception exception) {
-                        exception.printStackTrace();
+        FetchDataTask.with(this)
+            .load(rssUrl)
+            .loadFromCache(loadFromCache)
+            .saveToCache(true)
+            .then(data -> {
+                try {
+                    var articles = RssParser.parse(data);
+                    articlesAdapter.clear();
+                    for (var article : articles) {
+                        articlesAdapter.add(article);
                     }
-                })
-                .fetch();
-        } catch (Exception exception) {
-            exception.printStackTrace();
-        }
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            })
+            .fetch();
     }
 }
