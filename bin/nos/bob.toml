@@ -12,3 +12,6 @@ jsoup = { maven = "org.jsoup:jsoup:1.21.2" }
 
 [package.metadata.android]
 main_activity = ".activities.MainActivity"
+key_alias = ""
+keystore_password = "nos-android"
+key_password = "nos-android"
