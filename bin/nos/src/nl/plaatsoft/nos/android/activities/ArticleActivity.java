@@ -42,7 +42,7 @@ public class ArticleActivity extends BaseActivity {
             .fetch();
         ((TextView)findViewById(R.id.article_title_label)).setText(article.title());
         ((TextView)findViewById(R.id.article_date_label))
-            .setText(getString(R.string.article_date_label, article.date()));
+            .setText(getString(R.string.article_date_label, article.date().split(" \\+")[0]));
 
         var articleContent = (LinearLayout)findViewById(R.id.article_content);
         var document = Jsoup.parse(article.content());
@@ -53,8 +53,9 @@ public class ArticleActivity extends BaseActivity {
 
                 if (child.nodeName() == "h2") {
                     textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
-                    textView.setTextSize(18);
+                    textView.setTextSize(20);
                 } else {
+                    textView.setTextSize(18);
                     textView.setLineSpacing(0, 1.2f);
                 }
 

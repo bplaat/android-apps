@@ -184,13 +184,14 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">22sp</item>
     </style>
 
     <style name="ArticlePageDate">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">16dp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/secondary_text_color</item>
     </style>
