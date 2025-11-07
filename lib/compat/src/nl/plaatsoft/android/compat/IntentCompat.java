@@ -23,7 +23,7 @@ public class IntentCompat {
 
     @SuppressWarnings({"deprecation", "unchecked"})
     public static <T extends Serializable> T getSerializableExtra(Intent intent, String name, Class<T> clazz) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
             return intent.getSerializableExtra(name, clazz);
         return (T)intent.getSerializableExtra(name);
     }
