@@ -23,10 +23,11 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import nl.plaatsoft.android.alerts.UpdateAlert;
+import nl.plaatsoft.android.compat.CompatActivity;
 
 import org.jspecify.annotations.Nullable;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends CompatActivity {
     private @SuppressWarnings("null") WebView webviewPage;
     private @SuppressWarnings("null") LinearLayout disconnectedPage;
 

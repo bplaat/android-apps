@@ -1,10 +1,12 @@
 /*
- * Copyright (c) 2024-2025 Bastiaan van der Plaat
+ * Copyright (c) 2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
 
-package com.ycombinator.news;
+package nl.plaatsoft.android.compat;
+
+import java.util.Locale;
 
 import android.app.Activity;
 import android.os.Build;
@@ -12,11 +14,9 @@ import android.view.ViewGroup;
 import android.window.OnBackInvokedCallback;
 import android.window.OnBackInvokedDispatcher;
 
-import nl.plaatsoft.android.compat.WindowInsetsCompat;
-
 import org.jspecify.annotations.Nullable;
 
-public abstract class BaseActivity extends Activity {
+public abstract class CompatActivity extends Activity {
     private @Nullable OnBackInvokedCallback onBackCallback;
 
     // MARK: Window insets

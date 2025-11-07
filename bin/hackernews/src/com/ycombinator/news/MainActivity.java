@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Bastiaan van der Plaat
+ * Copyright (c) 2024-2025 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -21,11 +21,12 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import nl.plaatsoft.android.alerts.UpdateAlert;
+import nl.plaatsoft.android.compat.CompatActivity;
 import nl.plaatsoft.android.compat.WebSettingsCompat;
 
 import org.jspecify.annotations.Nullable;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends CompatActivity {
     private @SuppressWarnings("null") WebView webviewPage;
     private @SuppressWarnings("null") LinearLayout disconnectedPage;
 

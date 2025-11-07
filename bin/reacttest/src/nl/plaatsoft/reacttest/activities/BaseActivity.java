@@ -15,13 +15,13 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.view.ViewGroup;
 
+import nl.plaatsoft.android.compat.CompatActivity;
 import nl.plaatsoft.android.compat.WindowInsetsCompat;
 import nl.plaatsoft.reacttest.Settings;
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends CompatActivity {
     protected @SuppressWarnings("null") Settings settings;
 
-    // MARK: Context creation
     @Override
     public void attachBaseContext(@SuppressWarnings("null") Context context) {
         settings = new Settings(context);
@@ -61,14 +61,5 @@ public abstract class BaseActivity extends Activity {
             return;
         }
         super.attachBaseContext(context);
-    }
-
-    // MARK: Window insets
-    protected void useWindowInsets() {
-        getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
-            var insets = WindowInsetsCompat.getInsets(windowInsets);
-            view.setPadding(insets.left(), insets.top(), insets.right(), 0);
-            return windowInsets;
-        });
     }
 }

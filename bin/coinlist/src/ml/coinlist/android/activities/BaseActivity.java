@@ -15,14 +15,14 @@ import android.os.Build;
 import android.os.PowerManager;
 import android.view.ViewGroup;
 
+import nl.plaatsoft.android.compat.CompatActivity;
 import nl.plaatsoft.android.compat.WindowInsetsCompat;
 
 import ml.coinlist.android.Settings;
 
-public abstract class BaseActivity extends Activity {
+public abstract class BaseActivity extends CompatActivity {
     protected @SuppressWarnings("null") Settings settings;
 
-    // MARK: Context creation
     @Override
     public void attachBaseContext(@SuppressWarnings("null") Context context) {
         settings = new Settings(context);
@@ -62,22 +62,5 @@ public abstract class BaseActivity extends Activity {
             return;
         }
         super.attachBaseContext(context);
-    }
-
-    // MARK: Window insets
-    protected void useWindowInsets(ViewGroup... scrollViews) {
-        getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
-            var insets = WindowInsetsCompat.getInsets(windowInsets);
-            view.setPadding(insets.left(), insets.top(), insets.right(),
-                scrollViews != null && scrollViews.length > 0 ? 0 : insets.bottom());
-            if (scrollViews != null && scrollViews.length > 0) {
-                for (var scrollView : scrollViews) {
-                    scrollView.setClipToPadding(false);
-                    scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
-                        scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
-                }
-            }
-            return windowInsets;
-        });
     }
 }
