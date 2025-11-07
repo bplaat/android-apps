@@ -163,9 +163,18 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void openTab(int index, boolean withAnimation) {
+        if (withAnimation && viewFlipper.getDisplayedChild() == index)
+            return;
+
         var tab = tabs.get(index);
         titleLabel.setText(tab.title);
+
+        var inAnim = viewFlipper.getInAnimation();
+        if (!withAnimation)
+            viewFlipper.setInAnimation(null);
         viewFlipper.setDisplayedChild(index);
+        if (!withAnimation)
+            viewFlipper.setInAnimation(inAnim);
 
         for (var i = 0; i < tabs.size(); i++) {
             var button = tabs.get(i).button;
