@@ -22,7 +22,6 @@ import nl.plaatsoft.bassiemusic.Settings;
 public abstract class BaseActivity extends CompatActivity {
     protected @SuppressWarnings("null") Settings settings;
 
-    // MARK: Context creation
     @Override
     public void attachBaseContext(@SuppressWarnings("null") Context context) {
         settings = new Settings(context);
