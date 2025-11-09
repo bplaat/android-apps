@@ -130,7 +130,7 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
 
         viewHolder.coinStarButton.setImageResource(coin.starred() ? R.drawable.ic_star : R.drawable.ic_star_outline);
         viewHolder.coinStarButton.setOnClickListener(view -> {
-            var updatedCoin = coin.toggleStarred();
+            var updatedCoin = coin.withToggledStarred();
 
             viewHolder.coinStarButton.setImageResource(
                 updatedCoin.starred() ? R.drawable.ic_star : R.drawable.ic_star_outline);

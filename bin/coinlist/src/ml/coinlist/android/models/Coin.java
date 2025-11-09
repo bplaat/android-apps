@@ -28,12 +28,12 @@ public record Coin(boolean isPlaceholder, String id, int rank, String name, Stri
         }
     }
 
-    public Coin nextVisibleStat() {
+    public Coin withNextVisibleStat() {
         return new Coin(isPlaceholder, id, rank, name, imageUrl, price, change, marketCap, volume, supply,
             (visibleStat + 1) % 3, starred);
     }
 
-    public Coin toggleStarred() {
+    public Coin withToggledStarred() {
         return new Coin(
             isPlaceholder, id, rank, name, imageUrl, price, change, marketCap, volume, supply, visibleStat, !starred);
     }

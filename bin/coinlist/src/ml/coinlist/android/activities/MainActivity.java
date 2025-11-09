@@ -107,7 +107,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 return;
 
             coinsAdapter.remove(coin);
-            coinsAdapter.insert(coin.nextVisibleStat(), index);
+            coinsAdapter.insert(coin.withNextVisibleStat(), index);
         });
 
         // Show update alert

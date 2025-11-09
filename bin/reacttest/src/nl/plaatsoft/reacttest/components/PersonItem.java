@@ -58,8 +58,10 @@ public class PersonItem extends StatelessWidget {
                                           .textColorRes(R.color.secondary_text_color))
             .child(!person.isDead()
                     ? new Row(c)
-                          .child(new Button(c).text("+").onClick(view -> { onUpdate.onUpdate(person.ageInYears(1)); }))
-                          .child(new Button(c).text("-").onClick(view -> { onUpdate.onUpdate(person.ageInYears(-1)); }))
+                          .child(new Button(c).text("+").onClick(
+                              view -> { onUpdate.onUpdate(person.withAgeIncrement(1)); }))
+                          .child(new Button(c).text("-").onClick(
+                              view -> { onUpdate.onUpdate(person.withAgeIncrement(-1)); }))
                           .child(new Button(c).text("DEL").onClick(view -> { onDelete.onDelete(person.id()); }))
                     : null);
     }
