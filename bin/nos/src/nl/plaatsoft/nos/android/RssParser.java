@@ -23,7 +23,7 @@ public class RssParser {
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(new ByteArrayInputStream(input), null);
 
-        String title = "", imageUrl = "", date = "", content = "";
+        String title = "", imageUrl = "", date = "", content = "", externUrl = "";
         var insideItem = false;
 
         var eventType = parser.getEventType();
@@ -36,29 +36,25 @@ public class RssParser {
                         title = imageUrl = date = content = "";
                     } else if (insideItem) {
                         switch (tagName) {
-                            case "title", "pubDate", "description" -> {
+                            case "title", "pubDate", "description", "guid" -> {
                                 parser.next();
                                 if (parser.getEventType() == XmlPullParser.TEXT) {
-                                    String text = parser.getText();
+                                    var text = parser.getText();
                                     switch (tagName) {
                                         case "title" -> title = stripCdata(text);
                                         case "pubDate" -> date = text.trim();
                                         case "description" -> content = stripCdata(text);
+                                        case "guid" -> externUrl = text.trim();
                                     }
                                 }
                             }
-                            case "enclosure" -> {
-                                String type = parser.getAttributeValue(null, "type");
-                                if ("image/jpeg".equals(type)) {
-                                    imageUrl = parser.getAttributeValue(null, "url");
-                                }
-                            }
+                            case "enclosure" -> imageUrl = parser.getAttributeValue(null, "url");
                         }
                     }
                 }
                 case XmlPullParser.END_TAG -> {
                     if ("item".equals(tagName) && insideItem) {
-                        articles.add(new Article(title, imageUrl, date, content));
+                        articles.add(new Article(title, imageUrl, date, content, externUrl));
                         insideItem = false;
                     }
                 }

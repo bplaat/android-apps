@@ -6,6 +6,12 @@
         <ImageButton android:id="@+id/article_back_button"
             android:src="@drawable/ic_arrow_left"
             style="@style/ActionBarIconButton" />
+
+        <View style="@style/Flex" />
+
+        <ImageButton android:id="@+id/activity_share_button"
+            android:src="@drawable/ic_share_variant"
+            style="@style/ActionBarIconButton" />
     </LinearLayout>
 
     <ScrollView android:id="@+id/article_scroll"

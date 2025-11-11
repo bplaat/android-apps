@@ -35,6 +35,13 @@ public class ArticleActivity extends BaseActivity {
 
         findViewById(R.id.article_back_button).setOnClickListener(view -> { finish(); });
 
+        findViewById(R.id.activity_share_button).setOnClickListener(view -> {
+            var shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, article.title() + " - " + article.externUrl());
+            startActivity(Intent.createChooser(shareIntent, null));
+        });
+
         var articleImage = (ImageView)findViewById(R.id.article_image);
         articleImage.setOnClickListener(view -> {
             var intent = new Intent(this, ImageActivity.class);
