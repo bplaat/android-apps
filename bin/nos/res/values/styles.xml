@@ -24,6 +24,11 @@
         <item name="android:elevation">4dp</item>
     </style>
 
+    <style name="ActionBarTransparent">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="ActionBarTitle">
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">match_parent</item>
@@ -164,22 +169,22 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <!-- Article page -->
-    <style name="ArticlePageImage">
+    <!-- Article activity -->
+    <style name="ArticleActivityImage">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:adjustViewBounds">true</item>
         <item name="android:scaleType">centerCrop</item>
     </style>
 
-    <style name="ArticlePageContent">
+    <style name="ArticleActivityContent">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:padding">16dp</item>
         <item name="android:orientation">vertical</item>
     </style>
 
-    <style name="ArticlePageTitle">
+    <style name="ArticleActivityTitle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">16dp</item>
@@ -187,12 +192,24 @@
         <item name="android:textSize">20sp</item>
     </style>
 
-    <style name="ArticlePageDate">
+    <style name="ArticleActivityDate">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginBottom">16dp</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">italic</item>
         <item name="android:textColor">@color/secondary_text_color</item>
+    </style>
+
+    <!-- Image activity -->
+    <style name="ImageActivity">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">#000000</item>
+    </style>
+
+    <style name="ImageActivityImage">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
     </style>
 </resources>

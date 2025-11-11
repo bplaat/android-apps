@@ -13,16 +13,16 @@
 
         <LinearLayout style="@style/Fill">
             <ImageView android:id="@+id/article_image"
-                style="@style/ArticlePageImage" />
+                style="@style/ArticleActivityImage" />
 
             <LinearLayout android:id="@+id/article_content"
-                style="@style/ArticlePageContent">
+                style="@style/ArticleActivityContent">
 
                 <TextView android:id="@+id/article_title_label"
-                    style="@style/ArticlePageTitle" />
+                    style="@style/ArticleActivityTitle" />
 
                 <TextView android:id="@+id/article_date_label"
-                  style="@style/ArticlePageDate" />
+                  style="@style/ArticleActivityDate" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

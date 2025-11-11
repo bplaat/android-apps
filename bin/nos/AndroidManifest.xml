@@ -25,6 +25,12 @@
             android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
             android:exported="true" />
 
+        <activity android:name=".activities.ImageActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleTop"
+            android:configChanges="orientation|screenLayout|screenSize|smallestScreenSize"
+            android:exported="true" />
+
         <activity android:name=".activities.SettingsActivity"
             android:parentActivityName=".activities.MainActivity"
             android:launchMode="singleTop"

@@ -6,6 +6,7 @@
 
 package nl.plaatsoft.nos.android.activities;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -32,14 +33,21 @@ public class ArticleActivity extends BaseActivity {
 
         var article = IntentCompat.getSerializableExtra(getIntent(), "article", Article.class);
 
-        ((ImageView)findViewById(R.id.article_back_button)).setOnClickListener((View view) -> { finish(); });
+        findViewById(R.id.article_back_button).setOnClickListener(view -> { finish(); });
 
+        var articleImage = (ImageView)findViewById(R.id.article_image);
+        articleImage.setOnClickListener(view -> {
+            var intent = new Intent(this, ImageActivity.class);
+            intent.putExtra("url", article.imageUrl());
+            startActivity(intent);
+        });
         FetchImageTask.with(this)
             .load(article.imageUrl())
             .fadeIn()
             .loadingColor(ContextCompat.getColor(this, R.color.loading_color))
-            .into(findViewById(R.id.article_image))
+            .into(articleImage)
             .fetch();
+
         ((TextView)findViewById(R.id.article_title_label)).setText(article.title());
         ((TextView)findViewById(R.id.article_date_label))
             .setText(getString(R.string.article_date_label, article.date().split(" \\+")[0]));

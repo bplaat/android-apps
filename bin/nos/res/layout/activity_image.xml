@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ImageActivity">
+
+    <nl.plaatsoft.nos.android.views.ZoomableImageView
+        android:id="@+id/image_image"
+        style="@style/ImageActivityImage" />
+
+    <LinearLayout style="@style/ActionBarTransparent">
+        <ImageButton android:id="@+id/image_back_button"
+            android:src="@drawable/ic_arrow_left"
+            style="@style/ActionBarIconButton" />
+    </LinearLayout>
+</FrameLayout>

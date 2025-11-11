@@ -27,9 +27,11 @@ public abstract class CompatActivity extends Activity {
                 scrollViews != null && scrollViews.length > 0 ? 0 : insets.bottom());
             if (scrollViews != null && scrollViews.length > 0) {
                 for (var scrollView : scrollViews) {
-                    scrollView.setClipToPadding(false);
-                    scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
-                        scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
+                    if (scrollView != null) {
+                        scrollView.setClipToPadding(false);
+                        scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
+                            scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
+                    }
                 }
             }
             return windowInsets;

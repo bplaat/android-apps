@@ -45,8 +45,8 @@ public class SearchActivity extends BaseActivity {
         var searchAdapter = new MusicAdapter(this);
         searchList.setAdapter(searchAdapter);
         searchList.setOnItemClickListener((AdapterView<?> adapterView, View view, int position, long id) -> {
-            Music musicItem = searchAdapter.getItem(position);
-            Intent intent = getIntent();
+            var musicItem = searchAdapter.getItem(position);
+            var intent = getIntent();
             intent.putExtra("id", musicItem.getId());
             setResult(Activity.RESULT_OK, intent);
             finish();

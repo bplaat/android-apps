@@ -100,7 +100,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             var articlesAdapter = new ArticlesAdapter(this);
             tab.listView.setAdapter(articlesAdapter);
             tab.listView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
-                Intent intent = new Intent(this, ArticleActivity.class);
+                var intent = new Intent(this, ArticleActivity.class);
                 intent.putExtra("article", articlesAdapter.getItem(position));
                 startActivity(intent);
             });
