@@ -53,9 +53,9 @@ public class ArticleActivity extends BaseActivity {
 
                 if (child.nodeName() == "h2") {
                     textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
-                    textView.setTextSize(20);
-                } else {
                     textView.setTextSize(18);
+                } else {
+                    textView.setTextSize(16);
                     textView.setLineSpacing(0, 1.2f);
                 }
 
