@@ -9,6 +9,12 @@ package nl.plaatsoft.nos.android.activities;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.Spanned;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
+import android.text.style.StyleSpan;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
@@ -55,36 +61,55 @@ public class ArticleActivity extends BaseActivity {
             .into(articleImage)
             .fetch();
 
-        ((TextView)findViewById(R.id.article_title_label)).setText(article.title());
-        ((TextView)findViewById(R.id.article_date_label))
-            .setText(getString(R.string.article_date_label, article.date().split(" \\+")[0]));
+        // Fill article contents
+        var contents = (TextView)findViewById(R.id.article_contents);
 
-        var articleContent = (LinearLayout)findViewById(R.id.article_content);
+        var spannable = new SpannableStringBuilder();
+
+        var titleSpannable = new SpannableStringBuilder(article.title() + "\n");
+        titleSpannable.setSpan(
+            new StyleSpan(Typeface.BOLD), 0, titleSpannable.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        titleSpannable.setSpan(
+            new RelativeSizeSpan(1.25f), 0, titleSpannable.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.append(titleSpannable);
+
+        var newlineSpannable = new SpannableStringBuilder("\n");
+        newlineSpannable.setSpan(new RelativeSizeSpan(0.5f), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.append(newlineSpannable);
+
+        var dateSpannable =
+            new SpannableStringBuilder(getString(R.string.article_date_label, article.date().split(" \\+")[0]) + "\n");
+        dateSpannable.setSpan(
+            new StyleSpan(Typeface.ITALIC), 0, dateSpannable.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        dateSpannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, R.color.secondary_text_color)), 0,
+            dateSpannable.length() - 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.append(dateSpannable);
+
+        var newlineSpannable2 = new SpannableStringBuilder("\n");
+        newlineSpannable2.setSpan(new RelativeSizeSpan(0.5f), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannable.append(newlineSpannable2);
+
         var document = Jsoup.parse(article.content());
         for (var child : document.body().children()) {
             if (child.nodeName() == "h2" || child.nodeName() == "p") {
-                var textView = new TextView(this);
-                textView.setText(child.text());
-
+                var spannablePart =
+                    new SpannableStringBuilder(child.text() + (child.nextElementSibling() != null ? "\n" : ""));
                 if (child.nodeName() == "h2") {
-                    textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
-                    textView.setTextSize(18);
-                } else {
-                    textView.setTextSize(16);
-                    textView.setLineSpacing(0, 1.2f);
+                    spannablePart.setSpan(
+                        new StyleSpan(Typeface.BOLD), 0, spannablePart.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannablePart.setSpan(
+                        new RelativeSizeSpan(1.11f), 0, spannablePart.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
+                spannable.append(spannablePart);
 
                 if (child.nextElementSibling() != null) {
-                    var params = new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(0, 0, 0,
-                        (int)TypedValue.applyDimension(
-                            TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics()));
-                    textView.setLayoutParams(params);
+                    var newlineSpannable3 = new SpannableStringBuilder("\n");
+                    newlineSpannable3.setSpan(new RelativeSizeSpan(0.5f), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.append(newlineSpannable3);
                 }
-
-                articleContent.addView(textView);
             }
         }
+
+        contents.setText(spannable);
     }
 }

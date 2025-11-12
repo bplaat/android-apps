@@ -21,15 +21,8 @@
             <ImageView android:id="@+id/article_image"
                 style="@style/ArticleActivityImage" />
 
-            <LinearLayout android:id="@+id/article_content"
-                style="@style/ArticleActivityContent">
-
-                <TextView android:id="@+id/article_title_label"
-                    style="@style/ArticleActivityTitle" />
-
-                <TextView android:id="@+id/article_date_label"
-                  style="@style/ArticleActivityDate" />
-            </LinearLayout>
+            <TextView android:id="@+id/article_contents"
+                style="@style/ArticleActivityContents" />
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
