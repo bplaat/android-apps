@@ -461,8 +461,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         drawerBibles.removeAllViews();
         for (var bible : bibles) {
             var listItemButton = new LinearLayout(this, null, 0, R.style.ListItemButton);
-            listItemButton.setLayoutParams(
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int)(56 * density)));
+            listItemButton.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             if (openType == Settings.OPEN_TYPE_BIBLE && openBible != null
                 && bible.path().equals(Objects.requireNonNull(openBible).path()))
                 listItemButton.setBackgroundResource(R.drawable.list_item_button_selected);
@@ -495,8 +495,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         drawerSongBundles.removeAllViews();
         for (var songBundle : songBundles) {
             var listItemButton = new LinearLayout(this, null, 0, R.style.ListItemButton);
-            listItemButton.setLayoutParams(
-                new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, (int)(56 * density)));
+            listItemButton.setLayoutParams(new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
             if (openType == Settings.OPEN_TYPE_SONG_BUNDLE && openSongBundle != null
                 && songBundle.path().equals(Objects.requireNonNull(openSongBundle).path()))
                 listItemButton.setBackgroundResource(R.drawable.list_item_button_selected);
