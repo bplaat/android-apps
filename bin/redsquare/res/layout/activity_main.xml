@@ -319,7 +319,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
 
             <TextView android:id="@+id/settings_language_label"
                 android:layout_width="wrap_content"
@@ -338,7 +340,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:singleLine="true"
+                android:ellipsize="end" />
 
             <TextView android:id="@+id/settings_theme_label"
                 android:layout_width="wrap_content"

@@ -16,6 +16,10 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
@@ -163,27 +167,31 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
                     var jsonData = new JSONObject(new String(data, StandardCharsets.UTF_8)).getJSONObject("data");
 
-                    ((TextView)globalInfo.findViewById(R.id.global_info_market_cap_text))
-                        .setText(getResources().getString(R.string.main_global_market_cap,
+                    // Market Cap label
+                    var marketCapLabel = (TextView)globalInfo.findViewById(R.id.global_info_market_cap);
+                    var spannable = new SpannableStringBuilder();
+                    spannable.append(
+                        getResources().getString(R.string.main_global_market_cap,
                             Formatters.money(settings,
-                                jsonData.getJSONObject("total_market_cap").getDouble(settings.getCurrencyName()))));
+                                jsonData.getJSONObject("total_market_cap").getDouble(settings.getCurrencyName())))
+                        + " ");
                     var marketCapChange = jsonData.getDouble("market_cap_change_percentage_24h_usd");
-                    var marketCapChangeLabel = (TextView)globalInfo.findViewById(R.id.global_info_market_cap_change);
-                    marketCapChangeLabel.setText(Formatters.changePercent(marketCapChange));
-                    if (marketCapChange > 0) {
-                        marketCapChangeLabel.setTextColor(ContextCompat.getColor(this, R.color.positive_color));
-                    } else if (marketCapChange < 0) {
-                        marketCapChangeLabel.setTextColor(ContextCompat.getColor(this, R.color.negative_color));
-                    } else {
-                        marketCapChangeLabel.setTextColor(ContextCompat.getColor(this, R.color.secondary_text_color));
-                    }
-                    var marketCapLine = globalInfo.findViewById(R.id.global_info_market_cap_line);
-                    if (((ColorDrawable)marketCapLine.getBackground()).getColor() != Color.TRANSPARENT) {
+                    var colorRes = marketCapChange > 0
+                        ? R.color.positive_color
+                        : (marketCapChange < 0 ? R.color.negative_color : R.color.secondary_text_color);
+                    String changeText = Formatters.changePercent(marketCapChange);
+                    var changeSpannable = new SpannableString(changeText);
+                    changeSpannable.setSpan(new ForegroundColorSpan(ContextCompat.getColor(this, colorRes)), 0,
+                        changeText.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.append(changeSpannable);
+                    marketCapLabel.setText(spannable);
+                    if (((ColorDrawable)marketCapLabel.getBackground()).getColor() != Color.TRANSPARENT) {
                         var set = (AnimatorSet)AnimatorInflater.loadAnimator(this, R.animator.fade_in);
-                        set.setTarget(marketCapLine);
+                        set.setTarget(marketCapLabel);
                         set.start();
                     }
 
+                    // Volume label
                     var volumeLabel = (TextView)globalInfo.findViewById(R.id.global_info_volume);
                     volumeLabel.setText(getResources().getString(R.string.main_global_volume,
                         Formatters.money(
@@ -194,6 +202,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                         set.start();
                     }
 
+                    // Dominance label
                     var dominanceLabel = (TextView)globalInfo.findViewById(R.id.global_info_dominance);
                     dominanceLabel.setText(getResources().getString(R.string.main_global_dominance,
                         Formatters.percent(jsonData.getJSONObject("market_cap_percentage").getDouble("btc")),

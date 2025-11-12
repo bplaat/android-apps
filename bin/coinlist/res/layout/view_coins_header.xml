@@ -2,15 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/GlobalInfo">
 
-    <LinearLayout android:id="@+id/global_info_market_cap_line"
-        style="@style/GlobalInfoMarketCap">
-
-        <TextView android:id="@+id/global_info_market_cap_text"
-            style="@style/GlobalInfoMarketCapText" />
-
-        <TextView android:id="@+id/global_info_market_cap_change"
-            style="@style/GlobalInfoMarketCapChange" />
-    </LinearLayout>
+    <TextView android:id="@+id/global_info_market_cap"
+        style="@style/GlobalInfoMarketCap" />
 
     <TextView android:id="@+id/global_info_volume"
         style="@style/GlobalInfoVolume" />
