@@ -14,6 +14,7 @@ import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.util.AttributeSet;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -44,7 +45,7 @@ public class SongView extends ScrollView {
     @SuppressWarnings("this-escape")
     public SongView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        root = new LinearLayout(context, null, 0, R.style.SongView);
+        root = (LinearLayout)LayoutInflater.from(getContext()).inflate(R.layout.item_song_view, this, false);
         addView(root);
     }
 

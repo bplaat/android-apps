@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Containers -->
+    <style name="Container" parent="Fill">
+        <item name="android:layout_width">600dp</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+    </style>
+</resources>

@@ -184,6 +184,8 @@
 
     <!-- Chapter View -->
     <style name="ChapterView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
         <item name="android:orientation">vertical</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingLeft">16dp</item>

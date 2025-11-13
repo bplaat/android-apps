@@ -36,8 +36,8 @@ import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.fetch.FetchDataTask;
 import nl.plaatsoft.nos.android.R;
 import nl.plaatsoft.nos.android.RssParser;
-import nl.plaatsoft.nos.android.components.ArticlesAdapter;
 import nl.plaatsoft.nos.android.models.Article;
+import nl.plaatsoft.nos.android.views.ArticlesAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;

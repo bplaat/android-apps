@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: MIT
  */
 
-package nl.plaatsoft.nos.android.components;
+package nl.plaatsoft.nos.android.views;
 
 import android.content.Context;
 import android.view.LayoutInflater;

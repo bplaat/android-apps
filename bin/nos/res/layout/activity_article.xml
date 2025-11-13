@@ -17,7 +17,7 @@
     <ScrollView android:id="@+id/article_scroll"
         style="@style/Flex">
 
-        <LinearLayout style="@style/Fill">
+        <LinearLayout style="@style/Container">
             <ImageView android:id="@+id/article_image"
                 style="@style/ArticleActivityImage" />
 

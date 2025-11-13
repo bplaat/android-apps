@@ -16,6 +16,8 @@
         <item name="android:fillViewport">true</item>
     </style>
 
+    <style name="Container" parent="Fill"></style>
+
     <!-- Action bar -->
     <style name="ActionBar">
         <item name="android:layout_width">match_parent</item>
