@@ -13,6 +13,11 @@ import nl.plaatsoft.android.fetch.FetchImageTask;
 import nl.plaatsoft.nos.android.R;
 
 public class ImageActivity extends BaseActivity {
+    @Override
+    protected boolean forceDarkMode() {
+        return true;
+    }
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_image);
