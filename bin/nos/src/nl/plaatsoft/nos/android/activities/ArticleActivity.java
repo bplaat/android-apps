@@ -95,10 +95,9 @@ public class ArticleActivity extends BaseActivity {
                 var spannablePart =
                     new SpannableStringBuilder(child.text() + (child.nextElementSibling() != null ? "\n" : ""));
                 if (child.nodeName() == "h2") {
-                    spannablePart.setSpan(
-                        new StyleSpan(Typeface.BOLD), 0, spannablePart.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    spannablePart.setSpan(
-                        new RelativeSizeSpan(1.11f), 0, spannablePart.length() - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    var length = spannablePart.length() - (child.nextElementSibling() != null ? 1 : 0);
+                    spannablePart.setSpan(new StyleSpan(Typeface.BOLD), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannablePart.setSpan(new RelativeSizeSpan(1.11f), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 spannable.append(spannablePart);
 
