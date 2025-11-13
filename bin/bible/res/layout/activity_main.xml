@@ -37,7 +37,7 @@
                 style="@style/Fill">
 
                 <LinearLayout style="@style/Hero">
-                    <ImageView android:src="@drawable/ic_bookshelf"
+                    <ImageView android:src="@drawable/ic_bookshelf_hero"
                         style="@style/HeroIcon" />
 
                     <TextView android:text="@string/main_chapter_not_available_title_label"

@@ -24,7 +24,7 @@
             style="@style/Flex">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_wifi_off"
+                <ImageView android:src="@drawable/ic_wifi_off_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/main_disconnected_title_label"

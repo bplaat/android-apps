@@ -55,7 +55,7 @@
             style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_credit_card_scan"
+                <ImageView android:src="@drawable/ic_credit_card_scan_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/write_waiting_title_label"
@@ -72,7 +72,7 @@
             style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_credit_card_sync"
+                <ImageView android:src="@drawable/ic_credit_card_sync_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/write_writing_title_label"
@@ -89,7 +89,7 @@
             style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_credit_card_check"
+                <ImageView android:src="@drawable/ic_credit_card_check_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/write_success_title_label"
@@ -110,7 +110,7 @@
             style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_alert"
+                <ImageView android:src="@drawable/ic_alert_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/write_error_title_label"

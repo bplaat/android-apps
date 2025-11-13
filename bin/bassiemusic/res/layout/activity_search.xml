@@ -49,7 +49,7 @@
             style="@style/Scroll">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_playlist_music"
+                <ImageView android:src="@drawable/ic_playlist_music_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/search_empty_title_label"

@@ -21,7 +21,7 @@
             style="@style/Fill">
 
             <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_clock"
+                <ImageView android:src="@drawable/ic_clock_hero"
                     style="@style/HeroIcon" />
 
                 <TextView android:text="@string/main_landing_title_label"
