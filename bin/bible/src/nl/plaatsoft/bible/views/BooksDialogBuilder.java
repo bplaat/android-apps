@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Handler;
 import android.os.Looper;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -24,8 +23,6 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Book book);
     }
-
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     @SuppressWarnings("this-escape")
     public BooksDialogBuilder(
@@ -55,7 +52,7 @@ public class BooksDialogBuilder extends AlertDialog.Builder {
                 booksFlowLayout.addView(bookButton);
 
                 if (book.key().equals(currentBookKey))
-                    handler.post(() -> root.scrollTo(0, bookButton.getTop()));
+                    root.post(() -> root.scrollTo(0, bookButton.getTop()));
             }
         }
     }

@@ -8,7 +8,6 @@ package nl.plaatsoft.bible.views;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.os.Handler;
 import android.os.Looper;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -40,7 +39,6 @@ public class ChapterView extends ScrollView {
         void onNext();
     }
 
-    private Handler handler = new Handler(Looper.getMainLooper());
     private final LinearLayout root;
     private Typeface typeface = Typeface.create(Typeface.SERIF, Typeface.NORMAL);
     private @Nullable OnPreviousListener onPreviousListener;
@@ -133,11 +131,11 @@ public class ChapterView extends ScrollView {
 
         // Restore previous scroll position
         if (previousScrollY > 0 && highlightVerseId == -1)
-            handler.post(() -> scrollTo(0, previousScrollY));
+            post(() -> scrollTo(0, previousScrollY));
 
         // Or scroll to offset
         if (scrollToOffset[0] != -1) {
-            handler.post(() -> {
+            post(() -> {
                 var layout = versesView.getLayout();
                 var line = layout.getLineForOffset(scrollToOffset[0]);
                 scrollTo(0, layout.getLineTop(line));

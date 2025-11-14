@@ -23,16 +23,16 @@ public abstract class CompatActivity extends Activity {
     protected void useWindowInsets(ViewGroup... scrollViews) {
         getWindow().getDecorView().setOnApplyWindowInsetsListener((view, windowInsets) -> {
             var insets = WindowInsetsCompat.getInsets(windowInsets);
-            view.setPadding(insets.left(), insets.top(), insets.right(),
-                scrollViews != null && scrollViews.length > 0 ? 0 : insets.bottom());
             if (scrollViews != null && scrollViews.length > 0) {
+                view.setPadding(insets.left(), insets.top(), insets.right(), 0);
                 for (var scrollView : scrollViews) {
                     if (scrollView != null) {
                         scrollView.setClipToPadding(false);
-                        scrollView.setPadding(scrollView.getPaddingLeft(), scrollView.getPaddingTop(),
-                            scrollView.getPaddingRight(), scrollView.getPaddingBottom() + insets.bottom());
+                        scrollView.setPaddingRelative(0, 0, 0, insets.bottom());
                     }
                 }
+            } else {
+                view.setPadding(insets.left(), insets.top(), insets.right(), insets.bottom());
             }
             return windowInsets;
         });

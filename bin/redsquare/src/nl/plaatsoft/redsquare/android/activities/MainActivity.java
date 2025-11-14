@@ -15,7 +15,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 import android.view.View;
@@ -44,7 +43,6 @@ import org.jspecify.annotations.Nullable;
 public class MainActivity extends BaseActivity {
     private static final String ABOUT_WEBSITE_URL = "https://bplaat.nl/";
 
-    private final Handler handler = new Handler(Looper.getMainLooper());
     private @SuppressWarnings("null") String versionName;
     private @SuppressWarnings("null") RelativeLayout menuPage;
     private @SuppressWarnings("null") GamePage gamePage;
@@ -82,7 +80,7 @@ public class MainActivity extends BaseActivity {
         findViewById(R.id.menu_play_button).setOnClickListener(view -> {
             menuPage.setVisibility(View.GONE);
             gamePage.setVisibility(View.VISIBLE);
-            handler.post(() -> gamePage.start());
+            gamePage.post(() -> gamePage.start());
         });
 
         // Game Over page

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Handler;
 import android.os.Looper;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,8 +21,6 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Chapter chapter);
     }
-
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     @SuppressWarnings("this-escape")
     public ChaptersDialogBuilder(
@@ -46,7 +43,7 @@ public class ChaptersDialogBuilder extends AlertDialog.Builder {
             grid.addView(chapterButton);
 
             if (chapter.number() == currentChapterNumber)
-                handler.post(() -> root.scrollTo(0, chapterButton.getTop()));
+                root.post(() -> root.scrollTo(0, chapterButton.getTop()));
         }
     }
 }

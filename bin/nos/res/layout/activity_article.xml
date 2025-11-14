@@ -18,7 +18,8 @@
         style="@style/Flex">
 
         <LinearLayout style="@style/Container">
-            <ImageView android:id="@+id/article_image"
+            <nl.plaatsoft.nos.android.views.AspectRatioImageView
+                android:id="@+id/article_image"
                 style="@style/ArticleActivityImage" />
 
             <TextView android:id="@+id/article_contents"

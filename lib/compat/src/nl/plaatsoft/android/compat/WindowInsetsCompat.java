@@ -12,7 +12,7 @@ import android.view.WindowInsets;
 public class WindowInsetsCompat {
     private WindowInsetsCompat() {}
 
-    public record Insets(int left, int top, int right, int bottom) {}
+    public static record Insets(int left, int top, int right, int bottom) {}
 
     @SuppressWarnings("deprecation")
     public static Insets getInsets(WindowInsets windowInsets) {

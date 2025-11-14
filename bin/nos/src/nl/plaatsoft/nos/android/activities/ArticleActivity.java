@@ -19,23 +19,25 @@ import android.util.TypedValue;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import nl.plaatsoft.android.compat.ContextCompat;
 import nl.plaatsoft.android.compat.IntentCompat;
 import nl.plaatsoft.android.fetch.FetchImageTask;
+import nl.plaatsoft.nos.android.HtmlParser;
 import nl.plaatsoft.nos.android.R;
 import nl.plaatsoft.nos.android.models.Article;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
+import nl.plaatsoft.nos.android.views.AspectRatioImageView;
 
 public class ArticleActivity extends BaseActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_article);
-        useWindowInsets(findViewById(R.id.article_scroll));
+
+        var scroll = (ScrollView)findViewById(R.id.article_scroll);
+        scroll.post(() -> scroll.scrollTo(0, 0));
+        useWindowInsets(scroll);
 
         var article = IntentCompat.getSerializableExtra(getIntent(), "article", Article.class);
 
@@ -48,7 +50,7 @@ public class ArticleActivity extends BaseActivity {
             startActivity(Intent.createChooser(shareIntent, null));
         });
 
-        var articleImage = (ImageView)findViewById(R.id.article_image);
+        var articleImage = (AspectRatioImageView)findViewById(R.id.article_image);
         articleImage.setOnClickListener(view -> {
             var intent = new Intent(this, ImageActivity.class);
             intent.putExtra("url", article.imageUrl());
@@ -89,19 +91,20 @@ public class ArticleActivity extends BaseActivity {
         newlineSpannable2.setSpan(new RelativeSizeSpan(0.5f), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannable.append(newlineSpannable2);
 
-        var document = Jsoup.parse(article.content());
-        for (var child : document.body().children()) {
-            if (child.nodeName() == "h2" || child.nodeName() == "p") {
-                var spannablePart =
-                    new SpannableStringBuilder(child.text() + (child.nextElementSibling() != null ? "\n" : ""));
-                if (child.nodeName() == "h2") {
-                    var length = spannablePart.length() - (child.nextElementSibling() != null ? 1 : 0);
+        var elements = HtmlParser.parse(article.content());
+        for (var i = 0; i < elements.size(); i++) {
+            var element = elements.get(i);
+            var isLast = i == elements.size() - 1;
+            if (element.tag().equals("h2") || element.tag().equals("p")) {
+                var spannablePart = new SpannableStringBuilder(element.text() + (!isLast ? "\n" : ""));
+                if (element.tag().equals("h2")) {
+                    var length = spannablePart.length() - (!isLast ? 1 : 0);
                     spannablePart.setSpan(new StyleSpan(Typeface.BOLD), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannablePart.setSpan(new RelativeSizeSpan(1.11f), 0, length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
                 spannable.append(spannablePart);
 
-                if (child.nextElementSibling() != null) {
+                if (!isLast) {
                     var newlineSpannable3 = new SpannableStringBuilder("\n");
                     newlineSpannable3.setSpan(new RelativeSizeSpan(0.5f), 0, 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     spannable.append(newlineSpannable3);

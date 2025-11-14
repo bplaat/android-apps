@@ -8,7 +8,6 @@ alerts = { path = "../../lib/alerts" }
 compat = { path = "../../lib/compat" }
 fetch = { path = "../../lib/fetch" }
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
-jsoup = { maven = "org.jsoup:jsoup:1.21.2" }
 
 [package.metadata.android]
 main_activity = ".activities.MainActivity"
@@ -16,5 +15,6 @@ key_alias = ""
 keystore_password = "nos-android"
 key_password = "nos-android"
 proguard_keep = [
+    "public class nl.plaatsoft.nos.android.views.AspectRatioImageView { public <init>(android.content.Context, android.util.AttributeSet); }",
     "public class nl.plaatsoft.nos.android.views.ZoomableImageView { public <init>(android.content.Context, android.util.AttributeSet); }",
 ]

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Handler;
 import android.os.Looper;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,8 +21,6 @@ public class SongsDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
         void onResult(Song song);
     }
-
-    private Handler handler = new Handler(Looper.getMainLooper());
 
     @SuppressWarnings("this-escape")
     public SongsDialogBuilder(
@@ -46,7 +43,7 @@ public class SongsDialogBuilder extends AlertDialog.Builder {
             grid.addView(songButton);
 
             if (song.number().equals(currentSongNumber))
-                handler.post(() -> root.scrollTo(0, songButton.getTop()));
+                root.post(() -> root.scrollTo(0, songButton.getTop()));
         }
     }
 }
