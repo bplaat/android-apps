@@ -140,14 +140,29 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         }
     }
 
-    public void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-        openTab(savedInstanceState.getInt("openTab"), false);
-    }
-
+    @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        savedInstanceState.putInt("openTab", viewFlipper.getDisplayedChild());
+        var openTabIndex = viewFlipper.getDisplayedChild();
+        savedInstanceState.putInt("openTab", openTabIndex);
+        var currentListView = tabs.get(openTabIndex).listView;
+        var firstChild = currentListView.getChildAt(0);
+        var offset = (firstChild == null) ? 0 : firstChild.getTop() - currentListView.getPaddingTop();
+        savedInstanceState.putInt("listScrollIndex", currentListView.getFirstVisiblePosition());
+        savedInstanceState.putInt("listScrollOffset", offset);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        var openTabIndex = savedInstanceState.getInt("openTab");
+        openTab(openTabIndex, false);
+        handler.post(() -> {
+            var currentListView = tabs.get(openTabIndex).listView;
+            int index = savedInstanceState.getInt("listScrollIndex");
+            int offset = savedInstanceState.getInt("listScrollOffset");
+            currentListView.setSelectionFromTop(index, offset);
+        });
     }
 
     @Override

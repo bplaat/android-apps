@@ -36,7 +36,8 @@ public class ArticleActivity extends BaseActivity {
         setContentView(R.layout.activity_article);
 
         var scroll = (ScrollView)findViewById(R.id.article_scroll);
-        scroll.post(() -> scroll.scrollTo(0, 0));
+        if (savedInstanceState == null)
+            scroll.post(() -> scroll.scrollTo(0, 0));
         useWindowInsets(scroll);
 
         var article = IntentCompat.getSerializableExtra(getIntent(), "article", Article.class);
