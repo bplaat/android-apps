@@ -5,4 +5,26 @@
         <item name="android:layout_width">600dp</item>
         <item name="android:layout_gravity">center_horizontal</item>
     </style>
+
+    <!-- Bottom Bar -->
+    <style name="BottomBarItem">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">56dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:orientation">horizontal</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="BottomBarItemIcon">
+        <item name="android:layout_width">24dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+
+    <style name="BottomBarItemLabel">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">end</item>
+    </style>
 </resources>
