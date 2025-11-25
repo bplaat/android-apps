@@ -20,19 +20,19 @@
         android:inAnimation="@anim/fade_in"
         style="@style/Flex">
 
-        <ListView android:id="@+id/main_latest_articles_list"
+        <GridView android:id="@+id/main_latest_articles_list"
             style="@style/ArticleList" />
 
-        <ListView android:id="@+id/main_economy_articles_list"
+        <GridView android:id="@+id/main_economy_articles_list"
             style="@style/ArticleList" />
 
-        <ListView android:id="@+id/main_politics_articles_list"
+        <GridView android:id="@+id/main_politics_articles_list"
             style="@style/ArticleList" />
 
-        <ListView android:id="@+id/main_tech_articles_list"
+        <GridView android:id="@+id/main_tech_articles_list"
             style="@style/ArticleList" />
 
-        <ListView android:id="@+id/main_sports_articles_list"
+        <GridView android:id="@+id/main_sports_articles_list"
             style="@style/ArticleList" />
     </ViewFlipper>
 

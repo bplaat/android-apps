@@ -41,6 +41,9 @@ public class ArticlesAdapter extends ArrayAdapter<Article> {
             viewHolder = (ViewHolder)convertView.getTag();
         }
 
+        if (position < 0 || position >= getCount()) {
+            return convertView;
+        }
         var article = getItem(position);
         FetchImageTask.with(getContext())
             .load(article.imageUrl())

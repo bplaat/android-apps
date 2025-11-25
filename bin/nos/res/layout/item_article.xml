@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/ArticleItem">
 
-    <ImageView android:id="@+id/article_item_image"
+    <nl.plaatsoft.nos.android.views.AspectRatioImageView
+        android:id="@+id/article_item_image"
         style="@style/ArticleItemImage" />
 
     <TextView android:id="@+id/article_item_title_label"

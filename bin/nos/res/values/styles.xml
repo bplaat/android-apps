@@ -154,6 +154,7 @@
     <style name="ArticleItem">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">horizontal</item>
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
         <item name="android:paddingLeft">16dp</item>
@@ -162,10 +163,11 @@
 
     <style name="ArticleItemImage">
         <item name="android:layout_width">120dp</item>
-        <item name="android:layout_height">65dp</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_marginRight">16dp</item>
         <item name="android:background">@color/loading_color</item>
         <item name="android:scaleType">centerCrop</item>
+        <item name="aspectRatio">1.78</item>
     </style>
 
     <style name="ArticleItemTitle">
@@ -179,7 +181,7 @@
 
     <!-- Article activity -->
     <style name="ArticleActivityImage">
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="aspectRatio">1.78</item>
         <item name="android:scaleType">centerCrop</item>

@@ -24,10 +24,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.ViewFlipper;
@@ -43,7 +43,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemClickListener {
-    private static record Tab(String url, String title, ListView listView, LinearLayout button) {}
+    private static record Tab(String url, String title, GridView groupView, LinearLayout button) {}
 
     private static final int SETTINGS_REQUEST_CODE = 1;
 
@@ -66,7 +66,7 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         findViewById(R.id.main_refresh_button).setOnClickListener(view -> {
             for (var tab : tabs) {
-                var articlesAdapter = (ArticlesAdapter)tab.listView.getAdapter();
+                var articlesAdapter = (ArticlesAdapter)tab.groupView.getAdapter();
                 fetchNewsData(tab.url, false, articlesAdapter);
             }
         });
@@ -81,25 +81,23 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // Init tabs
         tabs = new ArrayList<>();
         tabs.add(new Tab("https://feeds.nos.nl/nosnieuwsalgemeen", getString(R.string.main_latest_title),
-            (ListView)findViewById(R.id.main_latest_articles_list),
-            (LinearLayout)findViewById(R.id.main_latest_button)));
+            findViewById(R.id.main_latest_articles_list), findViewById(R.id.main_latest_button)));
         tabs.add(new Tab("https://feeds.nos.nl/nosnieuwseconomie", getString(R.string.main_economy_title),
-            (ListView)findViewById(R.id.main_economy_articles_list),
-            (LinearLayout)findViewById(R.id.main_economy_button)));
+            findViewById(R.id.main_economy_articles_list), findViewById(R.id.main_economy_button)));
         tabs.add(new Tab("https://feeds.nos.nl/nosnieuwspolitiek", getString(R.string.main_politics_title),
-            (ListView)findViewById(R.id.main_politics_articles_list),
-            (LinearLayout)findViewById(R.id.main_politics_button)));
+            findViewById(R.id.main_politics_articles_list), findViewById(R.id.main_politics_button)));
         tabs.add(new Tab("https://feeds.nos.nl/nosnieuwstech", getString(R.string.main_tech_title),
-            (ListView)findViewById(R.id.main_tech_articles_list), (LinearLayout)findViewById(R.id.main_tech_button)));
+            findViewById(R.id.main_tech_articles_list), findViewById(R.id.main_tech_button)));
         tabs.add(new Tab("https://feeds.nos.nl/nossportalgemeen", getString(R.string.main_sports_title),
-            (ListView)findViewById(R.id.main_sports_articles_list),
-            (LinearLayout)findViewById(R.id.main_sports_button)));
+            findViewById(R.id.main_sports_articles_list), findViewById(R.id.main_sports_button)));
 
         for (var i = 0; i < tabs.size(); i++) {
             var tab = tabs.get(i);
             var articlesAdapter = new ArticlesAdapter(this);
-            tab.listView.setAdapter(articlesAdapter);
-            tab.listView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
+            var display = getResources().getDisplayMetrics();
+            tab.groupView.setNumColumns(Math.min(Math.max(1, display.widthPixels / (int)(240 * display.density)), 4));
+            tab.groupView.setAdapter(articlesAdapter);
+            tab.groupView.setOnItemClickListener((AdapterView<?> parent, View view, int position, long id) -> {
                 var intent = new Intent(this, ArticleActivity.class);
                 intent.putExtra("article", articlesAdapter.getItem(position));
                 startActivity(intent);
@@ -143,26 +141,28 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
+
         var openTabIndex = viewFlipper.getDisplayedChild();
         savedInstanceState.putInt("openTab", openTabIndex);
-        var currentListView = tabs.get(openTabIndex).listView;
-        var firstChild = currentListView.getChildAt(0);
-        var offset = (firstChild == null) ? 0 : firstChild.getTop() - currentListView.getPaddingTop();
-        savedInstanceState.putInt("listScrollIndex", currentListView.getFirstVisiblePosition());
+
+        var currentGroupView = tabs.get(openTabIndex).groupView;
+        var firstChild = currentGroupView.getChildAt(0);
+        var offset = (firstChild == null) ? 0 : firstChild.getTop() - currentGroupView.getPaddingTop();
+        savedInstanceState.putInt("listScrollIndex", currentGroupView.getFirstVisiblePosition());
         savedInstanceState.putInt("listScrollOffset", offset);
     }
 
     @Override
     public void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
         var openTabIndex = savedInstanceState.getInt("openTab");
         openTab(openTabIndex, false);
-        handler.post(() -> {
-            var currentListView = tabs.get(openTabIndex).listView;
-            int index = savedInstanceState.getInt("listScrollIndex");
-            int offset = savedInstanceState.getInt("listScrollOffset");
-            currentListView.setSelectionFromTop(index, offset);
-        });
+
+        var currentGroupView = tabs.get(openTabIndex).groupView;
+        int index = savedInstanceState.getInt("listScrollIndex", 0);
+        int offset = savedInstanceState.getInt("listScrollOffset", 0);
+        handler.post(() -> currentGroupView.setSelectionFromTop(index, offset));
     }
 
     @Override
