@@ -100,10 +100,10 @@ public class CoinsAdapter extends ArrayAdapter<Coin> {
         }
 
         viewHolder.coinRank.setText("#" + coin.rank());
-        viewHolder.coinChange.setText(Formatters.changePercent(coin.change()));
-        if (coin.change() > 0) {
+        viewHolder.coinChange.setText(Formatters.changePercent(coin.priceChange()));
+        if (coin.priceChange() > 0) {
             viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.positive_color));
-        } else if (coin.change() < 0) {
+        } else if (coin.priceChange() < 0) {
             viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.negative_color));
         } else {
             viewHolder.coinChange.setTextColor(ContextCompat.getColor(getContext(), R.color.secondary_text_color));
