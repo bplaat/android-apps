@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Menu options -->
+    <string name="menu_options_settings">Instellingen</string>
+
+    <!-- Main activity -->
+
+    <!-- Settings activity -->
+    <string name="settings_title_label">Instellingen</string>
+
+    <string name="settings_display_label">Weergave</string>
+
+    <string name="settings_language_button">Taal</string>
+    <string name="settings_language_system">Gebruik systeemstandaard</string>
+
+    <string name="settings_theme_button">Thema</string>
+    <string name="settings_theme_light">Licht</string>
+    <string name="settings_theme_dark">Donker</string>
+    <string name="settings_theme_battery_saver">Ingesteld door batterijbesparing</string>
+    <string name="settings_theme_system">Gebruik systeemstandaard</string>
+
+    <string name="settings_information_label">Informatie</string>
+    <string name="settings_version_button">App versie</string>
+    <string name="settings_version_message">Who, jij bent een geweldige hacker!</string>
+    <string name="settings_rate_button">Beoordeel deze app</string>
+    <string name="settings_share_button">Deel deze app</string>
+    <string name="settings_share_message">Bekijk deze coole app: %s</string>
+    <string name="settings_about_button">Over deze app</string>
+    <string name="settings_footer_button">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+
+    <string name="settings_about_alert_title_label">Over deze app</string>
+    <string name="settings_about_alert_message_label">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+</resources>

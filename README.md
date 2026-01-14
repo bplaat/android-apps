@@ -31,23 +31,23 @@ A collection of various Android apps that I created for myself and others
 </a>
 </td>
 <td width="120" align="center">
-<a href="bin/hackernews/">
-    <img src="bin/hackernews/docs/images/icon.svg" alt="HackerNews icon" width="48" height="48"/><br/>
-    HackerNews
+<a href="bin/drankcounter/">
+    <img src="bin/drankcounter/docs/images/icon.svg" alt="DrankCounter icon" width="48" height="48"/><br/>
+    DrankCounter
 </a>
 </td>
 </tr>
 <tr>
 <td width="120" align="center">
-<a href="bin/nos/">
-    <img src="bin/nos/docs/images/icon.svg" alt="NOS icon" width="48" height="48"/><br/>
-    NOS
+<a href="bin/hackernews/">
+    <img src="bin/hackernews/docs/images/icon.svg" alt="HackerNews icon" width="48" height="48"/><br/>
+    HackerNews
 </a>
 </td>
 <td width="120" align="center">
-<a href="bin/reacttest/">
-    <img src="bin/bassietest/docs/images/icon.svg" alt="ReactTest icon" width="48" height="48"/><br/>
-    ReactTest
+<a href="bin/nos/">
+    <img src="bin/nos/docs/images/icon.svg" alt="NOS icon" width="48" height="48"/><br/>
+    NOS
 </a>
 </td>
 <td width="120" align="center">
@@ -75,6 +75,7 @@ A collection of various Android apps that I created for myself and others
 -   [BassieTest](bin/bassietest/) A example test app for the bob build tool and sandbox for some ideas
 -   [Bible](bin/bible/) An offline Android Bible app containing multiple bible translations
 -   [CoinList](bin/coinlist/) A cryptocurrency information app similar to the [coinlist](https://github.com/bplaat/coinlist) website
+-   [DrankCounter](bin/drankcounter/) An alcohol tracker app with home screen widget
 -   [HackerNews](bin/hackernews/) A simple [HackerNews](https://news.ycombinator.com/) webview app because installed PWA's suck sadly
 -   [NOS](bin/nos/) A simple sync-once [NOS](https://nos.nl/) feed reader app
 -   [ReactTest](bin/reacttest/) A test app for the [ReactDroid](lib/reactdroid/) library
