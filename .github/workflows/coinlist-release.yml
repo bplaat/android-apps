@@ -17,6 +17,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install bob
         run: cargo install --git https://github.com/bplaat/crates.git bob
+      - name: Download Android SDK cmdline-tools latest
+        run: |
+          cd $ANDROID_HOME/cmdline-tools
+          wget -q https://dl.google.com/android/repository/commandlinetools-linux-14742923_latest.zip -O cmdline-tools.zip
+          unzip -q cmdline-tools.zip
+          mv cmdline-tools latest
+          rm cmdline-tools.zip
       - name: Build release
         working-directory: bin/coinlist
         run: |
