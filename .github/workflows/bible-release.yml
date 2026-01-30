@@ -1,0 +1,33 @@
+name: bible-release
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  bible-release:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install bob
+        run: cargo install --git https://github.com/bplaat/crates.git bob
+      - name: Build release
+        working-directory: bin/bible
+        run: |
+          export JAVA_HOME=$JAVA_HOME_21_X64
+          export PATH=$JAVA_HOME/bin:$PATH
+          echo "${{ secrets.BIBLE_KEYSTORE }}" | base64 --decode > keystore.jks
+          bob build --release
+      - name: Create Git tag and GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        working-directory: bin/bible
+        run: |
+          TAG_VERSION=$(sed -nE 's/^[[:space:]]*version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' bob.toml)
+          gh release create "bible/v${TAG_VERSION}" --title "Bible v${TAG_VERSION}" target/release/bible-${TAG_VERSION}.apk
