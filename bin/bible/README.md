@@ -8,25 +8,25 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/), [die-
 
 ### Dutch
 
--   [NBV21 (NBV21)](https://www.debijbel.nl/bijbel/NBV21/GEN.1)
--   [Bijbel in Gewone Taal (BGT)](https://www.debijbel.nl/bijbel/BGT/GEN.1)
--   [Herziene Statenvertaling (HSV)](https://www.debijbel.nl/bijbel/HSV/GEN.1)
--   [Nieuwe Bijbelvertaling (NBV)](https://www.debijbel.nl/bijbel/NBV/GEN.1)
+- [NBV21 (NBV21)](https://www.debijbel.nl/bijbel/NBV21/GEN.1)
+- [Bijbel in Gewone Taal (BGT)](https://www.debijbel.nl/bijbel/BGT/GEN.1)
+- [Herziene Statenvertaling (HSV)](https://www.debijbel.nl/bijbel/HSV/GEN.1)
+- [Nieuwe Bijbelvertaling (NBV)](https://www.debijbel.nl/bijbel/NBV/GEN.1)
 
 ### English
 
--   [New International Version (NIV)](https://www.die-bibel.de/bibel/NIV/GEN.1)
--   [King James Version (KJV)](https://www.die-bibel.de/bibel/KJV/GEN.1)
+- [New International Version (NIV)](https://www.die-bibel.de/bibel/NIV/GEN.1)
+- [King James Version (KJV)](https://www.die-bibel.de/bibel/KJV/GEN.1)
 
 ### German
 
--   [Lutherbibel 2017 (LU17)](https://www.die-bibel.de/bibel/LU17/GEN.1)
--   [Einheitsübersetzung (EUE)](https://www.die-bibel.de/bibel/EUE/GEN.1)
+- [Lutherbibel 2017 (LU17)](https://www.die-bibel.de/bibel/LU17/GEN.1)
+- [Einheitsübersetzung (EUE)](https://www.die-bibel.de/bibel/EUE/GEN.1)
 
 ## Christian Song Bundles
 
 ### Dutch
 
--   ~~[Liedboek 2013 (NLB)](https://kerkliedwiki.nl/Liedboek_2013/Inhoud)~~ (Not yet included, but I want to include it)
--   [Hemelhoog (HH)](https://kerkliedwiki.nl/Hemelhoog/Inhoud)
--   [Opwekking 2024 (OPW)](https://kerkliedwiki.nl/Opwekkingsliederen/Inhoud)
+- ~~[Liedboek 2013 (NLB)](https://kerkliedwiki.nl/Liedboek_2013/Inhoud)~~ (Not yet included, but I want to include it)
+- [Hemelhoog (HH)](https://kerkliedwiki.nl/Hemelhoog/Inhoud)
+- [Opwekking 2024 (OPW)](https://kerkliedwiki.nl/Opwekkingsliederen/Inhoud)
