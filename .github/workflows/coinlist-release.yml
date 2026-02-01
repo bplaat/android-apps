@@ -34,4 +34,7 @@ jobs:
         working-directory: bin/coinlist
         run: |
           TAG_VERSION=$(sed -nE 's/^[[:space:]]*version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' bob.toml)
-          gh release create "coinlist/v${TAG_VERSION}" --title "CoinList v${TAG_VERSION}" target/release/coinlist-${TAG_VERSION}.apk
+          gh release create "coinlist/v${TAG_VERSION}" \
+            --title "CoinList v${TAG_VERSION}" \
+            --notes "Download the \`.apk\` file and open it to install the application" \
+            target/release/coinlist-${TAG_VERSION}.apk
