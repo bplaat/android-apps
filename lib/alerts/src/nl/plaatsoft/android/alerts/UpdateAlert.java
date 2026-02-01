@@ -40,7 +40,8 @@ public class UpdateAlert {
                         if (!foundVersion.equals(appVersion)) {
                             new AlertDialog.Builder(context)
                                 .setTitle(context.getString(R.string.updatealert_title_label, appName))
-                                .setMessage(context.getString(R.string.updatealert_message_label, appVersion, appName))
+                                .setMessage(context.getString(
+                                    R.string.updatealert_message_label, foundVersion, appName, appVersion))
                                 .setPositiveButton(R.string.updatealert_update_button,
                                     (dialog, which) -> {
                                         context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(storePageUrl)));

@@ -9,7 +9,7 @@
 
     <!-- Update alert -->
     <string name="updatealert_title_label">Update %s</string>
-    <string name="updatealert_message_label">A new version v%1$s of %2$s is released, download the update now!</string>
+    <string name="updatealert_message_label">A new version v%1$s of %2$s is released, you are currently using an older version v%3$s. Please download the update now!</string>
     <string name="updatealert_update_button">Update</string>
     <string name="updatealert_later_button">Later</string>
 </resources>

@@ -9,7 +9,7 @@
 
     <!-- Update alert -->
     <string name="updatealert_title_label">%s updaten</string>
-    <string name="updatealert_message_label">Een nieuwe version v%1$s van %2$s is uitgekomen, download de update nu!</string>
+    <string name="updatealert_message_label">Een nieuwe versie v%1$s van %2$s is uitgebracht, je gebruikt momenteel een oudere versie v%3$s. Download nu de update!</string>
     <string name="updatealert_update_button">Updaten</string>
     <string name="updatealert_later_button">Later</string>
 </resources>
