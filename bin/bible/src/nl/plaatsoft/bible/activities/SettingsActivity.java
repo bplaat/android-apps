@@ -15,6 +15,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -112,6 +113,22 @@ public class SettingsActivity extends BaseActivity {
                                   .show();
             var density = getResources().getDisplayMetrics().density;
             alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
+        });
+
+        // Daily notification button
+        var dailyNotificationSwitch = (Switch)findViewById(R.id.settings_daily_notification_switch);
+        dailyNotificationSwitch.setChecked(settings.isDailyNotificationEnabled());
+        dailyNotificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            settings.setDailyNotificationEnabled(isChecked);
+            Toast
+                .makeText(this,
+                    isChecked ? R.string.settings_daily_notification_enabled_toast
+                              : R.string.settings_daily_notification_disabled_toast,
+                    Toast.LENGTH_SHORT)
+                .show();
+        });
+        findViewById(R.id.settings_daily_notification_button).setOnClickListener(view -> {
+            dailyNotificationSwitch.toggle();
         });
 
         // Version button easter egg

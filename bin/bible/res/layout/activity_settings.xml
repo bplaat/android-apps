@@ -15,6 +15,9 @@
         style="@style/Flex">
 
         <LinearLayout style="@style/List">
+            <!--
+            MARK: Display
+            -->
             <TextView android:text="@string/settings_display_label"
                 style="@style/ListItemSubtitle"/>
 
@@ -62,6 +65,31 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!--
+            MARK: Notifications
+            -->
+            <TextView android:text="@string/settings_notifications_label"
+                style="@style/ListItemSubtitle"/>
+
+            <LinearLayout style="@style/ListGroup">
+                <!-- Enable daily notification button -->
+                <LinearLayout android:id="@+id/settings_daily_notification_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_bell_ring"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_daily_notification_button"
+                        style="@style/ListItemButtonLabel" />
+
+                    <Switch android:id="@+id/settings_daily_notification_switch"
+                        style="@style/ListItemButtonSwitch" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--
+            MARK: Information
+            -->
             <TextView android:text="@string/settings_information_label"
                 style="@style/ListItemSubtitle" />
 

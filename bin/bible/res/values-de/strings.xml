@@ -45,6 +45,11 @@
     <string name="settings_theme_battery_saver">Durch Batteriesparmodus eingestellt</string>
     <string name="settings_theme_system">Systemstandard verwenden</string>
 
+    <string name="settings_notifications_label">Benachrichtigungen</string>
+    <string name="settings_daily_notification_button">Tägliche Vers-Benachrichtigung</string>
+    <string name="settings_daily_notification_enabled_toast">Tägliche Vers-Benachrichtigung aktiviert</string>
+    <string name="settings_daily_notification_disabled_toast">Tägliche Vers-Benachrichtigung deaktiviert</string>
+
     <string name="settings_information_label">Information</string>
     <string name="settings_version_button">App-Version</string>
     <string name="settings_version_message">Wow, du bist ein großartiger Hacker!</string>

@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import nl.plaatsoft.android.alerts.UpdateAlert;
 import nl.plaatsoft.android.compat.IntentCompat;
+import nl.plaatsoft.bible.DailyVerseNotification;
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Settings;
 import nl.plaatsoft.bible.models.Bible;
@@ -97,6 +98,9 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         chapterNotAvailablePage = findViewById(R.id.main_chapter_not_available_page);
         songPage = findViewById(R.id.main_song_page);
         useWindowInsets(findViewById(R.id.main_drawer_scroll), chapterPage, chapterNotAvailablePage, songPage);
+
+        // Init daily verse notification channel
+        DailyVerseNotification.createChannelIfNeeded(this);
 
         // Menu button
         findViewById(R.id.main_menu_button).setOnClickListener(view -> {

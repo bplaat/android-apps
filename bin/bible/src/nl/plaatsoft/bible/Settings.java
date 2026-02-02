@@ -75,6 +75,17 @@ public class Settings {
         prefs.edit().putInt("font", font).apply();
     }
 
+    // Enable daily notification
+    public boolean isDailyNotificationEnabled() {
+        return prefs.getBoolean("daily_notification_enabled", false);
+    }
+
+    public void setDailyNotificationEnabled(boolean enabled) {
+        if (isDailyNotificationEnabled() == enabled)
+            return;
+        prefs.edit().putBoolean("daily_notification_enabled", enabled).apply();
+    }
+
     // Installed assets version
     public String getInstalledAssetsVersion() {
         return prefs.getString("installed_assets_version", "");

@@ -45,6 +45,11 @@
     <string name="settings_theme_battery_saver">Ingesteld door batterijbesparing</string>
     <string name="settings_theme_system">Gebruik systeemstandaard</string>
 
+    <string name="settings_notifications_label">Notificaties</string>
+    <string name="settings_daily_notification_button">Dagelijks vers notificatie</string>
+    <string name="settings_daily_notification_enabled_toast">Dagelijks vers notificatie ingeschakeld</string>
+    <string name="settings_daily_notification_disabled_toast">Dagelijks vers notificatie uitgeschakeld</string>
+
     <string name="settings_information_label">Informatie</string>
     <string name="settings_version_button">App versie</string>
     <string name="settings_version_message">Who, jij bent een geweldige hacker!</string>

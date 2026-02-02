@@ -51,6 +51,11 @@
     <string name="settings_theme_battery_saver">Set by Battery Saver</string>
     <string name="settings_theme_system">Use system default</string>
 
+    <string name="settings_notifications_label">Notifications</string>
+    <string name="settings_daily_notification_button">Daily verse notification</string>
+    <string name="settings_daily_notification_enabled_toast">Daily verse notification enabled</string>
+    <string name="settings_daily_notification_disabled_toast">Daily verse notification disabled</string>
+
     <string name="settings_information_label">Information</string>
     <string name="settings_version_button">App version</string>
     <string name="settings_version_message">Who, you are an amazing hacker!</string>
