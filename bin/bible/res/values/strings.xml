@@ -32,6 +32,12 @@
     <!-- Settings activity -->
     <string name="settings_title_label">Settings</string>
 
+    <string name="settings_notifications_label">Notifications</string>
+
+    <string name="settings_daily_notification_button">Daily verse notification</string>
+
+    <string name="notification_channel_name">Daily Verse</string>
+
     <string name="settings_display_label">Display</string>
 
     <string name="settings_font_button">Font</string>

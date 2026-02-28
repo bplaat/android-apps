@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Bastiaan van der Plaat
+ * Copyright (c) 2024-2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -10,16 +10,21 @@ import java.util.Arrays;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.Settings;
+import nl.plaatsoft.bible.services.DailyVerseService;
 
 import org.jspecify.annotations.Nullable;
 
@@ -114,6 +119,28 @@ public class SettingsActivity extends BaseActivity {
             alertDialog.getListView().setPadding(0, 0, 0, (int)(16 * density));
         });
 
+        // Daily notification switch
+        var dailyNotificationSwitch = (Switch)findViewById(R.id.settings_daily_notification_switch);
+        dailyNotificationSwitch.setChecked(settings.isDailyNotification());
+        dailyNotificationSwitch.setOnCheckedChangeListener((CompoundButton buttonView, boolean isChecked) -> {
+            if (isChecked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                if (checkSelfPermission(android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                    buttonView.setChecked(false);
+                    requestPermissions(new String[] {android.Manifest.permission.POST_NOTIFICATIONS}, 0);
+                    return;
+                }
+            }
+            settings.setDailyNotification(isChecked);
+            if (isChecked) {
+                DailyVerseService.schedule(this);
+            } else {
+                DailyVerseService.cancel(this);
+            }
+        });
+        ((LinearLayout)findViewById(R.id.settings_daily_notification_button))
+            .setOnClickListener(v -> dailyNotificationSwitch.toggle());
+
         // Version button easter egg
         try {
             ((TextView)findViewById(R.id.settings_version_label))
@@ -160,5 +187,13 @@ public class SettingsActivity extends BaseActivity {
         findViewById(R.id.settings_footer_button).setOnClickListener(view -> {
             startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(ABOUT_WEBSITE_URL)));
         });
+    }
+
+    @Override
+    public void onRequestPermissionsResult(
+        int requestCode, @SuppressWarnings("null") String[] permissions, @SuppressWarnings("null") int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            ((Switch)findViewById(R.id.settings_daily_notification_switch)).setChecked(true);
+        }
     }
 }

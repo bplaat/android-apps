@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Bastiaan van der Plaat
+ * Copyright (c) 2024-2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -73,6 +73,17 @@ public class Settings {
         if (getFont() == font)
             return;
         prefs.edit().putInt("font", font).apply();
+    }
+
+    // Daily notification
+    public boolean isDailyNotification() {
+        return prefs.getBoolean("daily_notification", false);
+    }
+
+    public void setDailyNotification(boolean dailyNotification) {
+        if (isDailyNotification() == dailyNotification)
+            return;
+        prefs.edit().putBoolean("daily_notification", dailyNotification).apply();
     }
 
     // Installed assets version

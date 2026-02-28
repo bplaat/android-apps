@@ -37,6 +37,7 @@ import nl.plaatsoft.bible.models.SongBundle;
 import nl.plaatsoft.bible.models.SongWithText;
 import nl.plaatsoft.bible.models.Verse;
 import nl.plaatsoft.bible.services.BibleService;
+import nl.plaatsoft.bible.services.DailyVerseService;
 import nl.plaatsoft.bible.services.SongBundleService;
 import nl.plaatsoft.bible.views.BooksDialogBuilder;
 import nl.plaatsoft.bible.views.ChapterView;
@@ -249,7 +250,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
             bibles = bibleService.getInstalledBibles(this);
             songBundles = songBundleService.getInstalledSongBundles(this);
-            handler.post(() -> openFromSettings());
+            handler.post(() -> {
+                openFromSettings();
+                handleNotificationIntent(getIntent());
+            });
         };
         installAssetsAndOpen.run();
 
@@ -257,6 +261,38 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         UpdateAlert.checkAndShow(this,
             "https://raw.githubusercontent.com/bplaat/android-apps/refs/heads/master/bin/bible/bob.toml",
             SettingsActivity.STORE_PAGE_URL);
+    }
+
+    @Override
+    public void onNewIntent(@SuppressWarnings("null") Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleNotificationIntent(intent);
+    }
+
+    private void handleNotificationIntent(@Nullable Intent intent) {
+        if (intent == null)
+            return;
+        var bookKey = intent.getStringExtra(DailyVerseService.NOTIFICATION_BOOK_KEY);
+        if (bookKey == null)
+            return;
+        var chapterNumber = intent.getIntExtra(DailyVerseService.NOTIFICATION_CHAPTER_NUMBER, 1);
+        var verseId = intent.getIntExtra(DailyVerseService.NOTIFICATION_VERSE_ID, -1);
+        settings.setOpenType(Settings.OPEN_TYPE_BIBLE);
+        openBible = bibleService.readBible(this, settings.getOpenBible(), true);
+        // Find the book and open the chapter with verse highlight
+        for (var testament : Objects.requireNonNull(openBible).testaments()) {
+            for (var book : testament.books()) {
+                if (book.key().equals(bookKey)) {
+                    for (var chapter : book.chapters()) {
+                        if (chapter.number() == chapterNumber) {
+                            openChapter(book, chapter, 0, verseId);
+                            return;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override

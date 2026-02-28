@@ -178,6 +178,11 @@
         <item name="android:textColor">@color/secondary_text_color</item>
     </style>
 
+    <style name="ListItemButtonSwitch">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
+
     <style name="ListItemFooter" parent="ListItem">
         <item name="android:textColor">@color/secondary_text_color</item>
     </style>

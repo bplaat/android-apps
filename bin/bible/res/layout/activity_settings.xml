@@ -62,6 +62,25 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <TextView android:text="@string/settings_notifications_label"
+                style="@style/ListItemSubtitle"/>
+
+            <LinearLayout style="@style/ListGroup">
+                <!-- Daily notification button -->
+                <LinearLayout android:id="@+id/settings_daily_notification_button"
+                    style="@style/ListItemButton">
+
+                    <ImageView android:src="@drawable/ic_bell"
+                        style="@style/ListItemButtonIcon" />
+
+                    <TextView android:text="@string/settings_daily_notification_button"
+                        style="@style/ListItemButtonLabel" />
+
+                    <Switch android:id="@+id/settings_daily_notification_switch"
+                        style="@style/ListItemButtonSwitch" />
+                </LinearLayout>
+            </LinearLayout>
+
             <TextView android:text="@string/settings_information_label"
                 style="@style/ListItemSubtitle" />
 
