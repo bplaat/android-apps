@@ -32,6 +32,12 @@
     <!-- Settings activity -->
     <string name="settings_title_label">Instellingen</string>
 
+    <string name="settings_notifications_label">Meldingen</string>
+
+    <string name="settings_daily_notification_button">Dagelijkse vers melding</string>
+
+    <string name="notification_channel_name">Dagelijks vers</string>
+
     <string name="settings_display_label">Weergave</string>
 
     <string name="settings_font_button">Lettertype</string>
