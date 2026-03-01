@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/WidgetContainer">
+
+    <LinearLayout android:id="@+id/widget_beer_button"
+        style="@style/WidgetDrinkButton">
+        <ImageView
+            android:src="@drawable/ic_glass_mug"
+            android:contentDescription="@string/main_add_beer"
+            style="@style/WidgetDrinkButtonIcon" />
+        <TextView android:id="@+id/widget_beer_count"
+            android:text="0"
+            style="@style/WidgetDrinkCount" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/widget_wine_button"
+        style="@style/WidgetDrinkButton">
+        <ImageView
+            android:src="@drawable/ic_glass_wine"
+            android:contentDescription="@string/main_add_wine"
+            style="@style/WidgetDrinkButtonIcon" />
+        <TextView android:id="@+id/widget_wine_count"
+            android:text="0"
+            style="@style/WidgetDrinkCount" />
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/widget_liqueur_button"
+        style="@style/WidgetDrinkButton">
+        <ImageView
+            android:src="@drawable/ic_cup"
+            android:contentDescription="@string/main_add_liqueur"
+            style="@style/WidgetDrinkButtonIcon" />
+        <TextView android:id="@+id/widget_liqueur_count"
+            android:text="0"
+            style="@style/WidgetDrinkCount" />
+    </LinearLayout>
+</LinearLayout>
+
