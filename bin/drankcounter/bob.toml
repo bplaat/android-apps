@@ -10,3 +10,8 @@ jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
 
 [package.metadata.android]
 main_activity = ".activities.MainActivity"
+keystore_password = "drankcounter"
+key_password = "drankcounter"
+proguard_keep = [
+    "public class nl.plaatsoft.drankcounter.WidgetProvider {}",
+]
