@@ -102,6 +102,6 @@ A collection of various Android apps that I created for myself and others
 
 ## License
 
-Copyright © 2018-2025 [Bastiaan van der Plaat](https://github.com/bplaat)
+Copyright © 2018-2026 [Bastiaan van der Plaat](https://github.com/bplaat)
 
 Licensed under the [MIT](LICENSE) license.
