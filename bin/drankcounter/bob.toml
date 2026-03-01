@@ -1,0 +1,12 @@
+[package]
+name = "drankcounter"
+id = "nl.plaatsoft.drankcounter"
+version = "1.0.0"
+
+[dependencies]
+alerts = { path = "../../lib/alerts" }
+compat = { path = "../../lib/compat" }
+jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
+
+[package.metadata.android]
+main_activity = ".activities.MainActivity"

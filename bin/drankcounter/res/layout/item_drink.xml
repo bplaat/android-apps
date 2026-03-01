@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ListItemButton">
+
+    <ImageView android:id="@+id/drink_icon"
+        style="@style/ListItemIcon" />
+
+    <LinearLayout style="@style/DrinkItemInfo">
+
+        <TextView android:id="@+id/drink_type"
+            style="@style/DrinkItemType" />
+
+        <TextView android:id="@+id/drink_datetime"
+            style="@style/DrinkItemDateTime" />
+    </LinearLayout>
+
+    <ImageButton android:id="@+id/drink_menu_button"
+        android:src="@drawable/ic_dots_vertical"
+        style="@style/DrinkItemMenuButton" />
+</LinearLayout>
