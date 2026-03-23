@@ -12,6 +12,7 @@ import java.util.Objects;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -364,7 +365,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 songPage.setTypeface(settings.getFontTypeface());
                 openFromSettings();
             }
-            if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme())
+            var languageChanged =
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && oldLanguage != settings.getLanguage();
+            var themeChanged = oldTheme != settings.getTheme();
+            if (languageChanged || themeChanged)
                 handler.post(() -> recreate());
         }
     }

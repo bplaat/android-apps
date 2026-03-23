@@ -29,25 +29,29 @@ public abstract class BaseActivity extends CompatActivity {
         var theme = settings.getTheme();
 
         // Update configuration when different from system defaults
-        if (language != Settings.LANGUAGE_SYSTEM || theme != Settings.THEME_SYSTEM
-            || (theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)) {
+        var needsLanguageOverride =
+            language != Settings.LANGUAGE_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU;
+        var needsThemeOverride = theme != Settings.THEME_SYSTEM;
+        var needsBatterySaverOverride = theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q;
+        if (needsLanguageOverride || needsThemeOverride || needsBatterySaverOverride) {
             var configuration = new Configuration(context.getResources().getConfiguration());
-
-            if (language == Settings.LANGUAGE_ENGLISH)
-                configuration.setLocale(Locale.forLanguageTag("en"));
-            if (language == Settings.LANGUAGE_DUTCH)
-                configuration.setLocale(Locale.forLanguageTag("nl"));
-
-            if (theme == Settings.THEME_LIGHT) {
-                configuration.uiMode |= Configuration.UI_MODE_NIGHT_NO;
-                configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_YES;
+            if (needsLanguageOverride) {
+                if (language == Settings.LANGUAGE_ENGLISH)
+                    configuration.setLocale(Locale.forLanguageTag("en"));
+                if (language == Settings.LANGUAGE_DUTCH)
+                    configuration.setLocale(Locale.forLanguageTag("nl"));
             }
-            if (theme == Settings.THEME_DARK) {
-                configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
-                configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
+            if (needsThemeOverride) {
+                if (theme == Settings.THEME_LIGHT) {
+                    configuration.uiMode |= Configuration.UI_MODE_NIGHT_NO;
+                    configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_YES;
+                }
+                if (theme == Settings.THEME_DARK) {
+                    configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
+                    configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
+                }
             }
-            // Set dark mode on when in battery saver mode
-            if (theme == Settings.THEME_SYSTEM && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (needsBatterySaverOverride) {
                 if (((PowerManager)context.getSystemService(Context.POWER_SERVICE)).isPowerSaveMode()) {
                     configuration.uiMode |= Configuration.UI_MODE_NIGHT_YES;
                     configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_NO;
@@ -56,7 +60,6 @@ public abstract class BaseActivity extends CompatActivity {
                     configuration.uiMode &= ~Configuration.UI_MODE_NIGHT_YES;
                 }
             }
-
             super.attachBaseContext(context.createConfigurationContext(configuration));
             return;
         }

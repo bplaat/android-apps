@@ -39,10 +39,12 @@ public abstract class BaseActivity extends CompatActivity {
         // Update configuration
         var configuration = new Configuration(context.getResources().getConfiguration());
 
-        if (language == Settings.LANGUAGE_ENGLISH)
-            configuration.setLocale(Locale.forLanguageTag("en"));
-        if (language == Settings.LANGUAGE_DUTCH)
-            configuration.setLocale(Locale.forLanguageTag("nl"));
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            if (language == Settings.LANGUAGE_ENGLISH)
+                configuration.setLocale(Locale.forLanguageTag("en"));
+            if (language == Settings.LANGUAGE_DUTCH)
+                configuration.setLocale(Locale.forLanguageTag("nl"));
+        }
 
         if (theme == Settings.THEME_LIGHT && !forceDarkMode()) {
             configuration.uiMode |= Configuration.UI_MODE_NIGHT_NO;

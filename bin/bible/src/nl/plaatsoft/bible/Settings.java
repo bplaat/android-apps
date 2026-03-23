@@ -6,9 +6,12 @@
 
 package nl.plaatsoft.bible;
 
+import android.app.LocaleManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.os.Build;
+import android.os.LocaleList;
 
 import nl.plaatsoft.android.compat.ContextCompat;
 
@@ -28,13 +31,36 @@ public class Settings {
     public static final int LANGUAGE_GERMAN = 3;
 
     public int getLanguage() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            var locales = context.getSystemService(LocaleManager.class).getApplicationLocales();
+            if (locales.isEmpty())
+                return LANGUAGE_SYSTEM;
+            var tag = locales.get(0).getLanguage();
+            if (tag.equals("nl"))
+                return LANGUAGE_DUTCH;
+            if (tag.equals("de"))
+                return LANGUAGE_GERMAN;
+            return LANGUAGE_ENGLISH;
+        }
         return prefs.getInt("language", LANGUAGE_SYSTEM);
     }
 
     public void setLanguage(int language) {
         if (getLanguage() == language)
             return;
-        prefs.edit().putInt("language", language).apply();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            var localeManager = context.getSystemService(LocaleManager.class);
+            if (language == LANGUAGE_ENGLISH)
+                localeManager.setApplicationLocales(LocaleList.forLanguageTags("en"));
+            else if (language == LANGUAGE_DUTCH)
+                localeManager.setApplicationLocales(LocaleList.forLanguageTags("nl"));
+            else if (language == LANGUAGE_GERMAN)
+                localeManager.setApplicationLocales(LocaleList.forLanguageTags("de"));
+            else
+                localeManager.setApplicationLocales(LocaleList.getEmptyLocaleList());
+        } else {
+            prefs.edit().putInt("language", language).apply();
+        }
     }
 
     // Theme

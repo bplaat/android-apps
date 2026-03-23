@@ -53,7 +53,8 @@ public class SettingsActivity extends BaseActivity {
                                           dialog.dismiss();
                                           if (language != which) {
                                               settings.setLanguage(which);
-                                              recreate();
+                                              if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                                                  recreate();
                                           }
                                       })
                                   .show();

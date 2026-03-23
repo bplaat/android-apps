@@ -13,6 +13,7 @@ import android.animation.AnimatorSet;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -149,7 +150,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                 }
             }
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme()) {
+                var languageChanged =
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && oldLanguage != settings.getLanguage();
+                var themeChanged = oldTheme != settings.getTheme();
+                if (languageChanged || themeChanged) {
                     handler.post(() -> recreate());
                 }
             }

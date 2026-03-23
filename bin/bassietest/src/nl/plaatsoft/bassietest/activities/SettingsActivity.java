@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2024 Bastiaan van der Plaat
+ * Copyright (c) 2020-2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -49,7 +49,8 @@ public class SettingsActivity extends BaseActivity {
                                           dialog.dismiss();
                                           if (language != which) {
                                               settings.setLanguage(which);
-                                              recreate();
+                                              if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+                                                  recreate();
                                           }
                                       })
                                   .show();

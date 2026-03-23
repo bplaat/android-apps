@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -131,7 +132,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme()) {
+                var languageChanged =
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && oldLanguage != settings.getLanguage();
+                var themeChanged = oldTheme != settings.getTheme();
+                if (languageChanged || themeChanged) {
                     handler.post(() -> recreate());
                 }
             }

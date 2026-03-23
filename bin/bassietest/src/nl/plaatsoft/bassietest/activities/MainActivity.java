@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020-2025 Bastiaan van der Plaat
+ * Copyright (c) 2020-2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -11,6 +11,7 @@ import java.nio.charset.StandardCharsets;
 import android.animation.AnimatorInflater;
 import android.animation.AnimatorSet;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -120,11 +121,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     @Override
     public void onActivityResult(int requestCode, int resultCode, @SuppressWarnings("null") Intent data) {
         // When settings activity is closed check for restart
-        if (requestCode == SETTINGS_REQUEST_CODE) {
-            if (oldLanguage != -1 && oldTheme != -1) {
-                if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme()) {
-                    handler.post(() -> recreate());
-                }
+        if (requestCode == SETTINGS_REQUEST_CODE && oldLanguage != -1 && oldTheme != -1) {
+            var languageChanged =
+                Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && oldLanguage != settings.getLanguage();
+            var themeChanged = oldTheme != settings.getTheme();
+            if (languageChanged || themeChanged) {
+                handler.post(() -> recreate());
             }
         }
     }

@@ -310,7 +310,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         // When settings activity is closed check for restart
         if (requestCode == SETTINGS_ACTIVITY_REQUEST_CODE) {
             if (oldLanguage != -1 && oldTheme != -1) {
-                if (oldLanguage != settings.getLanguage() || oldTheme != settings.getTheme()) {
+                var languageChanged =
+                    Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU && oldLanguage != settings.getLanguage();
+                var themeChanged = oldTheme != settings.getTheme();
+                if (languageChanged || themeChanged) {
                     handler.post(() -> recreate());
                 }
             }
