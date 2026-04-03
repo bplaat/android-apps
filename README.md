@@ -78,7 +78,7 @@ A collection of various Android apps that I created for myself and others
 - [DrankCounter](bin/drankcounter/) A basic alcohol tracker app with home screen widget
 - [HackerNews](bin/hackernews/) A simple [HackerNews](https://news.ycombinator.com/) webview app because installed PWA's suck sadly
 - [NOS](bin/nos/) A simple sync-once [NOS](https://nos.nl/) feed reader app
-- [ReactTest](bin/reacttest/) A test app for the [ReactDroid](lib/reactdroid/) library
+- [ReactTest](bin/reacttest/) A test app for the [React](lib/react/) library
 - [RedSquare](bin/redsquare/) A port of the [RedSquare](https://github.com/plaatsoft/redsquare) game to Android
 - [RFID Viewer](bin/rfidviewer/) A Mifare Classic / RFID card viewer / writer app
 - [Tweakers](bin/tweakers/) A simple [Tweakers](https://tweakers.net/) webview app because installed PWA's suck sadly
@@ -88,7 +88,7 @@ A collection of various Android apps that I created for myself and others
 - [Alerts](lib/alerts/) A rating and update alert library
 - [Compat](lib/compat/) Wrappers around deprecated/changed Android API's
 - [Fetch](lib/fetch/) Some utils to fetch data and image from the internet
-- [ReactDroid](lib/reactdroid/) A [Litho](https://fblitho.com/) inspired declarative Android view component library
+- [React](lib/react/) A [Jetpack Compose](https://developer.android.com/jetpack/compose), [Litho](https://fblitho.com/) inspired declarative Android view component library
 
 ## Getting Started
 

@@ -4,4 +4,5 @@
     <color name="background_color">#111</color>
     <color name="primary_text_color">#fff</color>
     <color name="secondary_text_color">#888</color>
+    <color name="icon_color">#fff</color>
 </resources>

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ * Copyright (c) 2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -14,7 +14,7 @@ public record Person(UUID id, String name, int age, boolean isDead) {
     }
 
     public Person withAgeIncrement(int years) {
-        var new_age = Math.max(0, Math.min(100, age + years));
-        return new Person(id, name, new_age, new_age >= 100);
+        var newAge = Math.max(0, Math.min(100, age + years));
+        return new Person(id, name, newAge, newAge >= 100);
     }
 }

@@ -1,29 +1,36 @@
 /*
- * Copyright (c) 2021-2025 Bastiaan van der Plaat
+ * Copyright (c) 2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
 
 package nl.plaatsoft.reacttest.components;
 
-import nl.plaatsoft.android.compat.MapList;
-import nl.plaatsoft.android.reactdroid.Button;
-import nl.plaatsoft.android.reactdroid.Column;
-import nl.plaatsoft.android.reactdroid.Scroll;
-import nl.plaatsoft.android.reactdroid.StatefulWidget;
-import nl.plaatsoft.android.reactdroid.Text;
-import nl.plaatsoft.android.reactdroid.Widget;
-import nl.plaatsoft.android.reactdroid.WidgetContext;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import android.content.Context;
+import android.view.Gravity;
+
+import nl.plaatsoft.android.react.Column;
+import nl.plaatsoft.android.react.Component;
+import nl.plaatsoft.android.react.ImageButton;
+import nl.plaatsoft.android.react.LazyColumn;
+import nl.plaatsoft.android.react.Modifier;
+import nl.plaatsoft.android.react.Row;
+import nl.plaatsoft.android.react.Text;
 import nl.plaatsoft.reacttest.R;
 import nl.plaatsoft.reacttest.models.Person;
 
-public class HomeScreen extends StatefulWidget {
-    protected MapList<Person> persons;
+public class HomeScreen extends Component {
+    private List<Person> persons;
 
-    public HomeScreen(WidgetContext context) {
+    public HomeScreen(Context context) {
         super(context);
 
-        persons = new MapList<Person>(6);
+        persons = new ArrayList<>(6);
         persons.add(new Person("Willem", 51));
         persons.add(new Person("Wietske", 47));
         persons.add(new Person("Bastiaan", 19));
@@ -32,30 +39,34 @@ public class HomeScreen extends StatefulWidget {
         persons.add(new Person("Jiska", 13));
     }
 
-    public Widget build() {
-        return new Scroll(c).useWindowInsets().child(new Column(c)
-                .child(new Text(c).text("ReactTest").fontSizeSp(16).fontWeight(500).paddingDp(16))
+    private void updatePerson(Person person) {
+        persons = persons.stream().map(p -> p.id().equals(person.id()) ? person : p).collect(Collectors.toList());
+        rebuild();
+    }
 
-                .child(persons.map(person
-                    -> new PersonItem(c)
-                        .person(person)
-                        .onUpdate(updatedPerson -> {
-                            persons = persons.map(p -> p.id() == updatedPerson.id() ? updatedPerson : p);
-                            refresh();
-                        })
-                        .onDelete(id -> {
-                            persons = persons.filter(p -> p.id() != id);
-                            refresh();
-                        })
-                        .key(person.id())))
+    private void deletePerson(UUID id) {
+        persons = persons.stream().filter(p -> !p.id().equals(id)).collect(Collectors.toList());
+        rebuild();
+    }
 
-                .child(new Button(c).text("Add person").onClick(view -> {
+    @Override
+    public void render() {
+        new Column(() -> {
+            new Row(() -> {
+                new Text("ReactTest")
+                    .modifier(Modifier.of().weight(1).fontSizeSp(20).fontWeight(500).paddingDp(0, 16).align(
+                        Gravity.CENTER_VERTICAL));
+                new ImageButton(R.drawable.ic_plus, () -> {
                     persons.add(new Person("Person " + (persons.size() + 1), (int)(Math.random() * 100)));
-                    refresh();
-                }))
-                .child(new Text(c)
-                        .text("Made by Bastiaan van der Plaat")
-                        .textColorRes(R.color.secondary_text_color)
-                        .paddingDp(16)));
+                    rebuild();
+                }).modifier(Modifier.of().size(56).backgroundRes(R.drawable.app_bar_icon_button_ripple));
+            }).modifier(Modifier.of().fillMaxWidth().backgroundRes(R.color.primary_color).elevation(4));
+
+            new CounterButton();
+
+            new LazyColumn<>(persons, Person::id,
+                person -> new PersonItem(person.id(), person, this::updatePerson, this::deletePerson))
+                .modifier(Modifier.of().fillHeight());
+        });
     }
 }

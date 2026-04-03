@@ -1,10 +1,10 @@
 [package]
-name = "reactdroid"
-id = "nl.plaatsoft.android.reactdroid"
+name = "react"
+id = "nl.plaatsoft.android.react"
 version = "0.1.0"
 
 [lib]
 
 [dependencies]
-compat = { path = "../compat" }
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
+compat = { path = "../../lib/compat" }
