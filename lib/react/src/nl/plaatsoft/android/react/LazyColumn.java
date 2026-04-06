@@ -121,6 +121,8 @@ public class LazyColumn<T> {
                 lv.setTag(TAG_HEADER, hc);
                 lv.addHeaderView(hc, null, false);
             }
+            lv.addFooterView(new android.view.View(c.getContext()), null, false);
+            lv.setFooterDividersEnabled(false);
             lv.setAdapter(new ItemAdapter<>(c.getContext(), items, keyExtractor, renderer));
         } else {
             var rawAdapter = lv.getAdapter();
