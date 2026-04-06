@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2024 Bastiaan van der Plaat
+ * Copyright (c) 2021-2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -16,7 +16,6 @@ import android.os.PowerManager;
 import android.view.ViewGroup;
 
 import nl.plaatsoft.android.compat.CompatActivity;
-import nl.plaatsoft.android.compat.WindowInsetsCompat;
 
 import ml.coinlist.android.Settings;
 

@@ -13,6 +13,7 @@
     <string name="main_extra_market_cap">MCap %s</string>
     <string name="main_extra_volume">Volume %s</string>
     <string name="main_extra_supply">Supply %s</string>
+    <string name="main_coins_empty">No starred coins</string>
 
     <!-- Settings activity -->
     <string name="settings_title_label">Settings</string>

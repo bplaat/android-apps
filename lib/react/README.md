@@ -1,6 +1,6 @@
 # React
 
-A lightweight declarative UI library for Android inspired by Jetpack Compose/React/Flutter. Instead of XML
+A lightweight declarative UI library for Android inspired by [Jetpack Compose](https://developer.android.com/jetpack/compose) and [Litho](https://fblitho.com/). Instead of XML
 layouts, you describe your UI in plain Java using composable constructor calls. On every state
 change the same render code runs again and the library diffs the live view tree, reusing,
 repositioning, or removing views in place with no full rebuild.
@@ -96,12 +96,24 @@ new ImageButton(R.drawable.ic_delete)
 
 ### Image
 
-A non-interactive image.
+A non-interactive image. Supports both drawable resources and network URLs.
 
 ```java
+// Drawable resource
 new Image(R.drawable.logo)
     .modifier(Modifier.of().size(dp(64)));
+
+// Network URL -- served instantly from memory cache when available, no flash on re-render
+new Image(coin.imageUrl())
+    .scaleType(ImageView.ScaleType.CENTER_CROP)
+    .transparent()     // use ARGB_8888 for alpha channel
+    .loadingColor(ContextCompat.getColor(context, R.color.loading_background_color))
+    .modifier(Modifier.of().size(dp(24)));
 ```
+
+When the URL is unchanged across re-renders the `Image` is a no-op: it never clears the
+existing bitmap or restarts the fetch. Only a URL change triggers a new load. If the bitmap
+is already in the memory cache it is applied synchronously without any loading state.
 
 ### Spacer
 
@@ -174,12 +186,17 @@ new LazyColumn<>(items, item -> {
     new Text(item.name());
 });
 
+// With a header view above the list (no keys)
+new LazyColumn<>(items,
+    () -> new Text("Header").modifier(Modifier.of().padding(dp(16))),
+    item -> new PersonItem(item));
+
 // With a key extractor -- enables stable view recycling across dataset changes
 new LazyColumn<>(items, Item::id, item -> {
     new PersonItem(item);
 }).modifier(Modifier.of().weight(1).width(matchParent()));
 
-// With a header view above the list
+// With a key extractor and a header view above the list
 new LazyColumn<>(items, Item::id,
     () -> new Text("Header").modifier(Modifier.of().padding(dp(16))),
     item -> new PersonItem(item));
@@ -248,11 +265,19 @@ Modifier.of().padding(dp(8), dp(16))                // vertical, horizontal
 Modifier.of().padding(dp(4), dp(8), dp(4), dp(8))   // top, right, bottom, left
 Modifier.of().paddingX(dp(16))                      // left + right
 Modifier.of().paddingY(dp(8))                       // top + bottom
+Modifier.of().paddingTop(dp(8))
+Modifier.of().paddingRight(dp(8))
+Modifier.of().paddingBottom(dp(8))
+Modifier.of().paddingLeft(dp(8))
 
 Modifier.of().margin(dp(8))
 Modifier.of().marginX(dp(16))
 Modifier.of().marginY(dp(4))
 Modifier.of().margin(dp(4), dp(8), dp(4), dp(8))    // top, right, bottom, left
+Modifier.of().marginTop(dp(4))
+Modifier.of().marginRight(dp(4))
+Modifier.of().marginBottom(dp(4))
+Modifier.of().marginLeft(dp(4))
 ```
 
 ### LinearLayout weight, gravity and content alignment
@@ -313,12 +338,12 @@ new LazyColumn<>(items, Item::id, item -> new ItemView(item))
 - The decor view gets top / left / right system-bar padding so your custom action bar and other
   non-scrolling content stay below the status bar.
 - The scroll container gets `clipToPadding(false)` and bottom padding equal to the navigation
-  bar height, so list items scroll *behind* the navigation bar but are padded at rest.
+  bar height, so list items scroll _behind_ the navigation bar but are padded at rest.
 
 **Default behavior (no `useWindowInsets()`):**
 
 When a root `Component` attaches to a window the library automatically installs a decor listener
-that applies all insets (top, left, right, *and* bottom) to the decor view. This means layouts
+that applies all insets (top, left, right, _and_ bottom) to the decor view. This means layouts
 without `useWindowInsets()` work correctly out of the box -- content starts below the status bar
 and above the navigation bar -- with no Activity boilerplate required.
 

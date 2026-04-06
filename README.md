@@ -72,7 +72,7 @@ A collection of various Android apps that I created for myself and others
 </table>
 
 - [BassieMusic](bin/bassiemusic/) A simple Android app to listen to local music!
-- [BassieTest](bin/bassietest/) A example test app for the bob build tool and sandbox for some ideas
+- [BassieTest](bin/bassietest/) An example test app for the bob build tool and a sandbox for some ideas
 - [Bible](bin/bible/) An offline Android Bible app containing multiple bible translations
 - [CoinList](bin/coinlist/) A cryptocurrency information app similar to the [coinlist](https://github.com/bplaat/coinlist) website
 - [DrankCounter](bin/drankcounter/) A basic alcohol tracker app with home screen widget

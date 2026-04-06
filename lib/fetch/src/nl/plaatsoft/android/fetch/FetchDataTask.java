@@ -45,6 +45,7 @@ public class FetchDataTask {
     private boolean isPending = false;
     private boolean isLoaded = false;
     private boolean isError = false;
+    private boolean isCancelled = false;
 
     private FetchDataTask(Context context) {
         this.context = context;
@@ -104,12 +105,18 @@ public class FetchDataTask {
         return isError;
     }
 
+    public void cancel() {
+        isCancelled = true;
+    }
+
     public FetchDataTask fetch() {
         executor.execute(() -> {
             try {
                 isPending = true;
                 var data = fetchData(context, new URI(Objects.requireNonNull(url)), isLoadedFomCache, isSavedToCache);
                 handler.post(() -> {
+                    if (isCancelled)
+                        return;
                     isPending = false;
                     isLoaded = true;
                     if (onLoadListener != null)
@@ -117,6 +124,8 @@ public class FetchDataTask {
                 });
             } catch (Exception exception) {
                 handler.post(() -> {
+                    if (isCancelled)
+                        return;
                     isPending = false;
                     isError = true;
                     if (onErrorListener != null) {

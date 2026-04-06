@@ -48,6 +48,10 @@ public class FetchImageTask {
             }
         };
 
+    public static @Nullable Bitmap getCached(String url) {
+        return bitmapCache.get(url);
+    }
+
     private final Context context;
     private @Nullable String url;
     private boolean isTransparent = false;
@@ -151,15 +155,18 @@ public class FetchImageTask {
     }
 
     public FetchImageTask fetch() {
+        var startTime = System.currentTimeMillis();
+        var cached = bitmapCache.get(url);
+        if (cached != null) {
+            if (imageView != null)
+                imageView.setTag(this);
+            onLoad(cached, startTime);
+            return this;
+        }
+
         if (imageView != null) {
             imageView.setTag(this);
             Objects.requireNonNull(imageView).setImageBitmap(null);
-        }
-
-        var startTime = System.currentTimeMillis();
-        if (bitmapCache.get(url) != null) {
-            onLoad(bitmapCache.get(url), startTime);
-            return this;
         }
 
         if (imageView != null && isFadedIn && isTransparent && loadingColor != Color.TRANSPARENT)

@@ -8,3 +8,4 @@ version = "0.1.0"
 [dependencies]
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
 compat = { path = "../../lib/compat" }
+fetch = { path = "../../lib/fetch" }

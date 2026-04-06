@@ -100,6 +100,14 @@ public class Modifier {
         return this;
     }
 
+    public Modifier padding(Unit top, Unit right, Unit bottom, Unit left) {
+        paddingTop = top;
+        paddingRight = right;
+        paddingBottom = bottom;
+        paddingLeft = left;
+        return this;
+    }
+
     public Modifier paddingX(Unit horizontal) {
         paddingRight = paddingLeft = horizontal;
         return this;
@@ -110,10 +118,22 @@ public class Modifier {
         return this;
     }
 
-    public Modifier padding(Unit top, Unit right, Unit bottom, Unit left) {
+    public Modifier paddingTop(Unit top) {
         paddingTop = top;
+        return this;
+    }
+
+    public Modifier paddingRight(Unit right) {
         paddingRight = right;
+        return this;
+    }
+
+    public Modifier paddingBottom(Unit bottom) {
         paddingBottom = bottom;
+        return this;
+    }
+
+    public Modifier paddingLeft(Unit left) {
         paddingLeft = left;
         return this;
     }
@@ -133,6 +153,26 @@ public class Modifier {
         marginTop = top;
         marginRight = right;
         marginBottom = bottom;
+        marginLeft = left;
+        return this;
+    }
+
+    public Modifier marginTop(Unit top) {
+        marginTop = top;
+        return this;
+    }
+
+    public Modifier marginRight(Unit right) {
+        marginRight = right;
+        return this;
+    }
+
+    public Modifier marginBottom(Unit bottom) {
+        marginBottom = bottom;
+        return this;
+    }
+
+    public Modifier marginLeft(Unit left) {
         marginLeft = left;
         return this;
     }

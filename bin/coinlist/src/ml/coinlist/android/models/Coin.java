@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021-2024 Bastiaan van der Plaat
+ * Copyright (c) 2021-2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -21,8 +21,10 @@ public record Coin(boolean isPlaceholder, String id, int rank, String name, Stri
         return new Coin(false, json.getString("id"), json.getInt("market_cap_rank"), json.getString("name"),
             json.getString("image"), json.getDouble("current_price"),
             json.isNull("price_change_percentage_24h") ? 0 : json.getDouble("price_change_percentage_24h"),
-            json.getDouble("market_cap"), json.getDouble("total_volume"), json.getDouble("circulating_supply"),
-            VISIBLE_STAT_MARKET_CAP, isStarred);
+            json.isNull("market_cap") ? 0 : json.getDouble("market_cap"),
+            json.isNull("total_volume") ? 0 : json.getDouble("total_volume"),
+            json.isNull("circulating_supply") ? 0 : json.getDouble("circulating_supply"), VISIBLE_STAT_MARKET_CAP,
+            isStarred);
     }
 
     public Coin withNextVisibleStat() {
