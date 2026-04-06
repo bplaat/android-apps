@@ -6,9 +6,12 @@
 
 package nl.plaatsoft.android.react;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.widget.FrameLayout;
+
+import nl.plaatsoft.android.compat.WindowInsetsCompat;
 
 import org.jspecify.annotations.Nullable;
 
@@ -32,6 +35,17 @@ public abstract class Component extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
+        // Default: decor handles all insets. Modifier.windowInsets() overrides this for edge-to-edge scroll views.
+        if (getContext() instanceof Activity activity) {
+            var decor = activity.getWindow().getDecorView();
+            if (decor.getTag(Modifier.TAG_WINDOW_INSETS) == null) {
+                decor.setOnApplyWindowInsetsListener((dv, insets) -> {
+                    var i = WindowInsetsCompat.getInsets(insets);
+                    dv.setPadding(i.left(), i.top(), i.right(), i.bottom());
+                    return insets;
+                });
+            }
+        }
         if (!initialized) {
             initialized = true;
             rebuild();

@@ -7,17 +7,16 @@
 package nl.plaatsoft.reacttest.activities;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 
-import nl.plaatsoft.reacttest.components.HomeScreen;
+import nl.plaatsoft.reacttest.components.SettingsScreen;
 
 import org.jspecify.annotations.Nullable;
 
-public class MainActivity extends Activity {
+public class SettingsActivity extends Activity {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(new HomeScreen(this, () -> startActivity(new Intent(this, SettingsActivity.class))));
+        setContentView(new SettingsScreen(this));
     }
 }

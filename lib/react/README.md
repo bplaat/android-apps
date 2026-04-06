@@ -255,12 +255,17 @@ Modifier.of().marginY(dp(4))
 Modifier.of().margin(dp(4), dp(8), dp(4), dp(8))    // top, right, bottom, left
 ```
 
-### LinearLayout weight and gravity
+### LinearLayout weight, gravity and content alignment
 
 ```java
-Modifier.of().weight(1)                     // fill remaining space
-Modifier.of().align(Gravity.CENTER_VERTICAL)
+Modifier.of().weight(1)                       // fill remaining space
+Modifier.of().align(Gravity.CENTER_VERTICAL)  // position this view in its parent (layout_gravity)
+Modifier.of().contentGravity(Gravity.CENTER)  // align children inside this LinearLayout (gravity)
 ```
+
+`align` sets `layout_gravity` on the view's `LayoutParams` (how the view positions itself within
+its parent). `contentGravity` calls `LinearLayout.setGravity()` (how children align inside this
+container). They are different Android properties and can be combined.
 
 ### Background and elevation
 
@@ -292,9 +297,32 @@ Modifier.of().textSingleLine()                         // ellipsize at end
 Modifier.of().textGravity(Gravity.CENTER)
 ```
 
----
+### Window insets
 
-## Patterns
+Apply `useWindowInsets()` to any scrollable container (`LazyColumn`, `Column` with
+`.scrollVertical()`, `Row` with `.scrollHorizontal()`) to opt into edge-to-edge layout for that
+view:
+
+```java
+new LazyColumn<>(items, Item::id, item -> new ItemView(item))
+    .modifier(Modifier.of().weight(1).width(matchParent()).useWindowInsets());
+```
+
+**What it does:**
+
+- The decor view gets top / left / right system-bar padding so your custom action bar and other
+  non-scrolling content stay below the status bar.
+- The scroll container gets `clipToPadding(false)` and bottom padding equal to the navigation
+  bar height, so list items scroll *behind* the navigation bar but are padded at rest.
+
+**Default behavior (no `useWindowInsets()`):**
+
+When a root `Component` attaches to a window the library automatically installs a decor listener
+that applies all insets (top, left, right, *and* bottom) to the decor view. This means layouts
+without `useWindowInsets()` work correctly out of the box -- content starts below the status bar
+and above the navigation bar -- with no Activity boilerplate required.
+
+---
 
 ### Conditional rendering
 
@@ -364,7 +392,8 @@ public class PersonItem {
 
 ### Root setup in an Activity
 
-Add the root component to the `Activity` content view directly. No XML required.
+Add the root component to the `Activity` content view directly. No XML, no insets boilerplate
+required -- the library handles system bar insets automatically.
 
 ```java
 public class MainActivity extends Activity {

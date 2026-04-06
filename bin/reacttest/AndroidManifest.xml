@@ -8,7 +8,7 @@
         android:enableOnBackInvokedCallback="true">
 
         <activity android:name=".activities.MainActivity"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|keyboard|keyboardHidden"
             android:exported="true">
 
@@ -17,5 +17,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".activities.SettingsActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:launchMode="singleTop"
+            android:exported="true" />
     </application>
 </manifest>

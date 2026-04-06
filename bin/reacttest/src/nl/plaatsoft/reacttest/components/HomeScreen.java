@@ -7,6 +7,7 @@
 package nl.plaatsoft.reacttest.components;
 
 import static nl.plaatsoft.android.react.Unit.*;
+import static nl.plaatsoft.reacttest.components.Styles.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,12 @@ import nl.plaatsoft.reacttest.R;
 import nl.plaatsoft.reacttest.models.Person;
 
 public class HomeScreen extends Component {
-    private List<Person> persons;
+    private final List<Person> persons;
+    private final Runnable openSettings;
 
-    public HomeScreen(Context context) {
+    public HomeScreen(Context context, Runnable openSettings) {
         super(context);
+        this.openSettings = openSettings;
 
         persons = new ArrayList<>(6);
         persons.add(new Person("Willem", 51));
@@ -48,12 +51,15 @@ public class HomeScreen extends Component {
     public void render() {
         new Column(() -> {
             new Row(() -> {
-                new Text("ReactTest").modifier(actionBarTitle());
+                new Text(R.string.app_name).modifier(actionBarTitle());
                 new ImageButton(R.drawable.ic_plus)
                     .onClick(() -> {
                         persons.add(new Person("Person " + (persons.size() + 1), (int)(Math.random() * 100)));
                         rebuild();
                     })
+                    .modifier(actionBarIconButton());
+                new ImageButton(R.drawable.ic_dots_vertical)
+                    .onClick(v -> new PopupMenu(v.getContext(), v).item(R.string.settings, openSettings).show())
                     .modifier(actionBarIconButton());
             }).modifier(actionBar());
 
@@ -67,23 +73,8 @@ public class HomeScreen extends Component {
             } else {
                 new LazyColumn<>(
                     persons, Person::id, person -> new PersonItem(person, this::updatePerson, this::deletePerson))
-                    .modifier(Modifier.of().width(matchParent()).weight(1));
+                    .modifier(Modifier.of().width(matchParent()).weight(1).useWindowInsets());
             }
         });
-    }
-
-    private static Modifier actionBar() {
-        return Modifier.of().width(matchParent()).background(R.color.primary_color).elevation(dp(4));
-    }
-    private static Modifier actionBarTitle() {
-        return Modifier.of()
-            .weight(1)
-            .fontSize(sp(20))
-            .fontWeight(Modifier.FontWeight.MEDIUM)
-            .paddingX(dp(16))
-            .align(Gravity.CENTER_VERTICAL);
-    }
-    private static Modifier actionBarIconButton() {
-        return Modifier.of().size(dp(56)).background(R.drawable.app_bar_icon_button_ripple);
     }
 }

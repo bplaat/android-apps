@@ -8,6 +8,5 @@ main_activity = ".activities.MainActivity"
 min_sdk_version = 24
 
 [dependencies]
-compat = { path = "../../lib/compat" }
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
 react = { path = "../../lib/react" }

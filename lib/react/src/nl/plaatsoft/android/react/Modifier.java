@@ -6,6 +6,7 @@
 
 package nl.plaatsoft.android.react;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.TextUtils;
@@ -18,6 +19,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import nl.plaatsoft.android.compat.ContextCompat;
+import nl.plaatsoft.android.compat.WindowInsetsCompat;
 
 public class Modifier {
     public static class FontWeight {
@@ -31,6 +33,7 @@ public class Modifier {
     private static final int TAG_BACKGROUND_ATTR = 0x62676174; // 'bgat'
     private static final int TAG_TEXT_COLOR_RES = 0x74787263; // 'txrc'
     private static final int TAG_TEXT_COLOR_VAL = 0x74787663; // 'txvc'
+    static final int TAG_WINDOW_INSETS = 0x77696e73; // 'wins'
 
     private static final Typeface TYPEFACE_MEDIUM = Typeface.create("sans-serif-medium", Typeface.NORMAL);
 
@@ -76,6 +79,9 @@ public class Modifier {
 
     private boolean scrollVertical = false;
     private boolean scrollHorizontal = false;
+
+    private int contentGravityVal = 0;
+    private boolean useWindowInsets = false;
 
     private Modifier() {}
 
@@ -225,6 +231,16 @@ public class Modifier {
         return this;
     }
 
+    public Modifier contentGravity(int g) {
+        contentGravityVal = g;
+        return this;
+    }
+
+    public Modifier useWindowInsets() {
+        useWindowInsets = true;
+        return this;
+    }
+
     public Modifier minWidth(Unit u) {
         minWidth = u;
         return this;
@@ -295,6 +311,35 @@ public class Modifier {
             float elev = elevation.resolve(v.getContext());
             if (v.getElevation() != elev)
                 v.setElevation(elev);
+        }
+        if (contentGravityVal != 0 && v instanceof LinearLayout ll) {
+            if (ll.getGravity() != contentGravityVal)
+                ll.setGravity(contentGravityVal);
+        }
+        if (useWindowInsets && v instanceof ViewGroup vg) {
+            vg.setClipToPadding(false);
+            // Always override the decor listener so edge-to-edge scroll views get top on decor,
+            // bottom on this view (overrides the default full-insets listener from Component)
+            if (v.getContext() instanceof Activity activity) {
+                var decor = activity.getWindow().getDecorView();
+                decor.setTag(TAG_WINDOW_INSETS, true);
+                decor.setOnApplyWindowInsetsListener((dv, insets) -> {
+                    var i = WindowInsetsCompat.getInsets(insets);
+                    dv.setPadding(i.left(), i.top(), i.right(), 0);
+                    return insets;
+                });
+            }
+            // One-time per view: apply bottom padding so items at rest are above the nav bar
+            if (v.getTag(TAG_WINDOW_INSETS) == null) {
+                v.setTag(TAG_WINDOW_INSETS, true);
+                v.setOnApplyWindowInsetsListener((view, insets) -> {
+                    var i = WindowInsetsCompat.getInsets(insets);
+                    view.setPadding(view.getPaddingLeft(), view.getPaddingTop(), view.getPaddingRight(), i.bottom());
+                    return insets;
+                });
+                if (v.isAttachedToWindow())
+                    v.requestApplyInsets();
+            }
         }
         if (minWidth != null) {
             int mw = (int)minWidth.resolve(v.getContext());
