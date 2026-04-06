@@ -9,25 +9,23 @@ package nl.plaatsoft.android.react;
 import android.widget.ImageView;
 
 public class Image {
-    private final ImageView iv_ref;
+    private static final int TAG_DRAWABLE_RES = 0x696d6167; // 'imag'
+
+    private final ImageView ref;
 
     public Image(int drawableRes) {
         var c = BuildContext.current();
-        var iv = c.slot(ImageView.class, () -> new ImageView(c.getContext()));
-        iv_ref = iv;
-        iv.setImageResource(drawableRes);
-    }
-
-    public Image(Object key, int drawableRes) {
-        var c = BuildContext.current();
-        var iv = c.slot(key, ImageView.class, () -> new ImageView(c.getContext()));
-        iv_ref = iv;
-        iv.setImageResource(drawableRes);
+        ref = c.slot(ImageView.class, () -> new ImageView(c.getContext()));
+        var last = (Integer)ref.getTag(TAG_DRAWABLE_RES);
+        if (last == null || last != drawableRes) {
+            ref.setImageResource(drawableRes);
+            ref.setTag(TAG_DRAWABLE_RES, drawableRes);
+        }
     }
 
     public Image modifier(Modifier modifier) {
-        modifier.applyTo(iv_ref);
-        modifier.applyLayoutTo(iv_ref);
+        modifier.applyTo(ref);
+        modifier.applyLayoutTo(ref);
         return this;
     }
 }

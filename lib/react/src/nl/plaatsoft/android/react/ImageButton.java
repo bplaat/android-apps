@@ -6,35 +6,42 @@
 
 package nl.plaatsoft.android.react;
 
+import android.view.View.OnClickListener;
+
 public class ImageButton {
-    // Distinct subclass so slot() can tell ImageButton apart from other android.widget.ImageButton instances
     private static class ImageButtonView extends android.widget.ImageButton {
         ImageButtonView(android.content.Context context) {
             super(context);
         }
     }
 
-    private final ImageButtonView ib_ref;
+    private static final int TAG_DRAWABLE_RES = 0x64726177; // 'draw'
 
-    public ImageButton(int drawableRes, Runnable onClick) {
-        var c = BuildContext.current();
-        var ib = c.slot(ImageButtonView.class, () -> new ImageButtonView(c.getContext()));
-        ib_ref = ib;
-        ib.setImageResource(drawableRes);
-        ib.setOnClickListener(v -> onClick.run());
-    }
+    private final ImageButtonView ref;
 
-    public ImageButton(Object key, int drawableRes, Runnable onClick) {
+    public ImageButton(int drawableRes) {
         var c = BuildContext.current();
-        var ib = c.slot(key, ImageButtonView.class, () -> new ImageButtonView(c.getContext()));
-        ib_ref = ib;
-        ib.setImageResource(drawableRes);
-        ib.setOnClickListener(v -> onClick.run());
+        ref = c.slot(ImageButtonView.class, () -> new ImageButtonView(c.getContext()));
+        var last = (Integer)ref.getTag(TAG_DRAWABLE_RES);
+        if (last == null || last != drawableRes) {
+            ref.setImageResource(drawableRes);
+            ref.setTag(TAG_DRAWABLE_RES, drawableRes);
+        }
     }
 
     public ImageButton modifier(Modifier modifier) {
-        modifier.applyTo(ib_ref);
-        modifier.applyLayoutTo(ib_ref);
+        modifier.applyTo(ref);
+        modifier.applyLayoutTo(ref);
+        return this;
+    }
+
+    public ImageButton onClick(Runnable handler) {
+        ref.setOnClickListener(v -> handler.run());
+        return this;
+    }
+
+    public ImageButton onClick(OnClickListener handler) {
+        ref.setOnClickListener(handler);
         return this;
     }
 }

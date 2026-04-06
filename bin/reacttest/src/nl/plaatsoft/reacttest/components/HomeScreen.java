@@ -6,21 +6,16 @@
 
 package nl.plaatsoft.reacttest.components;
 
+import static nl.plaatsoft.android.react.Unit.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import android.content.Context;
 import android.view.Gravity;
 
-import nl.plaatsoft.android.react.Column;
-import nl.plaatsoft.android.react.Component;
-import nl.plaatsoft.android.react.ImageButton;
-import nl.plaatsoft.android.react.LazyColumn;
-import nl.plaatsoft.android.react.Modifier;
-import nl.plaatsoft.android.react.Row;
-import nl.plaatsoft.android.react.Text;
+import nl.plaatsoft.android.react.*;
 import nl.plaatsoft.reacttest.R;
 import nl.plaatsoft.reacttest.models.Person;
 
@@ -40,12 +35,12 @@ public class HomeScreen extends Component {
     }
 
     private void updatePerson(Person person) {
-        persons = persons.stream().map(p -> p.id().equals(person.id()) ? person : p).collect(Collectors.toList());
+        persons.replaceAll(p -> p.id().equals(person.id()) ? person : p);
         rebuild();
     }
 
     private void deletePerson(UUID id) {
-        persons = persons.stream().filter(p -> !p.id().equals(id)).collect(Collectors.toList());
+        persons.removeIf(p -> p.id().equals(id));
         rebuild();
     }
 
@@ -53,20 +48,42 @@ public class HomeScreen extends Component {
     public void render() {
         new Column(() -> {
             new Row(() -> {
-                new Text("ReactTest")
-                    .modifier(Modifier.of().weight(1).fontSizeSp(20).fontWeight(500).paddingDp(0, 16).align(
-                        Gravity.CENTER_VERTICAL));
-                new ImageButton(R.drawable.ic_plus, () -> {
-                    persons.add(new Person("Person " + (persons.size() + 1), (int)(Math.random() * 100)));
-                    rebuild();
-                }).modifier(Modifier.of().size(56).backgroundRes(R.drawable.app_bar_icon_button_ripple));
-            }).modifier(Modifier.of().fillMaxWidth().backgroundRes(R.color.primary_color).elevation(4));
+                new Text("ReactTest").modifier(actionBarTitle());
+                new ImageButton(R.drawable.ic_plus)
+                    .onClick(() -> {
+                        persons.add(new Person("Person " + (persons.size() + 1), (int)(Math.random() * 100)));
+                        rebuild();
+                    })
+                    .modifier(actionBarIconButton());
+            }).modifier(actionBar());
 
             new CounterButton();
 
-            new LazyColumn<>(persons, Person::id,
-                person -> new PersonItem(person.id(), person, this::updatePerson, this::deletePerson))
-                .modifier(Modifier.of().fillHeight());
+            if (persons.isEmpty()) {
+                new Box(() -> {
+                    new Text(R.string.persons_empty)
+                        .modifier(Modifier.of().align(Gravity.CENTER).textColor(R.color.secondary_text_color));
+                }).modifier(Modifier.of().width(matchParent()).weight(1));
+            } else {
+                new LazyColumn<>(
+                    persons, Person::id, person -> new PersonItem(person, this::updatePerson, this::deletePerson))
+                    .modifier(Modifier.of().width(matchParent()).weight(1));
+            }
         });
+    }
+
+    private static Modifier actionBar() {
+        return Modifier.of().width(matchParent()).background(R.color.primary_color).elevation(dp(4));
+    }
+    private static Modifier actionBarTitle() {
+        return Modifier.of()
+            .weight(1)
+            .fontSize(sp(20))
+            .fontWeight(Modifier.FontWeight.MEDIUM)
+            .paddingX(dp(16))
+            .align(Gravity.CENTER_VERTICAL);
+    }
+    private static Modifier actionBarIconButton() {
+        return Modifier.of().size(dp(56)).background(R.drawable.app_bar_icon_button_ripple);
     }
 }

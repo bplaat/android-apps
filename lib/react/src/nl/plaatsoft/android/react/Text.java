@@ -6,41 +6,43 @@
 
 package nl.plaatsoft.android.react;
 
+import android.content.Context;
+import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 public class Text {
-    private final TextView tv;
+    private static class TextLayout extends TextView {
+        TextLayout(Context context) {
+            super(context);
+        }
+    }
+
+    private final TextLayout ref;
 
     public Text(String text) {
         var c = BuildContext.current();
-        tv = c.slot(TextView.class, () -> new TextView(c.getContext()));
-        if (!tv.getText().equals(text)) {
-            tv.setText(text);
+        ref = c.slot(TextLayout.class, () -> new TextLayout(c.getContext()));
+        if (!text.equals(ref.getText().toString())) {
+            ref.setText(text);
         }
     }
 
     public Text(int textRes) {
-        var c = BuildContext.current();
-        tv = c.slot(TextView.class, () -> new TextView(c.getContext()));
-        tv.setText(textRes);
-    }
-
-    public Text(Object key, String text) {
-        var c = BuildContext.current();
-        tv = c.slot(key, TextView.class, () -> new TextView(c.getContext()));
-        if (!tv.getText().equals(text)) {
-            tv.setText(text);
-        }
-    }
-
-    public Text(Object key, int textRes) {
-        var c = BuildContext.current();
-        tv = c.slot(key, TextView.class, () -> new TextView(c.getContext()));
-        tv.setText(textRes);
+        this(BuildContext.current().getContext().getString(textRes));
     }
 
     public Text modifier(Modifier modifier) {
-        modifier.applyToTextView(tv);
+        modifier.applyToTextView(ref);
+        return this;
+    }
+
+    public Text onClick(Runnable handler) {
+        ref.setOnClickListener(v -> handler.run());
+        return this;
+    }
+
+    public Text onClick(OnClickListener handler) {
+        ref.setOnClickListener(handler);
         return this;
     }
 }

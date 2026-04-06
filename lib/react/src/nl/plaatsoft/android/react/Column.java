@@ -13,7 +13,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 
 public class Column {
-    // Distinct subclass so slot() can tell Column apart from Row
     static class ColumnLayout extends LinearLayout {
         ColumnLayout(Context context) {
             super(context);
@@ -21,8 +20,6 @@ public class Column {
         }
     }
 
-    // Scrollable variant: a ScrollView whose single child is a ColumnLayout.
-    // Using a distinct subclass lets the constructor recognise and reuse it across rebuilds.
     static class ScrollColumnLayout extends ScrollView {
         final ColumnLayout inner;
 
@@ -34,35 +31,18 @@ public class Column {
         }
     }
 
-    private final ColumnLayout ll_ref;
+    private final ColumnLayout ref;
 
     public Column(Runnable children) {
         BuildContext c = BuildContext.current();
-        // Accept an existing ScrollColumnLayout from a previous render so the scroll
-        // container is reused instead of replaced on every rebuild.
         View existing = c.peekSlot();
         if (existing instanceof ScrollColumnLayout) {
             c.advanceSlot();
-            ll_ref = ((ScrollColumnLayout)existing).inner;
+            ref = ((ScrollColumnLayout)existing).inner;
         } else {
-            ll_ref = c.slot(ColumnLayout.class, () -> new ColumnLayout(c.getContext()));
+            ref = c.slot(ColumnLayout.class, () -> new ColumnLayout(c.getContext()));
         }
-        var inner = c.scope(ll_ref);
-        BuildContext.push(inner);
-        try {
-            children.run();
-        } finally {
-            inner.cleanup();
-            BuildContext.pop();
-        }
-    }
-
-    /// Keyed constructor: the ColumnLayout is matched by key across renders so that
-    /// reordering or inserting items in a list does not recreate unrelated columns.
-    public Column(Object key, Runnable children) {
-        BuildContext c = BuildContext.current();
-        ll_ref = c.slot(key, ColumnLayout.class, () -> new ColumnLayout(c.getContext()));
-        var inner = c.scope(ll_ref);
+        var inner = c.scope(ref);
         BuildContext.push(inner);
         try {
             children.run();
@@ -74,31 +54,39 @@ public class Column {
 
     public Column modifier(Modifier modifier) {
         if (modifier.isScrollVertical()) {
-            var parent = ll_ref.getParent();
+            var parent = ref.getParent();
             if (parent instanceof ScrollColumnLayout) {
-                // Already wrapped from a previous render; just re-apply styling.
                 modifier.applyTo((ScrollColumnLayout)parent);
                 modifier.applyLayoutTo((ScrollColumnLayout)parent);
             } else if (parent instanceof ViewGroup) {
-                // First scroll render: wrap the existing ColumnLayout in a ScrollColumnLayout.
                 var vg = (ViewGroup)parent;
-                var scl = new ScrollColumnLayout(ll_ref.getContext());
-                // Move rendered children into scl.inner so they survive the wrap.
-                while (ll_ref.getChildCount() > 0) {
-                    var child = ll_ref.getChildAt(0);
-                    ll_ref.removeViewAt(0);
+                var scl = new ScrollColumnLayout(ref.getContext());
+                while (ref.getChildCount() > 0) {
+                    var child = ref.getChildAt(0);
+                    ref.removeViewAt(0);
                     scl.inner.addView(child);
                 }
-                int idx = vg.indexOfChild(ll_ref);
-                vg.removeView(ll_ref);
+                int idx = vg.indexOfChild(ref);
+                vg.removeView(ref);
                 vg.addView(scl, idx);
                 modifier.applyTo(scl);
                 modifier.applyLayoutTo(scl);
             }
         } else {
-            modifier.applyTo(ll_ref);
-            modifier.applyLayoutTo(ll_ref);
+            var target = ref.getParent() instanceof ScrollColumnLayout ? (ScrollColumnLayout)ref.getParent() : ref;
+            modifier.applyTo(target);
+            modifier.applyLayoutTo(target);
         }
+        return this;
+    }
+
+    public Column onClick(Runnable handler) {
+        ref.setOnClickListener(v -> handler.run());
+        return this;
+    }
+
+    public Column onClick(android.view.View.OnClickListener handler) {
+        ref.setOnClickListener(handler);
         return this;
     }
 }

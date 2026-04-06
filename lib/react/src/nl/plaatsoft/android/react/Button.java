@@ -6,30 +6,34 @@
 
 package nl.plaatsoft.android.react;
 
-public class Button {
-    private final android.widget.Button btn;
+import android.view.View.OnClickListener;
 
-    public Button(String label, Runnable onClick) {
+public class Button {
+    private final android.widget.Button ref;
+
+    public Button(String text) {
         var c = BuildContext.current();
-        btn = c.slot(android.widget.Button.class, () -> new android.widget.Button(c.getContext()));
-        if (!btn.getText().equals(label)) {
-            btn.setText(label);
-        }
-        btn.setOnClickListener(v -> onClick.run());
+        ref = c.slot(android.widget.Button.class, () -> new android.widget.Button(c.getContext()));
+        if (!text.equals(ref.getText().toString()))
+            ref.setText(text);
     }
 
-    public Button(Object key, String label, Runnable onClick) {
-        var c = BuildContext.current();
-        btn = c.slot(key, android.widget.Button.class, () -> new android.widget.Button(c.getContext()));
-        if (!btn.getText().equals(label)) {
-            btn.setText(label);
-        }
-        btn.setOnClickListener(v -> onClick.run());
+    public Button(int textRes) {
+        this(BuildContext.current().getContext().getString(textRes));
     }
 
     public Button modifier(Modifier modifier) {
-        modifier.applyTo(btn);
-        modifier.applyLayoutTo(btn);
+        modifier.applyToTextView(ref);
+        return this;
+    }
+
+    public Button onClick(Runnable handler) {
+        ref.setOnClickListener(v -> handler.run());
+        return this;
+    }
+
+    public Button onClick(OnClickListener handler) {
+        ref.setOnClickListener(handler);
         return this;
     }
 }

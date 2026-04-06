@@ -7,6 +7,7 @@
 package nl.plaatsoft.android.react;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -19,11 +20,13 @@ import android.widget.FrameLayout;
 import org.jspecify.annotations.Nullable;
 
 public class LazyColumn<T> {
+    private static final int TAG_HEADER = 0x68656164; // 'head'
+
     private static class ItemAdapter<T> extends BaseAdapter {
         private final Context context;
         private List<T> items;
         private final @Nullable Function<T, ?> keyExtractor;
-        private final Consumer<T> renderer;
+        private Consumer<T> renderer;
 
         ItemAdapter(Context context, List<T> items, @Nullable Function<T, ?> keyExtractor, Consumer<T> renderer) {
             this.context = context;
@@ -32,8 +35,9 @@ public class LazyColumn<T> {
             this.renderer = renderer;
         }
 
-        void updateItems(List<T> newItems) {
+        void updateItems(List<T> newItems, Consumer<T> newRenderer) {
             items = newItems;
+            renderer = newRenderer;
             notifyDataSetChanged();
         }
 
@@ -57,7 +61,15 @@ public class LazyColumn<T> {
             if (keyExtractor == null)
                 return position;
             var key = keyExtractor.apply(items.get(position));
-            return key != null ? key.hashCode() : position;
+            if (key == null)
+                return position;
+            if (key instanceof Long l)
+                return l;
+            if (key instanceof Number n)
+                return n.longValue();
+            if (key instanceof UUID u)
+                return u.getLeastSignificantBits() ^ u.getMostSignificantBits();
+            return key.hashCode();
         }
 
         @Override
@@ -80,30 +92,65 @@ public class LazyColumn<T> {
         }
     }
 
-    private final android.widget.ListView lv_ref;
+    private final android.widget.ListView ref;
 
-    /// Position-based adapter (no stable IDs).
     public LazyColumn(List<T> items, Consumer<T> renderer) {
-        this(items, null, renderer);
+        this(items, (Runnable)null, (Function<T, ?>)null, renderer);
     }
 
-    /// Keyed adapter: keyExtractor provides a stable ID per item so ListView
-    /// can match recycled views by identity rather than position.
+    public LazyColumn(List<T> items, @Nullable Runnable header, Consumer<T> renderer) {
+        this(items, header, (Function<T, ?>)null, renderer);
+    }
+
     public LazyColumn(List<T> items, Function<T, ?> keyExtractor, Consumer<T> renderer) {
+        this(items, (Runnable)null, keyExtractor, renderer);
+    }
+
+    public LazyColumn(List<T> items, Function<T, ?> keyExtractor, @Nullable Runnable header, Consumer<T> renderer) {
+        this(items, header, keyExtractor, renderer);
+    }
+
+    private LazyColumn(
+        List<T> items, @Nullable Runnable header, @Nullable Function<T, ?> keyExtractor, Consumer<T> renderer) {
         BuildContext c = BuildContext.current();
         var lv = c.slot(android.widget.ListView.class, () -> new android.widget.ListView(c.getContext()));
-        lv_ref = lv;
+        ref = lv;
         if (lv.getAdapter() == null) {
+            if (header != null) {
+                var hc = renderBlock(c.getContext(), null, header);
+                lv.setTag(TAG_HEADER, hc);
+                lv.addHeaderView(hc, null, false);
+            }
             lv.setAdapter(new ItemAdapter<>(c.getContext(), items, keyExtractor, renderer));
         } else {
-            @SuppressWarnings("unchecked") var adapter = (ItemAdapter<T>)lv.getAdapter();
-            adapter.updateItems(items);
+            var rawAdapter = lv.getAdapter();
+            @SuppressWarnings("unchecked")
+            var adapter = (ItemAdapter<T>)(rawAdapter instanceof android.widget.HeaderViewListAdapter
+                    ? ((android.widget.HeaderViewListAdapter)rawAdapter).getWrappedAdapter()
+                    : rawAdapter);
+            adapter.updateItems(items, renderer);
+            if (header != null) {
+                renderBlock(c.getContext(), (FrameLayout)lv.getTag(TAG_HEADER), header);
+            }
         }
     }
 
+    private static FrameLayout renderBlock(Context ctx, @Nullable FrameLayout existing, Runnable content) {
+        var container = existing != null ? existing : new FrameLayout(ctx);
+        var bc = new BuildContext(ctx, container);
+        BuildContext.push(bc);
+        try {
+            content.run();
+        } finally {
+            bc.cleanup();
+            BuildContext.pop();
+        }
+        return container;
+    }
+
     public LazyColumn<T> modifier(Modifier modifier) {
-        modifier.applyTo(lv_ref);
-        modifier.applyLayoutTo(lv_ref);
+        modifier.applyTo(ref);
+        modifier.applyLayoutTo(ref);
         return this;
     }
 }

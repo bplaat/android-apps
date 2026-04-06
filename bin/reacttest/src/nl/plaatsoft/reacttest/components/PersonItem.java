@@ -6,32 +6,35 @@
 
 package nl.plaatsoft.reacttest.components;
 
+import static nl.plaatsoft.android.react.Unit.*;
+
 import java.util.UUID;
 import java.util.function.Consumer;
 
-import nl.plaatsoft.android.react.Button;
-import nl.plaatsoft.android.react.Column;
-import nl.plaatsoft.android.react.Modifier;
-import nl.plaatsoft.android.react.Row;
-import nl.plaatsoft.android.react.Text;
+import nl.plaatsoft.android.react.*;
 import nl.plaatsoft.reacttest.R;
 import nl.plaatsoft.reacttest.models.Person;
 
-/// A stateless widget rendered as a constructor call -- no base class needed.
 public class PersonItem {
-    public PersonItem(Object key, Person person, Consumer<Person> onUpdate, Consumer<UUID> onDelete) {
-        new Column(key, () -> {
+    public PersonItem(Person person, Consumer<Person> onUpdate, Consumer<UUID> onDelete) {
+        new Column(() -> {
             if (!person.isDead()) {
                 new Text("Hello " + person.name() + ", i'm " + person.age() + " old!");
                 new Row(() -> {
-                    new Button("+", () -> onUpdate.accept(person.withAgeIncrement(1)));
-                    new Button("-", () -> onUpdate.accept(person.withAgeIncrement(-1)));
-                    new Button("DEL", () -> onDelete.accept(person.id()));
+                    new Button("+").onClick(() -> onUpdate.accept(person.withAgeIncrement(1)));
+                    new Button("-").onClick(() -> onUpdate.accept(person.withAgeIncrement(-1)));
+                    new Spacer().modifier(Modifier.of().weight(1));
+                    new ImageButton(R.drawable.ic_dots_vertical)
+                        .onClick(view
+                            -> new PopupMenu(view.getContext(), view)
+                                .item(R.string.delete, () -> onDelete.accept(person.id()))
+                                .show())
+                        .modifier(Modifier.of().background(R.drawable.app_bar_icon_button_ripple));
                 });
             } else {
                 new Text("Oh no, " + person.name() + " is dead!")
-                    .modifier(Modifier.of().textColorRes(R.color.secondary_text_color));
+                    .modifier(Modifier.of().textColor(R.color.secondary_text_color));
             }
-        }).modifier(Modifier.of().paddingDp(8, 16));
+        }).modifier(Modifier.of().padding(dp(8), dp(16)));
     }
 }

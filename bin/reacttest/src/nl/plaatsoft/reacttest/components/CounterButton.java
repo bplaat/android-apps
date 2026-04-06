@@ -6,11 +6,9 @@
 
 package nl.plaatsoft.reacttest.components;
 
-import nl.plaatsoft.android.react.Button;
-import nl.plaatsoft.android.react.Component;
-import nl.plaatsoft.android.react.Modifier;
-import nl.plaatsoft.android.react.Row;
-import nl.plaatsoft.android.react.Text;
+import static nl.plaatsoft.android.react.Unit.*;
+
+import nl.plaatsoft.android.react.*;
 
 public class CounterButton extends Component {
     private int count = 0;
@@ -28,15 +26,16 @@ public class CounterButton extends Component {
     @Override
     public void render() {
         new Row(() -> {
-            new Text("Count: " + count).modifier(Modifier.of().fontSizeSp(16).paddingDp(8, 12).weight(1));
-            new Button("-", () -> {
+            new Text("Count: " + count)
+                .modifier(Modifier.of().fontSize(sp(16)).fontWeight(Modifier.FontWeight.MEDIUM).weight(1));
+            new Button("-").onClick(() -> {
                 count = Math.max(0, count - 1);
                 rebuild();
             });
-            new Button("+", () -> {
+            new Button("+").onClick(() -> {
                 count++;
                 rebuild();
             });
-        }).modifier(Modifier.of().fillMaxWidth());
+        }).modifier(Modifier.of().padding(dp(8), dp(16)));
     }
 }

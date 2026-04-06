@@ -3,7 +3,7 @@
     package="nl.plaatsoft.reacttest">
 
     <application android:allowBackup="true"
-        android:label="ReactTest"
+        android:label="@string/app_name"
         android:theme="@style/Theme.App"
         android:enableOnBackInvokedCallback="true">
 

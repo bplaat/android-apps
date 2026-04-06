@@ -8,6 +8,7 @@ package nl.plaatsoft.android.react;
 
 import android.content.Context;
 import android.graphics.Typeface;
+import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -18,53 +19,61 @@ import android.widget.TextView;
 
 import nl.plaatsoft.android.compat.ContextCompat;
 
-/// A pure data builder for visual and layout properties.
-/// Start every chain with Modifier.of() and set properties via instance methods.
-/// Raw values (dp, sp, resource IDs) are stored without conversion; conversion
-/// happens at apply-time using the View's Context.
 public class Modifier {
-    // Padding (dp), -1 = not set
-    private float paddingTopDp = -1;
-    private float paddingRightDp = -1;
-    private float paddingBottomDp = -1;
-    private float paddingLeftDp = -1;
+    public static class FontWeight {
+        public static final int NORMAL = 400;
+        public static final int MEDIUM = 500;
+        public static final int BOLD = 700;
+    }
 
-    // Margin (dp), -1 = not set
-    private float marginTopDp = -1;
-    private float marginRightDp = -1;
-    private float marginBottomDp = -1;
-    private float marginLeftDp = -1;
+    private static final int TAG_BACKGROUND_RES = 0x62677265; // 'bgre'
+    private static final int TAG_BACKGROUND_COLOR = 0x6267636c; // 'bgcl'
+    private static final int TAG_BACKGROUND_ATTR = 0x62676174; // 'bgat'
+    private static final int TAG_TEXT_COLOR_RES = 0x74787263; // 'txrc'
+    private static final int TAG_TEXT_COLOR_VAL = 0x74787663; // 'txvc'
 
-    // Layout weight
+    private static final Typeface TYPEFACE_MEDIUM = Typeface.create("sans-serif-medium", Typeface.NORMAL);
+
+    private Unit paddingTop = null;
+    private Unit paddingRight = null;
+    private Unit paddingBottom = null;
+    private Unit paddingLeft = null;
+
+    private Unit marginTop = null;
+    private Unit marginRight = null;
+    private Unit marginBottom = null;
+    private Unit marginLeft = null;
+
     private float weight = -1;
 
-    // Size: Float.NaN = not set; -1f = MATCH_PARENT; -2f = WRAP_CONTENT; >= 0 = fixed dp
-    private float widthDp = Float.NaN;
-    private float heightDp = Float.NaN;
+    private Unit width = null;
+    private Unit height = null;
 
-    // Align within parent (Gravity constants; 0 = Gravity.NO_GRAVITY = not set)
     private int gravity = 0;
 
-    // Absolute position inside a Box in dp; Float.NaN = not set
-    private float positionXDp = Float.NaN;
-    private float positionYDp = Float.NaN;
+    private Unit positionX = null;
+    private Unit positionY = null;
 
-    // Background; 0 = not set
     private int backgroundResId = 0;
-    private int backgroundColor = 0;
-    private boolean hasBackground = false;
+    private int backgroundColorValue = 0;
+    private boolean hasBackgroundColor = false;
 
-    // Elevation (dp), -1 = not set
-    private float elevationDp = -1;
+    private Unit elevation = null;
 
-    // Text
-    private float fontSizeSp = -1;
-    private int fontWeight = -1;
-    private int textColorRes = 0; // 0 = not set
-    private int textColor = 0;
-    private boolean hasTextColor = false;
+    private Unit fontSize = null;
+    private int fontWeight = FontWeight.NORMAL;
+    private int textColorResId = 0;
+    private int textColorValue = 0;
+    private boolean hasTextColorValue = false;
 
-    // Scroll
+    private Unit minWidth = null;
+    private Unit minHeight = null;
+
+    private boolean singleLine = false;
+    private int textGravityVal = 0;
+
+    private int backgroundAttrId = 0;
+
     private boolean scrollVertical = false;
     private boolean scrollHorizontal = false;
 
@@ -74,48 +83,61 @@ public class Modifier {
         return new Modifier();
     }
 
-    // MARK: Builder methods
-
-    public Modifier paddingDp(float dp) {
-        paddingTopDp = paddingRightDp = paddingBottomDp = paddingLeftDp = dp;
+    public Modifier padding(Unit all) {
+        paddingTop = paddingRight = paddingBottom = paddingLeft = all;
         return this;
     }
 
-    public Modifier paddingDp(float vertical, float horizontal) {
-        paddingTopDp = paddingBottomDp = vertical;
-        paddingRightDp = paddingLeftDp = horizontal;
+    public Modifier padding(Unit vertical, Unit horizontal) {
+        paddingTop = paddingBottom = vertical;
+        paddingRight = paddingLeft = horizontal;
         return this;
     }
 
-    public Modifier paddingDp(float top, float right, float bottom, float left) {
-        paddingTopDp = top;
-        paddingRightDp = right;
-        paddingBottomDp = bottom;
-        paddingLeftDp = left;
+    public Modifier paddingX(Unit horizontal) {
+        paddingRight = paddingLeft = horizontal;
         return this;
     }
 
-    public Modifier marginDp(float dp) {
-        marginTopDp = marginRightDp = marginBottomDp = marginLeftDp = dp;
+    public Modifier paddingY(Unit vertical) {
+        paddingTop = paddingBottom = vertical;
         return this;
     }
 
-    public Modifier marginDp(float vertical, float horizontal) {
-        marginTopDp = marginBottomDp = vertical;
-        marginRightDp = marginLeftDp = horizontal;
+    public Modifier padding(Unit top, Unit right, Unit bottom, Unit left) {
+        paddingTop = top;
+        paddingRight = right;
+        paddingBottom = bottom;
+        paddingLeft = left;
         return this;
     }
 
-    public Modifier marginDp(float top, float right, float bottom, float left) {
-        marginTopDp = top;
-        marginRightDp = right;
-        marginBottomDp = bottom;
-        marginLeftDp = left;
+    public Modifier margin(Unit all) {
+        marginTop = marginRight = marginBottom = marginLeft = all;
         return this;
     }
 
-    public Modifier fillHeight() {
-        weight = 1f;
+    public Modifier margin(Unit vertical, Unit horizontal) {
+        marginTop = marginBottom = vertical;
+        marginRight = marginLeft = horizontal;
+        return this;
+    }
+
+    public Modifier margin(Unit top, Unit right, Unit bottom, Unit left) {
+        marginTop = top;
+        marginRight = right;
+        marginBottom = bottom;
+        marginLeft = left;
+        return this;
+    }
+
+    public Modifier marginX(Unit horizontal) {
+        marginRight = marginLeft = horizontal;
+        return this;
+    }
+
+    public Modifier marginY(Unit vertical) {
+        marginTop = marginBottom = vertical;
         return this;
     }
 
@@ -124,54 +146,24 @@ public class Modifier {
         return this;
     }
 
-    public Modifier fillMaxWidth() {
-        widthDp = ViewGroup.LayoutParams.MATCH_PARENT;
+    public Modifier width(Unit u) {
+        width = u;
         return this;
     }
 
-    public Modifier fillMaxHeight() {
-        heightDp = ViewGroup.LayoutParams.MATCH_PARENT;
+    public Modifier height(Unit u) {
+        height = u;
         return this;
     }
 
-    public Modifier fillMaxSize() {
-        widthDp = heightDp = ViewGroup.LayoutParams.MATCH_PARENT;
+    public Modifier size(Unit u) {
+        width = height = u;
         return this;
     }
 
-    public Modifier wrapContentWidth() {
-        widthDp = ViewGroup.LayoutParams.WRAP_CONTENT;
-        return this;
-    }
-
-    public Modifier wrapContentHeight() {
-        heightDp = ViewGroup.LayoutParams.WRAP_CONTENT;
-        return this;
-    }
-
-    public Modifier wrapContentSize() {
-        widthDp = heightDp = ViewGroup.LayoutParams.WRAP_CONTENT;
-        return this;
-    }
-
-    public Modifier width(float dp) {
-        widthDp = dp;
-        return this;
-    }
-
-    public Modifier height(float dp) {
-        heightDp = dp;
-        return this;
-    }
-
-    public Modifier size(float dp) {
-        widthDp = heightDp = dp;
-        return this;
-    }
-
-    public Modifier size(float widthDpVal, float heightDpVal) {
-        widthDp = widthDpVal;
-        heightDp = heightDpVal;
+    public Modifier size(Unit w, Unit h) {
+        width = w;
+        height = h;
         return this;
     }
 
@@ -180,30 +172,30 @@ public class Modifier {
         return this;
     }
 
-    public Modifier position(float xDp, float yDp) {
-        positionXDp = xDp;
-        positionYDp = yDp;
+    public Modifier position(Unit x, Unit y) {
+        positionX = x;
+        positionY = y;
         return this;
     }
 
-    public Modifier background(int color) {
-        backgroundColor = color;
-        hasBackground = true;
+    public Modifier background(int resId) {
+        backgroundResId = resId;
         return this;
     }
 
-    public Modifier backgroundRes(int res) {
-        backgroundResId = res;
+    public Modifier backgroundColor(int colorValue) {
+        backgroundColorValue = colorValue;
+        hasBackgroundColor = true;
         return this;
     }
 
-    public Modifier elevation(float dp) {
-        elevationDp = dp;
+    public Modifier elevation(Unit u) {
+        elevation = u;
         return this;
     }
 
-    public Modifier fontSizeSp(float sp) {
-        fontSizeSp = sp;
+    public Modifier fontSize(Unit u) {
+        fontSize = u;
         return this;
     }
 
@@ -212,14 +204,14 @@ public class Modifier {
         return this;
     }
 
-    public Modifier textColorRes(int res) {
-        textColorRes = res;
+    public Modifier textColor(int colorRes) {
+        textColorResId = colorRes;
         return this;
     }
 
-    public Modifier textColor(int color) {
-        textColor = color;
-        hasTextColor = true;
+    public Modifier textColorInt(int colorValue) {
+        this.textColorValue = colorValue;
+        hasTextColorValue = true;
         return this;
     }
 
@@ -233,125 +225,310 @@ public class Modifier {
         return this;
     }
 
+    public Modifier minWidth(Unit u) {
+        minWidth = u;
+        return this;
+    }
+
+    public Modifier minHeight(Unit u) {
+        minHeight = u;
+        return this;
+    }
+
+    public Modifier textSingleLine() {
+        singleLine = true;
+        return this;
+    }
+
+    public Modifier textGravity(int g) {
+        textGravityVal = g;
+        return this;
+    }
+
+    public Modifier backgroundAttr(int attrId) {
+        backgroundAttrId = attrId;
+        return this;
+    }
+
     boolean isScrollVertical() {
         return scrollVertical;
     }
+
     boolean isScrollHorizontal() {
         return scrollHorizontal;
     }
 
-    // MARK: Apply helpers
-
-    /// Apply visual properties (padding, background, elevation, aspect ratio) to any View.
     public void applyTo(View v) {
-        if (paddingTopDp >= 0) {
+        if (paddingTop != null || paddingRight != null || paddingBottom != null || paddingLeft != null) {
             var ctx = v.getContext();
-            v.setPadding(dpToPx(ctx, paddingLeftDp), dpToPx(ctx, paddingTopDp), dpToPx(ctx, paddingRightDp),
-                dpToPx(ctx, paddingBottomDp));
+            int pl = (int)(paddingLeft != null ? paddingLeft : Unit.dp(0)).resolve(ctx);
+            int pt = (int)(paddingTop != null ? paddingTop : Unit.dp(0)).resolve(ctx);
+            int pr = (int)(paddingRight != null ? paddingRight : Unit.dp(0)).resolve(ctx);
+            int pb = (int)(paddingBottom != null ? paddingBottom : Unit.dp(0)).resolve(ctx);
+            if (v.getPaddingLeft() != pl || v.getPaddingTop() != pt || v.getPaddingRight() != pr
+                || v.getPaddingBottom() != pb) {
+                v.setPadding(pl, pt, pr, pb);
+            }
         }
         if (backgroundResId != 0) {
-            v.setBackgroundResource(backgroundResId);
-        } else if (hasBackground) {
-            v.setBackgroundColor(backgroundColor);
+            Integer last = (Integer)v.getTag(TAG_BACKGROUND_RES);
+            if (last == null || last != backgroundResId) {
+                v.setBackgroundResource(backgroundResId);
+                v.setTag(TAG_BACKGROUND_RES, backgroundResId);
+            }
+        } else if (hasBackgroundColor) {
+            Integer last = (Integer)v.getTag(TAG_BACKGROUND_COLOR);
+            if (last == null || last != backgroundColorValue) {
+                v.setBackgroundColor(backgroundColorValue);
+                v.setTag(TAG_BACKGROUND_COLOR, backgroundColorValue);
+            }
+        } else if (backgroundAttrId != 0) {
+            Integer last = (Integer)v.getTag(TAG_BACKGROUND_ATTR);
+            if (last == null || last != backgroundAttrId) {
+                var outValue = new TypedValue();
+                v.getContext().getTheme().resolveAttribute(backgroundAttrId, outValue, true);
+                v.setBackgroundResource(outValue.resourceId);
+                v.setTag(TAG_BACKGROUND_ATTR, backgroundAttrId);
+            }
         }
-        if (elevationDp >= 0) {
-            v.setElevation(elevationDp * v.getContext().getResources().getDisplayMetrics().density);
+        if (elevation != null) {
+            float elev = elevation.resolve(v.getContext());
+            if (v.getElevation() != elev)
+                v.setElevation(elev);
+        }
+        if (minWidth != null) {
+            int mw = (int)minWidth.resolve(v.getContext());
+            if (v.getMinimumWidth() != mw)
+                v.setMinimumWidth(mw);
+        }
+        if (minHeight != null) {
+            int mh = (int)minHeight.resolve(v.getContext());
+            if (v.getMinimumHeight() != mh)
+                v.setMinimumHeight(mh);
         }
     }
 
-    /// Apply padding + text-specific properties to a TextView.
     public void applyToTextView(TextView tv) {
         applyTo(tv);
-        if (fontSizeSp >= 0) {
-            tv.setTextSize(fontSizeSp);
+        if (fontSize != null) {
+            float px = fontSize.resolve(tv.getContext());
+            if (tv.getTextSize() != px)
+                tv.setTextSize(TypedValue.COMPLEX_UNIT_PX, px);
         }
-        if (fontWeight == 400) {
-            tv.setTypeface(null, Typeface.NORMAL);
-        } else if (fontWeight == 500) {
-            tv.setTypeface(Typeface.create("sans-serif-medium", Typeface.NORMAL));
-        } else if (fontWeight == 700) {
-            tv.setTypeface(null, Typeface.BOLD);
+        if (fontWeight != FontWeight.NORMAL) {
+            Typeface target = fontWeight == FontWeight.MEDIUM ? TYPEFACE_MEDIUM : Typeface.DEFAULT_BOLD;
+            if (tv.getTypeface() != target)
+                tv.setTypeface(target);
         }
-        if (textColorRes != 0) {
-            tv.setTextColor(ContextCompat.getColor(tv.getContext(), textColorRes));
+        if (textColorResId != 0) {
+            Integer last = (Integer)tv.getTag(TAG_TEXT_COLOR_RES);
+            if (last == null || last != textColorResId) {
+                tv.setTextColor(ContextCompat.getColor(tv.getContext(), textColorResId));
+                tv.setTag(TAG_TEXT_COLOR_RES, textColorResId);
+            }
         }
-        if (hasTextColor) {
-            tv.setTextColor(textColor);
+        if (hasTextColorValue) {
+            Integer last = (Integer)tv.getTag(TAG_TEXT_COLOR_VAL);
+            if (last == null || last != textColorValue) {
+                tv.setTextColor(textColorValue);
+                tv.setTag(TAG_TEXT_COLOR_VAL, textColorValue);
+            }
         }
+        if (singleLine) {
+            tv.setSingleLine(true);
+            tv.setEllipsize(TextUtils.TruncateAt.END);
+        }
+        if (textGravityVal != 0 && tv.getGravity() != textGravityVal)
+            tv.setGravity(textGravityVal);
         applyLayoutTo(tv);
     }
 
-    /// Apply size, weight, gravity and position LayoutParams to a View.
-    /// Parent type is detected at runtime to produce the correct LayoutParams subclass.
     public void applyLayoutTo(View v) {
-        var hasWidth = !Float.isNaN(widthDp);
-        var hasHeight = !Float.isNaN(heightDp);
+        var hasWidth = width != null;
+        var hasHeight = height != null;
         var hasWeight = weight >= 0;
         var hasGravity = gravity != Gravity.NO_GRAVITY;
-        var hasPosX = !Float.isNaN(positionXDp);
-        var hasPosY = !Float.isNaN(positionYDp);
-        var hasMargin = marginTopDp >= 0 || marginRightDp >= 0 || marginBottomDp >= 0 || marginLeftDp >= 0;
+        var hasPosX = positionX != null;
+        var hasPosY = positionY != null;
+        var hasMargin = marginTop != null || marginRight != null || marginBottom != null || marginLeft != null;
         if (!hasWidth && !hasHeight && !hasWeight && !hasGravity && !hasPosX && !hasPosY && !hasMargin)
             return;
+        var ctx = v.getContext();
+        var existing = v.getLayoutParams();
         if (hasWeight) {
-            // In a horizontal LinearLayout weight distributes width → w=0, h=WRAP_CONTENT.
-            // In a vertical LinearLayout weight distributes height → w=MATCH_PARENT, h=0.
             var parent = v.getParent();
             boolean horizontal =
                 parent instanceof LinearLayout && ((LinearLayout)parent).getOrientation() == LinearLayout.HORIZONTAL;
-            var w = hasWidth ? resolveDim(v, widthDp) : (horizontal ? 0 : LinearLayout.LayoutParams.MATCH_PARENT);
-            var h = hasHeight ? resolveDim(v, heightDp) : (horizontal ? LinearLayout.LayoutParams.WRAP_CONTENT : 0);
-            var lp = new LinearLayout.LayoutParams(w, h, weight);
-            if (hasGravity)
-                lp.gravity = gravity;
-            if (hasMargin)
-                applyMargins(lp, v);
-            v.setLayoutParams(lp);
+            int w = hasWidth ? (int)width.resolve(ctx) : (horizontal ? 0 : LinearLayout.LayoutParams.MATCH_PARENT);
+            int h = hasHeight ? (int)height.resolve(ctx) : (horizontal ? LinearLayout.LayoutParams.WRAP_CONTENT : 0);
+            if (existing instanceof LinearLayout.LayoutParams lp) {
+                if (updateLinearParams(lp, w, h, weight, hasGravity ? gravity : lp.gravity, hasMargin, ctx))
+                    v.requestLayout();
+            } else {
+                var lp = new LinearLayout.LayoutParams(w, h, weight);
+                if (hasGravity)
+                    lp.gravity = gravity;
+                if (hasMargin)
+                    applyMargins(lp, v);
+                v.setLayoutParams(lp);
+            }
         } else if (v.getParent() instanceof LinearLayout) {
-            var w = hasWidth ? resolveDim(v, widthDp) : LinearLayout.LayoutParams.WRAP_CONTENT;
-            var h = hasHeight ? resolveDim(v, heightDp) : LinearLayout.LayoutParams.WRAP_CONTENT;
-            var lp = new LinearLayout.LayoutParams(w, h);
-            if (hasGravity)
-                lp.gravity = gravity;
-            if (hasMargin)
-                applyMargins(lp, v);
-            v.setLayoutParams(lp);
+            int w = hasWidth ? (int)width.resolve(ctx) : LinearLayout.LayoutParams.WRAP_CONTENT;
+            int h = hasHeight ? (int)height.resolve(ctx) : LinearLayout.LayoutParams.WRAP_CONTENT;
+            if (existing instanceof LinearLayout.LayoutParams lp) {
+                if (updateLinearParams(lp, w, h, 0, hasGravity ? gravity : lp.gravity, hasMargin, ctx))
+                    v.requestLayout();
+            } else {
+                var lp = new LinearLayout.LayoutParams(w, h);
+                if (hasGravity)
+                    lp.gravity = gravity;
+                if (hasMargin)
+                    applyMargins(lp, v);
+                v.setLayoutParams(lp);
+            }
         } else {
-            // FrameLayout parent (Box) or unknown — use FrameLayout.LayoutParams for gravity + position
-            var w = hasWidth ? resolveDim(v, widthDp) : FrameLayout.LayoutParams.WRAP_CONTENT;
-            var h = hasHeight ? resolveDim(v, heightDp) : FrameLayout.LayoutParams.WRAP_CONTENT;
-            var lp = new FrameLayout.LayoutParams(w, h);
-            if (hasGravity)
-                lp.gravity = gravity;
-            if (hasPosX)
-                lp.leftMargin = resolveDim(v, positionXDp);
-            if (hasPosY)
-                lp.topMargin = resolveDim(v, positionYDp);
-            if (hasMargin)
-                applyMargins(lp, v);
-            v.setLayoutParams(lp);
+            int w = hasWidth ? (int)width.resolve(ctx) : FrameLayout.LayoutParams.WRAP_CONTENT;
+            int h = hasHeight ? (int)height.resolve(ctx) : FrameLayout.LayoutParams.WRAP_CONTENT;
+            if (existing instanceof FrameLayout.LayoutParams lp) {
+                if (updateFrameParams(lp, w, h, hasGravity ? gravity : lp.gravity, hasPosX, hasPosY, hasMargin, ctx))
+                    v.requestLayout();
+            } else {
+                var lp = new FrameLayout.LayoutParams(w, h);
+                if (hasGravity)
+                    lp.gravity = gravity;
+                if (hasPosX)
+                    lp.leftMargin = (int)positionX.resolve(ctx);
+                if (hasPosY)
+                    lp.topMargin = (int)positionY.resolve(ctx);
+                if (hasMargin)
+                    applyMargins(lp, v);
+                v.setLayoutParams(lp);
+            }
         }
     }
 
+    private boolean updateLinearParams(
+        LinearLayout.LayoutParams lp, int w, int h, float wt, int grav, boolean hasMargin, Context ctx) {
+        boolean changed = false;
+        if (lp.width != w) {
+            lp.width = w;
+            changed = true;
+        }
+        if (lp.height != h) {
+            lp.height = h;
+            changed = true;
+        }
+        if (lp.weight != wt) {
+            lp.weight = wt;
+            changed = true;
+        }
+        if (lp.gravity != grav) {
+            lp.gravity = grav;
+            changed = true;
+        }
+        if (hasMargin) {
+            if (marginTop != null) {
+                int m = (int)marginTop.resolve(ctx);
+                if (lp.topMargin != m) {
+                    lp.topMargin = m;
+                    changed = true;
+                }
+            }
+            if (marginRight != null) {
+                int m = (int)marginRight.resolve(ctx);
+                if (lp.rightMargin != m) {
+                    lp.rightMargin = m;
+                    changed = true;
+                }
+            }
+            if (marginBottom != null) {
+                int m = (int)marginBottom.resolve(ctx);
+                if (lp.bottomMargin != m) {
+                    lp.bottomMargin = m;
+                    changed = true;
+                }
+            }
+            if (marginLeft != null) {
+                int m = (int)marginLeft.resolve(ctx);
+                if (lp.leftMargin != m) {
+                    lp.leftMargin = m;
+                    changed = true;
+                }
+            }
+        }
+        return changed;
+    }
+
+    private boolean updateFrameParams(FrameLayout.LayoutParams lp, int w, int h, int grav, boolean hasPosX,
+        boolean hasPosY, boolean hasMargin, Context ctx) {
+        boolean changed = false;
+        if (lp.width != w) {
+            lp.width = w;
+            changed = true;
+        }
+        if (lp.height != h) {
+            lp.height = h;
+            changed = true;
+        }
+        if (lp.gravity != grav) {
+            lp.gravity = grav;
+            changed = true;
+        }
+        if (hasPosX) {
+            int px = (int)positionX.resolve(ctx);
+            if (lp.leftMargin != px) {
+                lp.leftMargin = px;
+                changed = true;
+            }
+        }
+        if (hasPosY) {
+            int py = (int)positionY.resolve(ctx);
+            if (lp.topMargin != py) {
+                lp.topMargin = py;
+                changed = true;
+            }
+        }
+        if (hasMargin) {
+            if (marginTop != null) {
+                int m = (int)marginTop.resolve(ctx);
+                if (lp.topMargin != m) {
+                    lp.topMargin = m;
+                    changed = true;
+                }
+            }
+            if (marginRight != null) {
+                int m = (int)marginRight.resolve(ctx);
+                if (lp.rightMargin != m) {
+                    lp.rightMargin = m;
+                    changed = true;
+                }
+            }
+            if (marginBottom != null) {
+                int m = (int)marginBottom.resolve(ctx);
+                if (lp.bottomMargin != m) {
+                    lp.bottomMargin = m;
+                    changed = true;
+                }
+            }
+            if (marginLeft != null) {
+                int m = (int)marginLeft.resolve(ctx);
+                if (lp.leftMargin != m) {
+                    lp.leftMargin = m;
+                    changed = true;
+                }
+            }
+        }
+        return changed;
+    }
+
     private void applyMargins(android.view.ViewGroup.MarginLayoutParams lp, android.view.View v) {
-        if (marginTopDp >= 0)
-            lp.topMargin = dpToPx(v.getContext(), marginTopDp);
-        if (marginRightDp >= 0)
-            lp.rightMargin = dpToPx(v.getContext(), marginRightDp);
-        if (marginBottomDp >= 0)
-            lp.bottomMargin = dpToPx(v.getContext(), marginBottomDp);
-        if (marginLeftDp >= 0)
-            lp.leftMargin = dpToPx(v.getContext(), marginLeftDp);
-    }
-
-    private static int resolveDim(View v, float dp) {
-        if (dp < 0)
-            return (int)dp; // MATCH_PARENT (-1) or WRAP_CONTENT (-2)
-        return dpToPx(v.getContext(), dp);
-    }
-
-    private static int dpToPx(Context context, float dp) {
-        return (int)TypedValue.applyDimension(
-            TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+        if (marginTop != null)
+            lp.topMargin = (int)marginTop.resolve(v.getContext());
+        if (marginRight != null)
+            lp.rightMargin = (int)marginRight.resolve(v.getContext());
+        if (marginBottom != null)
+            lp.bottomMargin = (int)marginBottom.resolve(v.getContext());
+        if (marginLeft != null)
+            lp.leftMargin = (int)marginLeft.resolve(v.getContext());
     }
 }
