@@ -71,17 +71,17 @@ A collection of various Android apps that I created for myself and others
 </tr>
 </table>
 
-- [BassieMusic](bin/bassiemusic/) A simple Android app to listen to local music!
-- [BassieTest](bin/bassietest/) An example test app for the bob build tool and a sandbox for some ideas
-- [Bible](bin/bible/) An offline Android Bible app containing multiple bible translations
-- [CoinList](bin/coinlist/) A cryptocurrency information app similar to the [coinlist](https://github.com/bplaat/coinlist) website
-- [DrankCounter](bin/drankcounter/) A basic alcohol tracker app with home screen widget
-- [HackerNews](bin/hackernews/) A simple [HackerNews](https://news.ycombinator.com/) webview app because installed PWA's suck sadly
-- [NOS](bin/nos/) A simple sync-once [NOS](https://nos.nl/) feed reader app
-- [ReactTest](bin/reacttest/) A test app for the [React](lib/react/) library
-- [RedSquare](bin/redsquare/) A port of the [RedSquare](https://github.com/plaatsoft/redsquare) game to Android
-- [RFID Viewer](bin/rfidviewer/) A Mifare Classic / RFID card viewer / writer app
-- [Tweakers](bin/tweakers/) A simple [Tweakers](https://tweakers.net/) webview app because installed PWA's suck sadly
+- [BassieMusic](bin/bassiemusic/) A simple Android app to listen to local music! (XML)
+- [BassieTest](bin/bassietest/) An example test app for the bob build tool and a sandbox for some ideas (XML)
+- [Bible](bin/bible/) An offline Android Bible app containing multiple bible translations (XML)
+- [CoinList](bin/coinlist/) A cryptocurrency information app similar to the [coinlist](https://github.com/bplaat/coinlist) website (REACT)
+- [DrankCounter](bin/drankcounter/) A basic alcohol tracker app with home screen widget (XML)
+- [HackerNews](bin/hackernews/) A native [HackerNews](https://news.ycombinator.com/) API client app (REACT)
+- [NOS](bin/nos/) A simple sync-once [NOS](https://nos.nl/) feed reader app (XML)
+- [ReactTest](bin/reacttest/) A test app for the [React](lib/react/) library (REACT)
+- [RedSquare](bin/redsquare/) A port of the [RedSquare](https://github.com/plaatsoft/redsquare) game to Android (XML)
+- [RFID Viewer](bin/rfidviewer/) A Mifare Classic / RFID card viewer / writer app (XML)
+- [Tweakers](bin/tweakers/) A simple [Tweakers](https://tweakers.net/) webview app because installed PWA's suck sadly (XML)
 
 ## Android Libraries
 

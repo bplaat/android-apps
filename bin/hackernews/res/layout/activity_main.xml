@@ -1,42 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/Fill">
-
-    <!-- Webview page -->
-    <WebView android:id="@+id/main_webview_page"
-        style="@style/Fill" />
-
-    <!-- Disconnected page -->
-    <LinearLayout android:id="@+id/main_disconnected_page"
-        android:visibility="gone"
-        style="@style/Fill">
-
-        <LinearLayout style="@style/ActionBar">
-            <TextView android:text="@string/app_name"
-                style="@style/ActionBarTitle" />
-
-            <ImageButton android:id="@+id/main_disconnected_refresh_button"
-                android:src="@drawable/ic_refresh"
-                style="@style/ActionBarIconButton" />
-        </LinearLayout>
-
-        <ScrollView android:id="@+id/main_disconnected_scroll"
-            style="@style/Flex">
-
-            <LinearLayout style="@style/Hero">
-                <ImageView android:src="@drawable/ic_wifi_off_hero"
-                    style="@style/HeroIcon" />
-
-                <TextView android:text="@string/main_disconnected_title_label"
-                    style="@style/HeroTitle" />
-
-                <TextView android:text="@string/main_disconnected_description_label"
-                    style="@style/HeroDescription" />
-
-                <Button android:id="@+id/main_disconnected_hero_button"
-                    android:text="@string/main_disconnected_hero_button"
-                    style="@style/HeroButton" />
-            </LinearLayout>
-        </ScrollView>
-    </LinearLayout>
-</FrameLayout>
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" />

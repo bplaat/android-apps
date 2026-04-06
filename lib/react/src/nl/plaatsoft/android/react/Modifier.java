@@ -83,6 +83,8 @@ public class Modifier {
     private int contentGravityVal = 0;
     private boolean useWindowInsets = false;
 
+    private float alphaValue = -1;
+
     private Modifier() {}
 
     public static Modifier of() {
@@ -281,6 +283,11 @@ public class Modifier {
         return this;
     }
 
+    public Modifier alpha(float a) {
+        alphaValue = a;
+        return this;
+    }
+
     public Modifier minWidth(Unit u) {
         minWidth = u;
         return this;
@@ -391,6 +398,8 @@ public class Modifier {
             if (v.getMinimumHeight() != mh)
                 v.setMinimumHeight(mh);
         }
+        if (alphaValue >= 0 && v.getAlpha() != alphaValue)
+            v.setAlpha(alphaValue);
     }
 
     public void applyToTextView(TextView tv) {

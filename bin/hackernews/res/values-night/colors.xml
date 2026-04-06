@@ -5,4 +5,8 @@
     <color name="primary_text_color">#fff</color>
     <color name="secondary_text_color">#888</color>
     <color name="icon_color">#fff</color>
+    <color name="loading_background_color">#333</color>
+    <color name="divider_color">#333</color>
+    <color name="tab_selected_color">#ff8c00</color>
+    <color name="tab_unselected_color">#aaa</color>
 </resources>

@@ -2,7 +2,82 @@
 <resources>
     <string name="app_name" translatable="false">HackerNews</string>
 
+    <!-- Menu options -->
+    <string name="menu_options_settings">Settings</string>
+
+    <!-- Tabs -->
+    <string name="tab_top">Top</string>
+    <string name="tab_new">New</string>
+    <string name="tab_best">Best</string>
+    <string name="tab_ask">Ask</string>
+    <string name="tab_show">Show</string>
+    <string name="tab_jobs">Jobs</string>
+
+    <!-- Story list -->
+    <string name="story_points">%d points</string>
+    <string name="story_comments">%d comments</string>
+    <string name="story_no_comments">discuss</string>
+    <string name="story_load_more">Load more stories</string>
+
+    <!-- Story detail -->
+    <string name="story_detail_open_link">Open link</string>
+    <string name="story_detail_share">Share</string>
+    <string name="story_detail_share_message">%1$s - %2$s</string>
+    <string name="story_detail_no_comments">No comments yet</string>
+    <string name="story_detail_open_hn">View on HN</string>
+
+    <!-- Comments -->
+    <string name="comment_replies">%d replies</string>
+    <string name="comment_deleted">[deleted]</string>
+
+    <!-- User profile -->
+    <string name="user_karma">Karma: %d</string>
+    <string name="user_joined">Joined: %s</string>
+    <string name="user_view_submissions">View submissions</string>
+
+    <!-- Settings -->
+    <string name="settings_title_label">Settings</string>
+    <string name="settings_display_label">Display</string>
+    <string name="settings_language_button">Language</string>
+    <string name="settings_language_english">English</string>
+    <string name="settings_language_dutch">Nederlands</string>
+    <string name="settings_language_system">Use system default</string>
+    <string name="settings_theme_button">Theme</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_theme_battery_saver">Set by Battery Saver</string>
+    <string name="settings_theme_system">Use system default</string>
+    <string name="settings_information_label">Information</string>
+    <string name="settings_version_button">App version</string>
+    <string name="settings_version_message">Who, you are an amazing hacker!</string>
+    <string name="settings_rate_button">Rate this app</string>
+    <string name="settings_share_button">Share this app</string>
+    <string name="settings_share_message">Check out this cool app: %s</string>
+    <string name="settings_about_button">About this app</string>
+    <string name="settings_footer_button">This application is made by Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_title_label">About this app</string>
+    <string name="settings_about_alert_message_label">This application is made by Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+
+    <!-- Time ago -->
+    <string name="time_just_now">just now</string>
+    <string name="time_minute_ago">%d minute ago</string>
+    <string name="time_minutes_ago">%d minutes ago</string>
+    <string name="time_hour_ago">%d hour ago</string>
+    <string name="time_hours_ago">%d hours ago</string>
+    <string name="time_day_ago">%d day ago</string>
+    <string name="time_days_ago">%d days ago</string>
+    <string name="time_month_ago">%d month ago</string>
+    <string name="time_months_ago">%d months ago</string>
+    <string name="time_year_ago">%d year ago</string>
+    <string name="time_years_ago">%d years ago</string>
+
+    <!-- Story meta -->
+    <string name="story_by">by %s</string>
+
+
     <string name="main_disconnected_title_label">Disconnected</string>
-    <string name="main_disconnected_description_label">Can\'t connect to the HackerNews website probably because you don\'t have an internet connection, connect to the internet again to use this app again</string>
-    <string name="main_disconnected_hero_button">Refresh page</string>
+    <string name="main_disconnected_description_label">Can\'t connect to the HackerNews API. Please check your internet connection and try again.</string>
+    <string name="main_disconnected_hero_button">Refresh</string>
 </resources>

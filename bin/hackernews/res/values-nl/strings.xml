@@ -1,6 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="main_disconnected_title_label">Verbinding verbroken</string>
-    <string name="main_disconnected_description_label">Kan geen verbinding maken met de HackerNews-website waarschijnlijk omdat u geen internetverbinding hebt, maak opnieuw verbinding met internet om deze app weer te gebruiken</string>
-    <string name="main_disconnected_hero_button">Pagina herladen</string>
+    <string name="app_name" translatable="false">HackerNews</string>
+
+    <!-- Menu options -->
+    <string name="menu_options_settings">Instellingen</string>
+
+    <!-- Tabs -->
+    <string name="tab_top">Top</string>
+    <string name="tab_new">Nieuw</string>
+    <string name="tab_best">Beste</string>
+    <string name="tab_ask">Vraag</string>
+    <string name="tab_show">Toon</string>
+    <string name="tab_jobs">Vacatures</string>
+
+    <!-- Story list -->
+    <string name="story_points">%d punten</string>
+    <string name="story_comments">%d reacties</string>
+    <string name="story_no_comments">bespreek</string>
+    <string name="story_load_more">Meer verhalen laden</string>
+
+    <!-- Story detail -->
+    <string name="story_detail_open_link">Link openen</string>
+    <string name="story_detail_share">Delen</string>
+    <string name="story_detail_share_message">%1$s - %2$s</string>
+    <string name="story_detail_no_comments">Nog geen reacties</string>
+    <string name="story_detail_open_hn">Bekijk op HN</string>
+
+    <!-- Comments -->
+    <string name="comment_replies">%d antwoorden</string>
+    <string name="comment_deleted">[verwijderd]</string>
+
+    <!-- User profile -->
+    <string name="user_karma">Karma: %d</string>
+    <string name="user_joined">Lid sinds: %s</string>
+    <string name="user_view_submissions">Bekijk inzendingen</string>
+
+    <!-- Settings -->
+    <string name="settings_title_label">Instellingen</string>
+    <string name="settings_display_label">Weergave</string>
+    <string name="settings_language_button">Taal</string>
+    <string name="settings_language_english">Engels</string>
+    <string name="settings_language_dutch">Nederlands</string>
+    <string name="settings_language_system">Systeemstandaard</string>
+    <string name="settings_theme_button">Thema</string>
+    <string name="settings_theme_light">Licht</string>
+    <string name="settings_theme_dark">Donker</string>
+    <string name="settings_theme_battery_saver">Batterijbesparing</string>
+    <string name="settings_theme_system">Systeemstandaard</string>
+    <string name="settings_information_label">Informatie</string>
+    <string name="settings_version_button">App-versie</string>
+    <string name="settings_version_message">Wauw, je bent een geweldige hacker!</string>
+    <string name="settings_rate_button">Beoordeel deze app</string>
+    <string name="settings_share_button">Deel deze app</string>
+    <string name="settings_share_message">Bekijk deze coole app: %s</string>
+    <string name="settings_about_button">Over deze app</string>
+    <string name="settings_footer_button">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_title_label">Over deze app</string>
+    <string name="settings_about_alert_message_label">Deze applicatie is gemaakt door Bastiaan van der Plaat</string>
+    <string name="settings_about_alert_website_button">Website</string>
+    <string name="settings_about_alert_ok_button">OK</string>
+
+    <!-- Time ago -->
+    <string name="time_just_now">zojuist</string>
+    <string name="time_minute_ago">%d minuut geleden</string>
+    <string name="time_minutes_ago">%d minuten geleden</string>
+    <string name="time_hour_ago">%d uur geleden</string>
+    <string name="time_hours_ago">%d uur geleden</string>
+    <string name="time_day_ago">%d dag geleden</string>
+    <string name="time_days_ago">%d dagen geleden</string>
+    <string name="time_month_ago">%d maand geleden</string>
+    <string name="time_months_ago">%d maanden geleden</string>
+    <string name="time_year_ago">%d jaar geleden</string>
+    <string name="time_years_ago">%d jaar geleden</string>
+
+    <!-- Story meta -->
+    <string name="story_by">door %s</string>
+
+
+    <string name="main_disconnected_title_label">Geen verbinding</string>
+    <string name="main_disconnected_description_label">Kan geen verbinding maken met de HackerNews API. Controleer je internetverbinding en probeer het opnieuw.</string>
+    <string name="main_disconnected_hero_button">Opnieuw laden</string>
 </resources>

@@ -1,12 +1,16 @@
 [package]
 name = "hackernews"
 id = "com.ycombinator.news"
-version = "1.0.0"
+version = "2.0.0"
 
 [dependencies]
 alerts = { path = "../../lib/alerts" }
 compat = { path = "../../lib/compat" }
+fetch = { path = "../../lib/fetch" }
 jspecify = { maven = "org.jspecify:jspecify:1.0.0" }
+react = { path = "../../lib/react" }
 
 [package.metadata.android]
+main_activity = ".activities.MainActivity"
 key_alias = ""
+min_sdk_version = 24
