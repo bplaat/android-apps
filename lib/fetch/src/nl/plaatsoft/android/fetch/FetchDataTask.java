@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.net.HttpURLConnection;
 import java.net.URI;
 import java.security.MessageDigest;
 import java.util.Objects;
@@ -34,7 +35,7 @@ public class FetchDataTask {
     }
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
-    private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private static final Executor executor = Executors.newCachedThreadPool();
 
     private final Context context;
     private @Nullable String url;
@@ -155,7 +156,7 @@ public class FetchDataTask {
             var fileInputStream = new FileInputStream(cacheFile);
             var byteArrayOutputStream = new ByteArrayOutputStream();
             try (fileInputStream; byteArrayOutputStream) {
-                var buffer = new byte[1024];
+                var buffer = new byte[8192];
                 var bytesRead = 0;
                 while ((bytesRead = fileInputStream.read(buffer, 0, buffer.length)) != -1) {
                     byteArrayOutputStream.write(buffer, 0, bytesRead);
@@ -165,14 +166,21 @@ public class FetchDataTask {
         }
 
         // Load url from network
-        var bufferedInputStream = new BufferedInputStream(uri.toURL().openStream());
+        var connection = (HttpURLConnection)uri.toURL().openConnection();
+        connection.setConnectTimeout(10_000);
+        connection.setReadTimeout(30_000);
         var byteArrayOutputStream = new ByteArrayOutputStream();
-        try (bufferedInputStream; byteArrayOutputStream) {
-            var buffer = new byte[1024];
-            var bytesRead = 0;
-            while ((bytesRead = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
-                byteArrayOutputStream.write(buffer, 0, bytesRead);
+        try {
+            var bufferedInputStream = new BufferedInputStream(connection.getInputStream(), 8192);
+            try (bufferedInputStream) {
+                var buffer = new byte[8192];
+                var bytesRead = 0;
+                while ((bytesRead = bufferedInputStream.read(buffer, 0, buffer.length)) != -1) {
+                    byteArrayOutputStream.write(buffer, 0, bytesRead);
+                }
             }
+        } finally {
+            connection.disconnect();
         }
         var data = byteArrayOutputStream.toByteArray();
 

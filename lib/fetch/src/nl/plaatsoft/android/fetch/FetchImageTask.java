@@ -39,7 +39,7 @@ public class FetchImageTask {
     private static final int ANIMATION_IMAGE_LOADING_TIMEOUT = 50;
 
     private static final Handler handler = new Handler(Looper.getMainLooper());
-    private static final Executor executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private static final Executor executor = Executors.newCachedThreadPool();
     private static final LruCache<String, Bitmap> bitmapCache =
         new LruCache<String, Bitmap>((int)(Runtime.getRuntime().freeMemory() / 4)) {
             @Override
