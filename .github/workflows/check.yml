@@ -27,6 +27,4 @@ jobs:
         run: cargo install --git https://github.com/bplaat/crates.git bob
       - name: Run ./meta.sh check
         run: |
-          export JAVA_HOME=$JAVA_HOME_21_X64
-          export PATH=$JAVA_HOME/bin:$PATH
           ./meta.sh check

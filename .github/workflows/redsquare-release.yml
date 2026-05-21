@@ -24,8 +24,6 @@ jobs:
       - name: Build release
         working-directory: bin/redsquare
         run: |
-          export JAVA_HOME=$JAVA_HOME_21_X64
-          export PATH=$JAVA_HOME/bin:$PATH
           echo "${{ secrets.REDSQUARE_KEYSTORE }}" | base64 --decode > keystore.jks
           bob build --release
       - name: Create Git tag and GitHub Release
