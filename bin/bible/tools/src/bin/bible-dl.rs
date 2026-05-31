@@ -8,6 +8,7 @@ use std::fs::{self, File};
 use std::io::{Read, Write};
 use std::path::Path;
 use std::sync::mpsc;
+use std::thread;
 use std::time::Duration;
 
 use anyhow::{anyhow, bail, Result};
@@ -19,7 +20,14 @@ use serde::Deserialize;
 use serde_json::Value;
 use threadpool::ThreadPool;
 
-const DOWNLOAD_THREAD_COUNT: usize = 32;
+const DOWNLOAD_THREAD_COUNT: usize = 16;
+
+fn push_text(dst: &mut String, text: &str) {
+    if text == " " && (dst.is_empty() || dst.ends_with(' ') || dst.ends_with('\n')) {
+        return;
+    }
+    dst.push_str(text);
+}
 
 fn fetch_bible_chapter(url: &str) -> Result<(structs::ChapterContents, structs::Metadata)> {
     let body = ureq::get(url).call()?.into_string()?;
@@ -37,9 +45,14 @@ fn fetch_bible_chapter(url: &str) -> Result<(structs::ChapterContents, structs::
             )?);
         }
         if url.contains("/chapters") {
-            chapter_contents = Some(serde_json::from_value::<structs::ChapterContents>(
-                value.get("data").unwrap().get("chapter").unwrap().clone(),
-            )?);
+            if let Some(chapter) = value
+                .get("data")
+                .and_then(|d| d.get("chapter"))
+            {
+                chapter_contents = Some(serde_json::from_value::<structs::ChapterContents>(
+                    chapter.clone(),
+                )?);
+            }
         }
     }
     Ok((
@@ -241,11 +254,33 @@ fn main() -> Result<()> {
             let tx = tx.clone();
             pool.execute(move || {
                 println!("Downloading {}.{}...", chapter.book_key, chapter.number);
-                let (chapter_data, _) = fetch_bible_chapter(&format!(
+                let url = format!(
                     "{}/{}/{}.{}",
                     source_url, translation_upper, chapter.book_key, chapter.number
-                ))
-                .unwrap_or_else(|_| panic!("Can't fetch {}.{}", chapter.book_key, chapter.number));
+                );
+                let mut chapter_result = None;
+                for attempt in 0..5 {
+                    if attempt > 0 {
+                        println!("Retrying {}.{} (attempt {})...", chapter.book_key, chapter.number, attempt + 1);
+                        thread::sleep(Duration::from_secs(10 * attempt as u64));
+                    }
+                    match fetch_bible_chapter(&url) {
+                        Ok(result) => {
+                            chapter_result = Some(result);
+                            break;
+                        }
+                        Err(e) => {
+                            eprintln!("Error fetching {}.{}: {}", chapter.book_key, chapter.number, e);
+                        }
+                    }
+                }
+                let (chapter_data, _) = match chapter_result {
+                    Some(result) => result,
+                    None => {
+                        eprintln!("Skipping {}.{} after 5 failed attempts", chapter.book_key, chapter.number);
+                        return;
+                    }
+                };
 
                 let mut verses: Vec<Verse> = Vec::new();
                 for block in &chapter_data.blocks {
@@ -274,7 +309,7 @@ fn main() -> Result<()> {
                                                 number: None,
                                                 text: subblock_content.to_string(),
                                                 is_subtitle: true,
-                                                is_last: true,
+                                                is_last: false,
                                             });
                                         }
                                         "verse-number" => {
@@ -293,7 +328,17 @@ fn main() -> Result<()> {
                                             });
                                         }
                                         "verse-text" | "char" => {
-                                            if let Some(current_verse) = verses.last_mut() {
+                                            // If the last verse is a completed subtitle, find the
+                                            // last numbered verse to append to instead
+                                            let append_to_real_verse = verses
+                                                .last()
+                                                .map_or(false, |v| v.is_subtitle && v.is_last);
+                                            let target = if append_to_real_verse {
+                                                verses.iter_mut().rev().find(|v| !v.is_subtitle)
+                                            } else {
+                                                verses.last_mut()
+                                            };
+                                            if let Some(current_verse) = target {
                                                 if index == 0 {
                                                     current_verse.text.push('\n');
                                                 }
@@ -317,9 +362,7 @@ fn main() -> Result<()> {
                                                                 .unwrap()
                                                                 .as_str()
                                                                 .unwrap();
-                                                            if text != " " {
-                                                                current_verse.text.push_str(text);
-                                                            }
+                                                            push_text(&mut current_verse.text, text);
                                                         } else if subblock_type == "study" {
                                                         } else {
                                                             panic!(
@@ -330,9 +373,7 @@ fn main() -> Result<()> {
                                                     }
                                                 } else if subblock_content.is_string() {
                                                     let text = subblock_content.as_str().unwrap();
-                                                    if text != " " {
-                                                        current_verse.text.push_str(text);
-                                                    }
+                                                    push_text(&mut current_verse.text, text);
                                                 } else {
                                                     panic!(
                                                         "Unknown subblock content json value: {}",
@@ -382,9 +423,10 @@ fn main() -> Result<()> {
             }
             if let Ok(verses) = rx.recv_timeout(Duration::from_millis(100)) {
                 for verse in &verses {
+                    let text = verse.text.trim();
                     conn.execute(
                         "INSERT INTO verses (chapter_id, number, text, is_subtitle, is_last) VALUES (?, ?, ?, ?, ?)",
-                        (verse.chapter_id, &verse.number, &verse.text, verse.is_subtitle, verse.is_last),
+                        (verse.chapter_id, &verse.number, text, verse.is_subtitle, verse.is_last),
                     )?;
                 }
                 continue;
