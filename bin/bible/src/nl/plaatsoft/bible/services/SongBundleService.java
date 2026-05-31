@@ -51,10 +51,7 @@ public class SongBundleService {
                 if (skipExisting && file.exists() && file.length() > 0)
                     continue;
 
-                var assetsFile = context.getAssets().openFd("songbundles/" + filename);
-                if (file.exists() && file.length() == assetsFile.getLength())
-                    continue;
-                try (var gzipInputStream = new GZIPInputStream(assetsFile.createInputStream());
+                try (var gzipInputStream = new GZIPInputStream(context.getAssets().open("songbundles/" + filename));
                     var fileOutputStream = new FileOutputStream(file)) {
                     var buffer = new byte[1024];
                     var length = 0;
@@ -110,11 +107,22 @@ public class SongBundleService {
                     cursor.getString(cursor.getColumnIndex("number")),
                     cursor.getString(cursor.getColumnIndex("title"))));
         }
-        Collections.sort(songs, (a, b) -> a.number().compareTo(b.number()));
-        Collections.sort(songs,
-            (a, b)
-                -> Integer.parseInt(a.number().replaceAll("^\\d+", "$0"))
-                - Integer.parseInt(b.number().replaceAll("^\\d+", "$0")));
+        Collections.sort(songs, (a, b) -> {
+            var aPrefix = a.number().replaceAll("[^a-zA-Z].*", "");
+            var bPrefix = b.number().replaceAll("[^a-zA-Z].*", "");
+            var prefixCmp = aPrefix.compareTo(bPrefix);
+            if (prefixCmp != 0)
+                return prefixCmp;
+            var aNum = a.number().replaceAll("\\D+", "");
+            var bNum = b.number().replaceAll("\\D+", "");
+            if (aNum.isEmpty() && bNum.isEmpty())
+                return a.number().compareTo(b.number());
+            if (aNum.isEmpty())
+                return 1;
+            if (bNum.isEmpty())
+                return -1;
+            return Integer.parseInt(aNum) - Integer.parseInt(bNum);
+        });
 
         return new SongBundle(path, metadata.get("name"), metadata.get("abbreviation"), metadata.get("language"),
             metadata.get("copyright"), metadata.get("scraped_at"), songs);

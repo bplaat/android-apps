@@ -56,8 +56,7 @@ public class BibleService {
                 if (skipExisting && file.exists() && file.length() > 0)
                     continue;
 
-                var assetsFile = context.getAssets().openFd("bibles/" + filename);
-                try (var gzipInputStream = new GZIPInputStream(assetsFile.createInputStream());
+                try (var gzipInputStream = new GZIPInputStream(context.getAssets().open("bibles/" + filename));
                     var fileOutputStream = new FileOutputStream(file)) {
                     var buffer = new byte[1024];
                     var length = 0;
