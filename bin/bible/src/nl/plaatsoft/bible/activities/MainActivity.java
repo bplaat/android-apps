@@ -400,8 +400,13 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
 
         if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
             openSongBundle = songBundleService.readSongBundle(this, settings.getOpenSongBundle());
-            openSong(Objects.requireNonNull(
-                songBundleService.readSong(this, openSongBundle.path(), settings.getOpenSongNumber())));
+            var songNumber = settings.getOpenSongNumber();
+            var song = songBundleService.readSong(this, openSongBundle.path(), songNumber);
+            if (song == null) {
+                song = songBundleService.readSong(
+                    this, openSongBundle.path(), openSongBundle.songs().get(0).number());
+            }
+            openSong(song);
         }
     }
 
