@@ -20,6 +20,7 @@ import android.util.Log;
 
 import nl.plaatsoft.bible.models.Song;
 import nl.plaatsoft.bible.models.SongBundle;
+import nl.plaatsoft.bible.models.SongSection;
 import nl.plaatsoft.bible.models.SongWithText;
 
 import org.jspecify.annotations.Nullable;
@@ -100,19 +101,33 @@ public class SongBundleService {
                     cursor.getString(cursor.getColumnIndex("key")), cursor.getString(cursor.getColumnIndex("value")));
         }
 
+        // Read sections
+        var sections = new ArrayList<SongSection>();
+        var sectionMap = new HashMap<Integer, SongSection>();
+        try (var cursor = database.rawQuery("SELECT id, name, singular_name FROM sections ORDER BY id", null)) {
+            while (cursor.moveToNext()) {
+                var id = cursor.getInt(cursor.getColumnIndex("id"));
+                var name = cursor.getString(cursor.getColumnIndex("name"));
+                var singularName = cursor.getString(cursor.getColumnIndex("singular_name"));
+                var section = new SongSection(id, name, singularName, new ArrayList<>());
+                sections.add(section);
+                sectionMap.put(id, section);
+            }
+        }
+
+        // Read songs
         var songs = new ArrayList<Song>();
-        try (var cursor = database.rawQuery("SELECT id, number, title FROM songs", null)) {
-            while (cursor.moveToNext())
-                songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
+        try (var cursor = database.rawQuery("SELECT id, section_id, number, title FROM songs", null)) {
+            while (cursor.moveToNext()) {
+                var sectionId = cursor.isNull(cursor.getColumnIndex("section_id")) ? -1
+                    : cursor.getInt(cursor.getColumnIndex("section_id"));
+                var song = new Song(cursor.getInt(cursor.getColumnIndex("id")), sectionId,
                     cursor.getString(cursor.getColumnIndex("number")),
-                    cursor.getString(cursor.getColumnIndex("title"))));
+                    cursor.getString(cursor.getColumnIndex("title")));
+                songs.add(song);
+            }
         }
         Collections.sort(songs, (a, b) -> {
-            var aPrefix = a.number().replaceAll("[^a-zA-Z].*", "");
-            var bPrefix = b.number().replaceAll("[^a-zA-Z].*", "");
-            var prefixCmp = aPrefix.compareTo(bPrefix);
-            if (prefixCmp != 0)
-                return prefixCmp;
             var aNum = a.number().replaceAll("\\D+", "");
             var bNum = b.number().replaceAll("\\D+", "");
             if (aNum.isEmpty() && bNum.isEmpty())
@@ -124,17 +139,36 @@ public class SongBundleService {
             return Integer.parseInt(aNum) - Integer.parseInt(bNum);
         });
 
+        // Group songs into sections
+        if (!sections.isEmpty()) {
+            for (var song : songs) {
+                var section = sectionMap.get(song.sectionId());
+                if (section != null)
+                    section.songs().add(song);
+            }
+        }
+
         return new SongBundle(path, metadata.get("name"), metadata.get("abbreviation"), metadata.get("language"),
-            metadata.get("copyright"), metadata.get("scraped_at"), songs);
+            metadata.get("copyright"), metadata.get("scraped_at"), sections, songs);
     }
 
-    public @Nullable SongWithText readSong(Context context, String path, String songNumber) {
+    public @Nullable SongWithText readSong(Context context, String path, int sectionId, String songNumber) {
         var database = getDatabase(context, path);
-        try (var cursor = database.rawQuery(
-                 "SELECT id, number, title, text, copyright FROM songs WHERE number = ?", new String[] {songNumber})) {
+        String query;
+        String[] args;
+        if (sectionId >= 0) {
+            query = "SELECT id, section_id, number, title, text, copyright FROM songs WHERE section_id = ? AND number = ?";
+            args = new String[] {String.valueOf(sectionId), songNumber};
+        } else {
+            query = "SELECT id, section_id, number, title, text, copyright FROM songs WHERE number = ?";
+            args = new String[] {songNumber};
+        }
+        try (var cursor = database.rawQuery(query, args)) {
             if (!cursor.moveToNext())
                 return null;
-            return new SongWithText(cursor.getInt(cursor.getColumnIndex("id")),
+            var resultSectionId = cursor.isNull(cursor.getColumnIndex("section_id")) ? -1
+                : cursor.getInt(cursor.getColumnIndex("section_id"));
+            return new SongWithText(cursor.getInt(cursor.getColumnIndex("id")), resultSectionId,
                 cursor.getString(cursor.getColumnIndex("number")), cursor.getString(cursor.getColumnIndex("title")),
                 cursor.getString(cursor.getColumnIndex("text")), cursor.getString(cursor.getColumnIndex("copyright")));
         }
@@ -144,12 +178,15 @@ public class SongBundleService {
         var database = getDatabase(context, path);
         var songs = new ArrayList<Song>();
         try (var cursor = database.rawQuery(
-                 "SELECT id, number, title FROM songs WHERE number LIKE ? OR title LIKE ? OR text LIKE ? LIMIT ?",
+                 "SELECT id, section_id, number, title FROM songs WHERE number LIKE ? OR title LIKE ? OR text LIKE ? LIMIT ?",
                  new String[] {"%" + query + "%", "%" + query + "%", "%" + query + "%", String.valueOf(maxResults)})) {
-            while (cursor.moveToNext())
-                songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")),
+            while (cursor.moveToNext()) {
+                var sectionId = cursor.isNull(cursor.getColumnIndex("section_id")) ? -1
+                    : cursor.getInt(cursor.getColumnIndex("section_id"));
+                songs.add(new Song(cursor.getInt(cursor.getColumnIndex("id")), sectionId,
                     cursor.getString(cursor.getColumnIndex("number")),
                     cursor.getString(cursor.getColumnIndex("title"))));
+            }
         }
         return songs;
     }

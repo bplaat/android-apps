@@ -60,12 +60,23 @@ fn main() -> Result<()> {
         (),
     )?;
     conn.execute(
-        "CREATE TABLE IF NOT EXISTS songs (
+        "CREATE TABLE sections (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            number TEXT UNIQUE,
+            name TEXT NOT NULL,
+            singular_name TEXT NOT NULL
+        )",
+        (),
+    )?;
+    conn.execute(
+        "CREATE TABLE songs (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            section_id INTEGER,
+            number TEXT,
             title TEXT,
             text TEXT,
-            copyright TEXT
+            copyright TEXT,
+            UNIQUE(section_id, number),
+            FOREIGN KEY (section_id) REFERENCES sections (id)
         )",
         (),
     )?;

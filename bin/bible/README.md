@@ -27,6 +27,7 @@ Bible translations are scraped from [de-bijbel.nl](https://de-bijbel.nl/), [die-
 
 ### Dutch
 
+- [Liedboek voor de Kerken 1973 (LVDK)](https://kerkliedwiki.nl/Liedboek_voor_de_kerken/Inhoud)
 - ~~[Liedboek 2013 (NLB)](https://kerkliedwiki.nl/Liedboek_2013/Inhoud)~~ (Not yet included, but I want to include it)
 - [Hemelhoog (HH)](https://kerkliedwiki.nl/Hemelhoog/Inhoud)
 - [Opwekking 2024 (OPW)](https://kerkliedwiki.nl/Opwekkingsliederen/Inhoud)

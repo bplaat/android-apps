@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024-2025 Bastiaan van der Plaat
+ * Copyright (c) 2024-2026 Bastiaan van der Plaat
  *
  * SPDX-License-Identifier: MIT
  */
@@ -10,12 +10,13 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.os.Looper;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import nl.plaatsoft.bible.R;
 import nl.plaatsoft.bible.models.Song;
+import nl.plaatsoft.bible.models.SongSection;
 
 public class SongsDialogBuilder extends AlertDialog.Builder {
     public static interface OnResultListener {
@@ -23,27 +24,56 @@ public class SongsDialogBuilder extends AlertDialog.Builder {
     }
 
     @SuppressWarnings("this-escape")
-    public SongsDialogBuilder(
-        Context context, ArrayList<Song> songs, String currentSongNumber, OnResultListener onResultListener) {
+    public SongsDialogBuilder(Context context, ArrayList<SongSection> sections, ArrayList<Song> songs,
+        String currentSongNumber, int currentSectionId, OnResultListener onResultListener) {
         super(context);
 
         setTitle(R.string.main_song_alert_title_label);
         var root = new ScrollView(context);
         setView(root);
 
-        var grid = new FixedGridLayout(context, null, 0, R.style.IndexDialog);
-        grid.setColumnCount(6);
-        root.addView(grid);
+        if (!sections.isEmpty()) {
+            var list = new LinearLayout(context, null, 0, R.style.BooksDialog);
+            root.addView(list);
 
-        for (var song : songs) {
-            var songButton = new TextView(context, null, 0,
-                song.number().equals(currentSongNumber) ? R.style.IndexDialogButtonActive : R.style.IndexDialogButton);
-            songButton.setText(String.valueOf(song.number()));
-            songButton.setOnClickListener(view -> onResultListener.onResult(song));
-            grid.addView(songButton);
+            for (var section : sections) {
+                var subtitle = new TextView(context, null, 0, R.style.BooksDialogSubtitle);
+                subtitle.setText(section.name());
+                list.addView(subtitle);
 
-            if (song.number().equals(currentSongNumber))
-                root.post(() -> root.scrollTo(0, songButton.getTop()));
+                var grid = new FixedGridLayout(context, null, 0, R.style.IndexDialog);
+                grid.setColumnCount(6);
+                list.addView(grid);
+
+                for (var song : section.songs()) {
+                    var isActive = song.number().equals(currentSongNumber)
+                        && song.sectionId() == currentSectionId;
+                    var songButton = new TextView(context, null, 0,
+                        isActive ? R.style.IndexDialogButtonActive : R.style.IndexDialogButton);
+                    songButton.setText(String.valueOf(song.number()));
+                    songButton.setOnClickListener(view -> onResultListener.onResult(song));
+                    grid.addView(songButton);
+
+                    if (isActive)
+                        root.post(() -> root.scrollTo(0, songButton.getTop()));
+                }
+            }
+        } else {
+            var grid = new FixedGridLayout(context, null, 0, R.style.IndexDialog);
+            grid.setColumnCount(6);
+            root.addView(grid);
+
+            for (var song : songs) {
+                var songButton = new TextView(context, null, 0,
+                    song.number().equals(currentSongNumber) ? R.style.IndexDialogButtonActive
+                        : R.style.IndexDialogButton);
+                songButton.setText(String.valueOf(song.number()));
+                songButton.setOnClickListener(view -> onResultListener.onResult(song));
+                grid.addView(songButton);
+
+                if (song.number().equals(currentSongNumber))
+                    root.post(() -> root.scrollTo(0, songButton.getTop()));
+            }
         }
     }
 }

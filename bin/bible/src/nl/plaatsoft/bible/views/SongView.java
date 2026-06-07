@@ -61,14 +61,15 @@ public class SongView extends ScrollView {
         this.onNextListener = onNextListener;
     }
 
-    public void openSong(SongWithText song, int previousScrollY) {
+    public void openSong(SongWithText song, @Nullable String sectionName, int previousScrollY) {
         scrollTo(0, 0);
         root.removeAllViews();
 
         // Add song content
         var spannable = new SpannableStringBuilder();
 
-        var titleSpannable = new SpannableString(song.number() + ". " + song.title() + "\n");
+        var displayName = sectionName != null ? sectionName + " " + song.number() : song.number();
+        var titleSpannable = new SpannableString(displayName + ". " + song.title() + "\n");
         titleSpannable.setSpan(new TypefaceSpanCompat(Typeface.create(typeface, Typeface.BOLD)), 0,
             titleSpannable.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         spannable.append(titleSpannable);

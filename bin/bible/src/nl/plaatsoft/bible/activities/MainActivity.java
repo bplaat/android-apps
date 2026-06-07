@@ -130,8 +130,10 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
                     }).show();
             }
             if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
-                dialog = new SongsDialogBuilder(this, Objects.requireNonNull(openSongBundle).songs(),
-                    Objects.requireNonNull(openSong).number(), song -> {
+                var songBundle = Objects.requireNonNull(openSongBundle);
+                var currentSong = Objects.requireNonNull(openSong);
+                dialog = new SongsDialogBuilder(this, songBundle.sections(), songBundle.songs(),
+                    currentSong.number(), currentSong.sectionId(), song -> {
                         Objects.requireNonNull(dialog).dismiss();
                         openSong(song);
                     }).show();
@@ -214,7 +216,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             // Get index of openSong
             var openSongIndex = -1;
             for (int i = 0; i < songs.size(); i++) {
-                if (songs.get(i).number().equals(Objects.requireNonNull(openSong).number())) {
+                if (songs.get(i).number().equals(Objects.requireNonNull(openSong).number())
+                    && songs.get(i).sectionId() == openSong.sectionId()) {
                     openSongIndex = i;
                     break;
                 }
@@ -228,7 +231,8 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
             // Get index of openSong
             var openSongIndex = -1;
             for (int i = 0; i < songs.size(); i++) {
-                if (songs.get(i).number().equals(Objects.requireNonNull(openSong).number())) {
+                if (songs.get(i).number().equals(Objects.requireNonNull(openSong).number())
+                    && songs.get(i).sectionId() == openSong.sectionId()) {
                     openSongIndex = i;
                     break;
                 }
@@ -401,10 +405,12 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
         if (openType == Settings.OPEN_TYPE_SONG_BUNDLE) {
             openSongBundle = songBundleService.readSongBundle(this, settings.getOpenSongBundle());
             var songNumber = settings.getOpenSongNumber();
-            var song = songBundleService.readSong(this, openSongBundle.path(), songNumber);
+            var sectionId = settings.getOpenSongSectionId();
+            var song = songBundleService.readSong(this, openSongBundle.path(), sectionId, songNumber);
             if (song == null) {
-                song = songBundleService.readSong(
-                    this, openSongBundle.path(), openSongBundle.songs().get(0).number());
+                var firstSong = openSongBundle.songs().get(0);
+                song = songBundleService.readSong(this, openSongBundle.path(), firstSong.sectionId(),
+                    firstSong.number());
             }
             openSong(song);
         }
@@ -474,17 +480,28 @@ public class MainActivity extends BaseActivity implements PopupMenu.OnMenuItemCl
     }
 
     private void openSong(Song song) {
-        openSong(Objects.requireNonNull(
-            songBundleService.readSong(this, Objects.requireNonNull(openSongBundle).path(), song.number())));
+        openSong(Objects.requireNonNull(songBundleService.readSong(
+            this, Objects.requireNonNull(openSongBundle).path(), song.sectionId(), song.number())));
     }
 
     private void openSong(SongWithText song) {
         openSong = song;
         settings.setOpenSongNumber(song.number());
-        nameButton.setText(Objects.requireNonNull(openSongBundle).name());
+        settings.setOpenSongSectionId(song.sectionId());
+        var songBundle = Objects.requireNonNull(openSongBundle);
+        var sectionName = getSongSectionName(songBundle, song.sectionId());
+        nameButton.setText(sectionName != null ? sectionName : songBundle.name());
         indexButton.setText(song.number());
-        songPage.openSong(song, settings.getOpenSongScroll());
+        songPage.openSong(song, sectionName, settings.getOpenSongScroll());
         openPage(songPage);
+    }
+
+    private @Nullable String getSongSectionName(SongBundle songBundle, int sectionId) {
+        for (var section : songBundle.sections()) {
+            if (section.id() == sectionId)
+                return section.singularName();
+        }
+        return null;
     }
 
     private void openPage(View page) {

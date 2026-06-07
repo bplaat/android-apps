@@ -214,6 +214,17 @@ public class Settings {
         prefs.edit().putString("open_song_number", openSongBundleNumber).apply();
     }
 
+    // Open song section id
+    public int getOpenSongSectionId() {
+        return prefs.getInt("open_song_section_id", -1);
+    }
+
+    public void setOpenSongSectionId(int sectionId) {
+        if (getOpenSongSectionId() == sectionId)
+            return;
+        prefs.edit().putInt("open_song_section_id", sectionId).apply();
+    }
+
     // Open song scroll
     public int getOpenSongScroll() {
         return prefs.getInt("open_song_scroll", 0);

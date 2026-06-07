@@ -11,3 +11,4 @@ cargo run --bin convert-ops -- --name Hemelhoog --abbreviation hh \
     -o ../assets/songbundles/hh.songbundle
 
 cargo run --bin scrape-opwekking -- -o ../assets/songbundles/opw.songbundle
+cargo run --bin scrape-lvdk -- -o ../assets/songbundles/lvdk.songbundle
