@@ -69,7 +69,7 @@ public class Image {
         return this;
     }
 
-    // Call when no modifier is chained.
+    // Start fetch when no modifier is set
     public void fetch() {
         if (url != null)
             applyUrl();
@@ -77,7 +77,7 @@ public class Image {
 
     private void applyUrl() {
         if (!needsFetch) {
-            // Same URL: restore bitmap if the view was recycled and lost its drawable.
+            // Restore cached bitmap when recycled view lost it
             var cached = FetchImageTask.getCached(url);
             if (cached != null && ref.getDrawable() == null) {
                 ref.setImageBitmap(cached);
@@ -89,7 +89,7 @@ public class Image {
         }
         needsFetch = false;
 
-        // URL changed: serve from memory cache instantly to avoid any flash.
+        // Use memory cache when available
         var cached = FetchImageTask.getCached(url);
         if (cached != null) {
             ref.setImageBitmap(cached);
@@ -99,7 +99,7 @@ public class Image {
             return;
         }
 
-        // Not cached: show loading state and kick off async fetch.
+        // Show loading state and fetch image
         ref.setImageBitmap(null);
         ref.setImageAlpha(255);
         if (isTransparent && loadingColorValue != Color.TRANSPARENT)

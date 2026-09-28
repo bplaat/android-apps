@@ -358,8 +358,7 @@ public class Modifier {
         }
         if (useWindowInsets && v instanceof ViewGroup vg) {
             vg.setClipToPadding(false);
-            // Always override the decor listener so edge-to-edge scroll views get top on decor,
-            // bottom on this view (overrides the default full-insets listener from Component)
+            // Apply top insets to decor view
             if (v.getContext() instanceof Activity activity) {
                 var decor = activity.getWindow().getDecorView();
                 decor.setTag(TAG_WINDOW_INSETS, true);
@@ -369,7 +368,7 @@ public class Modifier {
                     return insets;
                 });
             }
-            // One-time per view: apply bottom padding so items at rest are above the nav bar
+            // Apply bottom insets to scroll view
             if (v.getTag(TAG_WINDOW_INSETS) == null) {
                 v.setTag(TAG_WINDOW_INSETS, true);
                 v.setOnApplyWindowInsetsListener((view, insets) -> {

@@ -24,7 +24,7 @@ public abstract class Component extends FrameLayout {
         super(context);
     }
 
-    // Nested-component constructor: self-slots so existing state is reused across rebuilds
+    // Nested component, reuse existing state across rebuilds
     @SuppressWarnings({"unchecked", "rawtypes"})
     protected Component() {
         super(BuildContext.current().getContext());
@@ -35,7 +35,7 @@ public abstract class Component extends FrameLayout {
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
-        // Default: decor handles all insets. Modifier.windowInsets() overrides this for edge-to-edge scroll views.
+        // Apply all insets to decor view, unless Modifier.useWindowInsets() is used
         if (getContext() instanceof Activity activity) {
             var decor = activity.getWindow().getDecorView();
             if (decor.getTag(Modifier.TAG_WINDOW_INSETS) == null) {

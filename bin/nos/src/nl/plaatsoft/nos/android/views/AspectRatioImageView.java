@@ -45,7 +45,7 @@ public class AspectRatioImageView extends ImageView {
         int width;
         int height;
 
-        // If width is EXACTLY and not MATCH_PARENT (i.e., set in dp), don't use aspect ratio
+        // Ignore aspect ratio when width is set in dp
         if (widthMode == MeasureSpec.EXACTLY && getLayoutParams() != null && getLayoutParams().width > 0) {
             width = originalWidth;
             height = MeasureSpec.getSize(heightMeasureSpec);
