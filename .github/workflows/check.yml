@@ -17,11 +17,10 @@ jobs:
   check:
     runs-on: ubuntu-26.04
     steps:
-      - uses: actions/checkout@v4
-      - name: Install clang-format@22
+      - uses: actions/checkout@v6
+      - name: Install clang-format@23.1.1
         run: |
-          wget -qO /usr/local/bin/clang-format https://github.com/cpp-linter/clang-tools-static-binaries/releases/latest/download/clang-format-22_linux-amd64
-          chmod a+x /usr/local/bin/clang-format
+          python -m pip install clang-format==23.1.1
           clang-format --version
       - name: Install bob
         run: cargo install --git https://github.com/bplaat/crates.git bob
