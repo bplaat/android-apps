@@ -95,9 +95,9 @@ A collection of various Android apps that I created for myself and others
 - Install Java JDK 17
 - Install Android SDK with `cmdline-tools`, `platform-tools`, `build-tools:36` and `platforms:android-36` and set `$ANDROID_HOME` env var
 - Install a [Rust toolchain](https://rustup.rs/)
-- Install [bob](https://github.com/bplaat/crates/tree/master/bin/bob)
+- Install [bob](https://github.com/bplaat/bron/tree/master/tools/bob)
     ```sh
-    cargo install --git https://github.com/bplaat/crates bob
+    cargo install --git https://github.com/bplaat/bron bob
     ```
 - Run `./meta.sh check`
 

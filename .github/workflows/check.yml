@@ -23,7 +23,7 @@ jobs:
           python -m pip install clang-format==23.1.1
           clang-format --version
       - name: Install bob
-        run: cargo install --git https://github.com/bplaat/crates.git bob
+        run: cargo install --git https://github.com/bplaat/bron.git bob
       - name: Run ./meta.sh check
         run: |
           ./meta.sh check
