@@ -1,0 +1,61 @@
+name: release
+
+on:
+  workflow_dispatch:
+    inputs:
+      project:
+        description: Project to release
+        required: true
+        type: choice
+        options:
+          - bassiemusic
+          - bible
+          - coinlist
+          - drankcounter
+          - hackernews
+          - nos
+          - redsquare
+          - rfidviewer
+          - tweakers
+
+concurrency:
+  group: ${{ github.workflow }}-${{ inputs.project }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+run-name: release ${{ inputs.project }}
+
+jobs:
+  release:
+    runs-on: ubuntu-26.04
+    env:
+      PROJECT: ${{ inputs.project }}
+      TITLE: ${{ fromJSON('{"bassiemusic":"BassieMusic","bible":"Bible","coinlist":"CoinList","drankcounter":"DrankCounter","hackernews":"HackerNews","nos":"NOS","redsquare":"RedSquare","rfidviewer":"RFID Viewer","tweakers":"Tweakers"}')[inputs.project] }}
+    defaults:
+      run:
+        working-directory: bin/${{ inputs.project }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install bob
+        run: cargo install --git https://github.com/bplaat/bron.git bob
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          cmdline-tools-version: 14742923
+      - name: Build release
+        env:
+          KEYSTORE: ${{ secrets[format('{0}_KEYSTORE', inputs.project)] }}
+        run: |
+          echo "$KEYSTORE" | base64 --decode > keystore.jks
+          bob build --release
+      - name: Create Git tag and GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG_VERSION=$(sed -nE 's/^[[:space:]]*version[[:space:]]*=[[:space:]]*"([^"]+)".*/\1/p' bob.toml)
+          gh release create "${PROJECT}/v${TAG_VERSION}" \
+            --title "${TITLE} v${TAG_VERSION}" \
+            --notes "Download the \`.apk\` file and open it to install the application" \
+            "target/release/${PROJECT}-${TAG_VERSION}.apk"
